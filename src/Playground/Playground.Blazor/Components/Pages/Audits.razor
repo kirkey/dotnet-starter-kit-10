@@ -276,7 +276,7 @@
 
 <!-- Main Data Table -->
 <MudPaper Class="table-card" Elevation="2">
-    <MudTable T="FSH.Playground.Blazor.ApiClient.AuditSummaryDto"
+    <MudTable T="ApiClient.AuditSummaryDto"
               @ref="_table"
               Class="audit-table"
               ServerData="LoadAudits"
@@ -290,10 +290,10 @@
               Breakpoint="Breakpoint.Sm"
               Elevation="0">
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortLabel="OccurredAtUtc" T="FSH.Playground.Blazor.ApiClient.AuditSummaryDto">Timestamp</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortLabel="EventType" T="FSH.Playground.Blazor.ApiClient.AuditSummaryDto">Event Type</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortLabel="Severity" T="FSH.Playground.Blazor.ApiClient.AuditSummaryDto">Severity</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortLabel="UserName" T="FSH.Playground.Blazor.ApiClient.AuditSummaryDto">User</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortLabel="OccurredAtUtc" T="ApiClient.AuditSummaryDto">Timestamp</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortLabel="EventType" T="ApiClient.AuditSummaryDto">Event Type</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortLabel="Severity" T="ApiClient.AuditSummaryDto">Severity</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortLabel="UserName" T="ApiClient.AuditSummaryDto">User</MudTableSortLabel></MudTh>
             <MudTh>Tenant</MudTh>
             <MudTh>Source</MudTh>
             <MudTh>Tracking</MudTh>
@@ -678,18 +678,18 @@
     private readonly AuditSeverityOption[] _severities = Enum.GetValues(typeof(AuditSeverityOption)).Cast<AuditSeverityOption>().Where(v => v != AuditSeverityOption.None).ToArray();
 
     private FilterDto _filter = new();
-    private MudTable<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>? _table;
-    private IReadOnlyList<FSH.Playground.Blazor.ApiClient.AuditSummaryDto> _currentPage = Array.Empty<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>();
+    private MudTable<ApiClient.AuditSummaryDto>? _table;
+    private IReadOnlyList<ApiClient.AuditSummaryDto> _currentPage = Array.Empty<ApiClient.AuditSummaryDto>();
     private TableState _lastState = new() { SortLabel = "OccurredAtUtc", SortDirection = SortDirection.Descending, PageSize = 25 };
     private int _pageSize = 25;
     private bool _loading;
     private int _totalCount;
-    private readonly Dictionary<Guid, FSH.Playground.Blazor.ApiClient.AuditDetailDto> _detailCache = new();
+    private readonly Dictionary<Guid, ApiClient.AuditDetailDto> _detailCache = new();
     private readonly HashSet<Guid> _expanded = new();
 
     // Summary dashboard
     private bool _showSummary = true;
-    private FSH.Playground.Blazor.ApiClient.AuditSummaryAggregateDto? _summary;
+    private ApiClient.AuditSummaryAggregateDto? _summary;
 
     // UI state
     private bool _filtersExpanded = false;
@@ -699,10 +699,10 @@
     private bool _showRelatedDialog = false;
     private bool _loadingRelated = false;
     private string _relatedType = "correlation";
-    private List<FSH.Playground.Blazor.ApiClient.AuditSummaryDto> _relatedEvents = new();
+    private List<ApiClient.AuditSummaryDto> _relatedEvents = new();
 
-    [Inject] private FSH.Playground.Blazor.ApiClient.IV1Client V1Client { get; set; } = default!;
-    [Inject] private FSH.Playground.Blazor.ApiClient.IAuditsClient AuditsClient { get; set; } = default!;
+    [Inject] private ApiClient.IV1Client V1Client { get; set; } = default!;
+    [Inject] private ApiClient.IAuditsClient AuditsClient { get; set; } = default!;
     [Inject] private ISnackbar Snackbar { get; set; } = default!;
     [Inject] private NavigationManager NavigationManager { get; set; } = default!;
 
@@ -727,7 +727,7 @@
         }
     }
 
-    private async Task<TableData<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>> LoadAudits(TableState state, CancellationToken cancellationToken)
+    private async Task<TableData<ApiClient.AuditSummaryDto>> LoadAudits(TableState state, CancellationToken cancellationToken)
     {
         _loading = true;
         try
@@ -757,7 +757,7 @@
                 search: string.IsNullOrWhiteSpace(_filter.Search) ? null : _filter.Search,
                 cancellationToken: cancellationToken);
 
-            _currentPage = result.Items?.ToList() ?? new List<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>();
+            _currentPage = result.Items?.ToList() ?? new List<ApiClient.AuditSummaryDto>();
             _totalCount = (int)result.TotalCount;
             _expanded.Clear();
             _detailCache.Clear();
@@ -765,7 +765,7 @@
             // Reload summary when filters change
             await LoadSummaryAsync();
 
-            return new TableData<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>
+            return new TableData<ApiClient.AuditSummaryDto>
             {
                 Items = _currentPage,
                 TotalItems = _totalCount
@@ -774,9 +774,9 @@
         catch (Exception ex)
         {
             Snackbar.Add($"Failed to load audits: {ex.Message}", Severity.Error);
-            return new TableData<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>
+            return new TableData<ApiClient.AuditSummaryDto>
             {
-                Items = Array.Empty<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>(),
+                Items = Array.Empty<ApiClient.AuditSummaryDto>(),
                 TotalItems = 0
             };
         }
@@ -833,7 +833,7 @@
         _table?.ReloadServerData();
     }
 
-    private async Task ToggleDetail(FSH.Playground.Blazor.ApiClient.AuditSummaryDto audit)
+    private async Task ToggleDetail(ApiClient.AuditSummaryDto audit)
     {
         if (_expanded.Contains(audit.Id))
         {
@@ -880,7 +880,7 @@
                 fromUtc: _filter.FromUtc,
                 toUtc: _filter.ToUtc);
 
-            _relatedEvents = events?.ToList() ?? new List<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>();
+            _relatedEvents = events?.ToList() ?? new List<ApiClient.AuditSummaryDto>();
         }
         catch (Exception ex)
         {
@@ -910,7 +910,7 @@
                 fromUtc: _filter.FromUtc,
                 toUtc: _filter.ToUtc);
 
-            _relatedEvents = events?.ToList() ?? new List<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>();
+            _relatedEvents = events?.ToList() ?? new List<ApiClient.AuditSummaryDto>();
         }
         catch (Exception ex)
         {
@@ -942,7 +942,7 @@
 
     private bool IsExpanded(Guid id) => _expanded.Contains(id);
 
-    private bool TryGetDetail(Guid id, out FSH.Playground.Blazor.ApiClient.AuditDetailDto? detail) =>
+    private bool TryGetDetail(Guid id, out ApiClient.AuditDetailDto? detail) =>
         _detailCache.TryGetValue(id, out detail);
 
     private static string FormatPayload(FSH.Playground.Blazor.ApiClient.JsonElement payload) =>
@@ -1009,7 +1009,7 @@
     {
         try
         {
-            var items = new List<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>();
+            var items = new List<ApiClient.AuditSummaryDto>();
             var remaining = Math.Min(_totalCount, ApiPageSizeLimit);
             var page = 1;
 
@@ -1031,7 +1031,7 @@
                     traceId: string.IsNullOrWhiteSpace(_filter.TraceId) ? null : _filter.TraceId,
                     search: string.IsNullOrWhiteSpace(_filter.Search) ? null : _filter.Search);
 
-                var pageItems = result.Items?.ToList() ?? new List<FSH.Playground.Blazor.ApiClient.AuditSummaryDto>();
+                var pageItems = result.Items?.ToList() ?? new List<ApiClient.AuditSummaryDto>();
                 if (pageItems.Count == 0)
                 {
                     break;
@@ -1064,7 +1064,7 @@
         }
     }
 
-    private static byte[] BuildCsv(IEnumerable<FSH.Playground.Blazor.ApiClient.AuditSummaryDto> items)
+    private static byte[] BuildCsv(IEnumerable<ApiClient.AuditSummaryDto> items)
     {
         var sb = new StringBuilder();
         sb.AppendLine("OccurredAtUtc,EventType,Severity,UserName,UserId,TenantId,Source,CorrelationId,TraceId");

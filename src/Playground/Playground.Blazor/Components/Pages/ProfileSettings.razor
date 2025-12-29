@@ -1,11 +1,11 @@
 @page "/settings/profile"
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Components.Authorization
-@inject FSH.Playground.Blazor.ApiClient.IIdentityClient IdentityClient
+@inject ApiClient.IIdentityClient IdentityClient
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject FSH.Playground.Blazor.Services.IUserProfileState UserProfileState
+@inject Services.IUserProfileState UserProfileState
 
 <!-- Hero Section -->
 <FshPageHeader Title="Profile Settings"
@@ -337,7 +337,7 @@ else
     private bool _loading = true;
     private bool _saving;
     private bool _changingPassword;
-    private FSH.Playground.Blazor.ApiClient.UserDto? _profile;
+    private ApiClient.UserDto? _profile;
     private string? _avatarPreviewUrl;
     private bool _hasImageChanges;
     private bool _deleteCurrentImage;
@@ -494,7 +494,7 @@ else
         _saving = true;
         try
         {
-            var command = new FSH.Playground.Blazor.ApiClient.UpdateUserCommand
+            var command = new ApiClient.UpdateUserCommand
             {
                 Id = _profile?.Id ?? string.Empty,
                 FirstName = _profileModel.FirstName,
@@ -507,7 +507,7 @@ else
             // Add image upload if pending
             if (_pendingImageData is not null && _pendingImageFileName is not null && _pendingImageContentType is not null)
             {
-                command.Image = new FSH.Playground.Blazor.ApiClient.FileUploadRequest
+                command.Image = new ApiClient.FileUploadRequest
                 {
                     FileName = _pendingImageFileName,
                     ContentType = _pendingImageContentType,
@@ -526,7 +526,7 @@ else
             // Notify other components (e.g., header) about the profile change
             NotifyProfileChanged();
         }
-        catch (FSH.Playground.Blazor.ApiClient.ApiException ex)
+        catch (ApiClient.ApiException ex)
         {
             Snackbar.Add($"Failed to update profile: {ex.Message}", Severity.Error);
         }
@@ -581,7 +581,7 @@ else
         _changingPassword = true;
         try
         {
-            var command = new FSH.Playground.Blazor.ApiClient.ChangePasswordCommand
+            var command = new ApiClient.ChangePasswordCommand
             {
                 Password = _passwordModel.CurrentPassword,
                 NewPassword = _passwordModel.NewPassword,
@@ -593,7 +593,7 @@ else
             Snackbar.Add("Password changed successfully!", Severity.Success);
             ResetPasswordForm();
         }
-        catch (FSH.Playground.Blazor.ApiClient.ApiException ex)
+        catch (ApiClient.ApiException ex)
         {
             Snackbar.Add($"Failed to change password: {ex.Message}", Severity.Error);
         }
