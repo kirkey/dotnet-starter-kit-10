@@ -96,12 +96,23 @@ public class IdentityModule : IModule
 
         services.AddIdentity<FshUser, FshRole>(options =>
         {
+            // Password requirements - can be overridden in appsettings.json
             options.Password.RequiredLength = IdentityModuleConstants.PasswordLength;
-            options.Password.RequireDigit = false;
-            options.Password.RequireLowercase = false;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = false;
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireNonAlphanumeric = false; // Special chars optional for better UX
+            options.Password.RequireUppercase = true;
+            
+            // User requirements
             options.User.RequireUniqueEmail = true;
+            
+            // Lockout settings for brute force protection
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.AllowedForNewUsers = true;
+            
+            // Sign-in requirements
+            options.SignIn.RequireConfirmedEmail = false; // Set to true in production if using email verification
         })
            .AddEntityFrameworkStores<IdentityDbContext>()
            .AddDefaultTokenProviders();

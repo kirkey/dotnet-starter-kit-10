@@ -153,6 +153,8 @@ public static class Extensions
 
     private static bool IsCorsEnabled(IConfiguration configuration)
     {
+        ArgumentNullException.ThrowIfNull(configuration);
+        
         var allowAll = configuration.GetValue("CorsOptions:AllowAll", false);
         var origins = configuration.GetSection("CorsOptions:AllowedOrigins").Get<string[]>() ?? [];
         return allowAll || origins.Length > 0;
@@ -160,6 +162,8 @@ public static class Extensions
 
     private static bool IsOpenApiEnabled(IConfiguration configuration)
     {
+        ArgumentNullException.ThrowIfNull(configuration);
+        
         return configuration.GetValue("OpenApiOptions:Enabled", true);
     }
 }

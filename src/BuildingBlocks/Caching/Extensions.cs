@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
@@ -31,7 +31,21 @@ public static class Extensions
         services.AddStackExchangeRedisCache(options =>
         {
             var config = ConfigurationOptions.Parse(cacheOptions.Redis);
-            config.AbortOnConnectFail = true;
+            
+            // Don't abort on connect fail in production - allow graceful degradation
+            config.AbortOnConnectFail = false;
+            
+            // Add connection retry logic
+            config.ConnectRetry = 3;
+            config.ConnectTimeout = 5000;
+            config.SyncTimeout = 5000;
+            config.AsyncTimeout = 5000;
+            
+            // Set default database
+            config.DefaultDatabase = 0;
+            
+            // Add command map for better performance
+            config.AllowAdmin = false;
 
             options.ConfigurationOptions = config;
         });

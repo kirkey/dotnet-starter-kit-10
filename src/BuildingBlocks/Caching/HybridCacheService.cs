@@ -45,7 +45,10 @@ public sealed class HybridCacheService : ICacheService
 
             // Fall back to L2 cache (distributed)
             var bytes = await _distributedCache.GetAsync(key, ct).ConfigureAwait(false);
-            if (bytes is null || bytes.Length == 0) return default;
+            if (bytes is null || bytes.Length == 0) 
+            {
+                return default;
+            }
 
             var value = JsonSerializer.Deserialize<T>(Utf8.GetString(bytes), JsonOpts);
             
@@ -149,7 +152,11 @@ public sealed class HybridCacheService : ICacheService
 
     private string Normalize(string key)
     {
-        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+        if (string.IsNullOrWhiteSpace(key)) 
+        {
+            throw new ArgumentException("Cache key cannot be null or whitespace.", nameof(key));
+        }
+        
         var prefix = _opts.KeyPrefix ?? string.Empty;
         if (prefix.Length == 0)
         {

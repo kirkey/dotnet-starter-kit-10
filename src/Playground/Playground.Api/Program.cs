@@ -1,4 +1,4 @@
-﻿using FSH.Framework.Web;
+﻿﻿using FSH.Framework.Web;
 using FSH.Framework.Web.Modules;
 using FSH.Modules.Auditing;
 using FSH.Modules.Identity;
@@ -63,7 +63,15 @@ app.UseHeroPlatform(p =>
     p.ServeStaticFiles = true;
 });
 
-app.MapGet("/", () => Results.Ok(new { message = "hello world!" }))
-   .WithTags("PlayGround")
-   .AllowAnonymous();
+// Health check endpoint - can be used for container/load balancer health checks
+app.MapGet("/", () => Results.Ok(new 
+    { 
+        message = "FSH Framework API is running", 
+        version = "v1",
+        timestamp = DateTimeOffset.UtcNow 
+    }))
+   .WithName("Root")
+   .WithTags("Health")
+   .AllowAnonymous()
+   .CacheOutput(policy => policy.Expire(TimeSpan.FromMinutes(1)));
 await app.RunAsync();
