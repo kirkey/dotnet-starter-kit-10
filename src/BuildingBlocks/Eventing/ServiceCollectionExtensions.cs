@@ -61,7 +61,7 @@ public static class ServiceCollectionExtensions
             return services;
         }
 
-        foreach (var assembly in assemblies)
+        foreach (Assembly assembly in assemblies)
         {
             var handlerTypes = assembly
                 .GetTypes()
@@ -77,7 +77,7 @@ public static class ServiceCollectionExtensions
 
             foreach (var handler in handlerTypes)
             {
-                foreach (var handlerInterface in handler.Interfaces)
+                foreach (Type handlerInterface in handler.Interfaces)
                 {
                     services.AddScoped(handlerInterface, handler.Type);
                 }

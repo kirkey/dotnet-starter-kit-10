@@ -6,8 +6,8 @@ internal static class ApiClientRegistration
 {
     public static IServiceCollection AddApiClients(this IServiceCollection services, IConfiguration configuration)
     {
-        var apiBaseUrl = configuration["Api:BaseUrl"]
-            ?? throw new InvalidOperationException("Api:BaseUrl configuration is missing.");
+        string apiBaseUrl = configuration["Api:BaseUrl"]
+                            ?? throw new InvalidOperationException("Api:BaseUrl configuration is missing.");
 
         static HttpClient ResolveClient(IServiceProvider sp) =>
             sp.GetRequiredService<HttpClient>();
@@ -22,8 +22,8 @@ internal static class ApiClientRegistration
         // This avoids circular dependency: TokenRefreshService -> ITokenClient -> HttpClient -> AuthorizationHeaderHandler -> TokenRefreshService
         services.AddTransient<ITokenClient>(sp =>
         {
-            var factory = sp.GetRequiredService<IHttpClientFactory>();
-            var client = factory.CreateClient("TokenClient");
+            IHttpClientFactory factory = sp.GetRequiredService<IHttpClientFactory>();
+            HttpClient client = factory.CreateClient("TokenClient");
             return new TokenClient(client);
         });
 

@@ -42,7 +42,7 @@ public sealed class TenantService : ITenantService
 
     public async Task<string> ActivateAsync(string id, CancellationToken cancellationToken)
     {
-        var tenant = await GetTenantInfoAsync(id).ConfigureAwait(false);
+        AppTenantInfo tenant = await GetTenantInfoAsync(id).ConfigureAwait(false);
 
         if (tenant.IsActive)
         {
@@ -76,12 +76,12 @@ public sealed class TenantService : ITenantService
 
     public async Task MigrateTenantAsync(AppTenantInfo tenant, CancellationToken cancellationToken)
     {
-        using var scope = _serviceProvider.CreateScope();
+        using IServiceScope scope = _serviceProvider.CreateScope();
 
         scope.ServiceProvider.GetRequiredService<IMultiTenantContextSetter>()
             .MultiTenantContext = new MultiTenantContext<AppTenantInfo>(tenant);
 
-        foreach (var initializer in scope.ServiceProvider.GetServices<IDbInitializer>())
+        foreach (IDbInitializer initializer in scope.ServiceProvider.GetServices<IDbInitializer>())
         {
             await initializer.MigrateAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -89,12 +89,12 @@ public sealed class TenantService : ITenantService
 
     public async Task SeedTenantAsync(AppTenantInfo tenant, CancellationToken cancellationToken)
     {
-        using var scope = _serviceProvider.CreateScope();
+        using IServiceScope scope = _serviceProvider.CreateScope();
 
         scope.ServiceProvider.GetRequiredService<IMultiTenantContextSetter>()
             .MultiTenantContext = new MultiTenantContext<AppTenantInfo>(tenant);
 
-        foreach (var initializer in scope.ServiceProvider.GetServices<IDbInitializer>())
+        foreach (IDbInitializer initializer in scope.ServiceProvider.GetServices<IDbInitializer>())
         {
             await initializer.SeedAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -102,7 +102,7 @@ public sealed class TenantService : ITenantService
 
     public async Task<string> DeactivateAsync(string id)
     {
-        var tenant = await GetTenantInfoAsync(id).ConfigureAwait(false);
+        AppTenantInfo tenant = await GetTenantInfoAsync(id).ConfigureAwait(false);
         if (!tenant.IsActive)
         {
             throw new CustomException($"tenant {id} is already deactivated");
@@ -135,7 +135,7 @@ public sealed class TenantService : ITenantService
         ArgumentNullException.ThrowIfNull(query);
 
         IQueryable<AppTenantInfo> tenants = _dbContext.TenantInfo;
-        var specification = new GetTenantsSpecification(query);
+        GetTenantsSpecification specification = new(query);
         IQueryable<TenantDto> projected = tenants.ApplySpecification(specification);
 
         return await projected
@@ -145,7 +145,7 @@ public sealed class TenantService : ITenantService
 
     public async Task<TenantStatusDto> GetStatusAsync(string id)
     {
-        var tenant = await GetTenantInfoAsync(id).ConfigureAwait(false);
+        AppTenantInfo tenant = await GetTenantInfoAsync(id).ConfigureAwait(false);
 
         return new TenantStatusDto
         {
@@ -161,10 +161,10 @@ public sealed class TenantService : ITenantService
 
     public async Task<DateTime> UpgradeSubscription(string id, DateTime extendedExpiryDate)
     {
-        var tenant = await GetTenantInfoAsync(id).ConfigureAwait(false);
+        AppTenantInfo tenant = await GetTenantInfoAsync(id).ConfigureAwait(false);
 
         // Ensure the date is UTC for PostgreSQL compatibility
-        var utcExpiryDate = extendedExpiryDate.Kind == DateTimeKind.Utc
+        DateTime utcExpiryDate = extendedExpiryDate.Kind == DateTimeKind.Utc
             ? extendedExpiryDate
             : DateTime.SpecifyKind(extendedExpiryDate, DateTimeKind.Utc);
 

@@ -23,7 +23,7 @@ public static class Extensions
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        var options = new OpenTelemetryOptions();
+        OpenTelemetryOptions options = new();
         builder.Configuration.GetSection(OpenTelemetryOptions.SectionName).Bind(options);
 
         if (!options.Enabled)
@@ -36,7 +36,7 @@ public static class Extensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        var resourceBuilder = ResourceBuilder
+        ResourceBuilder resourceBuilder = ResourceBuilder
             .CreateDefault()
             .AddService(serviceName: builder.Environment.ApplicationName);
 
@@ -80,7 +80,7 @@ public static class Extensions
                         });
                 }
 
-                foreach (var meterName in options.Metrics.MeterNames ?? Array.Empty<string>())
+                foreach (string meterName in options.Metrics.MeterNames ?? Array.Empty<string>())
                 {
                     metrics.AddMeter(meterName);
                 }
@@ -176,7 +176,7 @@ public static class Extensions
             otlp.Endpoint = new Uri(options.Endpoint);
         }
 
-        var protocol = options.Protocol?.Trim().ToLowerInvariant();
+        string? protocol = options.Protocol?.Trim().ToLowerInvariant();
         otlp.Protocol = protocol switch
         {
             "grpc" => OtlpExportProtocol.Grpc,

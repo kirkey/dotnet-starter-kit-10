@@ -1,6 +1,7 @@
 ﻿using FSH.Modules.Auditing.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace FSH.Modules.Auditing.Persistence;
 
@@ -20,15 +21,15 @@ internal static class EntityDiffBuilder
 
     public static List<Diff> Build(IEnumerable<EntityEntry> entries)
     {
-        var list = new List<Diff>();
+        List<Diff> list = new();
 
-        foreach (var e in entries)
+        foreach (EntityEntry e in entries)
         {
-            var entityType = e.Metadata;
-            var table = entityType.GetTableName() ?? entityType.GetDefaultTableName() ?? entityType.DisplayName();
-            var schema = entityType.GetSchema();
-            var key = BuildKey(e);
-            var op = e.State switch
+            IEntityType entityType = e.Metadata;
+            string table = entityType.GetTableName() ?? entityType.GetDefaultTableName() ?? entityType.DisplayName();
+            string? schema = entityType.GetSchema();
+            string key = BuildKey(e);
+            EntityOperation op = e.State switch
             {
                 EntityState.Added => EntityOperation.Insert,
                 EntityState.Modified => DetectSoftDelete(e) ? EntityOperation.SoftDelete : EntityOperation.Update,
@@ -36,8 +37,8 @@ internal static class EntityDiffBuilder
                 _ => EntityOperation.None
             };
 
-            var changes = new List<PropertyChange>();
-            foreach (var p in e.Properties)
+            List<PropertyChange> changes = new();
+            foreach (PropertyEntry p in e.Properties)
             {
                 if (p.Metadata.IsShadowProperty() && !p.Metadata.IsPrimaryKey()) continue;
                 if (p.Metadata.IsConcurrencyToken) continue;
@@ -48,12 +49,12 @@ internal static class EntityDiffBuilder
                 // Include only scalar types
                 if (!IsScalar(p.Metadata.ClrType)) continue;
 
-                var name = p.Metadata.Name;
-                var typeName = ToSimpleTypeName(p.Metadata.ClrType);
+                string name = p.Metadata.Name;
+                string typeName = ToSimpleTypeName(p.Metadata.ClrType);
 
                 object? oldVal = null;
                 object? newVal = null;
-                var isModified = false;
+                bool isModified = false;
 
                 switch (e.State)
                 {
@@ -103,7 +104,7 @@ internal static class EntityDiffBuilder
 
     private static string BuildKey(EntityEntry entry)
     {
-        var keyProps = entry.Properties.Where(p => p.Metadata.IsPrimaryKey()).ToArray();
+        PropertyEntry[] keyProps = entry.Properties.Where(p => p.Metadata.IsPrimaryKey()).ToArray();
         if (keyProps.Length == 0) return $"<no-key>";
         return string.Join("|", keyProps.Select(k => $"{k.Metadata.Name}:{k.CurrentValue ?? k.OriginalValue}"));
     }
@@ -111,11 +112,11 @@ internal static class EntityDiffBuilder
     private static bool DetectSoftDelete(EntityEntry entry)
     {
         // Convention: boolean property named "IsDeleted" flipped to true
-        var prop = entry.Properties.FirstOrDefault(p => p.Metadata.Name.Equals("IsDeleted", StringComparison.OrdinalIgnoreCase)
-                                                        && p.Metadata.ClrType == typeof(bool));
+        PropertyEntry? prop = entry.Properties.FirstOrDefault(p => p.Metadata.Name.Equals("IsDeleted", StringComparison.OrdinalIgnoreCase)
+                                                                   && p.Metadata.ClrType == typeof(bool));
         if (prop is null) return false;
-        var orig = prop.OriginalValue as bool? ?? false;
-        var curr = prop.CurrentValue as bool? ?? false;
+        bool orig = prop.OriginalValue as bool? ?? false;
+        bool curr = prop.CurrentValue as bool? ?? false;
         return !orig && curr;
     }
 

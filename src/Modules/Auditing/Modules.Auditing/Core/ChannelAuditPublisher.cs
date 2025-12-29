@@ -7,35 +7,29 @@ namespace FSH.Modules.Auditing.Core;
 /// <summary>
 /// Non-blocking publisher using a bounded channel. Writer is used on request path; reader is drained by a background worker.
 /// </summary>
-public sealed class ChannelAuditPublisher : IAuditPublisher
+public sealed class ChannelAuditPublisher(IHttpContextAccessor httpContextAccessor, int capacity = 50_000)
+    : IAuditPublisher
 {
     private static readonly IAuditScope DefaultScope = new DefaultAuditScope(null, null, null, null, null, null, null, null, AuditTag.None);
-    private readonly Channel<AuditEnvelope> _channel;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly Channel<AuditEnvelope> _channel = Channel.CreateBounded<AuditEnvelope>(new BoundedChannelOptions(capacity)
+    {
+        AllowSynchronousContinuations = false,
+        SingleReader = true,
+        SingleWriter = false,
+        FullMode = BoundedChannelFullMode.DropOldest
+    });
 
     public IAuditScope CurrentScope =>
-        _httpContextAccessor.HttpContext?.RequestServices.GetService(typeof(IAuditScope)) as IAuditScope
+        httpContextAccessor.HttpContext?.RequestServices.GetService(typeof(IAuditScope)) as IAuditScope
         ?? DefaultScope;
 
-    public ChannelAuditPublisher(IHttpContextAccessor httpContextAccessor, int capacity = 50_000)
-    {
-        _httpContextAccessor = httpContextAccessor;
-
-        // Drop oldest to keep latency predictable under pressure.
-        _channel = Channel.CreateBounded<AuditEnvelope>(new BoundedChannelOptions(capacity)
-        {
-            AllowSynchronousContinuations = false,
-            SingleReader = true,
-            SingleWriter = false,
-            FullMode = BoundedChannelFullMode.DropOldest
-        });
-    }
+    // Drop oldest to keep latency predictable under pressure.
 
     public ValueTask PublishAsync(IAuditEvent auditEvent, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(auditEvent);
 
-        var scope = CurrentScope;
+        IAuditScope scope = CurrentScope;
 
         if (auditEvent is not AuditEnvelope env)
         {

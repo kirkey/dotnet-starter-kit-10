@@ -9,6 +9,7 @@ using FSH.Modules.Identity.Data;
 using FSH.Modules.Identity.Features.v1.RoleClaims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace FSH.Modules.Identity.Features.v1.Roles;
 
@@ -26,7 +27,7 @@ public class RoleService(RoleManager<FshRole> roleManager,
             throw new NotFoundException("Role store not configured. Ensure .AddRoles<FshRole>() and EF stores.");
 
 
-        var roles = await roleManager.Roles
+        List<RoleDto> roles = await roleManager.Roles
             .Select(role => new RoleDto { Id = role.Id, Name = role.Name!, Description = role.Description })
             .ToListAsync();
 
@@ -72,7 +73,7 @@ public class RoleService(RoleManager<FshRole> roleManager,
 
     public async Task<RoleDto> GetWithPermissionsAsync(string id, CancellationToken cancellationToken)
     {
-        var role = await GetRoleAsync(id);
+        RoleDto? role = await GetRoleAsync(id);
         _ = role ?? throw new NotFoundException("role not found");
 
         role.Permissions = await context.RoleClaims
@@ -87,7 +88,7 @@ public class RoleService(RoleManager<FshRole> roleManager,
     {
         ArgumentNullException.ThrowIfNull(permissions);
 
-        var role = await roleManager.FindByIdAsync(roleId);
+        FshRole? role = await roleManager.FindByIdAsync(roleId);
         _ = role ?? throw new NotFoundException("role not found");
         if (role.Name == RoleConstants.Admin)
         {
@@ -100,15 +101,15 @@ public class RoleService(RoleManager<FshRole> roleManager,
             permissions.RemoveAll(u => u.StartsWith("Permissions.Root.", StringComparison.InvariantCultureIgnoreCase));
         }
 
-        var currentClaims = await roleManager.GetClaimsAsync(role);
+        IList<Claim> currentClaims = await roleManager.GetClaimsAsync(role);
 
         // Remove permissions that were previously selected
-        foreach (var claim in currentClaims.Where(c => !permissions.Exists(p => p == c.Value)))
+        foreach (Claim claim in currentClaims.Where(c => !permissions.Exists(p => p == c.Value)))
         {
-            var result = await roleManager.RemoveClaimAsync(role, claim);
+            IdentityResult result = await roleManager.RemoveClaimAsync(role, claim);
             if (!result.Succeeded)
             {
-                var errors = result.Errors.Select(error => error.Description).ToList();
+                List<string> errors = result.Errors.Select(error => error.Description).ToList();
                 throw new CustomException("operation failed", errors);
             }
         }

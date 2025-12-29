@@ -15,7 +15,7 @@ public class SmtpMailService(IOptions<MailOptions> settings, ILogger<SmtpMailSer
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        using var email = new MimeMessage();
+        using MimeMessage email = new();
 
         // From
         email.From.Add(new MailboxAddress(_settings.DisplayName, request.From ?? _settings.From));
@@ -45,12 +45,12 @@ public class SmtpMailService(IOptions<MailOptions> settings, ILogger<SmtpMailSer
         // Headers
         if (request.Headers != null)
         {
-            foreach (var header in request.Headers)
+            foreach (KeyValuePair<string, string> header in request.Headers)
                 email.Headers.Add(header.Key, header.Value);
         }
 
         // Content
-        var builder = new BodyBuilder();
+        BodyBuilder builder = new();
         email.Sender = new MailboxAddress(request.DisplayName ?? _settings.DisplayName, request.From ?? _settings.From);
         email.Subject = request.Subject;
         builder.HtmlBody = request.Body;
@@ -58,9 +58,9 @@ public class SmtpMailService(IOptions<MailOptions> settings, ILogger<SmtpMailSer
         // Create the file attachments for this e-mail message
         if (request.AttachmentData != null)
         {
-            foreach (var attachmentInfo in request.AttachmentData)
+            foreach (KeyValuePair<string, byte[]> attachmentInfo in request.AttachmentData)
             {
-                using var stream = new MemoryStream();
+                using MemoryStream stream = new();
                 await stream.WriteAsync(attachmentInfo.Value, ct);
                 stream.Position = 0;
                 await builder.Attachments.AddAsync(attachmentInfo.Key, stream, ct);
@@ -69,7 +69,7 @@ public class SmtpMailService(IOptions<MailOptions> settings, ILogger<SmtpMailSer
 
         email.Body = builder.ToMessageBody();
 
-        using var client = new SmtpClient();
+        using SmtpClient client = new();
         try
         {
             await client.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.StartTls, ct);

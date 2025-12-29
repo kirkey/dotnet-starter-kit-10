@@ -7,20 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Auditing.Features.v1.GetAuditSummary;
 
-public sealed class GetAuditSummaryQueryHandler : IQueryHandler<GetAuditSummaryQuery, AuditSummaryAggregateDto>
+public sealed class GetAuditSummaryQueryHandler(AuditDbContext dbContext)
+    : IQueryHandler<GetAuditSummaryQuery, AuditSummaryAggregateDto>
 {
-    private readonly AuditDbContext _dbContext;
-
-    public GetAuditSummaryQueryHandler(AuditDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async ValueTask<AuditSummaryAggregateDto> Handle(GetAuditSummaryQuery query, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(query);
 
-        IQueryable<AuditRecord> audits = _dbContext.AuditRecords.AsNoTracking();
+        IQueryable<AuditRecord> audits = dbContext.AuditRecords.AsNoTracking();
 
         if (query.FromUtc.HasValue)
         {
@@ -37,28 +31,28 @@ public sealed class GetAuditSummaryQueryHandler : IQueryHandler<GetAuditSummaryQ
             audits = audits.Where(a => a.TenantId == query.TenantId);
         }
 
-        var list = await audits.ToListAsync(cancellationToken).ConfigureAwait(false);
+        List<AuditRecord> list = await audits.ToListAsync(cancellationToken).ConfigureAwait(false);
 
-        var aggregate = new AuditSummaryAggregateDto();
+        AuditSummaryAggregateDto aggregate = new();
 
-        foreach (var record in list)
+        foreach (AuditRecord record in list)
         {
-            var type = (AuditEventType)record.EventType;
-            aggregate.EventsByType[type] = aggregate.EventsByType.TryGetValue(type, out var c) ? c + 1 : 1;
+            AuditEventType type = (AuditEventType)record.EventType;
+            aggregate.EventsByType[type] = aggregate.EventsByType.TryGetValue(type, out long c) ? c + 1 : 1;
 
-            var severity = (AuditSeverity)record.Severity;
-            aggregate.EventsBySeverity[severity] = aggregate.EventsBySeverity.TryGetValue(severity, out var s) ? s + 1 : 1;
+            AuditSeverity severity = (AuditSeverity)record.Severity;
+            aggregate.EventsBySeverity[severity] = aggregate.EventsBySeverity.TryGetValue(severity, out long s) ? s + 1 : 1;
 
             if (!string.IsNullOrWhiteSpace(record.Source))
             {
-                var key = record.Source!;
-                aggregate.EventsBySource[key] = aggregate.EventsBySource.TryGetValue(key, out var cs) ? cs + 1 : 1;
+                string key = record.Source!;
+                aggregate.EventsBySource[key] = aggregate.EventsBySource.TryGetValue(key, out long cs) ? cs + 1 : 1;
             }
 
             if (!string.IsNullOrWhiteSpace(record.TenantId))
             {
-                var tenantKey = record.TenantId!;
-                aggregate.EventsByTenant[tenantKey] = aggregate.EventsByTenant.TryGetValue(tenantKey, out var ct) ? ct + 1 : 1;
+                string tenantKey = record.TenantId!;
+                aggregate.EventsByTenant[tenantKey] = aggregate.EventsByTenant.TryGetValue(tenantKey, out long ct) ? ct + 1 : 1;
             }
         }
 

@@ -23,8 +23,8 @@ public class LocalStorageService : IStorageService
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        var rules = FileTypeMetadata.GetRules(fileType);
-        var extension = Path.GetExtension(request.FileName);
+        FileValidationRules rules = FileTypeMetadata.GetRules(fileType);
+        string extension = Path.GetExtension(request.FileName);
 
         if (string.IsNullOrWhiteSpace(extension) ||
             !rules.AllowedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
@@ -38,11 +38,11 @@ public class LocalStorageService : IStorageService
         }
 
         #pragma warning disable CA1308 // folder names are intentionally lower-case for URLs/paths
-        var folder = Regex.Replace(typeof(T).Name.ToLowerInvariant(), @"[^a-z0-9]", "_");
+        string folder = Regex.Replace(typeof(T).Name.ToLowerInvariant(), @"[^a-z0-9]", "_");
         #pragma warning restore CA1308
-        var safeFileName = $"{Guid.NewGuid():N}_{SanitizeFileName(request.FileName)}";
-        var relativePath = Path.Combine(UploadBasePath, folder, safeFileName);
-        var fullPath = Path.Combine(_rootPath, relativePath);
+        string safeFileName = $"{Guid.NewGuid():N}_{SanitizeFileName(request.FileName)}";
+        string relativePath = Path.Combine(UploadBasePath, folder, safeFileName);
+        string fullPath = Path.Combine(_rootPath, relativePath);
 
         Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
 
@@ -55,7 +55,7 @@ public class LocalStorageService : IStorageService
     {
         if (string.IsNullOrWhiteSpace(path)) return Task.CompletedTask;
 
-        var fullPath = Path.Combine(_rootPath, path);
+        string fullPath = Path.Combine(_rootPath, path);
 
         if (File.Exists(fullPath))
         {

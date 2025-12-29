@@ -15,8 +15,8 @@ public sealed class UpdateTenantThemeCommandHandler(
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        var tenantId = tenantAccessor.MultiTenantContext?.TenantInfo?.Id
-            ?? throw new InvalidOperationException("No tenant context available");
+        string tenantId = tenantAccessor.MultiTenantContext?.TenantInfo?.Id
+                          ?? throw new InvalidOperationException("No tenant context available");
 
         await themeService.UpdateThemeAsync(tenantId, command.Theme, cancellationToken);
 

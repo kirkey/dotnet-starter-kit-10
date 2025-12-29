@@ -24,7 +24,7 @@ public static class UpdateRolePermissionsEndpoint
                 return Results.BadRequest();
             }
 
-            var response = await mediator.Send(request, cancellationToken);
+            string response = await mediator.Send(request, cancellationToken);
             return Results.Ok(response);
         })
         .WithName("UpdateRolePermissions")

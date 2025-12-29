@@ -34,10 +34,10 @@ public sealed class OutboxDispatcher
 
     public async Task DispatchAsync(CancellationToken ct = default)
     {
-        var batchSize = _options.OutboxBatchSize;
+        int batchSize = _options.OutboxBatchSize;
         if (batchSize <= 0) batchSize = 100;
 
-        var messages = await _outbox.GetPendingBatchAsync(batchSize, ct).ConfigureAwait(false);
+        IReadOnlyList<OutboxMessage> messages = await _outbox.GetPendingBatchAsync(batchSize, ct).ConfigureAwait(false);
         if (messages.Count == 0)
         {
             _logger.LogDebug("No outbox messages to dispatch.");
@@ -46,15 +46,15 @@ public sealed class OutboxDispatcher
 
         _logger.LogInformation("Dispatching {Count} outbox messages (BatchSize={BatchSize})", messages.Count, batchSize);
 
-        var processedCount = 0;
-        var failedCount = 0;
-        var deadLetterCount = 0;
+        int processedCount = 0;
+        int failedCount = 0;
+        int deadLetterCount = 0;
 
-        foreach (var message in messages)
+        foreach (OutboxMessage message in messages)
         {
             try
             {
-                var @event = _serializer.Deserialize(message.Payload, message.Type);
+                IIntegrationEvent? @event = _serializer.Deserialize(message.Payload, message.Type);
                 if (@event is null)
                 {
                     await _outbox.MarkAsFailedAsync(message, "Cannot deserialize integration event.", isDead: true, ct).ConfigureAwait(false);
@@ -69,8 +69,8 @@ public sealed class OutboxDispatcher
             }
             catch (Exception ex)
             {
-                var maxRetries = _options.OutboxMaxRetries <= 0 ? 5 : _options.OutboxMaxRetries;
-                var isDead = message.RetryCount + 1 >= maxRetries;
+                int maxRetries = _options.OutboxMaxRetries <= 0 ? 5 : _options.OutboxMaxRetries;
+                bool isDead = message.RetryCount + 1 >= maxRetries;
 
                 await _outbox.MarkAsFailedAsync(message, ex.Message, isDead, ct).ConfigureAwait(false);
 

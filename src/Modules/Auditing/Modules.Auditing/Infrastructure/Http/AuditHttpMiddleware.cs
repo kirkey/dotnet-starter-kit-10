@@ -8,60 +8,53 @@ using System.Diagnostics;
 
 namespace FSH.Modules.Auditing.Infrastructure.Http;
 
-public sealed class AuditHttpMiddleware
+public sealed class AuditHttpMiddleware(RequestDelegate next, AuditHttpOptions opts, IAuditPublisher publisher)
 {
-    private readonly RequestDelegate _next;
-    private readonly AuditHttpOptions _opts;
-    private readonly IAuditPublisher _publisher;
-
-    public AuditHttpMiddleware(RequestDelegate next, AuditHttpOptions opts, IAuditPublisher publisher)
-        => (_next, _opts, _publisher) = (next, opts, publisher);
-
     public async Task InvokeAsync(HttpContext ctx)
     {
         ArgumentNullException.ThrowIfNull(ctx);
 
         if (ShouldSkip(ctx))
         {
-            await _next(ctx);
+            await next(ctx);
             return;
         }
 
-        var masker = ctx.RequestServices.GetService<IAuditMaskingService>();
-        var sw = Stopwatch.StartNew();
+        IAuditMaskingService? masker = ctx.RequestServices.GetService<IAuditMaskingService>();
+        Stopwatch sw = Stopwatch.StartNew();
 
         object? reqPreview = null;
         int reqSize = 0;
-        if (_opts.CaptureBodies &&
-            ContentTypeHelper.IsJsonLike(ctx.Request.ContentType, _opts.AllowedContentTypes))
+        if (opts.CaptureBodies &&
+            ContentTypeHelper.IsJsonLike(ctx.Request.ContentType, opts.AllowedContentTypes))
         {
-            (reqPreview, reqSize) = await HttpBodyReader.ReadRequestAsync(ctx, _opts.MaxRequestBytes, ctx.RequestAborted);
+            (reqPreview, reqSize) = await HttpBodyReader.ReadRequestAsync(ctx, opts.MaxRequestBytes, ctx.RequestAborted);
             if (reqPreview is not null && masker is not null)
             {
                 reqPreview = masker.ApplyMasking(reqPreview);
             }
         }
 
-        var originalBody = ctx.Response.Body;
-        await using var tee = new MemoryStream();
-        await using var respBuffer = new MemoryStream();
+        Stream originalBody = ctx.Response.Body;
+        await using MemoryStream tee = new();
+        await using MemoryStream respBuffer = new();
         ctx.Response.Body = tee;
 
         try
         {
-            await _next(ctx);
+            await next(ctx);
             sw.Stop();
 
             object? respPreview = null;
             int respSize = 0;
 
-            if (_opts.CaptureBodies &&
-                ContentTypeHelper.IsJsonLike(ctx.Response.ContentType, _opts.AllowedContentTypes))
+            if (opts.CaptureBodies &&
+                ContentTypeHelper.IsJsonLike(ctx.Response.ContentType, opts.AllowedContentTypes))
             {
                 tee.Position = 0;
                 await tee.CopyToAsync(respBuffer, ctx.RequestAborted);
                 (respPreview, respSize) = await HttpBodyReader.ReadResponseAsync(
-                    respBuffer, _opts.MaxResponseBytes, ctx.RequestAborted);
+                    respBuffer, opts.MaxResponseBytes, ctx.RequestAborted);
                 if (respPreview is not null && masker is not null)
                 {
                     respPreview = masker.ApplyMasking(respPreview);
@@ -77,32 +70,32 @@ public sealed class AuditHttpMiddleware
                 .WithActivityResult(
                     statusCode: ctx.Response.StatusCode,
                     durationMs: (int)sw.Elapsed.TotalMilliseconds,
-                    captured: _opts.CaptureBodies ? BodyCapture.Both : BodyCapture.None,
+                    captured: opts.CaptureBodies ? BodyCapture.Both : BodyCapture.None,
                     requestSize: reqSize,
                     responseSize: respSize,
                     requestPreview: reqPreview,
                     responsePreview: respPreview)
                 .WithSource("api")
-                .WithTenant((_publisher.CurrentScope?.TenantId) ?? null)
-                .WithUser(_publisher.CurrentScope?.UserId, _publisher.CurrentScope?.UserName)
-                .WithCorrelation(_publisher.CurrentScope?.CorrelationId ?? ctx.TraceIdentifier)
-                .WithRequestId(_publisher.CurrentScope?.RequestId ?? ctx.TraceIdentifier)
+                .WithTenant((publisher.CurrentScope?.TenantId) ?? null)
+                .WithUser(publisher.CurrentScope?.UserId, publisher.CurrentScope?.UserName)
+                .WithCorrelation(publisher.CurrentScope?.CorrelationId ?? ctx.TraceIdentifier)
+                .WithRequestId(publisher.CurrentScope?.RequestId ?? ctx.TraceIdentifier)
                 .WriteAsync(ctx.RequestAborted);
         }
         catch (Exception ex)
         {
             sw.Stop();
 
-            var sev = ExceptionSeverityClassifier.Classify(ex);
-            if (sev >= _opts.MinExceptionSeverity)
+            AuditSeverity sev = ExceptionSeverityClassifier.Classify(ex);
+            if (sev >= opts.MinExceptionSeverity)
             {
                 await Audit.ForException(ex, ExceptionArea.Api,
                         routeOrLocation: ctx.Request.Path, severity: sev)
                     .WithSource("api")
-                    .WithTenant((_publisher.CurrentScope?.TenantId) ?? null)
-                    .WithUser(_publisher.CurrentScope?.UserId, _publisher.CurrentScope?.UserName)
-                    .WithCorrelation(_publisher.CurrentScope?.CorrelationId ?? ctx.TraceIdentifier)
-                    .WithRequestId(_publisher.CurrentScope?.RequestId ?? ctx.TraceIdentifier)
+                    .WithTenant((publisher.CurrentScope?.TenantId) ?? null)
+                    .WithUser(publisher.CurrentScope?.UserId, publisher.CurrentScope?.UserName)
+                    .WithCorrelation(publisher.CurrentScope?.CorrelationId ?? ctx.TraceIdentifier)
+                    .WithRequestId(publisher.CurrentScope?.RequestId ?? ctx.TraceIdentifier)
                     .WriteAsync(ctx.RequestAborted);
             }
 
@@ -113,8 +106,8 @@ public sealed class AuditHttpMiddleware
 
     private bool ShouldSkip(HttpContext ctx)
     {
-        var path = ctx.Request.Path.Value ?? string.Empty;
-        return _opts.ExcludePathStartsWith.Any(prefix =>
+        string path = ctx.Request.Path.Value ?? string.Empty;
+        return opts.ExcludePathStartsWith.Any(prefix =>
             path.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
     }
 }

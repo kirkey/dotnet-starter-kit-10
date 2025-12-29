@@ -18,7 +18,7 @@ public sealed class JsonMaskingService : IAuditMaskingService
     {
         try
         {
-            var json = JsonSerializer.SerializeToNode(payload);
+            JsonNode? json = JsonSerializer.SerializeToNode(payload);
             if (json is null) return payload;
             MaskNode(json);
             return json;
@@ -33,7 +33,7 @@ public sealed class JsonMaskingService : IAuditMaskingService
     {
         if (node is JsonObject obj)
         {
-            foreach (var kvp in obj.ToList())
+            foreach (KeyValuePair<string, JsonNode?> kvp in obj.ToList())
             {
                 if (ShouldMask(kvp.Key))
                 {
@@ -47,7 +47,7 @@ public sealed class JsonMaskingService : IAuditMaskingService
         }
         else if (node is JsonArray arr)
         {
-            foreach (var el in arr)
+            foreach (JsonNode? el in arr)
                 if (el is not null) MaskNode(el);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Asp.Versioning.Builder;
 using FSH.Framework.Core.Context;
 using FSH.Framework.Eventing;
 using FSH.Framework.Eventing.Outbox;
@@ -62,7 +63,7 @@ public class IdentityModule : IModule
     public void ConfigureServices(IHostApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
-        var services = builder.Services;
+        IServiceCollection services = builder.Services;
         services.AddSingleton<IAuthorizationMiddlewareResultHandler, PathAwareAuthorizationHandler>();
         services.AddScoped<ICurrentUser, CurrentUserService>();
         services.AddScoped<ITokenService, TokenService>();
@@ -126,12 +127,12 @@ public class IdentityModule : IModule
     {
         ArgumentNullException.ThrowIfNull(endpoints);
 
-        var apiVersionSet = endpoints.NewApiVersionSet()
+        ApiVersionSet apiVersionSet = endpoints.NewApiVersionSet()
             .HasApiVersion(new ApiVersion(1))
             .ReportApiVersions()
             .Build();
 
-        var group = endpoints
+        RouteGroupBuilder group = endpoints
             .MapGroup("api/v{version:apiVersion}/identity")
             .WithTags("Identity")
             .WithApiVersionSet(apiVersionSet);
@@ -141,7 +142,7 @@ public class IdentityModule : IModule
         group.MapRefreshTokenEndpoint().AllowAnonymous().RequireRateLimiting("auth");
 
         // example Hangfire setup for Identity outbox dispatcher
-        var jobManager = endpoints.ServiceProvider.GetService<IRecurringJobManager>();
+        IRecurringJobManager? jobManager = endpoints.ServiceProvider.GetService<IRecurringJobManager>();
         if (jobManager is not null)
         {
             jobManager.AddOrUpdate(

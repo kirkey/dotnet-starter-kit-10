@@ -27,8 +27,8 @@ public static class Extensions
             options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
             options.AddDocumentTransformer(async (document, context, ct) =>
             {
-                var provider = context.ApplicationServices;
-                var openApi = provider.GetRequiredService<IOptions<OpenApiOptions>>().Value;
+                IServiceProvider provider = context.ApplicationServices;
+                OpenApiOptions openApi = provider.GetRequiredService<IOptions<OpenApiOptions>>().Value;
 
                 // Title/metadata
                 document.Info = new OpenApiInfo
@@ -65,7 +65,7 @@ public static class Extensions
 
         app.MapScalarApiReference(options =>
         {
-            var configuration = app.Configuration;
+            IConfiguration configuration = app.Configuration;
             options
                 .WithTitle(configuration["OpenApi:Title"] ?? "FSH API")
                 .WithTheme(Scalar.AspNetCore.ScalarTheme.Alternate)

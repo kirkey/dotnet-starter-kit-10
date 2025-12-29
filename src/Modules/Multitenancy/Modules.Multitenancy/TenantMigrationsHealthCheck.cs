@@ -8,25 +8,18 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace FSH.Modules.Multitenancy;
 
-public sealed class TenantMigrationsHealthCheck : IHealthCheck
+public sealed class TenantMigrationsHealthCheck(IServiceScopeFactory scopeFactory) : IHealthCheck
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-
-    public TenantMigrationsHealthCheck(IServiceScopeFactory scopeFactory)
-    {
-        _scopeFactory = scopeFactory;
-    }
-
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = scopeFactory.CreateScope();
 
-        var tenantStore = scope.ServiceProvider.GetRequiredService<IMultiTenantStore<AppTenantInfo>>();
-        var tenants = await tenantStore.GetAllAsync().ConfigureAwait(false);
+        IMultiTenantStore<AppTenantInfo> tenantStore = scope.ServiceProvider.GetRequiredService<IMultiTenantStore<AppTenantInfo>>();
+        IEnumerable<AppTenantInfo> tenants = await tenantStore.GetAllAsync().ConfigureAwait(false);
 
-        var details = new Dictionary<string, object>();
+        Dictionary<string, object> details = new();
 
-        foreach (var tenant in tenants)
+        foreach (AppTenantInfo tenant in tenants)
         {
             try
             {
@@ -35,9 +28,9 @@ public sealed class TenantMigrationsHealthCheck : IHealthCheck
                 tenantScope.ServiceProvider.GetRequiredService<IMultiTenantContextSetter>()
                     .MultiTenantContext = new MultiTenantContext<AppTenantInfo>(tenant);
 
-                var dbContext = tenantScope.ServiceProvider.GetRequiredService<TenantDbContext>();
+                TenantDbContext dbContext = tenantScope.ServiceProvider.GetRequiredService<TenantDbContext>();
 
-                var pendingMigrations = await dbContext.Database
+                IEnumerable<string> pendingMigrations = await dbContext.Database
                     .GetPendingMigrationsAsync(cancellationToken)
                     .ConfigureAwait(false);
 

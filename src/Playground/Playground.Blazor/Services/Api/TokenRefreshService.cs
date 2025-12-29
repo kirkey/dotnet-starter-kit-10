@@ -19,72 +19,63 @@ internal interface ITokenRefreshService
     Task<string?> TryRefreshTokenAsync(CancellationToken cancellationToken = default);
 }
 
-internal sealed class TokenRefreshService : ITokenRefreshService, IDisposable
+internal sealed class TokenRefreshService(
+    IHttpContextAccessor httpContextAccessor,
+    ITokenClient tokenClient,
+    ILogger<TokenRefreshService> logger)
+    : ITokenRefreshService, IDisposable
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ITokenClient _tokenClient;
-    private readonly ILogger<TokenRefreshService> _logger;
     private readonly SemaphoreSlim _refreshLock = new(1, 1);
-
-    public TokenRefreshService(
-        IHttpContextAccessor httpContextAccessor,
-        ITokenClient tokenClient,
-        ILogger<TokenRefreshService> logger)
-    {
-        _httpContextAccessor = httpContextAccessor;
-        _tokenClient = tokenClient;
-        _logger = logger;
-    }
 
     public async Task<string?> TryRefreshTokenAsync(CancellationToken cancellationToken = default)
     {
-        var httpContext = _httpContextAccessor.HttpContext;
+        HttpContext? httpContext = httpContextAccessor.HttpContext;
         if (httpContext is null)
         {
-            _logger.LogWarning("HttpContext is not available for token refresh");
+            logger.LogWarning("HttpContext is not available for token refresh");
             return null;
         }
 
         // Prevent concurrent refresh attempts
         if (!await _refreshLock.WaitAsync(TimeSpan.FromSeconds(10), cancellationToken))
         {
-            _logger.LogWarning("Token refresh lock acquisition timed out");
+            logger.LogWarning("Token refresh lock acquisition timed out");
             return null;
         }
 
         try
         {
-            var user = httpContext.User;
+            ClaimsPrincipal? user = httpContext.User;
             if (user?.Identity?.IsAuthenticated != true)
             {
-                _logger.LogDebug("User is not authenticated, cannot refresh token");
+                logger.LogDebug("User is not authenticated, cannot refresh token");
                 return null;
             }
 
-            var currentAccessToken = user.FindFirst("access_token")?.Value;
-            var refreshToken = user.FindFirst("refresh_token")?.Value;
-            var tenant = user.FindFirst("tenant")?.Value ?? "root";
+            string? currentAccessToken = user.FindFirst("access_token")?.Value;
+            string? refreshToken = user.FindFirst("refresh_token")?.Value;
+            string tenant = user.FindFirst("tenant")?.Value ?? "root";
 
             if (string.IsNullOrEmpty(refreshToken))
             {
-                _logger.LogWarning("No refresh token available");
+                logger.LogWarning("No refresh token available");
                 return null;
             }
 
             if (string.IsNullOrEmpty(currentAccessToken))
             {
-                _logger.LogWarning("No access token available for refresh");
+                logger.LogWarning("No access token available for refresh");
                 return null;
             }
 
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Attempting to refresh access token for tenant {Tenant}. RefreshToken length: {RefreshTokenLength}, First chars: {RefreshTokenPreview}",
                 tenant,
                 refreshToken.Length,
                 refreshToken[..Math.Min(8, refreshToken.Length)] + "...");
 
             // Call the refresh token API
-            var refreshResponse = await _tokenClient.RefreshAsync(
+            RefreshTokenCommandResponse? refreshResponse = await tokenClient.RefreshAsync(
                 tenant,
                 new RefreshTokenCommand
                 {
@@ -95,16 +86,16 @@ internal sealed class TokenRefreshService : ITokenRefreshService, IDisposable
 
             if (refreshResponse is null || string.IsNullOrEmpty(refreshResponse.Token))
             {
-                _logger.LogWarning("Token refresh returned empty response");
+                logger.LogWarning("Token refresh returned empty response");
                 return null;
             }
 
             // Parse the new JWT to extract claims
-            var jwtHandler = new JwtSecurityTokenHandler();
-            var jwtToken = jwtHandler.ReadJwtToken(refreshResponse.Token);
+            JwtSecurityTokenHandler jwtHandler = new();
+            JwtSecurityToken? jwtToken = jwtHandler.ReadJwtToken(refreshResponse.Token);
 
             // Build new claims list with updated tokens
-            var newClaims = new List<Claim>
+            List<Claim> newClaims = new()
             {
                 new(ClaimTypes.NameIdentifier, jwtToken.Subject ?? user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? Guid.NewGuid().ToString()),
                 new(ClaimTypes.Email, user.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty),
@@ -114,19 +105,19 @@ internal sealed class TokenRefreshService : ITokenRefreshService, IDisposable
             };
 
             // Preserve name claim
-            var nameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "name" || c.Type == ClaimTypes.Name);
+            Claim? nameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "name" || c.Type == ClaimTypes.Name);
             if (nameClaim != null)
             {
                 newClaims.Add(new Claim(ClaimTypes.Name, nameClaim.Value));
             }
 
             // Preserve role claims
-            var roleClaims = jwtToken.Claims.Where(c => c.Type == "role" || c.Type == ClaimTypes.Role);
+            IEnumerable<Claim> roleClaims = jwtToken.Claims.Where(c => c.Type == "role" || c.Type == ClaimTypes.Role);
             newClaims.AddRange(roleClaims.Select(r => new Claim(ClaimTypes.Role, r.Value)));
 
             // Re-sign in with updated claims
-            var identity = new ClaimsIdentity(newClaims, "Cookies");
-            var principal = new ClaimsPrincipal(identity);
+            ClaimsIdentity identity = new(newClaims, "Cookies");
+            ClaimsPrincipal principal = new(identity);
 
             await httpContext.SignInAsync("Cookies", principal, new AuthenticationProperties
             {
@@ -134,18 +125,18 @@ internal sealed class TokenRefreshService : ITokenRefreshService, IDisposable
                 ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7)
             });
 
-            _logger.LogInformation("Access token refreshed successfully");
+            logger.LogInformation("Access token refreshed successfully");
 
             return refreshResponse.Token;
         }
         catch (ApiException ex) when (ex.StatusCode == 401)
         {
-            _logger.LogWarning(ex, "Refresh token is invalid or expired, user needs to re-authenticate");
+            logger.LogWarning(ex, "Refresh token is invalid or expired, user needs to re-authenticate");
             return null;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to refresh access token");
+            logger.LogError(ex, "Failed to refresh access token");
             return null;
         }
         finally

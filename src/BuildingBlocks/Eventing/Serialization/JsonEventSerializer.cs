@@ -25,13 +25,13 @@ public sealed class JsonEventSerializer : IEventSerializer
         ArgumentNullException.ThrowIfNull(payload);
         ArgumentNullException.ThrowIfNull(eventTypeName);
 
-        var type = Type.GetType(eventTypeName, throwOnError: false);
+        Type? type = Type.GetType(eventTypeName, throwOnError: false);
         if (type is null)
         {
             return null;
         }
 
-        var result = JsonSerializer.Deserialize(payload, type, Options);
+        object? result = JsonSerializer.Deserialize(payload, type, Options);
         return result as IIntegrationEvent;
     }
 }

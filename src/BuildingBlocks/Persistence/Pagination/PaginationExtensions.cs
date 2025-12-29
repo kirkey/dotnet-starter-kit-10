@@ -17,11 +17,11 @@ public static class PaginationExtensions
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(pagination);
 
-        var pageNumber = pagination.PageNumber is null or <= 0
+        int pageNumber = pagination.PageNumber is null or <= 0
             ? 1
             : pagination.PageNumber.Value;
 
-        var pageSize = pagination.PageSize is null or <= 0
+        int pageSize = pagination.PageSize is null or <= 0
             ? DefaultPageSize
             : pagination.PageSize.Value;
 
@@ -43,9 +43,9 @@ public static class PaginationExtensions
         CancellationToken cancellationToken)
         where T : class
     {
-        var totalCount = await source.LongCountAsync(cancellationToken).ConfigureAwait(false);
+        long totalCount = await source.LongCountAsync(cancellationToken).ConfigureAwait(false);
 
-        var totalPages = totalCount == 0
+        int totalPages = totalCount == 0
             ? 0
             : (int)Math.Ceiling(totalCount / (double)pageSize);
 
@@ -54,9 +54,9 @@ public static class PaginationExtensions
             pageNumber = totalPages;
         }
 
-        var skip = (pageNumber - 1) * pageSize;
+        int skip = (pageNumber - 1) * pageSize;
 
-        var items = await source
+        List<T> items = await source
             .Skip(skip)
             .Take(pageSize)
             .ToListAsync(cancellationToken)

@@ -14,21 +14,13 @@ public interface IPasswordHistoryService
     Task CleanupOldPasswordHistoryAsync(string userId, CancellationToken cancellationToken = default);
 }
 
-internal sealed class PasswordHistoryService : IPasswordHistoryService
+internal sealed class PasswordHistoryService(
+    IdentityDbContext db,
+    UserManager<FshUser> userManager,
+    IOptions<PasswordPolicyOptions> passwordPolicyOptions)
+    : IPasswordHistoryService
 {
-    private readonly IdentityDbContext _db;
-    private readonly UserManager<FshUser> _userManager;
-    private readonly PasswordPolicyOptions _passwordPolicyOptions;
-
-    public PasswordHistoryService(
-        IdentityDbContext db,
-        UserManager<FshUser> userManager,
-        IOptions<PasswordPolicyOptions> passwordPolicyOptions)
-    {
-        _db = db;
-        _userManager = userManager;
-        _passwordPolicyOptions = passwordPolicyOptions.Value;
-    }
+    private readonly PasswordPolicyOptions _passwordPolicyOptions = passwordPolicyOptions.Value;
 
     public async Task<bool> IsPasswordInHistoryAsync(FshUser user, string newPassword, CancellationToken cancellationToken = default)
     {
@@ -36,13 +28,13 @@ internal sealed class PasswordHistoryService : IPasswordHistoryService
         ArgumentNullException.ThrowIfNull(newPassword);
 
         // Get the last N passwords from history (where N = PasswordHistoryCount)
-        var passwordHistoryCount = _passwordPolicyOptions.PasswordHistoryCount;
+        int passwordHistoryCount = _passwordPolicyOptions.PasswordHistoryCount;
         if (passwordHistoryCount <= 0)
         {
             return false; // Password history check disabled
         }
 
-        var recentPasswordHashes = await _db.Set<PasswordHistory>()
+        List<string> recentPasswordHashes = await db.Set<PasswordHistory>()
             .Where(ph => ph.UserId == user.Id)
             .OrderByDescending(ph => ph.CreatedAt)
             .Take(passwordHistoryCount)
@@ -50,10 +42,10 @@ internal sealed class PasswordHistoryService : IPasswordHistoryService
             .ToListAsync(cancellationToken);
 
         // Check if the new password matches any recent password
-        foreach (var passwordHash in recentPasswordHashes)
+        foreach (string passwordHash in recentPasswordHashes)
         {
-            var passwordHasher = _userManager.PasswordHasher;
-            var result = passwordHasher.VerifyHashedPassword(user, passwordHash, newPassword);
+            IPasswordHasher<FshUser> passwordHasher = userManager.PasswordHasher;
+            PasswordVerificationResult result = passwordHasher.VerifyHashedPassword(user, passwordHash, newPassword);
 
             if (result == PasswordVerificationResult.Success || result == PasswordVerificationResult.SuccessRehashNeeded)
             {
@@ -68,15 +60,15 @@ internal sealed class PasswordHistoryService : IPasswordHistoryService
     {
         ArgumentNullException.ThrowIfNull(user);
 
-        var passwordHistoryEntry = new PasswordHistory
+        PasswordHistory passwordHistoryEntry = new()
         {
             UserId = user.Id,
             PasswordHash = user.PasswordHash!,
             CreatedAt = DateTime.UtcNow
         };
 
-        _db.Set<PasswordHistory>().Add(passwordHistoryEntry);
-        await _db.SaveChangesAsync(cancellationToken);
+        db.Set<PasswordHistory>().Add(passwordHistoryEntry);
+        await db.SaveChangesAsync(cancellationToken);
 
         // Clean up old password history entries
         await CleanupOldPasswordHistoryAsync(user.Id, cancellationToken);
@@ -86,14 +78,14 @@ internal sealed class PasswordHistoryService : IPasswordHistoryService
     {
         ArgumentNullException.ThrowIfNull(userId);
 
-        var passwordHistoryCount = _passwordPolicyOptions.PasswordHistoryCount;
+        int passwordHistoryCount = _passwordPolicyOptions.PasswordHistoryCount;
         if (passwordHistoryCount <= 0)
         {
             return; // Password history disabled
         }
 
         // Get all password history entries for the user, ordered by most recent
-        var allPasswordHistories = await _db.Set<PasswordHistory>()
+        List<PasswordHistory> allPasswordHistories = await db.Set<PasswordHistory>()
             .Where(ph => ph.UserId == userId)
             .OrderByDescending(ph => ph.CreatedAt)
             .ToListAsync(cancellationToken);
@@ -101,12 +93,12 @@ internal sealed class PasswordHistoryService : IPasswordHistoryService
         // Keep only the configured number of passwords
         if (allPasswordHistories.Count > passwordHistoryCount)
         {
-            var oldPasswordHistories = allPasswordHistories
+            List<PasswordHistory> oldPasswordHistories = allPasswordHistories
                 .Skip(passwordHistoryCount)
                 .ToList();
 
-            _db.Set<PasswordHistory>().RemoveRange(oldPasswordHistories);
-            await _db.SaveChangesAsync(cancellationToken);
+            db.Set<PasswordHistory>().RemoveRange(oldPasswordHistories);
+            await db.SaveChangesAsync(cancellationToken);
         }
     }
 }

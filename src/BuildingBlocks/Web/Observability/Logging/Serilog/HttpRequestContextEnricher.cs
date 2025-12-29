@@ -5,21 +5,15 @@ using Serilog.Events;
 
 namespace FSH.Framework.Web.Observability.Logging.Serilog;
 
-public class HttpRequestContextEnricher : ILogEventEnricher
+public class HttpRequestContextEnricher(IHttpContextAccessor httpContextAccessor) : ILogEventEnricher
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public HttpRequestContextEnricher(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         ArgumentNullException.ThrowIfNull(logEvent);
         ArgumentNullException.ThrowIfNull(propertyFactory);
 
         // Get HttpContext properties here
-        var httpContext = _httpContextAccessor.HttpContext;
+        HttpContext? httpContext = httpContextAccessor.HttpContext;
 
         if (httpContext != null)
         {
@@ -30,9 +24,9 @@ public class HttpRequestContextEnricher : ILogEventEnricher
 
             if (httpContext.User?.Identity?.IsAuthenticated == true)
             {
-                var userId = httpContext.User.GetUserId();
-                var tenant = httpContext.User.GetTenant();
-                var userEmailId = httpContext.User.GetEmail();
+                string? userId = httpContext.User.GetUserId();
+                string? tenant = httpContext.User.GetTenant();
+                string? userEmailId = httpContext.User.GetEmail();
 
                 logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("UserId", userId));
                 logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("Tenant", tenant));

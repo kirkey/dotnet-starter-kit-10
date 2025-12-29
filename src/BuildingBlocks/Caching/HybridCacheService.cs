@@ -50,7 +50,7 @@ public sealed class HybridCacheService : ICacheService
                 return default;
             }
 
-            var value = JsonSerializer.Deserialize<T>(Utf8.GetString(bytes), JsonOpts);
+            T? value = JsonSerializer.Deserialize<T>(Utf8.GetString(bytes), JsonOpts);
             
             // Populate L1 cache from L2
             if (value is not null)
@@ -74,7 +74,7 @@ public sealed class HybridCacheService : ICacheService
         key = Normalize(key);
         try
         {
-            var bytes = Utf8.GetBytes(JsonSerializer.Serialize(value, JsonOpts));
+            byte[] bytes = Utf8.GetBytes(JsonSerializer.Serialize(value, JsonOpts));
             await _distributedCache.SetAsync(key, bytes, BuildDistributedEntryOptions(sliding), ct).ConfigureAwait(false);
             
             // Also set in memory cache
@@ -144,7 +144,7 @@ public sealed class HybridCacheService : ICacheService
         var options = new MemoryCacheEntryOptions();
 
         // Use shorter expiration for memory cache (faster refresh from distributed cache)
-        var slidingExpiration = _opts.DefaultSlidingExpiration ?? TimeSpan.FromMinutes(1);
+        TimeSpan slidingExpiration = _opts.DefaultSlidingExpiration ?? TimeSpan.FromMinutes(1);
         options.SetSlidingExpiration(TimeSpan.FromSeconds(slidingExpiration.TotalSeconds * 0.8)); // 80% of distributed cache expiration
 
         return options;
@@ -157,7 +157,7 @@ public sealed class HybridCacheService : ICacheService
             throw new ArgumentException("Cache key cannot be null or whitespace.", nameof(key));
         }
         
-        var prefix = _opts.KeyPrefix ?? string.Empty;
+        string prefix = _opts.KeyPrefix ?? string.Empty;
         if (prefix.Length == 0)
         {
             return key;

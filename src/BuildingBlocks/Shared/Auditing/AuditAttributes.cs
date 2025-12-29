@@ -8,12 +8,9 @@ public sealed class AuditIgnoreAttribute : Attribute { }
 /// Marks a property as sensitive (to be masked or hashed when serialized).
 /// </summary>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-public sealed class AuditSensitiveAttribute : Attribute
+public sealed class AuditSensitiveAttribute(bool hash = false, bool redact = false) : Attribute
 {
-    public bool Hash { get; init; }
-    public bool Redact { get; init; }
-
-    public AuditSensitiveAttribute(bool hash = false, bool redact = false)
-        => (Hash, Redact) = (hash, redact);
+    public bool Hash { get; init; } = hash;
+    public bool Redact { get; init; } = redact;
 }
 

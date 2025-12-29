@@ -14,30 +14,20 @@ using Microsoft.Extensions.Options;
 
 namespace FSH.Modules.Identity.Features.v1.Users.SearchUsers;
 
-public sealed class SearchUsersQueryHandler : IQueryHandler<SearchUsersQuery, PagedResponse<UserDto>>
+public sealed class SearchUsersQueryHandler(
+    UserManager<FshUser> userManager,
+    IdentityDbContext dbContext,
+    IOptions<OriginOptions> originOptions,
+    IHttpContextAccessor httpContextAccessor)
+    : IQueryHandler<SearchUsersQuery, PagedResponse<UserDto>>
 {
-    private readonly UserManager<FshUser> _userManager;
-    private readonly IdentityDbContext _dbContext;
-    private readonly Uri? _originUrl;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public SearchUsersQueryHandler(
-        UserManager<FshUser> userManager,
-        IdentityDbContext dbContext,
-        IOptions<OriginOptions> originOptions,
-        IHttpContextAccessor httpContextAccessor)
-    {
-        _userManager = userManager;
-        _dbContext = dbContext;
-        _originUrl = originOptions.Value.OriginUrl;
-        _httpContextAccessor = httpContextAccessor;
-    }
+    private readonly Uri? _originUrl = originOptions.Value.OriginUrl;
 
     public async ValueTask<PagedResponse<UserDto>> Handle(SearchUsersQuery query, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(query);
 
-        IQueryable<FshUser> users = _userManager.Users.AsNoTracking();
+        IQueryable<FshUser> users = userManager.Users.AsNoTracking();
 
         // Apply filters
         if (!string.IsNullOrWhiteSpace(query.Search))
@@ -62,7 +52,7 @@ public sealed class SearchUsersQueryHandler : IQueryHandler<SearchUsersQuery, Pa
 
         if (!string.IsNullOrWhiteSpace(query.RoleId))
         {
-            var userIdsInRole = await _dbContext.UserRoles
+            List<string> userIdsInRole = await dbContext.UserRoles
                 .Where(ur => ur.RoleId == query.RoleId)
                 .Select(ur => ur.UserId)
                 .ToListAsync(cancellationToken);
@@ -74,7 +64,7 @@ public sealed class SearchUsersQueryHandler : IQueryHandler<SearchUsersQuery, Pa
         users = ApplySorting(users, query.Sort);
 
         // Project to DTO
-        var projected = users.Select(u => new UserDto
+        IQueryable<UserDto> projected = users.Select(u => new UserDto
         {
             Id = u.Id,
             UserName = u.UserName,
@@ -87,10 +77,10 @@ public sealed class SearchUsersQueryHandler : IQueryHandler<SearchUsersQuery, Pa
             ImageUrl = u.ImageUrl != null ? u.ImageUrl.ToString() : null
         });
 
-        var pagedResult = await projected.ToPagedResponseAsync(query, cancellationToken).ConfigureAwait(false);
+        PagedResponse<UserDto> pagedResult = await projected.ToPagedResponseAsync(query, cancellationToken).ConfigureAwait(false);
 
         // Resolve image URLs for items
-        var items = pagedResult.Items.Select(u => new UserDto
+        List<UserDto> items = pagedResult.Items.Select(u => new UserDto
         {
             Id = u.Id,
             UserName = u.UserName,
@@ -120,13 +110,13 @@ public sealed class SearchUsersQueryHandler : IQueryHandler<SearchUsersQuery, Pa
             return query.OrderBy(u => u.FirstName).ThenBy(u => u.LastName);
         }
 
-        var sortParts = sort.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        string[] sortParts = sort.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         IOrderedQueryable<FshUser>? orderedQuery = null;
 
-        foreach (var part in sortParts)
+        foreach (string part in sortParts)
         {
-            var descending = part.StartsWith('-');
-            var field = descending ? part[1..] : part;
+            bool descending = part.StartsWith('-');
+            string field = descending ? part[1..] : part;
 
             orderedQuery = (orderedQuery, field.ToLowerInvariant()) switch
             {
@@ -163,18 +153,18 @@ public sealed class SearchUsersQueryHandler : IQueryHandler<SearchUsersQuery, Pa
 
         if (_originUrl is null)
         {
-            var request = _httpContextAccessor.HttpContext?.Request;
+            HttpRequest? request = httpContextAccessor.HttpContext?.Request;
             if (request is not null && !string.IsNullOrWhiteSpace(request.Scheme) && request.Host.HasValue)
             {
-                var baseUri = $"{request.Scheme}://{request.Host.Value}{request.PathBase}";
-                var relativePath = imageUrl.TrimStart('/');
+                string baseUri = $"{request.Scheme}://{request.Host.Value}{request.PathBase}";
+                string relativePath = imageUrl.TrimStart('/');
                 return $"{baseUri.TrimEnd('/')}/{relativePath}";
             }
 
             return imageUrl;
         }
 
-        var originRelativePath = imageUrl.TrimStart('/');
+        string originRelativePath = imageUrl.TrimStart('/');
         return $"{_originUrl.AbsoluteUri.TrimEnd('/')}/{originRelativePath}";
     }
 }

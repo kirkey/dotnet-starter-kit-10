@@ -1,7 +1,8 @@
 using FSH.CLI.Commands;
 using Spectre.Console.Cli;
+using System.Reflection;
 
-var app = new CommandApp();
+CommandApp app = new();
 
 app.Configure(config =>
 {
@@ -20,7 +21,7 @@ return await app.RunAsync(args);
 
 static string GetVersion()
 {
-    var assembly = typeof(Program).Assembly;
-    var version = assembly.GetName().Version;
+    Assembly assembly = typeof(Program).Assembly;
+    Version? version = assembly.GetName().Version;
     return version?.ToString(3) ?? "1.0.0";
 }

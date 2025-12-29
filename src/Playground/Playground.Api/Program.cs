@@ -9,7 +9,7 @@ using FSH.Modules.Multitenancy.Contracts.v1.GetTenantStatus;
 using FSH.Modules.Multitenancy.Features.v1.GetTenantStatus;
 using System.Reflection;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsProduction())
 {
@@ -21,7 +21,7 @@ if (builder.Environment.IsProduction())
         }
     }
 
-    var config = builder.Configuration;
+    ConfigurationManager config = builder.Configuration;
     Require(config, "DatabaseOptions:ConnectionString");
     Require(config, "CachingOptions:Redis");
     Require(config, "JwtOptions:SigningKey");
@@ -39,7 +39,7 @@ builder.Services.AddMediator(o =>
         typeof(FSH.Modules.Auditing.Persistence.AuditDbContext)];
 });
 
-var moduleAssemblies = new Assembly[]
+Assembly[] moduleAssemblies = new Assembly[]
 {
     typeof(IdentityModule).Assembly,
     typeof(MultitenancyModule).Assembly,
@@ -54,7 +54,7 @@ builder.AddHeroPlatform(o =>
 });
 
 builder.AddModules(moduleAssemblies);
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.UseHeroMultiTenantDatabases();
 app.UseHeroPlatform(p =>

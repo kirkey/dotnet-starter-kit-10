@@ -12,35 +12,16 @@ using System.Security.Claims;
 
 namespace FSH.Modules.Identity.Features.v1.Tokens.TokenGeneration;
 
-public sealed class GenerateTokenCommandHandler
+public sealed class GenerateTokenCommandHandler(
+    IIdentityService identityService,
+    ITokenService tokenService,
+    ISecurityAudit securityAudit,
+    IHttpContextAccessor http,
+    IOutboxStore outboxStore,
+    IMultiTenantContextAccessor<AppTenantInfo> multiTenantContextAccessor,
+    ISessionService sessionService)
     : ICommandHandler<GenerateTokenCommand, TokenResponse>
 {
-    private readonly IIdentityService _identityService;
-    private readonly ITokenService _tokenService;
-    private readonly ISecurityAudit _securityAudit;
-    private readonly IHttpContextAccessor _http;
-    private readonly IOutboxStore _outboxStore;
-    private readonly IMultiTenantContextAccessor<AppTenantInfo> _multiTenantContextAccessor;
-    private readonly ISessionService _sessionService;
-
-    public GenerateTokenCommandHandler(
-        IIdentityService identityService,
-        ITokenService tokenService,
-        ISecurityAudit securityAudit,
-        IHttpContextAccessor http,
-        IOutboxStore outboxStore,
-        IMultiTenantContextAccessor<AppTenantInfo> multiTenantContextAccessor,
-        ISessionService sessionService)
-    {
-        _identityService = identityService;
-        _tokenService = tokenService;
-        _securityAudit = securityAudit;
-        _http = http;
-        _outboxStore = outboxStore;
-        _multiTenantContextAccessor = multiTenantContextAccessor;
-        _sessionService = sessionService;
-    }
-
     public async ValueTask<TokenResponse> Handle(
         GenerateTokenCommand request,
         CancellationToken cancellationToken)
@@ -48,20 +29,20 @@ public sealed class GenerateTokenCommandHandler
         ArgumentNullException.ThrowIfNull(request);
 
         // Gather context for auditing
-        var http = _http.HttpContext;
-        var ip = http?.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-        var ua = http?.Request.Headers.UserAgent.ToString() ?? "unknown";
-        var clientId = http?.Request.Headers["X-Client-Id"].ToString();
+        HttpContext? http1 = http.HttpContext;
+        string ip = http1?.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        string ua = http1?.Request.Headers.UserAgent.ToString() ?? "unknown";
+        string? clientId = http1?.Request.Headers["X-Client-Id"].ToString();
         if (string.IsNullOrWhiteSpace(clientId)) clientId = "web";
 
         // Validate credentials
-        var identityResult = await _identityService
+        (string Subject, IEnumerable<Claim> Claims)? identityResult = await identityService
             .ValidateCredentialsAsync(request.Email, request.Password, cancellationToken);
 
         if (identityResult is null)
         {
             // 1) Audit failed login BEFORE throwing
-            await _securityAudit.LoginFailedAsync(
+            await securityAudit.LoginFailedAsync(
                 subjectIdOrName: request.Email,
                 clientId: clientId!,
                 reason: "InvalidCredentials",
@@ -72,10 +53,10 @@ public sealed class GenerateTokenCommandHandler
         }
 
         // Unpack subject + claims
-        var (subject, claims) = identityResult.Value;
+        (string subject, IEnumerable<Claim> claims) = identityResult.Value;
 
         // 2) Audit successful login
-        await _securityAudit.LoginSucceededAsync(
+        await securityAudit.LoginSucceededAsync(
             userId: subject,
             userName: claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value ?? request.Email,
             clientId: clientId!,
@@ -84,16 +65,16 @@ public sealed class GenerateTokenCommandHandler
             ct: cancellationToken);
 
         // Issue token
-        var token = await _tokenService.IssueAsync(subject, claims, /*extra*/ null, cancellationToken);
+        TokenResponse token = await tokenService.IssueAsync(subject, claims, /*extra*/ null, cancellationToken);
 
         // Persist refresh token (hashed) for this user
-        await _identityService.StoreRefreshTokenAsync(subject, token.RefreshToken, token.RefreshTokenExpiresAt, cancellationToken);
+        await identityService.StoreRefreshTokenAsync(subject, token.RefreshToken, token.RefreshTokenExpiresAt, cancellationToken);
 
         // Create user session for session management (non-blocking, fail gracefully)
         try
         {
-            var refreshTokenHash = Sha256Short(token.RefreshToken);
-            await _sessionService.CreateSessionAsync(
+            string refreshTokenHash = Sha256Short(token.RefreshToken);
+            await sessionService.CreateSessionAsync(
                 subject,
                 refreshTokenHash,
                 ip,
@@ -108,8 +89,8 @@ public sealed class GenerateTokenCommandHandler
         }
 
         // 3) Audit token issuance with a fingerprint (never raw token)
-        var fingerprint = Sha256Short(token.AccessToken);
-        await _securityAudit.TokenIssuedAsync(
+        string fingerprint = Sha256Short(token.AccessToken);
+        await securityAudit.TokenIssuedAsync(
             userId: subject,
             userName: claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value ?? request.Email,
             clientId: clientId!,
@@ -118,10 +99,10 @@ public sealed class GenerateTokenCommandHandler
             ct: cancellationToken);
 
         // 4) Enqueue integration event for token generation (sample event for testing eventing)
-        var tenantId = _multiTenantContextAccessor.MultiTenantContext?.TenantInfo?.Id;
-        var correlationId = Guid.NewGuid().ToString();
+        string? tenantId = multiTenantContextAccessor.MultiTenantContext?.TenantInfo?.Id;
+        string correlationId = Guid.NewGuid().ToString();
 
-        var integrationEvent = new TokenGeneratedIntegrationEvent(
+        TokenGeneratedIntegrationEvent integrationEvent = new(
             Id: Guid.NewGuid(),
             OccurredOnUtc: DateTime.UtcNow,
             TenantId: tenantId,
@@ -135,14 +116,14 @@ public sealed class GenerateTokenCommandHandler
             TokenFingerprint: fingerprint,
             AccessTokenExpiresAtUtc: token.AccessTokenExpiresAt);
 
-        await _outboxStore.AddAsync(integrationEvent, cancellationToken).ConfigureAwait(false);
+        await outboxStore.AddAsync(integrationEvent, cancellationToken).ConfigureAwait(false);
 
         return token;
     }
 
     private static string Sha256Short(string value)
     {
-        var hash = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(value));
+        byte[] hash = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(value));
         // short printable fingerprint; store only this
         return Convert.ToHexString(hash.AsSpan(0, 8));
     }

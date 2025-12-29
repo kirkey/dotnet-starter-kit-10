@@ -47,7 +47,7 @@ public sealed class DistributedCacheService : ICacheService
         key = Normalize(key);
         try
         {
-            var bytes = Utf8.GetBytes(JsonSerializer.Serialize(value, JsonOpts));
+            byte[] bytes = Utf8.GetBytes(JsonSerializer.Serialize(value, JsonOpts));
             await _cache.SetAsync(key, bytes, BuildEntryOptions(sliding), ct).ConfigureAwait(false);
             _logger.LogDebug("Cached {Key}", key);
         }
@@ -99,7 +99,7 @@ public sealed class DistributedCacheService : ICacheService
     private string Normalize(string key)
     {
         if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
-        var prefix = _opts.KeyPrefix ?? string.Empty;
+        string prefix = _opts.KeyPrefix ?? string.Empty;
         if (prefix.Length == 0)
         {
             return key;

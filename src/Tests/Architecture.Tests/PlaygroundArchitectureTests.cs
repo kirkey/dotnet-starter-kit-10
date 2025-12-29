@@ -16,7 +16,7 @@ public class PlaygroundArchitectureTests
             "Playground.Blazor"
         };
 
-        var result = Types
+        TestResult? result = Types
             .InCurrentDomain()
             .That()
             .ResideInNamespace("FSH.Modules")
@@ -24,7 +24,7 @@ public class PlaygroundArchitectureTests
             .NotHaveDependencyOnAny(playgroundNamespaces)
             .GetResult();
 
-        var failingTypes = result.FailingTypeNames ?? Array.Empty<string>();
+        IReadOnlyList<string> failingTypes = result.FailingTypeNames ?? Array.Empty<string>();
 
         result.IsSuccessful.ShouldBeTrue(
             "Module code must not depend on Playground host assemblies. " +
@@ -46,7 +46,7 @@ public class PlaygroundArchitectureTests
             "FSH.Modules.Multitenancy.Data"
         };
 
-        var hostResult = Types
+        TestResult? hostResult = Types
             .InCurrentDomain()
             .That()
             .ResideInNamespace("FSH.Playground")
@@ -56,7 +56,7 @@ public class PlaygroundArchitectureTests
             .NotHaveDependencyOnAny(forbiddenNamespaces)
             .GetResult();
 
-        var hostFailingTypes = hostResult.FailingTypeNames ?? Array.Empty<string>();
+        IReadOnlyList<string> hostFailingTypes = hostResult.FailingTypeNames ?? Array.Empty<string>();
 
         hostResult.IsSuccessful.ShouldBeTrue(
             "Playground hosts should not depend directly on module feature or data internals. " +
@@ -70,7 +70,7 @@ internal static class ModuleArchitectureTestsFixture
 
     private static string GetSolutionRoot()
     {
-        var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
+        DirectoryInfo? directory = new(Directory.GetCurrentDirectory());
 
         while (directory is not null && !Directory.Exists(Path.Combine(directory.FullName, "src")))
         {

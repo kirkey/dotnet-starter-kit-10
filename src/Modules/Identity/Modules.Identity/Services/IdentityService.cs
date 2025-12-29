@@ -12,34 +12,24 @@ using System.Security.Claims;
 
 namespace FSH.Modules.Identity.Services;
 
-public sealed class IdentityService : IIdentityService
+public sealed class IdentityService(
+    UserManager<FshUser> userManager,
+    IMultiTenantContextAccessor<AppTenantInfo>? multiTenantContextAccessor,
+    ILogger<IdentityService> logger)
+    : IIdentityService
 {
-    private readonly UserManager<FshUser> _userManager;
-    private readonly ILogger<IdentityService> _logger;
-    private readonly IMultiTenantContextAccessor<AppTenantInfo>? _multiTenantContextAccessor;
-
-    public IdentityService(
-        UserManager<FshUser> userManager,
-        IMultiTenantContextAccessor<AppTenantInfo>? multiTenantContextAccessor,
-        ILogger<IdentityService> logger)
-    {
-        _userManager = userManager;
-        _multiTenantContextAccessor = multiTenantContextAccessor;
-        _logger = logger;
-    }
-
     public async Task<(string Subject, IEnumerable<Claim> Claims)?>
         ValidateCredentialsAsync(string email, string password, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(email);
         ArgumentNullException.ThrowIfNull(password);
 
-        var currentTenant = _multiTenantContextAccessor!.MultiTenantContext.TenantInfo;
+        AppTenantInfo? currentTenant = multiTenantContextAccessor!.MultiTenantContext.TenantInfo;
         if (currentTenant == null) throw new UnauthorizedException();
 
         if (string.IsNullOrWhiteSpace(currentTenant.Id)
-           || await _userManager.FindByEmailAsync(email.Trim().Normalize()) is not { } user
-           || !await _userManager.CheckPasswordAsync(user, password))
+           || await userManager.FindByEmailAsync(email.Trim().Normalize()) is not { } user
+           || !await userManager.CheckPasswordAsync(user, password))
         {
             throw new UnauthorizedException();
         }
@@ -68,7 +58,7 @@ public sealed class IdentityService : IIdentityService
         }
 
         // Build user claims
-        var claims = new List<Claim>
+        List<Claim> claims = new()
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(ClaimTypes.NameIdentifier, user.Id),
@@ -77,12 +67,12 @@ public sealed class IdentityService : IIdentityService
             new(ClaimTypes.MobilePhone, user.PhoneNumber ?? string.Empty),
             new(ClaimConstants.Fullname, $"{user.FirstName} {user.LastName}"),
             new(ClaimTypes.Surname, user.LastName ?? string.Empty),
-            new(ClaimConstants.Tenant, _multiTenantContextAccessor!.MultiTenantContext.TenantInfo!.Id),
+            new(ClaimConstants.Tenant, multiTenantContextAccessor!.MultiTenantContext.TenantInfo!.Id),
             new(ClaimConstants.ImageUrl, user.ImageUrl == null ? string.Empty : user.ImageUrl.ToString())
         };
 
         // Add roles as claims
-        var roles = await _userManager.GetRolesAsync(user);
+        IList<string> roles = await userManager.GetRolesAsync(user);
         claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
         return (user.Id, claims);
@@ -91,7 +81,7 @@ public sealed class IdentityService : IIdentityService
     public async Task<(string Subject, IEnumerable<Claim> Claims)?>
         ValidateRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
     {
-        var currentTenant = _multiTenantContextAccessor!.MultiTenantContext.TenantInfo;
+        AppTenantInfo? currentTenant = multiTenantContextAccessor!.MultiTenantContext.TenantInfo;
         if (currentTenant == null) throw new UnauthorizedException();
 
         if (string.IsNullOrWhiteSpace(currentTenant.Id))
@@ -99,19 +89,19 @@ public sealed class IdentityService : IIdentityService
             throw new UnauthorizedException();
         }
 
-        var hashedToken = HashToken(refreshToken);
+        string hashedToken = HashToken(refreshToken);
 
-        _logger.LogDebug(
+        logger.LogDebug(
             "Validating refresh token for tenant {TenantId}. Token hash: {TokenHash}",
             currentTenant.Id,
             hashedToken[..Math.Min(8, hashedToken.Length)] + "...");
 
-        var user = await _userManager.Users
+        FshUser? user = await userManager.Users
             .FirstOrDefaultAsync(u => u.RefreshToken == hashedToken, ct);
 
         if (user is null)
         {
-            _logger.LogWarning(
+            logger.LogWarning(
                 "No user found with matching refresh token hash for tenant {TenantId}",
                 currentTenant.Id);
             throw new UnauthorizedException("refresh token is invalid or expired");
@@ -119,7 +109,7 @@ public sealed class IdentityService : IIdentityService
 
         if (user.RefreshTokenExpiryTime <= DateTime.UtcNow)
         {
-            _logger.LogWarning(
+            logger.LogWarning(
                 "Refresh token expired for user {UserId}. Expired at: {ExpiryTime}, Current time: {CurrentTime}",
                 user.Id,
                 user.RefreshTokenExpiryTime,
@@ -150,7 +140,7 @@ public sealed class IdentityService : IIdentityService
             }
         }
 
-        var claims = new List<Claim>
+        List<Claim> claims = new()
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(ClaimTypes.NameIdentifier, user.Id),
@@ -159,11 +149,11 @@ public sealed class IdentityService : IIdentityService
             new(ClaimTypes.MobilePhone, user.PhoneNumber ?? string.Empty),
             new(ClaimConstants.Fullname, $"{user.FirstName} {user.LastName}"),
             new(ClaimTypes.Surname, user.LastName ?? string.Empty),
-            new(ClaimConstants.Tenant, _multiTenantContextAccessor!.MultiTenantContext.TenantInfo!.Id),
+            new(ClaimConstants.Tenant, multiTenantContextAccessor!.MultiTenantContext.TenantInfo!.Id),
             new(ClaimConstants.ImageUrl, user.ImageUrl == null ? string.Empty : user.ImageUrl.ToString())
         };
 
-        var roles = await _userManager.GetRolesAsync(user);
+        IList<string> roles = await userManager.GetRolesAsync(user);
         claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
         return (user.Id, claims);
@@ -171,7 +161,7 @@ public sealed class IdentityService : IIdentityService
 
     public async Task StoreRefreshTokenAsync(string subject, string refreshToken, DateTime expiresAtUtc, CancellationToken ct = default)
     {
-        var currentTenant = _multiTenantContextAccessor!.MultiTenantContext.TenantInfo;
+        AppTenantInfo? currentTenant = multiTenantContextAccessor!.MultiTenantContext.TenantInfo;
         if (currentTenant == null) throw new UnauthorizedException();
 
         if (string.IsNullOrWhiteSpace(currentTenant.Id))
@@ -179,37 +169,37 @@ public sealed class IdentityService : IIdentityService
             throw new UnauthorizedException();
         }
 
-        var user = await _userManager.FindByIdAsync(subject);
+        FshUser? user = await userManager.FindByIdAsync(subject);
 
         if (user is null)
         {
             throw new UnauthorizedException("user not found");
         }
 
-        var hashedToken = HashToken(refreshToken);
+        string hashedToken = HashToken(refreshToken);
         user.RefreshToken = hashedToken;
         user.RefreshTokenExpiryTime = expiresAtUtc;
 
-        _logger.LogDebug(
+        logger.LogDebug(
             "Storing refresh token for user {UserId} in tenant {TenantId}. Token hash: {TokenHash}, Expires: {ExpiresAt}",
             subject,
             currentTenant.Id,
             hashedToken[..Math.Min(8, hashedToken.Length)] + "...",
             expiresAtUtc);
 
-        var result = await _userManager.UpdateAsync(user);
+        IdentityResult result = await userManager.UpdateAsync(user);
 
         if (!result.Succeeded)
         {
-            _logger.LogError("Failed to persist refresh token for user {UserId}: {Errors}", subject, string.Join(", ", result.Errors.Select(e => e.Description)));
+            logger.LogError("Failed to persist refresh token for user {UserId}: {Errors}", subject, string.Join(", ", result.Errors.Select(e => e.Description)));
             throw new UnauthorizedException("could not persist refresh token");
         }
     }
 
     private static string HashToken(string token)
     {
-        var bytes = System.Text.Encoding.UTF8.GetBytes(token);
-        var hash = System.Security.Cryptography.SHA256.HashData(bytes);
+        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(token);
+        byte[] hash = System.Security.Cryptography.SHA256.HashData(bytes);
         return Convert.ToBase64String(hash);
     }
 }

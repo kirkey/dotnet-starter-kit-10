@@ -42,14 +42,10 @@ public class PasswordExpiryStatus
     }
 }
 
-internal sealed class PasswordExpiryService : IPasswordExpiryService
+internal sealed class PasswordExpiryService(IOptions<PasswordPolicyOptions> passwordPolicyOptions)
+    : IPasswordExpiryService
 {
-    private readonly PasswordPolicyOptions _passwordPolicyOptions;
-
-    public PasswordExpiryService(IOptions<PasswordPolicyOptions> passwordPolicyOptions)
-    {
-        _passwordPolicyOptions = passwordPolicyOptions.Value;
-    }
+    private readonly PasswordPolicyOptions _passwordPolicyOptions = passwordPolicyOptions.Value;
 
     public bool IsPasswordExpired(FshUser user)
     {
@@ -58,7 +54,7 @@ internal sealed class PasswordExpiryService : IPasswordExpiryService
             return false;
         }
 
-        var expiryDate = user.LastPasswordChangeDate.AddDays(_passwordPolicyOptions.PasswordExpiryDays);
+        DateTime expiryDate = user.LastPasswordChangeDate.AddDays(_passwordPolicyOptions.PasswordExpiryDays);
         return DateTime.UtcNow > expiryDate;
     }
 
@@ -69,8 +65,8 @@ internal sealed class PasswordExpiryService : IPasswordExpiryService
             return int.MaxValue;
         }
 
-        var expiryDate = user.LastPasswordChangeDate.AddDays(_passwordPolicyOptions.PasswordExpiryDays);
-        var daysUntilExpiry = (int)(expiryDate - DateTime.UtcNow).TotalDays;
+        DateTime expiryDate = user.LastPasswordChangeDate.AddDays(_passwordPolicyOptions.PasswordExpiryDays);
+        int daysUntilExpiry = (int)(expiryDate - DateTime.UtcNow).TotalDays;
         return daysUntilExpiry;
     }
 
@@ -81,16 +77,16 @@ internal sealed class PasswordExpiryService : IPasswordExpiryService
             return false;
         }
 
-        var daysUntilExpiry = GetDaysUntilExpiry(user);
+        int daysUntilExpiry = GetDaysUntilExpiry(user);
         return daysUntilExpiry >= 0 && daysUntilExpiry <= _passwordPolicyOptions.PasswordExpiryWarningDays;
     }
 
     public PasswordExpiryStatus GetPasswordExpiryStatus(FshUser user)
     {
-        var expiryDate = user.LastPasswordChangeDate.AddDays(_passwordPolicyOptions.PasswordExpiryDays);
-        var daysUntilExpiry = GetDaysUntilExpiry(user);
-        var isExpired = IsPasswordExpired(user);
-        var isExpiringWithinWarningPeriod = IsPasswordExpiringWithinWarningPeriod(user);
+        DateTime expiryDate = user.LastPasswordChangeDate.AddDays(_passwordPolicyOptions.PasswordExpiryDays);
+        int daysUntilExpiry = GetDaysUntilExpiry(user);
+        bool isExpired = IsPasswordExpired(user);
+        bool isExpiringWithinWarningPeriod = IsPasswordExpiringWithinWarningPeriod(user);
 
         return new PasswordExpiryStatus
         {

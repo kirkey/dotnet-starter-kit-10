@@ -11,7 +11,7 @@ internal static class SolutionGenerator
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var projectPath = Path.Combine(options.OutputPath, options.Name);
+        string projectPath = Path.Combine(options.OutputPath, options.Name);
 
         if (Directory.Exists(projectPath) &&
             Directory.EnumerateFileSystemEntries(projectPath).Any() &&
@@ -102,7 +102,7 @@ internal static class SolutionGenerator
 
     private static Task CreateDirectoryStructureAsync(string projectPath, ProjectOptions options)
     {
-        var directories = new List<string>
+        List<string> directories = new()
         {
             "src",
             $"src/{options.Name}.Api",
@@ -140,7 +140,7 @@ internal static class SolutionGenerator
             directories.Add(".github/workflows");
         }
 
-        foreach (var dir in directories)
+        foreach (string dir in directories)
         {
             Directory.CreateDirectory(Path.Combine(projectPath, dir));
         }
@@ -150,58 +150,58 @@ internal static class SolutionGenerator
 
     private static async Task CreateSolutionFileAsync(string projectPath, ProjectOptions options)
     {
-        var slnContent = TemplateEngine.GenerateSolution(options);
+        string slnContent = TemplateEngine.GenerateSolution(options);
         await File.WriteAllTextAsync(Path.Combine(projectPath, "src", $"{options.Name}.slnx"), slnContent);
     }
 
     private static async Task CreateApiProjectAsync(string projectPath, ProjectOptions options)
     {
-        var apiPath = Path.Combine(projectPath, "src", $"{options.Name}.Api");
+        string apiPath = Path.Combine(projectPath, "src", $"{options.Name}.Api");
 
         // Create .csproj
-        var csproj = TemplateEngine.GenerateApiCsproj(options);
+        string csproj = TemplateEngine.GenerateApiCsproj(options);
         await File.WriteAllTextAsync(Path.Combine(apiPath, $"{options.Name}.Api.csproj"), csproj);
 
         // Create Program.cs
-        var program = TemplateEngine.GenerateApiProgram(options);
+        string program = TemplateEngine.GenerateApiProgram(options);
         await File.WriteAllTextAsync(Path.Combine(apiPath, "Program.cs"), program);
 
         // Create appsettings.json
-        var appsettings = TemplateEngine.GenerateAppSettings(options);
+        string appsettings = TemplateEngine.GenerateAppSettings(options);
         await File.WriteAllTextAsync(Path.Combine(apiPath, "appsettings.json"), appsettings);
 
         // Create appsettings.Development.json
-        var appsettingsDev = TemplateEngine.GenerateAppSettingsDevelopment();
+        string appsettingsDev = TemplateEngine.GenerateAppSettingsDevelopment();
         await File.WriteAllTextAsync(Path.Combine(apiPath, "appsettings.Development.json"), appsettingsDev);
 
         // Create Properties directory and launchSettings.json
         Directory.CreateDirectory(Path.Combine(apiPath, "Properties"));
-        var launchSettings = TemplateEngine.GenerateApiLaunchSettings(options);
+        string launchSettings = TemplateEngine.GenerateApiLaunchSettings(options);
         await File.WriteAllTextAsync(Path.Combine(apiPath, "Properties", "launchSettings.json"), launchSettings);
 
         // Create Dockerfile
-        var dockerfile = TemplateEngine.GenerateDockerfile(options);
+        string dockerfile = TemplateEngine.GenerateDockerfile(options);
         await File.WriteAllTextAsync(Path.Combine(apiPath, "Dockerfile"), dockerfile);
     }
 
     private static async Task CreateBlazorProjectAsync(string projectPath, ProjectOptions options)
     {
-        var blazorPath = Path.Combine(projectPath, "src", $"{options.Name}.Blazor");
+        string blazorPath = Path.Combine(projectPath, "src", $"{options.Name}.Blazor");
 
         // Create .csproj
-        var csproj = TemplateEngine.GenerateBlazorCsproj();
+        string csproj = TemplateEngine.GenerateBlazorCsproj();
         await File.WriteAllTextAsync(Path.Combine(blazorPath, $"{options.Name}.Blazor.csproj"), csproj);
 
         // Create Program.cs
-        var program = TemplateEngine.GenerateBlazorProgram(options);
+        string program = TemplateEngine.GenerateBlazorProgram(options);
         await File.WriteAllTextAsync(Path.Combine(blazorPath, "Program.cs"), program);
 
         // Create _Imports.razor
-        var imports = TemplateEngine.GenerateBlazorImports(options);
+        string imports = TemplateEngine.GenerateBlazorImports(options);
         await File.WriteAllTextAsync(Path.Combine(blazorPath, "_Imports.razor"), imports);
 
         // Create App.razor
-        var app = TemplateEngine.GenerateBlazorApp();
+        string app = TemplateEngine.GenerateBlazorApp();
         await File.WriteAllTextAsync(Path.Combine(blazorPath, "App.razor"), app);
 
         // Create wwwroot directory
@@ -209,132 +209,132 @@ internal static class SolutionGenerator
 
         // Create Shared directory and MainLayout.razor
         Directory.CreateDirectory(Path.Combine(blazorPath, "Shared"));
-        var mainLayout = TemplateEngine.GenerateBlazorMainLayout(options);
+        string mainLayout = TemplateEngine.GenerateBlazorMainLayout(options);
         await File.WriteAllTextAsync(Path.Combine(blazorPath, "Shared", "MainLayout.razor"), mainLayout);
 
         // Create Pages directory
         Directory.CreateDirectory(Path.Combine(blazorPath, "Pages"));
 
         // Create Index.razor
-        var index = TemplateEngine.GenerateBlazorIndexPage(options);
+        string index = TemplateEngine.GenerateBlazorIndexPage(options);
         await File.WriteAllTextAsync(Path.Combine(blazorPath, "Pages", "Index.razor"), index);
     }
 
     private static async Task CreateMigrationsProjectAsync(string projectPath, ProjectOptions options)
     {
-        var migrationsPath = Path.Combine(projectPath, "src", $"{options.Name}.Migrations");
+        string migrationsPath = Path.Combine(projectPath, "src", $"{options.Name}.Migrations");
 
         // Create .csproj
-        var csproj = TemplateEngine.GenerateMigrationsCsproj(options);
+        string csproj = TemplateEngine.GenerateMigrationsCsproj(options);
         await File.WriteAllTextAsync(Path.Combine(migrationsPath, $"{options.Name}.Migrations.csproj"), csproj);
     }
 
     private static async Task CreateAspireAppHostAsync(string projectPath, ProjectOptions options)
     {
-        var appHostPath = Path.Combine(projectPath, "src", $"{options.Name}.AppHost");
+        string appHostPath = Path.Combine(projectPath, "src", $"{options.Name}.AppHost");
 
         // Create .csproj
-        var csproj = TemplateEngine.GenerateAppHostCsproj(options);
+        string csproj = TemplateEngine.GenerateAppHostCsproj(options);
         await File.WriteAllTextAsync(Path.Combine(appHostPath, $"{options.Name}.AppHost.csproj"), csproj);
 
         // Create Program.cs
-        var program = TemplateEngine.GenerateAppHostProgram(options);
+        string program = TemplateEngine.GenerateAppHostProgram(options);
         await File.WriteAllTextAsync(Path.Combine(appHostPath, "Program.cs"), program);
 
         // Create Properties directory and launchSettings.json
         Directory.CreateDirectory(Path.Combine(appHostPath, "Properties"));
-        var launchSettings = TemplateEngine.GenerateAppHostLaunchSettings(options);
+        string launchSettings = TemplateEngine.GenerateAppHostLaunchSettings(options);
         await File.WriteAllTextAsync(Path.Combine(appHostPath, "Properties", "launchSettings.json"), launchSettings);
     }
 
     private static async Task CreateDockerComposeAsync(string projectPath, ProjectOptions options)
     {
-        var dockerCompose = TemplateEngine.GenerateDockerCompose(options);
+        string dockerCompose = TemplateEngine.GenerateDockerCompose(options);
         await File.WriteAllTextAsync(Path.Combine(projectPath, "docker-compose.yml"), dockerCompose);
 
-        var dockerComposeOverride = TemplateEngine.GenerateDockerComposeOverride();
+        string dockerComposeOverride = TemplateEngine.GenerateDockerComposeOverride();
         await File.WriteAllTextAsync(Path.Combine(projectPath, "docker-compose.override.yml"), dockerComposeOverride);
     }
 
     private static async Task CreateSampleModuleAsync(string projectPath, ProjectOptions options)
     {
-        var modulePath = Path.Combine(projectPath, "src", "Modules", $"{options.Name}.Catalog");
-        var contractsPath = Path.Combine(projectPath, "src", "Modules", $"{options.Name}.Catalog.Contracts");
+        string modulePath = Path.Combine(projectPath, "src", "Modules", $"{options.Name}.Catalog");
+        string contractsPath = Path.Combine(projectPath, "src", "Modules", $"{options.Name}.Catalog.Contracts");
 
         // Create Contracts project
-        var contractsCsproj = TemplateEngine.GenerateCatalogContractsCsproj();
+        string contractsCsproj = TemplateEngine.GenerateCatalogContractsCsproj();
         await File.WriteAllTextAsync(Path.Combine(contractsPath, $"{options.Name}.Catalog.Contracts.csproj"), contractsCsproj);
 
         // Create Module project
-        var moduleCsproj = TemplateEngine.GenerateCatalogModuleCsproj(options);
+        string moduleCsproj = TemplateEngine.GenerateCatalogModuleCsproj(options);
         await File.WriteAllTextAsync(Path.Combine(modulePath, $"{options.Name}.Catalog.csproj"), moduleCsproj);
 
         // Create CatalogModule.cs
-        var catalogModule = TemplateEngine.GenerateCatalogModule(options);
+        string catalogModule = TemplateEngine.GenerateCatalogModule(options);
         Directory.CreateDirectory(modulePath);
         await File.WriteAllTextAsync(Path.Combine(modulePath, "CatalogModule.cs"), catalogModule);
 
         // Create Features directory with sample endpoint
-        var featuresPath = Path.Combine(modulePath, "Features", "v1", "Products");
+        string featuresPath = Path.Combine(modulePath, "Features", "v1", "Products");
         Directory.CreateDirectory(featuresPath);
 
-        var getProducts = TemplateEngine.GenerateGetProductsEndpoint(options);
+        string getProducts = TemplateEngine.GenerateGetProductsEndpoint(options);
         await File.WriteAllTextAsync(Path.Combine(featuresPath, "GetProductsEndpoint.cs"), getProducts);
     }
 
     private static async Task CreateTerraformAsync(string projectPath, ProjectOptions options)
     {
-        var terraformPath = Path.Combine(projectPath, "terraform");
+        string terraformPath = Path.Combine(projectPath, "terraform");
 
-        var mainTf = TemplateEngine.GenerateTerraformMain(options);
+        string mainTf = TemplateEngine.GenerateTerraformMain(options);
         await File.WriteAllTextAsync(Path.Combine(terraformPath, "main.tf"), mainTf);
 
-        var variablesTf = TemplateEngine.GenerateTerraformVariables(options);
+        string variablesTf = TemplateEngine.GenerateTerraformVariables(options);
         await File.WriteAllTextAsync(Path.Combine(terraformPath, "variables.tf"), variablesTf);
 
-        var outputsTf = TemplateEngine.GenerateTerraformOutputs(options);
+        string outputsTf = TemplateEngine.GenerateTerraformOutputs(options);
         await File.WriteAllTextAsync(Path.Combine(terraformPath, "outputs.tf"), outputsTf);
     }
 
     private static async Task CreateGitHubActionsAsync(string projectPath, ProjectOptions options)
     {
-        var workflowsPath = Path.Combine(projectPath, ".github", "workflows");
+        string workflowsPath = Path.Combine(projectPath, ".github", "workflows");
 
-        var ciYaml = TemplateEngine.GenerateGitHubActionsCI(options);
+        string ciYaml = TemplateEngine.GenerateGitHubActionsCI(options);
         await File.WriteAllTextAsync(Path.Combine(workflowsPath, "ci.yml"), ciYaml);
     }
 
     private static async Task CreateCommonFilesAsync(string projectPath, ProjectOptions options)
     {
         // Create .gitignore
-        var gitignore = TemplateEngine.GenerateGitignore();
+        string gitignore = TemplateEngine.GenerateGitignore();
         await File.WriteAllTextAsync(Path.Combine(projectPath, ".gitignore"), gitignore);
 
         // Create .editorconfig
-        var editorconfig = TemplateEngine.GenerateEditorConfig();
+        string editorconfig = TemplateEngine.GenerateEditorConfig();
         await File.WriteAllTextAsync(Path.Combine(projectPath, ".editorconfig"), editorconfig);
 
         // Create global.json
-        var globalJson = TemplateEngine.GenerateGlobalJson();
+        string globalJson = TemplateEngine.GenerateGlobalJson();
         await File.WriteAllTextAsync(Path.Combine(projectPath, "global.json"), globalJson);
 
         // Create Directory.Build.props
-        var buildProps = TemplateEngine.GenerateDirectoryBuildProps(options);
+        string buildProps = TemplateEngine.GenerateDirectoryBuildProps(options);
         await File.WriteAllTextAsync(Path.Combine(projectPath, "src", "Directory.Build.props"), buildProps);
 
         // Create Directory.Packages.props
-        var packagesProps = TemplateEngine.GenerateDirectoryPackagesProps(options);
+        string packagesProps = TemplateEngine.GenerateDirectoryPackagesProps(options);
         await File.WriteAllTextAsync(Path.Combine(projectPath, "src", "Directory.Packages.props"), packagesProps);
 
         // Create README.md
-        var readme = TemplateEngine.GenerateReadme(options);
+        string readme = TemplateEngine.GenerateReadme(options);
         await File.WriteAllTextAsync(Path.Combine(projectPath, "README.md"), readme);
     }
 
     private static async Task InitializeGitRepositoryAsync(string projectPath)
     {
         // Run git init
-        using var initProcess = new Process
+        using Process initProcess = new()
         {
             StartInfo = new ProcessStartInfo
             {
@@ -355,13 +355,13 @@ internal static class SolutionGenerator
 
             if (initProcess.ExitCode != 0)
             {
-                var error = await initProcess.StandardError.ReadToEndAsync();
+                string error = await initProcess.StandardError.ReadToEndAsync();
                 ConsoleTheme.WriteWarning($"git init failed: {error}");
                 return;
             }
 
             // Run dotnet new gitignore to get a comprehensive .NET gitignore
-            using var gitignoreProcess = new Process
+            using Process gitignoreProcess = new()
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -395,9 +395,9 @@ internal static class SolutionGenerator
     {
         ConsoleTheme.WriteStep("Restoring packages");
 
-        var slnPath = Path.Combine(projectPath, "src", $"{options.Name}.slnx");
+        string slnPath = Path.Combine(projectPath, "src", $"{options.Name}.slnx");
 
-        using var process = new Process
+        using Process process = new()
         {
             StartInfo = new ProcessStartInfo
             {
@@ -416,7 +416,7 @@ internal static class SolutionGenerator
 
         if (process.ExitCode != 0)
         {
-            var error = await process.StandardError.ReadToEndAsync();
+            string error = await process.StandardError.ReadToEndAsync();
             ConsoleTheme.WriteWarning($"Restore warnings: {error}");
         }
     }

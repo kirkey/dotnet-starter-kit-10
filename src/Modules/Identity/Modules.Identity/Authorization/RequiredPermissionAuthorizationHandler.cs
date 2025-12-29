@@ -12,14 +12,14 @@ public sealed class RequiredPermissionAuthorizationHandler(IUserService userServ
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(requirement);
 
-        var endpoint = context.Resource switch
+        Endpoint? endpoint = context.Resource switch
         {
             HttpContext httpContext => httpContext.GetEndpoint(),
             Endpoint ep => ep,
             _ => null,
         };
 
-        var requiredPermissions = endpoint?.Metadata.GetMetadata<IRequiredPermissionMetadata>()?.RequiredPermissions;
+        HashSet<string>? requiredPermissions = endpoint?.Metadata.GetMetadata<IRequiredPermissionMetadata>()?.RequiredPermissions;
         if (requiredPermissions == null)
         {
             // there are no permission requirements set by the endpoint

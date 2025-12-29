@@ -20,7 +20,7 @@ public sealed class RequiredPermissionAttribute : Attribute, IRequiredPermission
         RequiredPermission = requiredPermission;
         AdditionalRequiredPermissions = additionalRequiredPermissions;
 
-        var permissions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        HashSet<string> permissions = new(StringComparer.OrdinalIgnoreCase);
         if (!string.IsNullOrWhiteSpace(requiredPermission))
         {
             permissions.Add(requiredPermission);
@@ -28,7 +28,7 @@ public sealed class RequiredPermissionAttribute : Attribute, IRequiredPermission
 
         if (additionalRequiredPermissions is { Length: > 0 })
         {
-            foreach (var p in additionalRequiredPermissions.Where(p => !string.IsNullOrWhiteSpace(p)))
+            foreach (string p in additionalRequiredPermissions.Where(p => !string.IsNullOrWhiteSpace(p)))
             {
                 permissions.Add(p);
             }

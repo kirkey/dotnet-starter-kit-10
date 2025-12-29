@@ -1,6 +1,7 @@
 using FSH.Modules.Auditing.Contracts;
 using FSH.Modules.Auditing.Infrastructure.Serialization;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace FSH.Modules.Auditing.Core;
 
@@ -30,20 +31,20 @@ public static class Audit
     public static Builder ForEntityChange(
         string dbContext, string? schema, string table, string entityName, string key,
         EntityOperation operation, IEnumerable<PropertyChange> changes)
-        => new Builder(
+        => new(
             eventType: AuditEventType.EntityChange,
             severity: AuditSeverity.Information,
             payload: new EntityChangeEventPayload(dbContext, schema, table, entityName, key, operation, changes.ToArray(), TransactionId: null));
 
     public static Builder ForSecurity(SecurityAction action)
-        => new Builder(
+        => new(
             eventType: AuditEventType.Security,
             severity: action is SecurityAction.LoginFailed or SecurityAction.PermissionDenied or SecurityAction.PolicyFailed
                 ? AuditSeverity.Warning : AuditSeverity.Information,
             payload: new SecurityEventPayload(action, null, null, null, null, null));
 
     public static Builder ForActivity(Contracts.ActivityKind kind, string name)
-        => new Builder(
+        => new(
             eventType: AuditEventType.Activity,
             severity: AuditSeverity.Information,
             payload: new ActivityEventPayload(kind, name, null, 0, BodyCapture.None, 0, 0, null, null));
@@ -73,15 +74,15 @@ public static class Audit
 
     private static List<string> StackTop(Exception ex, int maxFrames)
     {
-        var frames = new List<string>(maxFrames);
-        var trace = new StackTrace(ex, true);
-        foreach (var f in trace.GetFrames() ?? Array.Empty<StackFrame>())
+        List<string> frames = new(maxFrames);
+        StackTrace trace = new(ex, true);
+        foreach (StackFrame f in trace.GetFrames() ?? Array.Empty<StackFrame>())
         {
             if (frames.Count >= maxFrames) break;
-            var method = f.GetMethod();
-            var name = method is null ? "<unknown>" : $"{method.DeclaringType?.FullName}.{method.Name}";
-            var file = f.GetFileName();
-            var line = f.GetFileLineNumber();
+            MethodBase? method = f.GetMethod();
+            string name = method is null ? "<unknown>" : $"{method.DeclaringType?.FullName}.{method.Name}";
+            string? file = f.GetFileName();
+            int line = f.GetFileLineNumber();
             frames.Add(file is null ? name : $"{name} ({file}:{line})");
         }
         return frames;
@@ -90,10 +91,10 @@ public static class Audit
     private static Dictionary<string, object?>? ToDict(System.Collections.IDictionary? data)
     {
         if (data is null || data.Count == 0) return null;
-        var dict = new Dictionary<string, object?>(data.Count);
-        foreach (var k in data.Keys)
+        Dictionary<string, object?> dict = new(data.Count);
+        foreach (object? k in data.Keys)
         {
-            var key = k?.ToString() ?? "key";
+            string key = k?.ToString() ?? "key";
             dict[key] = data[key];
         }
         return dict;
@@ -170,7 +171,7 @@ public static class Audit
 
         public async ValueTask WriteAsync(CancellationToken ct = default)
         {
-            var env = new AuditEnvelope(
+            AuditEnvelope env = new(
                 id: Guid.CreateVersion7(),
                 occurredAtUtc: _occurredAtUtc,
                 receivedAtUtc: DateTime.UtcNow,
@@ -189,7 +190,7 @@ public static class Audit
             );
 
             // Enrich prior to publish
-            foreach (var enricher in _enrichers)
+            foreach (IAuditEnricher enricher in _enrichers)
                 enricher.Enrich(env);
 
             await Publisher.PublishAsync(env, ct);

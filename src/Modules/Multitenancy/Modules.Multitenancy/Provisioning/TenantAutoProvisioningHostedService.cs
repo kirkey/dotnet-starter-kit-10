@@ -39,12 +39,12 @@ public sealed class TenantAutoProvisioningHostedService : IHostedService
             return;
         }
 
-        using var scope = _serviceProvider.CreateScope();
-        var tenantStore = scope.ServiceProvider.GetRequiredService<IMultiTenantStore<AppTenantInfo>>();
-        var provisioning = scope.ServiceProvider.GetRequiredService<ITenantProvisioningService>();
+        using IServiceScope scope = _serviceProvider.CreateScope();
+        IMultiTenantStore<AppTenantInfo> tenantStore = scope.ServiceProvider.GetRequiredService<IMultiTenantStore<AppTenantInfo>>();
+        ITenantProvisioningService provisioning = scope.ServiceProvider.GetRequiredService<ITenantProvisioningService>();
 
-        var tenants = await tenantStore.GetAllAsync().ConfigureAwait(false);
-        foreach (var tenant in tenants)
+        IEnumerable<AppTenantInfo> tenants = await tenantStore.GetAllAsync().ConfigureAwait(false);
+        foreach (AppTenantInfo tenant in tenants)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -53,7 +53,7 @@ public sealed class TenantAutoProvisioningHostedService : IHostedService
 
             try
             {
-                var latest = await provisioning.GetLatestAsync(tenant.Id, cancellationToken).ConfigureAwait(false);
+                TenantProvisioning? latest = await provisioning.GetLatestAsync(tenant.Id, cancellationToken).ConfigureAwait(false);
 
                 // When RunTenantMigrationsOnStartup is enabled, always re-provision to apply any new migrations
                 // Otherwise, only provision if not completed yet

@@ -95,10 +95,10 @@ internal sealed class NewCommand : AsyncCommand<NewCommand.Settings>
             {
                 options = BuildOptionsFromSettings(settings);
 
-                var validation = OptionValidator.Validate(options);
+                OptionValidationResult validation = OptionValidator.Validate(options);
                 if (!validation.IsValid)
                 {
-                    foreach (var error in validation.Errors)
+                    foreach (string error in validation.Errors)
                     {
                         ConsoleTheme.WriteError(error);
                     }
@@ -142,7 +142,7 @@ internal sealed class NewCommand : AsyncCommand<NewCommand.Settings>
         // If preset is specified, use it as base
         if (!string.IsNullOrEmpty(settings.Preset))
         {
-            var preset = settings.Preset.ToUpperInvariant() switch
+            Preset preset = settings.Preset.ToUpperInvariant() switch
             {
                 "QUICKSTART" or "QUICK" => Presets.QuickStart,
                 "PRODUCTION" or "PROD" => Presets.ProductionReady,
@@ -151,8 +151,8 @@ internal sealed class NewCommand : AsyncCommand<NewCommand.Settings>
                 _ => throw new ArgumentException($"Unknown preset: {settings.Preset}")
             };
 
-            var name = settings.Name ?? throw new ArgumentException("Project name is required");
-            var options = preset.ToProjectOptions(name, settings.Output);
+            string name = settings.Name ?? throw new ArgumentException("Project name is required");
+            ProjectOptions options = preset.ToProjectOptions(name, settings.Output);
 
             // Allow overrides
             if (settings.Docker.HasValue) options.IncludeDocker = settings.Docker.Value;
@@ -167,7 +167,7 @@ internal sealed class NewCommand : AsyncCommand<NewCommand.Settings>
         }
 
         // Build from individual options
-        var projectName = settings.Name ?? throw new ArgumentException("Project name is required in non-interactive mode");
+        string projectName = settings.Name ?? throw new ArgumentException("Project name is required in non-interactive mode");
 
         return new ProjectOptions
         {

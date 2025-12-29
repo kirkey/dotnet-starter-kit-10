@@ -33,7 +33,7 @@ public static class ServiceCollectionExtensions
         services.AddHostedService<AuditBackgroundWorker>();
         services.AddSingleton<IAuditSink, SqlAuditSink>();
 
-        var opts = new AuditHttpOptions();
+        AuditHttpOptions opts = new();
         configure?.Invoke(opts);
         services.AddSingleton(opts);
 

@@ -33,7 +33,7 @@ public record AppTenantInfo(string Id, string Identifier, string? Name = null)
 
     public void SetValidity(in DateTime validTill)
     {
-        var normalized = validTill;
+        DateTime normalized = validTill;
         ValidUpto = ValidUpto < normalized
             ? normalized
             : throw new InvalidOperationException("Subscription cannot be backdated.");

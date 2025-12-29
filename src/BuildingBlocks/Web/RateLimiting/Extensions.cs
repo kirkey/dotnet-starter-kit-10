@@ -16,7 +16,7 @@ public static class Extensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
 
-        var settings = configuration.GetSection(nameof(RateLimitingOptions)).Get<RateLimitingOptions>() ?? new RateLimitingOptions();
+        RateLimitingOptions settings = configuration.GetSection(nameof(RateLimitingOptions)).Get<RateLimitingOptions>() ?? new RateLimitingOptions();
 
         services.AddOptions<RateLimitingOptions>()
             .BindConfiguration(nameof(RateLimitingOptions));
@@ -32,11 +32,11 @@ public static class Extensions
 
             string GetPartitionKey(HttpContext context)
             {
-                var tenant = context.User?.FindFirst(ClaimConstants.Tenant)?.Value;
-                var userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                string? tenant = context.User?.FindFirst(ClaimConstants.Tenant)?.Value;
+                string? userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (!string.IsNullOrWhiteSpace(tenant)) return $"tenant:{tenant}";
                 if (!string.IsNullOrWhiteSpace(userId)) return $"user:{userId}";
-                var ip = context.Connection.RemoteIpAddress?.ToString();
+                string? ip = context.Connection.RemoteIpAddress?.ToString();
                 return string.IsNullOrWhiteSpace(ip) ? "ip:unknown" : $"ip:{ip}";
             }
 
@@ -53,7 +53,7 @@ public static class Extensions
                     return RateLimitPartition.GetNoLimiter("health");
                 }
 
-                var key = GetPartitionKey(context);
+                string key = GetPartitionKey(context);
                 return RateLimitPartition.GetFixedWindowLimiter(
                     partitionKey: key,
                     factory: _ => new FixedWindowRateLimiterOptions
@@ -95,7 +95,7 @@ public static class Extensions
     {
         ArgumentNullException.ThrowIfNull(app);
 
-        var opts = app.ApplicationServices.GetRequiredService<IOptions<RateLimitingOptions>>().Value;
+        RateLimitingOptions opts = app.ApplicationServices.GetRequiredService<IOptions<RateLimitingOptions>>().Value;
         if (opts.Enabled)
         {
             app.UseRateLimiter();

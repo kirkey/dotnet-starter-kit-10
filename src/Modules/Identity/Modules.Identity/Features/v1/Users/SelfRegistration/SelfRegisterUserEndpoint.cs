@@ -20,7 +20,7 @@ public static class SelfRegisterUserEndpoint
             IMediator mediator,
             CancellationToken cancellationToken) =>
         {
-            var origin = $"{context.Request.Scheme}://{context.Request.Host.Value}{context.Request.PathBase.Value}";
+            string origin = $"{context.Request.Scheme}://{context.Request.Host.Value}{context.Request.PathBase.Value}";
             command.Origin = origin;
             return mediator.Send(command, cancellationToken);
         })

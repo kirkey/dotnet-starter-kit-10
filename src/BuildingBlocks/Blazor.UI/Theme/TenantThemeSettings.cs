@@ -20,8 +20,8 @@ public sealed class TenantThemeSettings
 
     public MudTheme ToMudTheme()
     {
-        var bodyFontFamily = new[] { Typography.FontFamily.Split(',')[0].Trim(), "system-ui", "sans-serif" };
-        var headingFontFamily = new[] { Typography.HeadingFontFamily.Split(',')[0].Trim(), "system-ui", "sans-serif" };
+        string[] bodyFontFamily = new[] { Typography.FontFamily.Split(',')[0].Trim(), "system-ui", "sans-serif" };
+        string[] headingFontFamily = new[] { Typography.HeadingFontFamily.Split(',')[0].Trim(), "system-ui", "sans-serif" };
 
         return new MudTheme
         {

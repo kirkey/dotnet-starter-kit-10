@@ -24,7 +24,7 @@ public static class RevokeSessionEndpoint
         IMediator mediator,
         CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new RevokeSessionCommand(sessionId), cancellationToken);
+        bool result = await mediator.Send(new RevokeSessionCommand(sessionId), cancellationToken);
         return result ? Results.Ok() : Results.NotFound();
     }
 }

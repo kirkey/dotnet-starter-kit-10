@@ -22,7 +22,7 @@ public static class UpgradeTenantEndpoint
                 return Results.BadRequest();
             }
 
-            var result = await dispatcher.Send(command);
+            UpgradeTenantCommandResponse result = await dispatcher.Send(command);
             return Results.Ok(result);
         })
         .WithName("UpgradeTenant")

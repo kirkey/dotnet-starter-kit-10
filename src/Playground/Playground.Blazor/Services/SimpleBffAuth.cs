@@ -21,15 +21,15 @@ internal static class SimpleBffAuth
             try
             {
                 // Read form data
-                var form = await httpContext.Request.ReadFormAsync();
-                var email = form["Email"].ToString();
-                var password = form["Password"].ToString();
-                var tenant = form["Tenant"].ToString();
+                IFormCollection form = await httpContext.Request.ReadFormAsync();
+                string email = form["Email"].ToString();
+                string password = form["Password"].ToString();
+                string? tenant = form["Tenant"].ToString();
 
                 logger.LogInformation("Login attempt for {Email}", email);
 
                 // Call the identity API to get token
-                var token = await tokenClient.IssueAsync(
+                TokenResponse? token = await tokenClient.IssueAsync(
                     tenant ?? "root",
                     new GenerateTokenCommand
                     {
@@ -43,10 +43,10 @@ internal static class SimpleBffAuth
                 }
 
                 // Parse JWT to extract claims
-                var jwtHandler = new JwtSecurityTokenHandler();
-                var jwtToken = jwtHandler.ReadJwtToken(token.AccessToken);
+                JwtSecurityTokenHandler jwtHandler = new();
+                JwtSecurityToken? jwtToken = jwtHandler.ReadJwtToken(token.AccessToken);
 
-                var claims = new List<Claim>
+                List<Claim> claims = new()
                 {
                     new(ClaimTypes.NameIdentifier, jwtToken.Subject ?? Guid.NewGuid().ToString()),
                     new(ClaimTypes.Email, email),
@@ -56,19 +56,19 @@ internal static class SimpleBffAuth
                 };
 
                 // Add name claim
-                var nameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "name" || c.Type == ClaimTypes.Name);
+                Claim? nameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "name" || c.Type == ClaimTypes.Name);
                 if (nameClaim != null)
                 {
                     claims.Add(new Claim(ClaimTypes.Name, nameClaim.Value));
                 }
 
                 // Add role claims
-                var roleClaims = jwtToken.Claims.Where(c => c.Type == "role" || c.Type == ClaimTypes.Role);
+                IEnumerable<Claim> roleClaims = jwtToken.Claims.Where(c => c.Type == "role" || c.Type == ClaimTypes.Role);
                 claims.AddRange(roleClaims.Select(r => new Claim(ClaimTypes.Role, r.Value)));
 
                 // Create identity and sign in with cookie
-                var identity = new ClaimsIdentity(claims, "Cookies");
-                var principal = new ClaimsPrincipal(identity);
+                ClaimsIdentity identity = new(claims, "Cookies");
+                ClaimsPrincipal principal = new(identity);
 
                 await httpContext.SignInAsync("Cookies", principal, new AuthenticationProperties
                 {

@@ -52,11 +52,11 @@ internal sealed class TenantThemeState : ITenantThemeState
     {
         try
         {
-            var response = await _httpClient.GetAsync(ThemeEndpoint, cancellationToken);
+            HttpResponseMessage response = await _httpClient.GetAsync(ThemeEndpoint, cancellationToken);
 
             if (response.IsSuccessStatusCode)
             {
-                var dto = await response.Content.ReadFromJsonAsync<TenantThemeApiDto>(cancellationToken);
+                TenantThemeApiDto? dto = await response.Content.ReadFromJsonAsync<TenantThemeApiDto>(cancellationToken);
                 if (dto is not null)
                 {
                     _current = MapFromDto(dto);
@@ -77,8 +77,8 @@ internal sealed class TenantThemeState : ITenantThemeState
 
     public async Task SaveThemeAsync(CancellationToken cancellationToken = default)
     {
-        var dto = MapToDto(_current);
-        var response = await _httpClient.PutAsJsonAsync("/api/v1/tenants/theme", dto, cancellationToken);
+        TenantThemeApiDto dto = MapToDto(_current);
+        HttpResponseMessage response = await _httpClient.PutAsJsonAsync("/api/v1/tenants/theme", dto, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         _theme = _current.ToMudTheme();
@@ -87,7 +87,7 @@ internal sealed class TenantThemeState : ITenantThemeState
 
     public async Task ResetThemeAsync(CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsync(ThemeResetEndpoint, null, cancellationToken);
+        HttpResponseMessage response = await _httpClient.PostAsync(ThemeResetEndpoint, null, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         _current = TenantThemeSettings.Default;

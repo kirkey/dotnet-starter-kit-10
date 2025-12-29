@@ -30,7 +30,7 @@ public static class Extensions
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        var options = new FshPlatformOptions();
+        FshPlatformOptions options = new();
         configure?.Invoke(options);
 
         builder.Services.AddScoped<CurrentUserMiddleware>();
@@ -45,8 +45,8 @@ public static class Extensions
         builder.Services.AddHeroDatabaseOptions(builder.Configuration);
         builder.Services.AddHeroRateLimiting(builder.Configuration);
 
-        var corsEnabled = options.EnableCors && IsCorsEnabled(builder.Configuration);
-        var openApiEnabled = options.EnableOpenApi && IsOpenApiEnabled(builder.Configuration);
+        bool corsEnabled = options.EnableCors && IsCorsEnabled(builder.Configuration);
+        bool openApiEnabled = options.EnableOpenApi && IsOpenApiEnabled(builder.Configuration);
 
         if (corsEnabled)
         {
@@ -91,11 +91,11 @@ public static class Extensions
     {
         ArgumentNullException.ThrowIfNull(app);
 
-        var options = new FshPipelineOptions();
+        FshPipelineOptions options = new();
         configure?.Invoke(options);
 
-        var corsEnabled = options.UseCors && IsCorsEnabled(app.Configuration);
-        var openApiEnabled = options.UseOpenApi && IsOpenApiEnabled(app.Configuration);
+        bool corsEnabled = options.UseCors && IsCorsEnabled(app.Configuration);
+        bool openApiEnabled = options.UseOpenApi && IsOpenApiEnabled(app.Configuration);
 
         app.UseExceptionHandler();
         app.UseHttpsRedirection();
@@ -105,7 +105,7 @@ public static class Extensions
         // Serve static files as early as possible to short-circuit pipeline
         if (options.ServeStaticFiles)
         {
-            var assetsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            string assetsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
             if (!Directory.Exists(assetsPath))
             {
                 Directory.CreateDirectory(assetsPath);
@@ -131,7 +131,7 @@ public static class Extensions
         app.UseAuthentication();
 
         // If Auditing module is referenced, wire its HTTP middleware (request/response logging)
-        var auditMiddlewareType = Type.GetType("FSH.Modules.Auditing.AuditHttpMiddleware, FSH.Modules.Auditing");
+        Type? auditMiddlewareType = Type.GetType("FSH.Modules.Auditing.AuditHttpMiddleware, FSH.Modules.Auditing");
         if (auditMiddlewareType is not null)
         {
             app.UseMiddleware(auditMiddlewareType);
@@ -155,8 +155,8 @@ public static class Extensions
     {
         ArgumentNullException.ThrowIfNull(configuration);
         
-        var allowAll = configuration.GetValue("CorsOptions:AllowAll", false);
-        var origins = configuration.GetSection("CorsOptions:AllowedOrigins").Get<string[]>() ?? [];
+        bool allowAll = configuration.GetValue("CorsOptions:AllowAll", false);
+        string[] origins = configuration.GetSection("CorsOptions:AllowedOrigins").Get<string[]>() ?? [];
         return allowAll || origins.Length > 0;
     }
 

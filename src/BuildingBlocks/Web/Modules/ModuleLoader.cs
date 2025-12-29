@@ -24,11 +24,11 @@ public static class ModuleLoader
 
             builder.Services.AddValidatorsFromAssemblies(assemblies);
 
-            var source = assemblies is { Length: > 0 }
+            Assembly[] source = assemblies is { Length: > 0 }
                 ? assemblies
                 : AppDomain.CurrentDomain.GetAssemblies();
 
-            var moduleRegistrations = source
+            IEnumerable<Type> moduleRegistrations = source
                 .SelectMany(a => a.GetCustomAttributes<FshModuleAttribute>())
                 .Where(r => typeof(IModule).IsAssignableFrom(r.ModuleType))
                 .DistinctBy(r => r.ModuleType)
@@ -36,7 +36,7 @@ public static class ModuleLoader
                 .ThenBy(r => r.ModuleType.Name)
                 .Select(r => r.ModuleType);
 
-            foreach (var moduleType in moduleRegistrations)
+            foreach (Type moduleType in moduleRegistrations)
             {
                 if (Activator.CreateInstance(moduleType) is not IModule module)
                 {
@@ -55,7 +55,7 @@ public static class ModuleLoader
 
     public static IEndpointRouteBuilder MapModules(this IEndpointRouteBuilder endpoints)
     {
-        foreach (var m in _modules)
+        foreach (IModule m in _modules)
             m.MapEndpoints(endpoints);
 
         return endpoints;

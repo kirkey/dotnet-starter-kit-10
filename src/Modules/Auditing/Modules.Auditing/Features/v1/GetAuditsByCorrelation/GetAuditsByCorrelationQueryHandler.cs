@@ -7,20 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Auditing.Features.v1.GetAuditsByCorrelation;
 
-public sealed class GetAuditsByCorrelationQueryHandler : IQueryHandler<GetAuditsByCorrelationQuery, IReadOnlyList<AuditSummaryDto>>
+public sealed class GetAuditsByCorrelationQueryHandler(AuditDbContext dbContext)
+    : IQueryHandler<GetAuditsByCorrelationQuery, IReadOnlyList<AuditSummaryDto>>
 {
-    private readonly AuditDbContext _dbContext;
-
-    public GetAuditsByCorrelationQueryHandler(AuditDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async ValueTask<IReadOnlyList<AuditSummaryDto>> Handle(GetAuditsByCorrelationQuery query, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(query);
 
-        IQueryable<AuditRecord> audits = _dbContext.AuditRecords
+        IQueryable<AuditRecord> audits = dbContext.AuditRecords
             .AsNoTracking()
             .Where(a => a.CorrelationId == query.CorrelationId);
 
@@ -34,7 +28,7 @@ public sealed class GetAuditsByCorrelationQueryHandler : IQueryHandler<GetAudits
             audits = audits.Where(a => a.OccurredAtUtc <= query.ToUtc.Value);
         }
 
-        var list = await audits
+        List<AuditSummaryDto> list = await audits
             .OrderBy(a => a.OccurredAtUtc)
             .Select(a => new AuditSummaryDto
             {

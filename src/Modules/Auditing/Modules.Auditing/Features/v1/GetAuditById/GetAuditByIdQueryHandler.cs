@@ -8,20 +8,14 @@ using System.Text.Json;
 
 namespace FSH.Modules.Auditing.Features.v1.GetAuditById;
 
-public sealed class GetAuditByIdQueryHandler : IQueryHandler<GetAuditByIdQuery, AuditDetailDto>
+public sealed class GetAuditByIdQueryHandler(AuditDbContext dbContext)
+    : IQueryHandler<GetAuditByIdQuery, AuditDetailDto>
 {
-    private readonly AuditDbContext _dbContext;
-
-    public GetAuditByIdQueryHandler(AuditDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async ValueTask<AuditDetailDto> Handle(GetAuditByIdQuery query, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(query);
 
-        var record = await _dbContext.AuditRecords
+        AuditRecord? record = await dbContext.AuditRecords
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == query.Id, cancellationToken)
             .ConfigureAwait(false);
@@ -34,7 +28,7 @@ public sealed class GetAuditByIdQueryHandler : IQueryHandler<GetAuditByIdQuery, 
         JsonElement payload;
         try
         {
-            using var document = JsonDocument.Parse(record.PayloadJson);
+            using JsonDocument document = JsonDocument.Parse(record.PayloadJson);
             payload = document.RootElement.Clone();
         }
         catch

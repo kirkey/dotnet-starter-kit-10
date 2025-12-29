@@ -7,20 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Auditing.Features.v1.GetExceptionAudits;
 
-public sealed class GetExceptionAuditsQueryHandler : IQueryHandler<GetExceptionAuditsQuery, IReadOnlyList<AuditSummaryDto>>
+public sealed class GetExceptionAuditsQueryHandler(AuditDbContext dbContext)
+    : IQueryHandler<GetExceptionAuditsQuery, IReadOnlyList<AuditSummaryDto>>
 {
-    private readonly AuditDbContext _dbContext;
-
-    public GetExceptionAuditsQueryHandler(AuditDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async ValueTask<IReadOnlyList<AuditSummaryDto>> Handle(GetExceptionAuditsQuery query, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(query);
 
-        IQueryable<AuditRecord> audits = _dbContext.AuditRecords
+        IQueryable<AuditRecord> audits = dbContext.AuditRecords
             .AsNoTracking()
             .Where(a => a.EventType == (int)AuditEventType.Exception);
 
@@ -58,7 +52,7 @@ public sealed class GetExceptionAuditsQueryHandler : IQueryHandler<GetExceptionA
                 EF.Functions.ILike(a.PayloadJson, $"%\"routeOrLocation\":\"{query.RouteOrLocation}%"));
         }
 
-        var list = await audits
+        List<AuditSummaryDto> list = await audits
             .OrderByDescending(a => a.OccurredAtUtc)
             .Select(a => new AuditSummaryDto
             {

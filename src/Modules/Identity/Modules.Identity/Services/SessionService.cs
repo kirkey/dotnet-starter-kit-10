@@ -11,30 +11,18 @@ using UAParser;
 
 namespace FSH.Modules.Identity.Services;
 
-public sealed class SessionService : ISessionService
+public sealed class SessionService(
+    IdentityDbContext db,
+    ICurrentUser currentUser,
+    IMultiTenantContextAccessor<AppTenantInfo> multiTenantContextAccessor,
+    ILogger<SessionService> logger)
+    : ISessionService
 {
-    private readonly IdentityDbContext _db;
-    private readonly ICurrentUser _currentUser;
-    private readonly IMultiTenantContextAccessor<AppTenantInfo> _multiTenantContextAccessor;
-    private readonly ILogger<SessionService> _logger;
-    private readonly Parser _uaParser;
-
-    public SessionService(
-        IdentityDbContext db,
-        ICurrentUser currentUser,
-        IMultiTenantContextAccessor<AppTenantInfo> multiTenantContextAccessor,
-        ILogger<SessionService> logger)
-    {
-        _db = db;
-        _currentUser = currentUser;
-        _multiTenantContextAccessor = multiTenantContextAccessor;
-        _logger = logger;
-        _uaParser = Parser.GetDefault();
-    }
+    private readonly Parser _uaParser = Parser.GetDefault();
 
     private void EnsureValidTenant()
     {
-        if (string.IsNullOrWhiteSpace(_multiTenantContextAccessor?.MultiTenantContext?.TenantInfo?.Id))
+        if (string.IsNullOrWhiteSpace(multiTenantContextAccessor?.MultiTenantContext?.TenantInfo?.Id))
         {
             throw new UnauthorizedAccessException("Invalid tenant");
         }
@@ -50,9 +38,9 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var clientInfo = _uaParser.Parse(userAgent);
+        ClientInfo? clientInfo = _uaParser.Parse(userAgent);
 
-        var session = new UserSession
+        UserSession session = new()
         {
             UserId = userId,
             RefreshTokenHash = refreshTokenHash,
@@ -68,10 +56,10 @@ public sealed class SessionService : ISessionService
             LastActivityAt = DateTime.UtcNow
         };
 
-        _db.UserSessions.Add(session);
-        await _db.SaveChangesAsync(cancellationToken);
+        db.UserSessions.Add(session);
+        await db.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Created session {SessionId} for user {UserId}", session.Id, userId);
+        logger.LogInformation("Created session {SessionId} for user {UserId}", session.Id, userId);
 
         return MapToDto(session, isCurrentSession: true);
     }
@@ -82,13 +70,13 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var currentUserId = _currentUser.GetUserId().ToString();
+        string currentUserId = currentUser.GetUserId().ToString();
         if (!string.Equals(userId, currentUserId, StringComparison.OrdinalIgnoreCase))
         {
             throw new UnauthorizedAccessException("Cannot view sessions for another user");
         }
 
-        var sessions = await _db.UserSessions
+        List<UserSession> sessions = await db.UserSessions
             .AsNoTracking()
             .Where(s => s.UserId == userId && !s.IsRevoked && s.ExpiresAt > DateTime.UtcNow)
             .OrderByDescending(s => s.LastActivityAt)
@@ -103,7 +91,7 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var sessions = await _db.UserSessions
+        List<UserSession> sessions = await db.UserSessions
             .AsNoTracking()
             .Include(s => s.User)
             .Where(s => s.UserId == userId && !s.IsRevoked && s.ExpiresAt > DateTime.UtcNow)
@@ -119,7 +107,7 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var session = await _db.UserSessions
+        UserSession? session = await db.UserSessions
             .AsNoTracking()
             .Include(s => s.User)
             .FirstOrDefaultAsync(s => s.Id == sessionId, cancellationToken);
@@ -135,7 +123,7 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var session = await _db.UserSessions
+        UserSession? session = await db.UserSessions
             .FirstOrDefaultAsync(s => s.Id == sessionId && !s.IsRevoked, cancellationToken);
 
         if (session is null)
@@ -143,7 +131,7 @@ public sealed class SessionService : ISessionService
             return false;
         }
 
-        var currentUserId = _currentUser.GetUserId().ToString();
+        string currentUserId = currentUser.GetUserId().ToString();
         if (!string.Equals(session.UserId, currentUserId, StringComparison.OrdinalIgnoreCase))
         {
             throw new UnauthorizedAccessException("Cannot revoke session for another user");
@@ -154,9 +142,9 @@ public sealed class SessionService : ISessionService
         session.RevokedBy = revokedBy;
         session.RevokedReason = reason ?? "User requested";
 
-        await _db.SaveChangesAsync(cancellationToken);
+        await db.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Session {SessionId} revoked by {RevokedBy}", sessionId, revokedBy);
+        logger.LogInformation("Session {SessionId} revoked by {RevokedBy}", sessionId, revokedBy);
 
         return true;
     }
@@ -170,13 +158,13 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var currentUserId = _currentUser.GetUserId().ToString();
+        string currentUserId = currentUser.GetUserId().ToString();
         if (!string.Equals(userId, currentUserId, StringComparison.OrdinalIgnoreCase))
         {
             throw new UnauthorizedAccessException("Cannot revoke sessions for another user");
         }
 
-        var query = _db.UserSessions
+        IQueryable<UserSession> query = db.UserSessions
             .Where(s => s.UserId == userId && !s.IsRevoked);
 
         if (exceptSessionId.HasValue)
@@ -184,9 +172,9 @@ public sealed class SessionService : ISessionService
             query = query.Where(s => s.Id != exceptSessionId.Value);
         }
 
-        var sessions = await query.ToListAsync(cancellationToken);
+        List<UserSession> sessions = await query.ToListAsync(cancellationToken);
 
-        foreach (var session in sessions)
+        foreach (UserSession session in sessions)
         {
             session.IsRevoked = true;
             session.RevokedAt = DateTime.UtcNow;
@@ -194,9 +182,9 @@ public sealed class SessionService : ISessionService
             session.RevokedReason = reason ?? "User requested logout from all devices";
         }
 
-        await _db.SaveChangesAsync(cancellationToken);
+        await db.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Revoked {Count} sessions for user {UserId}", sessions.Count, userId);
+        logger.LogInformation("Revoked {Count} sessions for user {UserId}", sessions.Count, userId);
 
         return sessions.Count;
     }
@@ -209,11 +197,11 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var sessions = await _db.UserSessions
+        List<UserSession> sessions = await db.UserSessions
             .Where(s => s.UserId == userId && !s.IsRevoked)
             .ToListAsync(cancellationToken);
 
-        foreach (var session in sessions)
+        foreach (UserSession session in sessions)
         {
             session.IsRevoked = true;
             session.RevokedAt = DateTime.UtcNow;
@@ -221,9 +209,9 @@ public sealed class SessionService : ISessionService
             session.RevokedReason = reason ?? "Admin requested";
         }
 
-        await _db.SaveChangesAsync(cancellationToken);
+        await db.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Admin {AdminId} revoked {Count} sessions for user {UserId}",
+        logger.LogInformation("Admin {AdminId} revoked {Count} sessions for user {UserId}",
             revokedBy, sessions.Count, userId);
 
         return sessions.Count;
@@ -237,7 +225,7 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var session = await _db.UserSessions
+        UserSession? session = await db.UserSessions
             .FirstOrDefaultAsync(s => s.Id == sessionId && !s.IsRevoked, cancellationToken);
 
         if (session is null)
@@ -250,9 +238,9 @@ public sealed class SessionService : ISessionService
         session.RevokedBy = revokedBy;
         session.RevokedReason = reason ?? "Admin requested";
 
-        await _db.SaveChangesAsync(cancellationToken);
+        await db.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Admin {AdminId} revoked session {SessionId}", revokedBy, sessionId);
+        logger.LogInformation("Admin {AdminId} revoked session {SessionId}", revokedBy, sessionId);
 
         return true;
     }
@@ -263,13 +251,13 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var session = await _db.UserSessions
+        UserSession? session = await db.UserSessions
             .FirstOrDefaultAsync(s => s.RefreshTokenHash == refreshTokenHash && !s.IsRevoked, cancellationToken);
 
         if (session is not null)
         {
             session.LastActivityAt = DateTime.UtcNow;
-            await _db.SaveChangesAsync(cancellationToken);
+            await db.SaveChangesAsync(cancellationToken);
         }
     }
 
@@ -281,7 +269,7 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var session = await _db.UserSessions
+        UserSession? session = await db.UserSessions
             .FirstOrDefaultAsync(s => s.RefreshTokenHash == oldRefreshTokenHash && !s.IsRevoked, cancellationToken);
 
         if (session is not null)
@@ -289,9 +277,9 @@ public sealed class SessionService : ISessionService
             session.RefreshTokenHash = newRefreshTokenHash;
             session.ExpiresAt = newExpiresAt;
             session.LastActivityAt = DateTime.UtcNow;
-            await _db.SaveChangesAsync(cancellationToken);
+            await db.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Updated session {SessionId} with new refresh token", session.Id);
+            logger.LogInformation("Updated session {SessionId} with new refresh token", session.Id);
         }
     }
 
@@ -301,7 +289,7 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var session = await _db.UserSessions
+        UserSession? session = await db.UserSessions
             .AsNoTracking()
             .FirstOrDefaultAsync(s => s.RefreshTokenHash == refreshTokenHash, cancellationToken);
 
@@ -319,7 +307,7 @@ public sealed class SessionService : ISessionService
     {
         EnsureValidTenant();
 
-        var session = await _db.UserSessions
+        UserSession? session = await db.UserSessions
             .AsNoTracking()
             .FirstOrDefaultAsync(s => s.RefreshTokenHash == refreshTokenHash && !s.IsRevoked, cancellationToken);
 
@@ -329,16 +317,16 @@ public sealed class SessionService : ISessionService
     public async Task CleanupExpiredSessionsAsync(
         CancellationToken cancellationToken = default)
     {
-        var cutoffDate = DateTime.UtcNow.AddDays(-30); // Keep revoked sessions for 30 days for audit
-        var expiredSessions = await _db.UserSessions
+        DateTime cutoffDate = DateTime.UtcNow.AddDays(-30); // Keep revoked sessions for 30 days for audit
+        List<UserSession> expiredSessions = await db.UserSessions
             .Where(s => s.ExpiresAt < DateTime.UtcNow && s.ExpiresAt < cutoffDate)
             .ToListAsync(cancellationToken);
 
         if (expiredSessions.Count > 0)
         {
-            _db.UserSessions.RemoveRange(expiredSessions);
-            await _db.SaveChangesAsync(cancellationToken);
-            _logger.LogInformation("Cleaned up {Count} expired sessions", expiredSessions.Count);
+            db.UserSessions.RemoveRange(expiredSessions);
+            await db.SaveChangesAsync(cancellationToken);
+            logger.LogInformation("Cleaned up {Count} expired sessions", expiredSessions.Count);
         }
     }
 
@@ -349,7 +337,7 @@ public sealed class SessionService : ISessionService
             return "Desktop";
         }
 
-        var lower = deviceFamily.ToLowerInvariant();
+        string lower = deviceFamily.ToLowerInvariant();
         if (lower.Contains("mobile") || lower.Contains("phone") || lower.Contains("iphone") || lower.Contains("android"))
         {
             return "Mobile";

@@ -9,18 +9,18 @@ public sealed class TenantDbContextFactory : IDesignTimeDbContextFactory<TenantD
     public TenantDbContext CreateDbContext(string[] args)
     {
         // Design-time factory: read configuration (appsettings + env vars) to decide provider and connection.
-        var configuration = new ConfigurationBuilder()
+        IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: true)
             .AddJsonFile("appsettings.Development.json", optional: true)
             .AddEnvironmentVariables()
             .Build();
 
-        var provider = configuration["DatabaseOptions:Provider"] ?? "POSTGRESQL";
-        var connectionString = configuration["DatabaseOptions:ConnectionString"]
-            ?? "Host=localhost;Database=fsh-tenant;Username=postgres;Password=postgres";
+        string provider = configuration["DatabaseOptions:Provider"] ?? "POSTGRESQL";
+        string connectionString = configuration["DatabaseOptions:ConnectionString"]
+                                  ?? "Host=localhost;Database=fsh-tenant;Username=postgres;Password=postgres";
 
-        var optionsBuilder = new DbContextOptionsBuilder<TenantDbContext>();
+        DbContextOptionsBuilder<TenantDbContext> optionsBuilder = new();
 
         switch (provider.ToUpperInvariant())
         {

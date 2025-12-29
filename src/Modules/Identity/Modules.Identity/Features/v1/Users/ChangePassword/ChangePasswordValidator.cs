@@ -42,20 +42,20 @@ public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
 
     private async Task<bool> NotBeInPasswordHistoryAsync(string newPassword, CancellationToken cancellationToken)
     {
-        var userId = _httpContextAccessor.HttpContext?.User.GetUserId();
+        string? userId = _httpContextAccessor.HttpContext?.User.GetUserId();
         if (string.IsNullOrEmpty(userId))
         {
             return true; // Let other validation handle unauthorized access
         }
 
-        var user = await _userManager.FindByIdAsync(userId);
+        FshUser? user = await _userManager.FindByIdAsync(userId);
         if (user is null)
         {
             return true; // Let other validation handle user not found
         }
 
         // Check if password is in history
-        var isInHistory = await _passwordHistoryService.IsPasswordInHistoryAsync(user, newPassword, cancellationToken);
+        bool isInHistory = await _passwordHistoryService.IsPasswordInHistoryAsync(user, newPassword, cancellationToken);
         return !isInHistory; // Return true if NOT in history (validation passes)
     }
 }

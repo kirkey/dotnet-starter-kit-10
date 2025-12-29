@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Asp.Versioning.Builder;
 using FSH.Framework.Persistence;
 using FSH.Framework.Web.Modules;
 using FSH.Modules.Auditing.Contracts;
@@ -27,7 +28,7 @@ public class AuditingModule : IModule
     public void ConfigureServices(IHostApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
-        var httpOpts = builder.Configuration.GetSection("Auditing").Get<AuditHttpOptions>() ?? new AuditHttpOptions();
+        AuditHttpOptions httpOpts = builder.Configuration.GetSection("Auditing").Get<AuditHttpOptions>() ?? new AuditHttpOptions();
         builder.Services.AddSingleton(httpOpts);
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<IAuditClient, DefaultAuditClient>();
@@ -54,12 +55,12 @@ public class AuditingModule : IModule
 
     public void MapEndpoints(IEndpointRouteBuilder endpoints)
     {
-        var apiVersionSet = endpoints.NewApiVersionSet()
+        ApiVersionSet apiVersionSet = endpoints.NewApiVersionSet()
             .HasApiVersion(new ApiVersion(1))
             .ReportApiVersions()
             .Build();
 
-        var group = endpoints
+        RouteGroupBuilder group = endpoints
             .MapGroup("api/v{version:apiVersion}/audits")
             .WithTags("Audits")
             .WithApiVersionSet(apiVersionSet);

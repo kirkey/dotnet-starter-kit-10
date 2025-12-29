@@ -14,7 +14,7 @@ public static class AdminRevokeAllSessionsEndpoint
     {
         return endpoints.MapPost("/users/{userId:guid}/sessions/revoke-all", async (Guid userId, AdminRevokeAllSessionsCommand? command, IMediator mediator, CancellationToken cancellationToken) =>
         {
-            var result = await mediator.Send(command ?? new AdminRevokeAllSessionsCommand(userId), cancellationToken);
+            int result = await mediator.Send(command ?? new AdminRevokeAllSessionsCommand(userId), cancellationToken);
             return TypedResults.Ok(new { RevokedCount = result });
         })
         .WithName("AdminRevokeAllSessions")

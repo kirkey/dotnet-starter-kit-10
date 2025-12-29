@@ -1,5 +1,6 @@
 ﻿using FSH.Modules.Auditing.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace FSH.Modules.Auditing.Persistence;
@@ -7,34 +8,30 @@ namespace FSH.Modules.Auditing.Persistence;
 /// <summary>
 /// Captures EF Core entity changes at SaveChanges to produce an EntityChange event.
 /// </summary>
-public sealed class AuditingSaveChangesInterceptor : SaveChangesInterceptor
+public sealed class AuditingSaveChangesInterceptor(IAuditPublisher publisher) : SaveChangesInterceptor
 {
-    private readonly IAuditPublisher _publisher;
-
-    public AuditingSaveChangesInterceptor(IAuditPublisher publisher) => _publisher = publisher;
-
     public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
         InterceptionResult<int> result,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(eventData);
-        var ctx = eventData.Context;
+        DbContext? ctx = eventData.Context;
         if (ctx is null) return result;
 
-        var entries = ctx.ChangeTracker.Entries()
+        EntityEntry[] entries = ctx.ChangeTracker.Entries()
             .Where(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted)
             .ToArray();
 
         if (entries.Length == 0) return result;
 
-        var diffs = EntityDiffBuilder.Build(entries);
+        List<EntityDiffBuilder.Diff> diffs = EntityDiffBuilder.Build(entries);
 
         if (diffs.Count > 0)
         {
-            foreach (var group in diffs.GroupBy(d => (d.DbContext, d.Schema, d.Table, d.EntityName, d.Key, d.Operation)))
+            foreach (IGrouping<(string DbContext, string? Schema, string Table, string EntityName, string Key, EntityOperation Operation), EntityDiffBuilder.Diff> group in diffs.GroupBy(d => (d.DbContext, d.Schema, d.Table, d.EntityName, d.Key, d.Operation)))
             {
-                var payload = new EntityChangeEventPayload(
+                EntityChangeEventPayload payload = new(
                     DbContext: group.Key.DbContext,
                     Schema: group.Key.Schema,
                     Table: group.Key.Table,
@@ -44,7 +41,7 @@ public sealed class AuditingSaveChangesInterceptor : SaveChangesInterceptor
                     Changes: group.SelectMany(g => g.Changes).ToList(),
                     TransactionId: ctx.Database.CurrentTransaction?.TransactionId.ToString());
 
-                var env = new AuditEnvelope(
+                AuditEnvelope env = new(
                     id: Guid.CreateVersion7(),
                     occurredAtUtc: DateTime.UtcNow,
                     receivedAtUtc: DateTime.UtcNow,
@@ -56,7 +53,7 @@ public sealed class AuditingSaveChangesInterceptor : SaveChangesInterceptor
                     tags: AuditTag.None,
                     payload: payload);
 
-                await _publisher.PublishAsync(env, cancellationToken);
+                await publisher.PublishAsync(env, cancellationToken);
             }
         }
 

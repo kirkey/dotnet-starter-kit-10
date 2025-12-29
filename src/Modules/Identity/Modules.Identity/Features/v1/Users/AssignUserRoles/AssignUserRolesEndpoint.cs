@@ -22,7 +22,7 @@ public static class AssignUserRolesEndpoint
                 return Results.BadRequest();
             }
 
-            var result = await mediator.Send(command, cancellationToken);
+            string result = await mediator.Send(command, cancellationToken);
             return Results.Ok(result);
         })
         .WithName("AssignUserRoles")

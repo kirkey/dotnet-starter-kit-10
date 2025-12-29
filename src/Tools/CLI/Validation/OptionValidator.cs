@@ -8,7 +8,7 @@ internal static class OptionValidator
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var errors = new List<string>();
+        List<string> errors = new();
 
         // Serverless + Blazor is not supported
         if (options.Architecture == ArchitectureStyle.Serverless && options.Type == ProjectType.ApiBlazor)

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using Mediator;
 
 namespace FSH.Framework.Web.Mediator.Behaviors;
@@ -17,9 +18,9 @@ public sealed class ValidationBehavior<TMessage, TResponse>(IEnumerable<IValidat
 
         if (_validators.Any())
         {
-            var context = new ValidationContext<TMessage>(message);
-            var validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
-            var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();
+            ValidationContext<TMessage> context = new(message);
+            ValidationResult[] validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
+            List<ValidationFailure> failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();
 
             if (failures.Count > 0)
                 throw new ValidationException(failures);

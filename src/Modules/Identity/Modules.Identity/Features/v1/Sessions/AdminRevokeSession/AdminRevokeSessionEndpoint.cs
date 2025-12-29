@@ -25,7 +25,7 @@ public static class AdminRevokeSessionEndpoint
         IMediator mediator,
         CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new AdminRevokeSessionCommand(userId, sessionId), cancellationToken);
+        bool result = await mediator.Send(new AdminRevokeSessionCommand(userId, sessionId), cancellationToken);
         return result ? Results.Ok() : Results.NotFound();
     }
 }

@@ -30,9 +30,9 @@ public static class Extensions
 
         services.AddHangfire((provider, config) =>
         {
-            var configuration = provider.GetRequiredService<IConfiguration>();
-            var dbOptions = configuration.GetSection(nameof(DatabaseOptions)).Get<DatabaseOptions>()
-                ?? throw new CustomException("Database options not found");
+            IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
+            DatabaseOptions dbOptions = configuration.GetSection(nameof(DatabaseOptions)).Get<DatabaseOptions>()
+                                        ?? throw new CustomException("Database options not found");
 
             switch (dbOptions.Provider.ToUpperInvariant())
             {
@@ -66,19 +66,19 @@ public static class Extensions
 
     private static void CleanupStaleLocks(string connectionString, IServiceProvider provider)
     {
-        var logger = provider.GetService<ILoggerFactory>()?.CreateLogger("Hangfire");
+        ILogger? logger = provider.GetService<ILoggerFactory>()?.CreateLogger("Hangfire");
 
         try
         {
-            using var connection = new NpgsqlConnection(connectionString);
+            using NpgsqlConnection connection = new(connectionString);
             connection.Open();
 
             // Delete locks older than 5 minutes (stale from crashed instances)
-            using var cmd = new NpgsqlCommand(
+            using NpgsqlCommand cmd = new(
                 "DELETE FROM hangfire.lock WHERE acquired < NOW() - INTERVAL '5 minutes'",
                 connection);
 
-            var deleted = cmd.ExecuteNonQuery();
+            int deleted = cmd.ExecuteNonQuery();
             if (deleted > 0)
             {
                 logger?.LogWarning("Cleaned up {Count} stale Hangfire locks", deleted);
@@ -97,8 +97,8 @@ public static class Extensions
         ArgumentNullException.ThrowIfNull(app);
         ArgumentNullException.ThrowIfNull(config);
 
-        var hangfireOptions = config.GetSection(nameof(HangfireOptions)).Get<HangfireOptions>() ?? new HangfireOptions();
-        var dashboardOptions = new DashboardOptions();
+        HangfireOptions hangfireOptions = config.GetSection(nameof(HangfireOptions)).Get<HangfireOptions>() ?? new HangfireOptions();
+        DashboardOptions dashboardOptions = new();
         dashboardOptions.AppPath = "/";
         dashboardOptions.Authorization = new[]
         {

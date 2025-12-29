@@ -3,6 +3,7 @@ using FSH.Modules.Identity;
 using FSH.Modules.Multitenancy;
 using NetArchTest.Rules;
 using Shouldly;
+using System.Reflection;
 using Xunit;
 
 namespace Architecture.Tests;
@@ -14,16 +15,16 @@ public class FeatureArchitectureTests
     {
         // Guardrail for future versions (v2, v3, ...). For now, this is mostly
         // a safety net to prevent accidental cross-version feature coupling.
-        var modules = new[]
+        Assembly[] modules = new[]
         {
             typeof(AuditingModule).Assembly,
             typeof(IdentityModule).Assembly,
             typeof(MultitenancyModule).Assembly
         };
 
-        foreach (var module in modules)
+        foreach (Assembly module in modules)
         {
-            var v1Result = Types
+            TestResult? v1Result = Types
                 .InAssembly(module)
                 .That()
                 .ResideInNamespaceEndingWith(".Features.v1")
@@ -34,7 +35,7 @@ public class FeatureArchitectureTests
                     ".Features.v3")
                 .GetResult();
 
-            var failingTypes = v1Result.FailingTypeNames ?? Array.Empty<string>();
+            IReadOnlyList<string> failingTypes = v1Result.FailingTypeNames ?? Array.Empty<string>();
 
             v1Result.IsSuccessful.ShouldBeTrue(
                 $"v1 features in assembly '{module.FullName}' must not depend on newer feature versions. " +

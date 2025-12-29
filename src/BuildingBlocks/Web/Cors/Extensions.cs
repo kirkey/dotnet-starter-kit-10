@@ -29,12 +29,12 @@ public static class Extensions
         services.AddCors();
         services.AddSingleton<IConfigureOptions<AspNetCorsOptions>>(sp =>
         {
-            var corsSettings = sp.GetRequiredService<IOptions<CorsOptions>>();
+            IOptions<CorsOptions> corsSettings = sp.GetRequiredService<IOptions<CorsOptions>>();
             return new ConfigureOptions<AspNetCorsOptions>(options =>
             {
                 options.AddPolicy(PolicyName, builder =>
                 {
-                    var settings = corsSettings.Value;
+                    CorsOptions settings = corsSettings.Value;
                     if (settings.AllowAll)
                     {
                         builder

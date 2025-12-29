@@ -18,7 +18,7 @@ public class NamespaceConventionsTests
             return;
         }
 
-        var files = Directory
+        string[] files = Directory
             .GetFiles(domainRoot, "*.cs", SearchOption.AllDirectories)
             .ToArray();
 
@@ -28,7 +28,7 @@ public class NamespaceConventionsTests
         {
             string content = File.ReadAllText(file);
 
-            var namespaceLine = content
+            string? namespaceLine = content
                 .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
                 .FirstOrDefault(line => line.TrimStart().StartsWith("namespace ", StringComparison.Ordinal));
 

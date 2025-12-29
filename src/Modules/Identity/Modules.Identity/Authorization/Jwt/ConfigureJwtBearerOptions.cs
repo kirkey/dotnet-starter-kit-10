@@ -1,7 +1,9 @@
 ﻿using FSH.Framework.Core.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
@@ -58,11 +60,11 @@ public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions
             {
                 context.HandleResponse();
 
-                var path = context.HttpContext.Request.Path;
+                PathString path = context.HttpContext.Request.Path;
 
                 if (!context.Response.HasStarted)
                 {
-                    var method = context.HttpContext.Request.Method;
+                    string method = context.HttpContext.Request.Method;
 
                     // You can include more details if needed like headers, etc.
                     throw new UnauthorizedException($"Unauthorized access to {method} {path}");
@@ -73,7 +75,7 @@ public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions
             OnForbidden = _ => throw new ForbiddenException(),
             OnMessageReceived = context =>
             {
-                var accessToken = context.Request.Query["access_token"];
+                StringValues accessToken = context.Request.Query["access_token"];
 
                 if (!string.IsNullOrEmpty(accessToken) &&
                     context.HttpContext.Request.Path.StartsWithSegments("/notifications", StringComparison.OrdinalIgnoreCase))

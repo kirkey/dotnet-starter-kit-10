@@ -9,7 +9,7 @@ public class UserImageValidator : AbstractValidator<FileUploadRequest>
     public UserImageValidator() : this(FileType.Image) { }
     public UserImageValidator(FileType fileType)
     {
-        var rules = FileTypeMetadata.GetRules(fileType);
+        FileValidationRules rules = FileTypeMetadata.GetRules(fileType);
 
         RuleFor(x => x.FileName)
             .NotEmpty()

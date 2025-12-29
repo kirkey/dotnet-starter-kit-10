@@ -7,7 +7,7 @@ using FSH.Playground.Blazor.Services.Api;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Configure HTTP/3 support (only override in production, respect launchSettings in dev)
 if (!builder.Environment.IsDevelopment())
@@ -60,13 +60,13 @@ builder.Services.AddScoped<ITokenRefreshService, TokenRefreshService>();
 
 builder.Services.AddHttpClient();
 
-var apiBaseUrl = builder.Configuration["Api:BaseUrl"]
-                 ?? throw new InvalidOperationException("Api:BaseUrl configuration is missing.");
+string apiBaseUrl = builder.Configuration["Api:BaseUrl"]
+                    ?? throw new InvalidOperationException("Api:BaseUrl configuration is missing.");
 
 // Configure HttpClient with authorization handler for API calls
 builder.Services.AddScoped(sp =>
 {
-    var handler = sp.GetRequiredService<AuthorizationHeaderHandler>();
+    AuthorizationHeaderHandler handler = sp.GetRequiredService<AuthorizationHeaderHandler>();
     handler.InnerHandler = new HttpClientHandler();
 
     return new HttpClient(handler)
@@ -108,7 +108,7 @@ builder.Services.AddOutputCache(options =>
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {

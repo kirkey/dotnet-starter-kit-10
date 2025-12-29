@@ -12,7 +12,7 @@ public class CreateTenantCommandHandler(ITenantService tenantService, ITenantPro
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        var tenantId = await tenantService.CreateAsync(
+        string tenantId = await tenantService.CreateAsync(
             command.Id,
             command.Name,
             command.ConnectionString,
@@ -20,7 +20,7 @@ public class CreateTenantCommandHandler(ITenantService tenantService, ITenantPro
             command.Issuer,
             cancellationToken);
 
-        var provisioning = await provisioningService.StartAsync(tenantId, cancellationToken);
+        Provisioning.TenantProvisioning provisioning = await provisioningService.StartAsync(tenantId, cancellationToken);
 
         return new CreateTenantCommandResponse(
             tenantId,

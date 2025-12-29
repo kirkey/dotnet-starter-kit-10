@@ -33,8 +33,8 @@ internal sealed class S3StorageService : IStorageService
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        var rules = FileTypeMetadata.GetRules(fileType);
-        var extension = Path.GetExtension(request.FileName);
+        FileValidationRules rules = FileTypeMetadata.GetRules(fileType);
+        string extension = Path.GetExtension(request.FileName);
 
         if (string.IsNullOrWhiteSpace(extension) || !rules.AllowedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
         {
@@ -46,11 +46,11 @@ internal sealed class S3StorageService : IStorageService
             throw new InvalidOperationException($"File exceeds max size of {rules.MaxSizeInMB} MB.");
         }
 
-        var key = BuildKey<T>(SanitizeFileName(request.FileName));
+        string key = BuildKey<T>(SanitizeFileName(request.FileName));
 
-        using var stream = new MemoryStream([.. request.Data]);
+        using MemoryStream stream = new([.. request.Data]);
 
-        var putRequest = new PutObjectRequest
+        PutObjectRequest putRequest = new()
         {
             BucketName = _options.Bucket,
             Key = key,
@@ -74,7 +74,7 @@ internal sealed class S3StorageService : IStorageService
 
         try
         {
-            var key = NormalizeKey(path);
+            string key = NormalizeKey(path);
             await _s3.DeleteObjectAsync(_options.Bucket, key, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception ex)
@@ -85,8 +85,8 @@ internal sealed class S3StorageService : IStorageService
 
     private string BuildKey<T>(string fileName) where T : class
     {
-        var folder = Regex.Replace(typeof(T).Name.ToLowerInvariant(), @"[^a-z0-9]", "_");
-        var relativePath = Path.Combine(UploadBasePath, folder, $"{Guid.NewGuid():N}_{fileName}").Replace("\\", "/", StringComparison.Ordinal);
+        string folder = Regex.Replace(typeof(T).Name.ToLowerInvariant(), @"[^a-z0-9]", "_");
+        string relativePath = Path.Combine(UploadBasePath, folder, $"{Guid.NewGuid():N}_{fileName}").Replace("\\", "/", StringComparison.Ordinal);
         if (!string.IsNullOrWhiteSpace(_options.Prefix))
         {
             return $"{_options.Prefix.TrimEnd('/')}/{relativePath}";
@@ -97,7 +97,7 @@ internal sealed class S3StorageService : IStorageService
 
     private string BuildPublicUrl(string key)
     {
-        var safeKey = key.TrimStart('/');
+        string safeKey = key.TrimStart('/');
 
         if (!string.IsNullOrWhiteSpace(_options.PublicBaseUrl))
         {
@@ -120,12 +120,12 @@ internal sealed class S3StorageService : IStorageService
     private string NormalizeKey(string path)
     {
         // If a full URL was passed, strip host and query to get the object key.
-        if (Uri.TryCreate(path, UriKind.Absolute, out var uri))
+        if (Uri.TryCreate(path, UriKind.Absolute, out Uri? uri))
         {
             path = uri.AbsolutePath;
         }
 
-        var trimmed = path.TrimStart('/');
+        string trimmed = path.TrimStart('/');
         if (!string.IsNullOrWhiteSpace(_options.Prefix) && trimmed.StartsWith(_options.Prefix, StringComparison.OrdinalIgnoreCase))
         {
             return trimmed;

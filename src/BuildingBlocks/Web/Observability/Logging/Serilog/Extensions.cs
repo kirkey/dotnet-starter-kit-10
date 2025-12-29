@@ -14,7 +14,7 @@ public static class Extensions
         builder.Services.AddSingleton<HttpRequestContextEnricher>();
         builder.Services.AddSerilog((context, logger) =>
         {
-            var httpEnricher = context.GetRequiredService<HttpRequestContextEnricher>();
+            HttpRequestContextEnricher httpEnricher = context.GetRequiredService<HttpRequestContextEnricher>();
             logger.ReadFrom.Configuration(builder.Configuration);
             logger.Enrich.With(httpEnricher);
             logger

@@ -11,13 +11,13 @@ internal static class TemplateEngine
 
     private static string GetFrameworkVersion()
     {
-        var assembly = Assembly.GetExecutingAssembly();
-        var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
-            ?? assembly.GetName().Version?.ToString()
-            ?? "10.0.0";
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        string version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                         ?? assembly.GetName().Version?.ToString()
+                         ?? "10.0.0";
 
         // Remove any +buildmetadata suffix (e.g., "10.0.0-rc.1+abc123" -> "10.0.0-rc.1")
-        var plusIndex = version.IndexOf('+', StringComparison.Ordinal);
+        int plusIndex = version.IndexOf('+', StringComparison.Ordinal);
         return plusIndex > 0 ? version[..plusIndex] : version;
     }
 
@@ -25,7 +25,7 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var projects = new List<string>
+        List<string> projects = new()
         {
             $"""    <Project Path="{options.Name}.Api/{options.Name}.Api.csproj" />""",
             $"""    <Project Path="{options.Name}.Migrations/{options.Name}.Migrations.csproj" />"""
@@ -65,9 +65,9 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var serverless = options.Architecture == ArchitectureStyle.Serverless;
+        bool serverless = options.Architecture == ArchitectureStyle.Serverless;
 
-        var sampleModuleRef = options.IncludeSampleModule
+        string sampleModuleRef = options.IncludeSampleModule
             ? $"""
 
               <ItemGroup>
@@ -122,15 +122,15 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var serverless = options.Architecture == ArchitectureStyle.Serverless;
+        bool serverless = options.Architecture == ArchitectureStyle.Serverless;
 
         if (serverless)
         {
-            var serverlessModuleUsing = options.IncludeSampleModule
+            string serverlessModuleUsing = options.IncludeSampleModule
                 ? $"using {options.Name}.Catalog;\n"
                 : string.Empty;
 
-            var serverlessModuleAssembly = options.IncludeSampleModule
+            string serverlessModuleAssembly = options.IncludeSampleModule
                 ? $",\n    typeof(CatalogModule).Assembly"
                 : string.Empty;
 
@@ -170,11 +170,11 @@ internal static class TemplateEngine
                 """;
         }
 
-        var sampleModuleUsing = options.IncludeSampleModule
+        string sampleModuleUsing = options.IncludeSampleModule
             ? $"using {options.Name}.Catalog;\n"
             : string.Empty;
 
-        var sampleModuleAssembly = options.IncludeSampleModule
+        string sampleModuleAssembly = options.IncludeSampleModule
             ? ",\n    typeof(CatalogModule).Assembly"
             : string.Empty;
 
@@ -244,7 +244,7 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var connectionString = options.Database switch
+        string connectionString = options.Database switch
         {
             DatabaseProvider.PostgreSQL => $"Server=localhost;Database={options.Name.ToLowerInvariant()};User Id=postgres;Password=password",
             DatabaseProvider.SqlServer => $"Server=localhost;Database={options.Name};Trusted_Connection=True;TrustServerCertificate=True",
@@ -252,7 +252,7 @@ internal static class TemplateEngine
             _ => string.Empty
         };
 
-        var dbProvider = options.Database switch
+        string dbProvider = options.Database switch
         {
             DatabaseProvider.PostgreSQL => "POSTGRESQL",
             DatabaseProvider.SqlServer => "MSSQL",
@@ -260,8 +260,8 @@ internal static class TemplateEngine
             _ => "POSTGRESQL"
         };
 
-        var migrationsAssembly = $"{options.Name}.Migrations";
-        var projectNameLower = options.Name.ToLowerInvariant();
+        string migrationsAssembly = $"{options.Name}.Migrations";
+        string projectNameLower = options.Name.ToLowerInvariant();
 
         return $$"""
             {
@@ -533,7 +533,7 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var dbPackage = options.Database switch
+        string dbPackage = options.Database switch
         {
             DatabaseProvider.PostgreSQL => "<PackageReference Include=\"Npgsql.EntityFrameworkCore.PostgreSQL\" />",
             DatabaseProvider.SqlServer => "<PackageReference Include=\"Microsoft.EntityFrameworkCore.SqlServer\" />",
@@ -567,7 +567,7 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var dbPackage = options.Database switch
+        string dbPackage = options.Database switch
         {
             DatabaseProvider.PostgreSQL => "<PackageReference Include=\"Aspire.Hosting.PostgreSQL\" />",
             DatabaseProvider.SqlServer => "<PackageReference Include=\"Aspire.Hosting.SqlServer\" />",
@@ -603,10 +603,10 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var projectNameLower = options.Name.ToLowerInvariant();
-        var projectNameSafe = options.Name.Replace(".", "_", StringComparison.Ordinal);
+        string projectNameLower = options.Name.ToLowerInvariant();
+        string projectNameSafe = options.Name.Replace(".", "_", StringComparison.Ordinal);
 
-        var (dbSetup, dbProvider, dbRef, dbWait, migrationsAssembly) = options.Database switch
+        (string? dbSetup, string dbProvider, string dbRef, string dbWait, string? migrationsAssembly) = options.Database switch
         {
             DatabaseProvider.PostgreSQL => (
                 $"""
@@ -635,13 +635,13 @@ internal static class TemplateEngine
             _ => ("// Database configured externally", "POSTGRESQL", string.Empty, string.Empty, $"{options.Name}.Migrations")
         };
 
-        var redisSetup = $"""
-            var redis = builder.AddRedis("redis").WithDataVolume("{projectNameLower}-redis-data");
-            """;
+        string redisSetup = $"""
+                             var redis = builder.AddRedis("redis").WithDataVolume("{projectNameLower}-redis-data");
+                             """;
 
         // Build database environment variables
-        var dbResourceName = options.Database == DatabaseProvider.PostgreSQL ? "postgres" : "sqlserver";
-        var dbEnvVars = options.Database != DatabaseProvider.SQLite
+        string dbResourceName = options.Database == DatabaseProvider.PostgreSQL ? "postgres" : "sqlserver";
+        string dbEnvVars = options.Database != DatabaseProvider.SQLite
             ? $$"""
                 .WithEnvironment("DatabaseOptions__Provider", "{{dbProvider}}")
                 .WithEnvironment("DatabaseOptions__ConnectionString", {{dbResourceName}}.Resource.ConnectionStringExpression)
@@ -653,7 +653,7 @@ internal static class TemplateEngine
                 """;
 
         // When Blazor is included, api variable is referenced; otherwise suppress unused warning
-        var (apiDeclaration, blazorProject) = options.Type == ProjectType.ApiBlazor
+        (string? apiDeclaration, string? blazorProject) = options.Type == ProjectType.ApiBlazor
             ? ($"var api = builder.AddProject<Projects.{projectNameSafe}_Api>(\"{projectNameLower}-api\")",
                $"""
 
@@ -685,9 +685,9 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var projectNameLower = options.Name.ToUpperInvariant().ToLowerInvariant();
+        string projectNameLower = options.Name.ToUpperInvariant().ToLowerInvariant();
 
-        var dbService = options.Database switch
+        string dbService = options.Database switch
         {
             DatabaseProvider.PostgreSQL => $"""
               postgres:
@@ -722,7 +722,7 @@ internal static class TemplateEngine
             _ => string.Empty
         };
 
-        var volumes = options.Database switch
+        string volumes = options.Database switch
         {
             DatabaseProvider.PostgreSQL => """
             volumes:
@@ -885,8 +885,8 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var serverless = options.Architecture == ArchitectureStyle.Serverless;
-        var projectNameLower = options.Name.ToUpperInvariant().ToLowerInvariant();
+        bool serverless = options.Architecture == ArchitectureStyle.Serverless;
+        string projectNameLower = options.Name.ToUpperInvariant().ToLowerInvariant();
 
         if (serverless)
         {
@@ -1073,7 +1073,7 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var projectNameLower = options.Name.ToUpperInvariant().ToLowerInvariant();
+        string projectNameLower = options.Name.ToUpperInvariant().ToLowerInvariant();
 
         return $$"""
             variable "aws_region" {
@@ -1162,7 +1162,7 @@ internal static class TemplateEngine
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var projectNameLower = options.Name.ToUpperInvariant().ToLowerInvariant();
+        string projectNameLower = options.Name.ToUpperInvariant().ToLowerInvariant();
 
         return $@"name: CI
 
@@ -1292,7 +1292,7 @@ jobs:
         ArgumentNullException.ThrowIfNull(options);
 
         // Use custom version from options, or fall back to CLI's version
-        var version = options.FrameworkVersion ?? FrameworkVersion;
+        string version = options.FrameworkVersion ?? FrameworkVersion;
 
         return $$"""
             <Project>
@@ -1364,7 +1364,7 @@ jobs:
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        var archDescription = options.Architecture switch
+        string archDescription = options.Architecture switch
         {
             ArchitectureStyle.Monolith => "monolithic",
             ArchitectureStyle.Microservices => "microservices",

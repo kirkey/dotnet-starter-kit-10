@@ -30,7 +30,7 @@ public static class Extensions
         // Use Redis for L2 cache
         services.AddStackExchangeRedisCache(options =>
         {
-            var config = ConfigurationOptions.Parse(cacheOptions.Redis);
+            ConfigurationOptions config = ConfigurationOptions.Parse(cacheOptions.Redis);
             
             // Don't abort on connect fail in production - allow graceful degradation
             config.AbortOnConnectFail = false;

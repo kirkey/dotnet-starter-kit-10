@@ -12,7 +12,7 @@ public class ModuleArchitectureTests
         string solutionRoot = GetSolutionRoot();
         string modulesRoot = Path.Combine(solutionRoot, "src", "Modules");
 
-        var runtimeProjects = Directory
+        string[] runtimeProjects = Directory
             .GetFiles(modulesRoot, "Modules.*.csproj", SearchOption.AllDirectories)
             .Where(path => !path.Contains(".Contracts", StringComparison.OrdinalIgnoreCase))
             .ToArray();
@@ -23,8 +23,8 @@ public class ModuleArchitectureTests
         {
             string currentName = Path.GetFileNameWithoutExtension(projectPath);
 
-            var document = XDocument.Load(projectPath);
-            var references = document
+            XDocument document = XDocument.Load(projectPath);
+            string[] references = document
                 .Descendants("ProjectReference")
                 .Select(x => (string?)x.Attribute("Include") ?? string.Empty)
                 .Where(include => include.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase))
@@ -53,7 +53,7 @@ public class ModuleArchitectureTests
     private static string GetSolutionRoot()
     {
         // Start at current directory and walk up until we find `src`.
-        var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
+        DirectoryInfo? directory = new(Directory.GetCurrentDirectory());
 
         while (directory is not null && !Directory.Exists(Path.Combine(directory.FullName, "src")))
         {

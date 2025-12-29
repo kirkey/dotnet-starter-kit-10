@@ -11,8 +11,8 @@ internal static class HttpBodyReader
         if (ctx.Request.Body is null || ctx.Request.ContentLength == 0) return (null, 0);
 
         ctx.Request.EnableBuffering();
-        using var ms = new MemoryStream();
-        var copied = await CopyCappedAsync(ctx.Request.Body, ms, maxBytes, ct);
+        using MemoryStream ms = new();
+        int copied = await CopyCappedAsync(ctx.Request.Body, ms, maxBytes, ct);
         ctx.Request.Body.Position = 0;
 
         return DeserializePreview(ms, copied);
@@ -24,18 +24,18 @@ internal static class HttpBodyReader
         if (source.Length == 0) return (null, 0);
         source.Position = 0;
 
-        using var ms = new MemoryStream();
-        var copied = await CopyCappedAsync(source, ms, maxBytes, ct);
+        using MemoryStream ms = new();
+        int copied = await CopyCappedAsync(source, ms, maxBytes, ct);
         return DeserializePreview(ms, copied);
     }
 
     private static async Task<int> CopyCappedAsync(Stream src, Stream dst, int maxBytes, CancellationToken ct)
     {
-        var buf = new byte[8 * 1024];
+        byte[] buf = new byte[8 * 1024];
         int total = 0, read;
         while ((read = await src.ReadAsync(buf, ct)) > 0)
         {
-            var toWrite = Math.Min(read, Math.Max(0, maxBytes - total));
+            int toWrite = Math.Min(read, Math.Max(0, maxBytes - total));
             if (toWrite > 0) await dst.WriteAsync(buf.AsMemory(0, toWrite), ct);
             total += read;
             if (total >= maxBytes) break;
@@ -48,15 +48,15 @@ internal static class HttpBodyReader
         try
         {
             ms.Position = 0;
-            using var doc = JsonDocument.Parse(ms.ToArray());
+            using JsonDocument doc = JsonDocument.Parse(ms.ToArray());
             return (ToPlain(doc.RootElement), totalBytes);
         }
         catch
         {
             // not JSON; return UTF8 snippet
             ms.Position = 0;
-            var text = Encoding.UTF8.GetString(ms.ToArray());
-            var snippet = text.Length > 2000 ? text[..2000] + ".(truncated)" : text;
+            string text = Encoding.UTF8.GetString(ms.ToArray());
+            string snippet = text.Length > 2000 ? text[..2000] + ".(truncated)" : text;
             return (new { text = snippet }, totalBytes);
         }
     }
@@ -84,10 +84,10 @@ internal static class HttpBodyReader
 
     private static object GetNumericValue(JsonElement e)
     {
-        if (e.TryGetInt64(out var longValue))
+        if (e.TryGetInt64(out long longValue))
             return longValue;
 
-        if (e.TryGetDouble(out var doubleValue))
+        if (e.TryGetDouble(out double doubleValue))
             return doubleValue;
 
         return e.GetRawText();

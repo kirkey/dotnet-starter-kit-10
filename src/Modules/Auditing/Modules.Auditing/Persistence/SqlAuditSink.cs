@@ -10,42 +10,39 @@ namespace FSH.Modules.Auditing.Persistence;
 /// <summary>
 /// Persists audit envelopes into SQL using EF Core.
 /// </summary>
-public sealed class SqlAuditSink : IAuditSink
+public sealed class SqlAuditSink(
+    IServiceScopeFactory scopeFactory,
+    IAuditSerializer serializer,
+    ILogger<SqlAuditSink> log)
+    : IAuditSink
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-    private readonly IAuditSerializer _serializer;
-    private readonly ILogger<SqlAuditSink> _log;
-
-    public SqlAuditSink(IServiceScopeFactory scopeFactory, IAuditSerializer serializer, ILogger<SqlAuditSink> log)
-        => (_scopeFactory, _serializer, _log) = (scopeFactory, serializer, log);
-
     public async Task WriteAsync(IReadOnlyList<AuditEnvelope> batch, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(batch);
         if (batch.Count == 0) return;
 
         // Process per-tenant so MultiTenantDbContext has an ambient tenant context.
-        foreach (var group in batch.GroupBy(e => e.TenantId))
+        foreach (IGrouping<string?, AuditEnvelope> group in batch.GroupBy(e => e.TenantId))
         {
-            using var scope = _scopeFactory.CreateScope();
-            var store = scope.ServiceProvider.GetRequiredService<IMultiTenantStore<AppTenantInfo>>();
+            using IServiceScope scope = scopeFactory.CreateScope();
+            IMultiTenantStore<AppTenantInfo> store = scope.ServiceProvider.GetRequiredService<IMultiTenantStore<AppTenantInfo>>();
 
-            var tenantInfo = group.Key is null
+            AppTenantInfo? tenantInfo = group.Key is null
                 ? await store.GetAsync(MultitenancyConstants.Root.Id).ConfigureAwait(false)
                 : await store.GetAsync(group.Key).ConfigureAwait(false);
 
             if (tenantInfo is null)
             {
-                _log.LogWarning("Skipping audit write for tenant {TenantId} because tenant was not found.", group.Key ?? "<null>");
+                log.LogWarning("Skipping audit write for tenant {TenantId} because tenant was not found.", group.Key ?? "<null>");
                 continue;
             }
 
             scope.ServiceProvider.GetRequiredService<IMultiTenantContextSetter>()
                 .MultiTenantContext = new MultiTenantContext<AppTenantInfo>(tenantInfo);
 
-            var db = scope.ServiceProvider.GetRequiredService<AuditDbContext>();
+            AuditDbContext db = scope.ServiceProvider.GetRequiredService<AuditDbContext>();
 
-            var records = group.Select(e => new AuditRecord
+            List<AuditRecord> records = group.Select(e => new AuditRecord
             {
                 Id = e.Id,
                 OccurredAtUtc = e.OccurredAtUtc,
@@ -61,13 +58,13 @@ public sealed class SqlAuditSink : IAuditSink
                 RequestId = e.RequestId,
                 Source = e.Source,
                 Tags = (long)e.Tags,
-                PayloadJson = _serializer.SerializePayload(e.Payload)
+                PayloadJson = serializer.SerializePayload(e.Payload)
             }).ToList();
 
             db.AuditRecords.AddRange(records);
             await db.SaveChangesAsync(ct).ConfigureAwait(false);
 
-            _log.LogInformation("Wrote {Count} audit records for tenant {TenantId}.", records.Count, tenantInfo.Id);
+            log.LogInformation("Wrote {Count} audit records for tenant {TenantId}.", records.Count, tenantInfo.Id);
         }
     }
 }

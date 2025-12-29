@@ -18,7 +18,7 @@ public static class Extensions
 
     public static IServiceCollection AddHeroStorage(this IServiceCollection services, IConfiguration configuration)
     {
-        var provider = configuration["Storage:Provider"]?.ToLowerInvariant();
+        string? provider = configuration["Storage:Provider"]?.ToLowerInvariant();
 
         if (string.Equals(provider, "s3", StringComparison.OrdinalIgnoreCase))
         {
@@ -26,7 +26,7 @@ public static class Extensions
 
             services.AddSingleton<IAmazonS3>(sp =>
             {
-                var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<S3StorageOptions>>().Value;
+                S3StorageOptions options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<S3StorageOptions>>().Value;
 
                 if (string.IsNullOrWhiteSpace(options.Bucket))
                 {

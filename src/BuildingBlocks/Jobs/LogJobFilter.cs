@@ -1,4 +1,6 @@
+using Hangfire;
 using Hangfire.Client;
+using Hangfire.Common;
 using Hangfire.Logging;
 using Hangfire.Server;
 using Hangfire.States;
@@ -18,8 +20,8 @@ public class LogJobFilter : IClientFilter, IServerFilter, IElectStateFilter, IAp
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        var job = context.Job;
-        var jobName = GetJobName(job);
+        Job? job = context.Job;
+        string jobName = GetJobName(job);
 
         Logger.DebugFormat(
             "Creating job for {0}.", jobName);
@@ -29,10 +31,10 @@ public class LogJobFilter : IClientFilter, IServerFilter, IElectStateFilter, IAp
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        var job = context.Job;
-        var jobName = GetJobName(job);
-        var jobId = context.BackgroundJob?.Id ?? "<unknown>";
-        var recurringJobId = context.Parameters.TryGetValue("RecurringJobId", out var r) ? r : null;
+        Job? job = context.Job;
+        string jobName = GetJobName(job);
+        string jobId = context.BackgroundJob?.Id ?? "<unknown>";
+        object? recurringJobId = context.Parameters.TryGetValue("RecurringJobId", out object? r) ? r : null;
 
         Logger.DebugFormat(
             "Job created: Id={0}, Name={1}, RecurringJobId={2}",
@@ -45,11 +47,11 @@ public class LogJobFilter : IClientFilter, IServerFilter, IElectStateFilter, IAp
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        var backgroundJob = context.BackgroundJob;
-        var job = backgroundJob.Job;
-        var jobName = GetJobName(job);
-        var recurringJobId = context.GetJobParameter<string>("RecurringJobId") ?? "<none>";
-        var args = FormatArguments(job.Args);
+        BackgroundJob? backgroundJob = context.BackgroundJob;
+        Job? job = backgroundJob.Job;
+        string jobName = GetJobName(job);
+        string recurringJobId = context.GetJobParameter<string>("RecurringJobId") ?? "<none>";
+        string args = FormatArguments(job.Args);
 
         Logger.DebugFormat(
             "Starting job: Id={0}, Name={1}, RecurringJobId={2}, Queue={3}, Args={4}",
@@ -64,9 +66,9 @@ public class LogJobFilter : IClientFilter, IServerFilter, IElectStateFilter, IAp
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        var backgroundJob = context.BackgroundJob;
-        var job = backgroundJob.Job;
-        var jobName = GetJobName(job);
+        BackgroundJob? backgroundJob = context.BackgroundJob;
+        Job? job = backgroundJob.Job;
+        string jobName = GetJobName(job);
 
         Logger.DebugFormat(
             "Job completed: Id={0}, Name={1}, Succeeded={2}",
@@ -127,7 +129,7 @@ public class LogJobFilter : IClientFilter, IServerFilter, IElectStateFilter, IAp
         #pragma warning disable CA1031 // best-effort formatting for diagnostics
         try
         {
-            var rendered = args.Select(a => a?.ToString() ?? "null");
+            IEnumerable<string> rendered = args.Select(a => a?.ToString() ?? "null");
             return "[" + string.Join(", ", rendered) + "]";
         }
         catch

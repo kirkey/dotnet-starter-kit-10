@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace FSH.Framework.Persistence.Specifications;
 
@@ -37,12 +38,12 @@ internal static class SpecificationEvaluator
             query = query.Where(specification.Criteria);
         }
 
-        foreach (var include in specification.Includes)
+        foreach (Expression<Func<T, object>> include in specification.Includes)
         {
             query = query.Include(include);
         }
 
-        foreach (var includeString in specification.IncludeStrings)
+        foreach (string includeString in specification.IncludeStrings)
         {
             query = query.Include(includeString);
         }
@@ -51,7 +52,7 @@ internal static class SpecificationEvaluator
         {
             IOrderedQueryable<T>? ordered = null;
 
-            foreach (var order in specification.OrderExpressions)
+            foreach (OrderExpression<T> order in specification.OrderExpressions)
             {
                 if (ordered is null)
                 {
@@ -84,7 +85,7 @@ internal static class SpecificationEvaluator
         ArgumentNullException.ThrowIfNull(inputQuery);
         ArgumentNullException.ThrowIfNull(specification);
 
-        var query = GetQuery(inputQuery, (ISpecification<T>)specification);
+        IQueryable<T> query = GetQuery(inputQuery, (ISpecification<T>)specification);
 
         // When a selector is configured, includes may be ignored at the EF level,
         // but behavior is consistently applied by always projecting at the end.

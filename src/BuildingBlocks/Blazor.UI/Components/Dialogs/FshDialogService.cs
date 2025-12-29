@@ -17,7 +17,7 @@ public static class FshDialogService
     {
         ArgumentNullException.ThrowIfNull(dialogService);
 
-        var parameters = new DialogParameters<FshConfirmDialog>
+        DialogParameters<FshConfirmDialog> parameters = new()
         {
             { x => x.Title, title },
             { x => x.Message, message },
@@ -28,7 +28,7 @@ public static class FshDialogService
             { x => x.IconColor, iconColor }
         };
 
-        var options = new DialogOptions
+        DialogOptions options = new()
         {
             CloseButton = false,
             MaxWidth = MaxWidth.ExtraSmall,
@@ -37,8 +37,8 @@ public static class FshDialogService
             CloseOnEscapeKey = true
         };
 
-        var dialog = await dialogService.ShowAsync<FshConfirmDialog>(title, parameters, options);
-        var result = await dialog.Result;
+        IDialogReference dialog = await dialogService.ShowAsync<FshConfirmDialog>(title, parameters, options);
+        DialogResult? result = await dialog.Result;
 
         return result is not null && !result.Canceled;
     }

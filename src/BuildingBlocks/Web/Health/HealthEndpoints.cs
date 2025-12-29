@@ -12,7 +12,7 @@ public static class HealthEndpoints
     public sealed record HealthEntry(string Name, string Status, string? Description, double DurationMs, Dictionary<string, object>? Details = default);
     public static IEndpointRouteBuilder MapHeroHealthEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/health")
+        RouteGroupBuilder group = app.MapGroup("/health")
                        .WithTags("Health")
                        .AllowAnonymous()
                        .DisableRateLimiting();
@@ -22,8 +22,8 @@ public static class HealthEndpoints
         group.MapGet("/live",
                 async Task<Ok<HealthResult>> (HealthCheckService hc, CancellationToken cancellationToken) =>
                 {
-                    var report = await hc.CheckHealthAsync(_ => false, cancellationToken);
-                    var payload = new HealthResult(
+                    HealthReport report = await hc.CheckHealthAsync(_ => false, cancellationToken);
+                    HealthResult payload = new(
                     Status: report.Status.ToString(),
                     Results: Array.Empty<HealthEntry>());
 
@@ -38,8 +38,8 @@ public static class HealthEndpoints
         group.MapGet("/ready",
                     async Task<Results<Ok<HealthResult>, StatusCodeHttpResult>> (HealthCheckService hc, CancellationToken cancellationToken) =>
                     {
-                        var report = await hc.CheckHealthAsync(cancellationToken: cancellationToken);
-                        var results = report.Entries.Select(e =>
+                        HealthReport report = await hc.CheckHealthAsync(cancellationToken: cancellationToken);
+                        IEnumerable<HealthEntry> results = report.Entries.Select(e =>
                     new HealthEntry(
                         Name: e.Key,
                         Status: e.Value.Status.ToString(),
@@ -50,7 +50,7 @@ public static class HealthEndpoints
                             v => v.Value is null ? "null" : v.Value
                         )));
 
-                        var payload = new HealthResult(report.Status.ToString(), results);
+                        HealthResult payload = new(report.Status.ToString(), results);
 
                         return report.Status == HealthStatus.Healthy
                             ? TypedResults.Ok(payload)

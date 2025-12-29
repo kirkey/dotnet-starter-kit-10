@@ -9,31 +9,22 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FSH.Modules.Multitenancy.Features.v1.GetTenantMigrations;
 
-public sealed class GetTenantMigrationsQueryHandler
+public sealed class GetTenantMigrationsQueryHandler(
+    IMultiTenantStore<AppTenantInfo> tenantStore,
+    IServiceScopeFactory scopeFactory)
     : IQueryHandler<GetTenantMigrationsQuery, IReadOnlyCollection<TenantMigrationStatusDto>>
 {
-    private readonly IMultiTenantStore<AppTenantInfo> _tenantStore;
-    private readonly IServiceScopeFactory _scopeFactory;
-
-    public GetTenantMigrationsQueryHandler(
-        IMultiTenantStore<AppTenantInfo> tenantStore,
-        IServiceScopeFactory scopeFactory)
-    {
-        _tenantStore = tenantStore;
-        _scopeFactory = scopeFactory;
-    }
-
     public async ValueTask<IReadOnlyCollection<TenantMigrationStatusDto>> Handle(
         GetTenantMigrationsQuery query,
         CancellationToken cancellationToken)
     {
-        var tenants = await _tenantStore.GetAllAsync().ConfigureAwait(false);
+        IEnumerable<AppTenantInfo> tenants = await tenantStore.GetAllAsync().ConfigureAwait(false);
 
-        var tenantMigrationStatuses = new List<TenantMigrationStatusDto>();
+        List<TenantMigrationStatusDto> tenantMigrationStatuses = new();
 
-        foreach (var tenant in tenants)
+        foreach (AppTenantInfo tenant in tenants)
         {
-            var tenantStatus = new TenantMigrationStatusDto
+            TenantMigrationStatusDto tenantStatus = new()
             {
                 TenantId = tenant.Id,
                 Name = tenant.Name!,
@@ -43,18 +34,18 @@ public sealed class GetTenantMigrationsQueryHandler
 
             try
             {
-                using IServiceScope tenantScope = _scopeFactory.CreateScope();
+                using IServiceScope tenantScope = scopeFactory.CreateScope();
 
                 tenantScope.ServiceProvider.GetRequiredService<IMultiTenantContextSetter>()
                     .MultiTenantContext = new MultiTenantContext<AppTenantInfo>(tenant);
 
-                var dbContext = tenantScope.ServiceProvider.GetRequiredService<TenantDbContext>();
+                TenantDbContext dbContext = tenantScope.ServiceProvider.GetRequiredService<TenantDbContext>();
 
-                var appliedMigrations = await dbContext.Database
+                IEnumerable<string> appliedMigrations = await dbContext.Database
                     .GetAppliedMigrationsAsync(cancellationToken)
                     .ConfigureAwait(false);
 
-                var pendingMigrations = await dbContext.Database
+                IEnumerable<string> pendingMigrations = await dbContext.Database
                     .GetPendingMigrationsAsync(cancellationToken)
                     .ConfigureAwait(false);
 

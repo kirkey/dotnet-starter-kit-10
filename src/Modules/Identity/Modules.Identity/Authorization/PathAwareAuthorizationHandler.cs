@@ -19,8 +19,8 @@ public class PathAwareAuthorizationHandler : IAuthorizationMiddlewareResultHandl
         ArgumentNullException.ThrowIfNull(policy);
         ArgumentNullException.ThrowIfNull(authorizeResult);
 
-        var path = context.Request.Path;
-        var allowedPaths = new[]
+        PathString path = context.Request.Path;
+        PathString[] allowedPaths = new[]
         {
             new PathString("/scalar"),
             new PathString("/openapi"),
@@ -29,7 +29,7 @@ public class PathAwareAuthorizationHandler : IAuthorizationMiddlewareResultHandl
         if (allowedPaths.Any(p => path.StartsWithSegments(p, StringComparison.OrdinalIgnoreCase)))
         {
             // ✅ Respect routing + continue the pipeline
-            var endpoint = context.GetEndpoint();
+            Endpoint? endpoint = context.GetEndpoint();
             if (endpoint != null)
             {
                 await next(context);

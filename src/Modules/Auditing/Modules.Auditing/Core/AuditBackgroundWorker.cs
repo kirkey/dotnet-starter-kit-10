@@ -1,39 +1,28 @@
 using FSH.Modules.Auditing.Contracts;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Threading.Channels;
 
 namespace FSH.Modules.Auditing.Core;
 
 /// <summary>
 /// Drains the channel and writes to the configured sink in batches.
 /// </summary>
-public sealed class AuditBackgroundWorker : BackgroundService
+public sealed class AuditBackgroundWorker(
+    ChannelAuditPublisher publisher,
+    IAuditSink sink,
+    ILogger<AuditBackgroundWorker> logger,
+    int batchSize = 200,
+    int flushIntervalMs = 1000)
+    : BackgroundService
 {
-    private readonly ChannelAuditPublisher _publisher;
-    private readonly IAuditSink _sink;
-    private readonly ILogger<AuditBackgroundWorker> _logger;
-
-    private readonly int _batchSize;
-    private readonly TimeSpan _flushInterval;
-
-    public AuditBackgroundWorker(
-        ChannelAuditPublisher publisher,
-        IAuditSink sink,
-        ILogger<AuditBackgroundWorker> logger,
-        int batchSize = 200,
-        int flushIntervalMs = 1000)
-    {
-        _publisher = publisher;
-        _sink = sink;
-        _logger = logger;
-        _batchSize = Math.Max(1, batchSize);
-        _flushInterval = TimeSpan.FromMilliseconds(Math.Max(50, flushIntervalMs));
-    }
+    private readonly int _batchSize = Math.Max(1, batchSize);
+    private readonly TimeSpan _flushInterval = TimeSpan.FromMilliseconds(Math.Max(50, flushIntervalMs));
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var reader = _publisher.Reader;
-        var batch = new List<AuditEnvelope>(_batchSize);
+        ChannelReader<AuditEnvelope> reader = publisher.Reader;
+        List<AuditEnvelope> batch = new(_batchSize);
 
         // Single delay task we reuse/reset to avoid concurrent waits.
         Task delayTask = Task.Delay(_flushInterval, stoppingToken);
@@ -43,7 +32,7 @@ public sealed class AuditBackgroundWorker : BackgroundService
             while (!stoppingToken.IsCancellationRequested)
             {
                 // Greedily drain whatever is available, up to batch size.
-                while (batch.Count < _batchSize && reader.TryRead(out var item))
+                while (batch.Count < _batchSize && reader.TryRead(out AuditEnvelope? item))
                     batch.Add(item);
 
                 // If we've filled the batch, flush immediately.
@@ -55,8 +44,8 @@ public sealed class AuditBackgroundWorker : BackgroundService
                 }
 
                 // If we have nothing yet, wait for either data to arrive or the flush window to elapse.
-                var readTask = reader.WaitToReadAsync(stoppingToken).AsTask();
-                var winner = await Task.WhenAny(readTask, delayTask);
+                Task<bool> readTask = reader.WaitToReadAsync(stoppingToken).AsTask();
+                Task winner = await Task.WhenAny(readTask, delayTask);
 
                 if (winner == readTask)
                 {
@@ -78,14 +67,14 @@ public sealed class AuditBackgroundWorker : BackgroundService
         catch (OperationCanceledException) { /* shutting down */ }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Audit background worker crashed.");
+            logger.LogError(ex, "Audit background worker crashed.");
         }
 
         // Best-effort final flush on shutdown.
         if (batch.Count > 0 && !stoppingToken.IsCancellationRequested)
         {
-            try { await _sink.WriteAsync(batch, stoppingToken); }
-            catch (Exception ex) { _logger.LogError(ex, "Final audit flush failed."); }
+            try { await sink.WriteAsync(batch, stoppingToken); }
+            catch (Exception ex) { logger.LogError(ex, "Final audit flush failed."); }
         }
     }
 
@@ -93,12 +82,12 @@ public sealed class AuditBackgroundWorker : BackgroundService
     {
         try
         {
-            await _sink.WriteAsync(batch, ct);
+            await sink.WriteAsync(batch, ct);
         }
         catch (Exception ex)
         {
             // Don't crash the worker; log and keep going.
-            _logger.LogError(ex, "Audit background flush failed.");
+            logger.LogError(ex, "Audit background flush failed.");
             await Task.Delay(250, ct);
         }
         finally

@@ -16,38 +16,29 @@ internal interface IThemeStateFactory
 /// Redis-cached implementation of theme state factory.
 /// Efficient for SSR pages that need theme data without full circuit.
 /// </summary>
-internal sealed class CachedThemeStateFactory : IThemeStateFactory
+internal sealed class CachedThemeStateFactory(
+    IDistributedCache cache,
+    HttpClient httpClient,
+    ILogger<CachedThemeStateFactory> logger)
+    : IThemeStateFactory
 {
     private static readonly Uri ThemeEndpoint = new("/api/v1/tenants/theme", UriKind.Relative);
 
-    private readonly IDistributedCache _cache;
-    private readonly HttpClient _httpClient;
-    private readonly ILogger<CachedThemeStateFactory> _logger;
     private readonly TimeSpan _cacheExpiry = TimeSpan.FromMinutes(15);
-
-    public CachedThemeStateFactory(
-        IDistributedCache cache,
-        HttpClient httpClient,
-        ILogger<CachedThemeStateFactory> logger)
-    {
-        _cache = cache;
-        _httpClient = httpClient;
-        _logger = logger;
-    }
 
     public async Task<TenantThemeSettings> GetThemeAsync(string tenantId, CancellationToken cancellationToken = default)
     {
-        var cacheKey = $"theme:{tenantId}";
+        string cacheKey = $"theme:{tenantId}";
 
         // Try to get from cache first (with error handling for Redis failures)
         try
         {
-            var json = await _cache.GetStringAsync(cacheKey, cancellationToken);
+            string? json = await cache.GetStringAsync(cacheKey, cancellationToken);
             if (json is not null)
             {
                 try
                 {
-                    var cached = JsonSerializer.Deserialize<TenantThemeSettings>(json);
+                    TenantThemeSettings? cached = JsonSerializer.Deserialize<TenantThemeSettings>(json);
                     if (cached is not null)
                     {
                         return cached;
@@ -55,40 +46,40 @@ internal sealed class CachedThemeStateFactory : IThemeStateFactory
                 }
                 catch (JsonException ex)
                 {
-                    _logger.LogWarning(ex, "Failed to deserialize cached theme for tenant {TenantId}", tenantId);
+                    logger.LogWarning(ex, "Failed to deserialize cached theme for tenant {TenantId}", tenantId);
                 }
             }
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Cache unavailable, fetching theme directly for tenant {TenantId}", tenantId);
+            logger.LogWarning(ex, "Cache unavailable, fetching theme directly for tenant {TenantId}", tenantId);
         }
 
         // Cache miss or deserialization failed - fetch from API
         try
         {
-            var response = await _httpClient.GetAsync(ThemeEndpoint, cancellationToken);
+            HttpResponseMessage response = await httpClient.GetAsync(ThemeEndpoint, cancellationToken);
 
             if (response.IsSuccessStatusCode)
             {
-                var dto = await response.Content.ReadFromJsonAsync<TenantThemeApiDto>(cancellationToken);
+                TenantThemeApiDto? dto = await response.Content.ReadFromJsonAsync<TenantThemeApiDto>(cancellationToken);
                 if (dto is not null)
                 {
-                    var settings = MapFromDto(dto);
+                    TenantThemeSettings settings = MapFromDto(dto);
 
                     // Try to cache for 15 minutes (fail silently if cache unavailable)
                     try
                     {
-                        var serialized = JsonSerializer.Serialize(settings);
-                        var options = new DistributedCacheEntryOptions
+                        string serialized = JsonSerializer.Serialize(settings);
+                        DistributedCacheEntryOptions options = new()
                         {
                             AbsoluteExpirationRelativeToNow = _cacheExpiry
                         };
-                        await _cache.SetStringAsync(cacheKey, serialized, options, cancellationToken);
+                        await cache.SetStringAsync(cacheKey, serialized, options, cancellationToken);
                     }
                     catch (Exception cacheEx)
                     {
-                        _logger.LogWarning(cacheEx, "Failed to cache theme, continuing without cache");
+                        logger.LogWarning(cacheEx, "Failed to cache theme, continuing without cache");
                     }
 
                     return settings;
@@ -96,12 +87,12 @@ internal sealed class CachedThemeStateFactory : IThemeStateFactory
             }
             else
             {
-                _logger.LogWarning("Failed to load tenant theme from API: {StatusCode}", response.StatusCode);
+                logger.LogWarning("Failed to load tenant theme from API: {StatusCode}", response.StatusCode);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading tenant theme for {TenantId}", tenantId);
+            logger.LogError(ex, "Error loading tenant theme for {TenantId}", tenantId);
         }
 
         // Fallback to default theme
@@ -110,7 +101,7 @@ internal sealed class CachedThemeStateFactory : IThemeStateFactory
 
     private static TenantThemeSettings MapFromDto(TenantThemeApiDto dto)
     {
-        var defaultSettings = TenantThemeSettings.Default;
+        TenantThemeSettings defaultSettings = TenantThemeSettings.Default;
 
         return new TenantThemeSettings
         {

@@ -1,6 +1,8 @@
 ﻿using FSH.Framework.Caching;
 using FSH.Framework.Core.Exceptions;
 using FSH.Framework.Shared.Identity;
+using FSH.Modules.Identity.Features.v1.Roles;
+using FSH.Modules.Identity.Features.v1.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Identity.Services;
@@ -9,17 +11,17 @@ internal sealed partial class UserService
 {
     public async Task<List<string>?> GetPermissionsAsync(string userId, CancellationToken cancellationToken)
     {
-        var permissions = await cache.GetOrSetAsync(
+        List<string>? permissions = await cache.GetOrSetAsync(
             GetPermissionCacheKey(userId),
             async () =>
             {
-                var user = await userManager.FindByIdAsync(userId);
+                FshUser? user = await userManager.FindByIdAsync(userId);
 
                 _ = user ?? throw new UnauthorizedException();
 
-                var userRoles = await userManager.GetRolesAsync(user);
-                var permissions = new List<string>();
-                foreach (var role in await roleManager.Roles
+                IList<string> userRoles = await userManager.GetRolesAsync(user);
+                List<string> permissions = new();
+                foreach (FshRole role in await roleManager.Roles
                     .Where(r => userRoles.Contains(r.Name!))
                     .ToListAsync(cancellationToken))
                 {
@@ -42,7 +44,7 @@ internal sealed partial class UserService
 
     public async Task<bool> HasPermissionAsync(string userId, string permission, CancellationToken cancellationToken = default)
     {
-        var permissions = await GetPermissionsAsync(userId, cancellationToken);
+        List<string>? permissions = await GetPermissionsAsync(userId, cancellationToken);
 
         return permissions?.Contains(permission) ?? false;
     }

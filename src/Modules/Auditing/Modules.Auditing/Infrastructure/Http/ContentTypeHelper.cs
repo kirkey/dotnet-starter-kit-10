@@ -9,11 +9,11 @@ internal static class ContentTypeHelper
         if (string.IsNullOrWhiteSpace(contentType)) return false;
 
         // Prefer robust parse; fallback to naive split if needed.
-        if (MediaTypeHeaderValue.TryParse(contentType, out var mt))
+        if (MediaTypeHeaderValue.TryParse(contentType, out MediaTypeHeaderValue? mt))
             return allowed.Contains(mt.MediaType.Value ?? string.Empty);
 
-        var semi = contentType.IndexOf(';', StringComparison.Ordinal);
-        var type = semi >= 0 ? contentType[..semi] : contentType;
+        int semi = contentType.IndexOf(';', StringComparison.Ordinal);
+        string type = semi >= 0 ? contentType[..semi] : contentType;
         return allowed.Contains(type.Trim());
     }
 }

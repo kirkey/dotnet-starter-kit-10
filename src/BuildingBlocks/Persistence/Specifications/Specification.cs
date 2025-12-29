@@ -15,11 +15,7 @@ public abstract class Specification<T> : ISpecification<T>
     private readonly List<string> _includeStrings = [];
     private readonly List<OrderExpression<T>> _orderExpressions = [];
 
-    protected Specification()
-    {
-        // Favor read-only queries by default.
-        AsNoTracking = true;
-    }
+    // Favor read-only queries by default.
 
     public Expression<Func<T, bool>>? Criteria =>
         _criteria.Count == 0
@@ -35,7 +31,7 @@ public abstract class Specification<T> : ISpecification<T>
     public IReadOnlyList<OrderExpression<T>> OrderExpressions =>
         new ReadOnlyCollection<OrderExpression<T>>(_orderExpressions);
 
-    public bool AsNoTracking { get; private set; }
+    public bool AsNoTracking { get; private set; } = true;
 
     public bool AsSplitQuery { get; private set; }
 
@@ -229,10 +225,10 @@ public abstract class Specification<T> : ISpecification<T>
         Expression<Func<T, bool>> first,
         Expression<Func<T, bool>> second)
     {
-        var parameter = Expression.Parameter(typeof(T), "x");
-        var left = ReplaceParameter(first.Body, first.Parameters[0], parameter);
-        var right = ReplaceParameter(second.Body, second.Parameters[0], parameter);
-        var body = Expression.AndAlso(left, right);
+        ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
+        Expression left = ReplaceParameter(first.Body, first.Parameters[0], parameter);
+        Expression right = ReplaceParameter(second.Body, second.Parameters[0], parameter);
+        BinaryExpression body = Expression.AndAlso(left, right);
         return Expression.Lambda<Func<T, bool>>(body, parameter);
     }
 
@@ -245,20 +241,12 @@ public abstract class Specification<T> : ISpecification<T>
                ?? throw new InvalidOperationException("Failed to replace parameter in expression.");
     }
 
-    private sealed class ParameterReplaceVisitor : ExpressionVisitor
+    private sealed class ParameterReplaceVisitor(ParameterExpression source, ParameterExpression target)
+        : ExpressionVisitor
     {
-        private readonly ParameterExpression _source;
-        private readonly ParameterExpression _target;
-
-        public ParameterReplaceVisitor(ParameterExpression source, ParameterExpression target)
-        {
-            _source = source;
-            _target = target;
-        }
-
         protected override Expression VisitParameter(ParameterExpression node)
         {
-            return node == _source ? _target : base.VisitParameter(node);
+            return node == source ? target : base.VisitParameter(node);
         }
     }
 }

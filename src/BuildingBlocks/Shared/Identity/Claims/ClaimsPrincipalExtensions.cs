@@ -35,14 +35,14 @@ public static class ClaimsPrincipalExtensions
     // Retrieves the user's image URL as Uri
     public static Uri? GetImageUrl(this ClaimsPrincipal principal)
     {
-        var imageUrl = principal?.FindFirstValue(CustomClaims.ImageUrl);
-        return Uri.TryCreate(imageUrl, UriKind.Absolute, out var uri) ? uri : null;
+        string? imageUrl = principal?.FindFirstValue(CustomClaims.ImageUrl);
+        return Uri.TryCreate(imageUrl, UriKind.Absolute, out Uri? uri) ? uri : null;
     }
 
     // Retrieves the user's token expiration date
     public static DateTimeOffset GetExpiration(this ClaimsPrincipal principal)
     {
-        var expiration = principal?.FindFirstValue(CustomClaims.Expiration);
+        string? expiration = principal?.FindFirstValue(CustomClaims.Expiration);
         return expiration != null
             ? DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(expiration))
             : throw new InvalidOperationException("Expiration claim not found.");

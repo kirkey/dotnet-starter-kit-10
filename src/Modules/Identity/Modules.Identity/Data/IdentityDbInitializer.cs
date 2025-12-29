@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
 namespace FSH.Modules.Identity.Data;
 
@@ -68,8 +69,8 @@ internal sealed class IdentityDbInitializer(
 
     private async Task AssignPermissionsToRoleAsync(IdentityDbContext dbContext, IReadOnlyList<FshPermission> permissions, FshRole role)
     {
-        var currentClaims = await roleManager.GetClaimsAsync(role);
-        var newClaims = permissions
+        IList<Claim> currentClaims = await roleManager.GetClaimsAsync(role);
+        List<FshRoleClaim> newClaims = permissions
             .Where(permission => !currentClaims.Any(c => c.Type == ClaimConstants.Permission && c.Value == permission.Name))
             .Select(permission => new FshRoleClaim
             {
@@ -81,7 +82,7 @@ internal sealed class IdentityDbInitializer(
             })
             .ToList();
 
-        foreach (var claim in newClaims)
+        foreach (FshRoleClaim claim in newClaims)
         {
             logger.LogInformation("Seeding {Role} Permission '{Permission}' for '{TenantId}' Tenant.", role.Name, claim.ClaimValue, multiTenantContextAccessor.MultiTenantContext.TenantInfo?.Id);
             await dbContext.RoleClaims.AddAsync(claim);
@@ -121,7 +122,7 @@ internal sealed class IdentityDbInitializer(
             };
 
             logger.LogInformation("Seeding Default Admin User for '{TenantId}' Tenant.", multiTenantContextAccessor.MultiTenantContext.TenantInfo?.Id);
-            var password = new PasswordHasher<FshUser>();
+            PasswordHasher<FshUser> password = new();
             adminUser.PasswordHash = password.HashPassword(adminUser, MultitenancyConstants.DefaultPassword);
             await userManager.CreateAsync(adminUser);
         }

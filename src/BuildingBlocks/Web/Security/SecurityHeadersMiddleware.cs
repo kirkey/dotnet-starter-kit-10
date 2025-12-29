@@ -16,7 +16,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate next, IOptions<Sec
             return next(context);
         }
 
-        var path = context.Request.Path;
+        PathString path = context.Request.Path;
 
         // Allow listed paths (e.g., OpenAPI / Scalar UI) to manage their own scripts/styles.
         if (_options.ExcludedPaths?.Any(p => path.StartsWithSegments(p, StringComparison.OrdinalIgnoreCase)) == true)
@@ -24,7 +24,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate next, IOptions<Sec
             return next(context);
         }
 
-        var headers = context.Response.Headers;
+        IHeaderDictionary headers = context.Response.Headers;
 
         headers["X-Content-Type-Options"] = "nosniff";
         headers["X-Frame-Options"] = "DENY";
@@ -33,10 +33,10 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate next, IOptions<Sec
 
         if (!headers.ContainsKey("Content-Security-Policy"))
         {
-            var scriptSources = string.Join(' ', _options.ScriptSources ?? []);
-            var styleSources = string.Join(' ', _options.StyleSources ?? []);
+            string scriptSources = string.Join(' ', _options.ScriptSources ?? []);
+            string styleSources = string.Join(' ', _options.StyleSources ?? []);
 
-            var csp =
+            string csp =
                 "default-src 'self'; " +
                 "img-src 'self' data: https:; " +
                 $"script-src 'self' https: {scriptSources}; " +

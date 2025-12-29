@@ -24,7 +24,7 @@ public static class GenerateTokenEndpoint
             [FromServices] IMediator mediator,
             CancellationToken ct) =>
             {
-                var token = await mediator.Send(command, ct);
+                TokenResponse? token = await mediator.Send(command, ct);
                 return token is null
                     ? TypedResults.Unauthorized()
                     : TypedResults.Ok(token);

@@ -30,29 +30,29 @@ public sealed class TokenService : ITokenService
         string? tenant = null,
         CancellationToken ct = default)
     {
-        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SigningKey));
-        var creds = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+        SymmetricSecurityKey signingKey = new(Encoding.UTF8.GetBytes(_options.SigningKey));
+        SigningCredentials creds = new(signingKey, SecurityAlgorithms.HmacSha256);
 
         // Access token
-        var accessTokenExpiry = DateTime.UtcNow.AddMinutes(_options.AccessTokenMinutes);
-        var jwtToken = new JwtSecurityToken(
+        DateTime accessTokenExpiry = DateTime.UtcNow.AddMinutes(_options.AccessTokenMinutes);
+        JwtSecurityToken jwtToken = new(
             _options.Issuer,
             _options.Audience,
             claims,
             expires: accessTokenExpiry,
             signingCredentials: creds);
 
-        var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+        string? accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
         // Refresh token
-        var refreshToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-        var refreshTokenExpiry = DateTime.UtcNow.AddDays(_options.RefreshTokenDays);
+        string refreshToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+        DateTime refreshTokenExpiry = DateTime.UtcNow.AddDays(_options.RefreshTokenDays);
 
-        var userEmail = claims.Where(a => a.Type == ClaimTypes.Email).Select(a => a.Value).First();
+        string userEmail = claims.Where(a => a.Type == ClaimTypes.Email).Select(a => a.Value).First();
         _logger.LogInformation("Issued JWT for {Email}", userEmail);
         _metrics.TokenGenerated(userEmail);
 
-        var response = new TokenResponse(
+        TokenResponse response = new(
             AccessToken: accessToken,
             RefreshToken: refreshToken,
             RefreshTokenExpiresAt: refreshTokenExpiry,

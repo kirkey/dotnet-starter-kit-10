@@ -5,25 +5,17 @@ using Microsoft.Extensions.Options;
 
 namespace FSH.Framework.Persistence;
 
-public sealed class DatabaseOptionsStartupLogger : IHostedService
+public sealed class DatabaseOptionsStartupLogger(
+    ILogger<DatabaseOptionsStartupLogger> logger,
+    IOptions<DatabaseOptions> options)
+    : IHostedService
 {
-    private readonly ILogger<DatabaseOptionsStartupLogger> _logger;
-    private readonly IOptions<DatabaseOptions> _options;
-
-    public DatabaseOptionsStartupLogger(
-        ILogger<DatabaseOptionsStartupLogger> logger,
-        IOptions<DatabaseOptions> options)
-    {
-        _logger = logger;
-        _options = options;
-    }
-
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        var options = _options.Value;
-        _logger.LogInformation("current db provider: {Provider}", options.Provider);
-        _logger.LogInformation("for docs: https://www.fullstackhero.net");
-        _logger.LogInformation("sponsor: https://opencollective.com/fullstackhero");
+        DatabaseOptions options1 = options.Value;
+        logger.LogInformation("current db provider: {Provider}", options1.Provider);
+        logger.LogInformation("for docs: https://www.fullstackhero.net");
+        logger.LogInformation("sponsor: https://opencollective.com/fullstackhero");
         return Task.CompletedTask;
     }
 

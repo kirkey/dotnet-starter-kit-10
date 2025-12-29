@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Asp.Versioning.Builder;
 using Finbuckle.MultiTenant.Abstractions;
 using Finbuckle.MultiTenant.AspNetCore.Extensions;
 using Finbuckle.MultiTenant.EntityFrameworkCore.Stores;
@@ -28,6 +29,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Primitives;
 
 namespace FSH.Modules.Multitenancy;
 
@@ -58,8 +60,8 @@ public sealed class MultitenancyModule : IModule
                     if (context.MultiTenantContext.StoreInfo is null) return;
                     if (context.MultiTenantContext.StoreInfo.StoreType != typeof(DistributedCacheStore<AppTenantInfo>))
                     {
-                        var sp = ((HttpContext)context.Context!).RequestServices;
-                        var distributedStore = sp
+                        IServiceProvider sp = ((HttpContext)context.Context!).RequestServices;
+                        IMultiTenantStore<AppTenantInfo>? distributedStore = sp
                             .GetRequiredService<IEnumerable<IMultiTenantStore<AppTenantInfo>>>()
                             .FirstOrDefault(s => s.GetType() == typeof(DistributedCacheStore<AppTenantInfo>));
 
@@ -74,7 +76,7 @@ public sealed class MultitenancyModule : IModule
             {
                 if (context is not HttpContext httpContext) return null;
 
-                if (!httpContext.Request.Query.TryGetValue("tenant", out var tenantIdentifier) ||
+                if (!httpContext.Request.Query.TryGetValue("tenant", out StringValues tenantIdentifier) ||
                     string.IsNullOrEmpty(tenantIdentifier))
                     return null;
 
@@ -95,12 +97,12 @@ public sealed class MultitenancyModule : IModule
 
     public void MapEndpoints(IEndpointRouteBuilder endpoints)
     {
-        var versionSet = endpoints.NewApiVersionSet()
+        ApiVersionSet versionSet = endpoints.NewApiVersionSet()
             .HasApiVersion(new ApiVersion(1))
             .ReportApiVersions()
             .Build();
 
-        var group = endpoints.MapGroup("api/v{version:apiVersion}/tenants")
+        RouteGroupBuilder group = endpoints.MapGroup("api/v{version:apiVersion}/tenants")
             .WithTags("Tenants")
             .WithApiVersionSet(versionSet);
         ChangeTenantActivationEndpoint.Map(group);

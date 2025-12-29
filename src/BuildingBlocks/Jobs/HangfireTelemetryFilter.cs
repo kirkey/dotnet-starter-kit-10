@@ -16,12 +16,12 @@ public sealed class HangfireTelemetryFilter : JobFilterAttribute, IServerFilter
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        var job = context.BackgroundJob?.Job;
+        Job? job = context.BackgroundJob?.Job;
         string name = job is null
             ? "Hangfire.Job"
             : $"{job.Type.Name}.{job.Method.Name}";
 
-        var activity = ActivitySource.StartActivity(name, ActivityKind.Internal);
+        Activity? activity = ActivitySource.StartActivity(name, ActivityKind.Internal);
         if (activity is null)
         {
             return;
@@ -38,7 +38,7 @@ public sealed class HangfireTelemetryFilter : JobFilterAttribute, IServerFilter
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        if (!context.Items.TryGetValue(ActivityKey, out var value) || value is not Activity activity)
+        if (!context.Items.TryGetValue(ActivityKey, out object? value) || value is not Activity activity)
         {
             return;
         }

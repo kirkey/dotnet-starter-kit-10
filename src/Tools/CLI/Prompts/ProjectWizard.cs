@@ -13,16 +13,16 @@ internal static class ProjectWizard
         ConsoleTheme.WriteBanner();
 
         // Step 1: Choose preset or custom
-        var startChoice = PromptStartChoice();
+        string startChoice = PromptStartChoice();
 
         if (startChoice != "Custom")
         {
-            var preset = Presets.All.First(p => p.Name == startChoice);
-            var presetName = PromptProjectName(initialName);
-            var presetPath = PromptOutputPath();
-            var presetVersion = PromptFrameworkVersion(initialVersion);
+            Preset preset = Presets.All.First(p => p.Name == startChoice);
+            string presetName = PromptProjectName(initialName);
+            string presetPath = PromptOutputPath();
+            string? presetVersion = PromptFrameworkVersion(initialVersion);
 
-            var presetOptions = preset.ToProjectOptions(presetName, presetPath);
+            ProjectOptions presetOptions = preset.ToProjectOptions(presetName, presetPath);
             presetOptions.FrameworkVersion = presetVersion;
 
             ShowSummary(presetOptions);
@@ -30,15 +30,15 @@ internal static class ProjectWizard
         }
 
         // Custom flow
-        var name = PromptProjectName(initialName);
-        var type = PromptProjectType();
-        var architecture = PromptArchitecture(type);
-        var database = PromptDatabase(architecture);
-        var features = PromptFeatures(architecture);
-        var outputPath = PromptOutputPath();
-        var frameworkVersion = PromptFrameworkVersion(initialVersion);
+        string name = PromptProjectName(initialName);
+        ProjectType type = PromptProjectType();
+        ArchitectureStyle architecture = PromptArchitecture(type);
+        DatabaseProvider database = PromptDatabase(architecture);
+        List<string> features = PromptFeatures(architecture);
+        string outputPath = PromptOutputPath();
+        string? frameworkVersion = PromptFrameworkVersion(initialVersion);
 
-        var options = new ProjectOptions
+        ProjectOptions options = new()
         {
             Name = name,
             Type = type,
@@ -60,10 +60,10 @@ internal static class ProjectWizard
 
     private static string PromptStartChoice()
     {
-        var choices = new List<string> { "Custom" };
+        List<string> choices = new() { "Custom" };
         choices.AddRange(Presets.All.Select(p => p.Name));
 
-        var choice = AnsiConsole.Prompt(
+        string choice = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("[dim]Select template[/]")
                 .PageSize(10)
@@ -74,7 +74,7 @@ internal static class ProjectWizard
                     if (c == "Custom")
                         return "Custom [dim]- configure manually[/]";
 
-                    var preset = Presets.All.First(p => p.Name == c);
+                    Preset preset = Presets.All.First(p => p.Name == c);
                     return $"{preset.Name} [dim]- {preset.Description}[/]";
                 }));
 
@@ -109,7 +109,7 @@ internal static class ProjectWizard
 
     private static ProjectType PromptProjectType()
     {
-        var choice = AnsiConsole.Prompt(
+        string choice = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("[dim]Project type[/]")
                 .HighlightStyle(ConsoleTheme.PrimaryStyle)
@@ -120,7 +120,7 @@ internal static class ProjectWizard
 
     private static ArchitectureStyle PromptArchitecture(ProjectType projectType)
     {
-        var choices = new List<string>
+        List<string> choices = new()
         {
             "Monolith",
             "Microservices"
@@ -132,7 +132,7 @@ internal static class ProjectWizard
             choices.Add("Serverless");
         }
 
-        var choice = AnsiConsole.Prompt(
+        string choice = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("[dim]Architecture[/]")
                 .HighlightStyle(ConsoleTheme.PrimaryStyle)
@@ -149,7 +149,7 @@ internal static class ProjectWizard
 
     private static DatabaseProvider PromptDatabase(ArchitectureStyle architecture)
     {
-        var choices = new List<string>
+        List<string> choices = new()
         {
             "PostgreSQL",
             "SQL Server"
@@ -161,7 +161,7 @@ internal static class ProjectWizard
             choices.Add("SQLite");
         }
 
-        var choice = AnsiConsole.Prompt(
+        string choice = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("[dim]Database[/]")
                 .HighlightStyle(ConsoleTheme.PrimaryStyle)
@@ -178,7 +178,7 @@ internal static class ProjectWizard
 
     private static List<string> PromptFeatures(ArchitectureStyle architecture)
     {
-        var choices = new List<string>
+        List<string> choices = new()
         {
             "Git Repository",
             "Docker Compose",
@@ -193,19 +193,19 @@ internal static class ProjectWizard
             choices.Insert(2, "Aspire AppHost");
         }
 
-        var defaults = new List<string> { "Git Repository", "Docker Compose" };
+        List<string> defaults = new() { "Git Repository", "Docker Compose" };
         if (architecture != ArchitectureStyle.Serverless)
         {
             defaults.Add("Aspire AppHost");
         }
 
-        var prompt = new MultiSelectionPrompt<string>()
+        MultiSelectionPrompt<string> prompt = new MultiSelectionPrompt<string>()
             .Title("[dim]Features[/] [dim italic](space to toggle)[/]")
             .HighlightStyle(ConsoleTheme.PrimaryStyle)
             .InstructionsText("")
             .AddChoices(choices);
 
-        foreach (var item in defaults)
+        foreach (string item in defaults)
         {
             prompt.Select(item);
         }
@@ -215,7 +215,7 @@ internal static class ProjectWizard
 
     private static string PromptOutputPath()
     {
-        var useCurrentDir = AnsiConsole.Confirm("[dim]Create in current directory?[/]", true);
+        bool useCurrentDir = AnsiConsole.Confirm("[dim]Create in current directory?[/]", true);
 
         if (useCurrentDir)
         {
@@ -244,9 +244,9 @@ internal static class ProjectWizard
             return initialVersion;
         }
 
-        var defaultVersion = GetDefaultFrameworkVersion();
+        string defaultVersion = GetDefaultFrameworkVersion();
 
-        var useDefault = AnsiConsole.Confirm(
+        bool useDefault = AnsiConsole.Confirm(
             $"[dim]Use default FSH version[/] [cyan]{defaultVersion}[/][dim]?[/]",
             true);
 
@@ -275,13 +275,13 @@ internal static class ProjectWizard
 
     private static string GetDefaultFrameworkVersion()
     {
-        var assembly = Assembly.GetExecutingAssembly();
-        var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
-            ?? assembly.GetName().Version?.ToString()
-            ?? "10.0.0";
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        string version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                         ?? assembly.GetName().Version?.ToString()
+                         ?? "10.0.0";
 
         // Remove any +buildmetadata suffix
-        var plusIndex = version.IndexOf('+', StringComparison.Ordinal);
+        int plusIndex = version.IndexOf('+', StringComparison.Ordinal);
         return plusIndex > 0 ? version[..plusIndex] : version;
     }
 
@@ -297,7 +297,7 @@ internal static class ProjectWizard
         ConsoleTheme.WriteKeyValue("Output", options.OutputPath);
 
         // Build features list
-        var features = new List<string>();
+        List<string> features = new();
         if (options.InitializeGit) features.Add("Git");
         if (options.IncludeDocker) features.Add("Docker");
         if (options.IncludeAspire) features.Add("Aspire");

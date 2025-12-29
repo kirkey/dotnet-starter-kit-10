@@ -29,8 +29,8 @@ public static class Extensions
 
         services.AddDbContext<TContext>((sp, options) =>
         {
-            var env = sp.GetRequiredService<IHostEnvironment>();
-            var dbConfig = sp.GetRequiredService<IOptions<DatabaseOptions>>().Value;
+            IHostEnvironment env = sp.GetRequiredService<IHostEnvironment>();
+            DatabaseOptions dbConfig = sp.GetRequiredService<IOptions<DatabaseOptions>>().Value;
             options.ConfigureHeroDatabase(dbConfig.Provider, dbConfig.ConnectionString, dbConfig.MigrationsAssembly, env.IsDevelopment());
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
         });

@@ -14,12 +14,12 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         ArgumentNullException.ThrowIfNull(httpContext);
         ArgumentNullException.ThrowIfNull(exception);
 
-        var problemDetails = new ProblemDetails
+        ProblemDetails problemDetails = new()
         {
             Instance = httpContext.Request.Path
         };
 
-        var statusCode = StatusCodes.Status500InternalServerError;
+        int statusCode = StatusCodes.Status500InternalServerError;
 
         if (exception is FluentValidation.ValidationException fluentException)
         {
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             problemDetails.Detail = "One or more validation errors occurred.";
             problemDetails.Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1";
 
-            var errors = fluentException.Errors
+            Dictionary<string, string[]> errors = fluentException.Errors
                 .GroupBy(e => e.PropertyName)
                 .ToDictionary(
                     g => g.Key,
