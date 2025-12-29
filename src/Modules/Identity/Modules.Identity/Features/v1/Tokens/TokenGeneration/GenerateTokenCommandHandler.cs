@@ -1,14 +1,14 @@
-﻿using FSH.Modules.Auditing.Contracts;
+﻿using Finbuckle.MultiTenant.Abstractions;
+using FSH.Framework.Eventing.Outbox;
+using FSH.Framework.Shared.Multitenancy;
+using FSH.Modules.Auditing.Contracts;
 using FSH.Modules.Identity.Contracts.DTOs;
+using FSH.Modules.Identity.Contracts.Events;
 using FSH.Modules.Identity.Contracts.Services;
 using FSH.Modules.Identity.Contracts.v1.Tokens.TokenGeneration;
 using Mediator;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using Finbuckle.MultiTenant.Abstractions;
-using FSH.Framework.Eventing.Outbox;
-using FSH.Framework.Shared.Multitenancy;
-using FSH.Modules.Identity.Contracts.Events;
 
 namespace FSH.Modules.Identity.Features.v1.Tokens.TokenGeneration;
 

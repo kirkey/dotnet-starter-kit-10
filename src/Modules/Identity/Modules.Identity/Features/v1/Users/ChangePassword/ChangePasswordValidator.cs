@@ -3,8 +3,8 @@ using FSH.Framework.Shared.Identity.Claims;
 using FSH.Modules.Identity.Contracts.v1.Users.ChangePassword;
 using FSH.Modules.Identity.Features.v1.Users;
 using FSH.Modules.Identity.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace FSH.Modules.Identity.Features.v1.Users.ChangePassword;
 

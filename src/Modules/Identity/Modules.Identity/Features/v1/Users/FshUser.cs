@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using FSH.Modules.Identity.Features.v1.Users.PasswordHistory;
+﻿using FSH.Modules.Identity.Features.v1.Users.PasswordHistory;
+using Microsoft.AspNetCore.Identity;
 
 namespace FSH.Modules.Identity.Features.v1.Users;
 

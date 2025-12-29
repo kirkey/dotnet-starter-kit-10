@@ -1,6 +1,6 @@
+using FSH.CLI.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using FSH.CLI.Models;
 
 namespace FSH.CLI.Scaffolding;
 

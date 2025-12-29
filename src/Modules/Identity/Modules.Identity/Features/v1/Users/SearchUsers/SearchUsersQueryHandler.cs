@@ -1,5 +1,6 @@
 using FSH.Framework.Persistence;
 using FSH.Framework.Shared.Persistence;
+using FSH.Framework.Web.Origin;
 using FSH.Modules.Identity.Contracts.DTOs;
 using FSH.Modules.Identity.Contracts.v1.Users.SearchUsers;
 using FSH.Modules.Identity.Data;
@@ -9,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using FSH.Framework.Web.Origin;
 
 namespace FSH.Modules.Identity.Features.v1.Users.SearchUsers;
 

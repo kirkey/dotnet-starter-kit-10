@@ -1,9 +1,9 @@
 @page "/users"
-@using FSH.Playground.Blazor.ApiClient
+@using System.Security.Claims
 @using FSH.Framework.Blazor.UI.Components.Dialogs
 @inherits ComponentBase
-@using System.Security.Claims
 @using FSH.Framework.Shared.Constants
+@using FSH.Playground.Blazor.ApiClient
 @using Microsoft.AspNetCore.Components.Authorization
 @inject IIdentityClient IdentityClient
 @inject IUsersClient UsersClient

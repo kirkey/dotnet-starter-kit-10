@@ -1,5 +1,5 @@
-using System.Text.Json;
 using FSH.Framework.Eventing.Abstractions;
+using System.Text.Json;
 
 namespace FSH.Framework.Eventing.Serialization;
 
