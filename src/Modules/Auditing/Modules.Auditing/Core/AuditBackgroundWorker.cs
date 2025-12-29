@@ -2,7 +2,7 @@ using FSH.Modules.Auditing.Contracts;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace FSH.Modules.Auditing;
+namespace FSH.Modules.Auditing.Core;
 
 /// <summary>
 /// Drains the channel and writes to the configured sink in batches.

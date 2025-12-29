@@ -1,9 +1,9 @@
 ﻿using FSH.Framework.Caching;
 using FSH.Framework.Core.Exceptions;
-using FSH.Framework.Shared.Constants;
+using FSH.Framework.Shared.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Framework.Infrastructure.Identity.Users.Services;
+namespace FSH.Modules.Identity.Services;
 
 internal sealed partial class UserService
 {

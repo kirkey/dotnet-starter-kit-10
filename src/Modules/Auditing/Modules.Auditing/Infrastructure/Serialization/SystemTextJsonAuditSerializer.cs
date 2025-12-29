@@ -2,7 +2,7 @@ using FSH.Modules.Auditing.Contracts;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FSH.Modules.Auditing;
+namespace FSH.Modules.Auditing.Infrastructure.Serialization;
 
 public sealed class SystemTextJsonAuditSerializer : IAuditSerializer
 {

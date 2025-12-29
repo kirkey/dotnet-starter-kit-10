@@ -1,8 +1,6 @@
 using FSH.Playground.Blazor.ApiClient;
-using FSH.Playground.Blazor.Services.Api;
-using System.Net.Http;
 
-namespace FSH.Playground.Blazor;
+namespace FSH.Playground.Blazor.Services.Api;
 
 internal static class ApiClientRegistration
 {

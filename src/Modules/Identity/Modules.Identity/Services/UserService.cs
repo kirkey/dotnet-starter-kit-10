@@ -7,7 +7,7 @@ using FSH.Framework.Eventing.Outbox;
 using FSH.Framework.Jobs.Services;
 using FSH.Framework.Mailing;
 using FSH.Framework.Mailing.Services;
-using FSH.Framework.Shared.Constants;
+using FSH.Framework.Shared.Identity;
 using FSH.Framework.Shared.Multitenancy;
 using FSH.Framework.Storage;
 using FSH.Framework.Storage.DTOs;
@@ -20,7 +20,6 @@ using FSH.Modules.Identity.Contracts.Services;
 using FSH.Modules.Identity.Data;
 using FSH.Modules.Identity.Features.v1.Roles;
 using FSH.Modules.Identity.Features.v1.Users;
-using FSH.Modules.Identity.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -31,7 +30,7 @@ using System.Globalization;
 using System.Security.Claims;
 using System.Text;
 
-namespace FSH.Framework.Infrastructure.Identity.Users.Services;
+namespace FSH.Modules.Identity.Services;
 
 internal sealed partial class UserService(
     UserManager<FshUser> userManager,

@@ -1,4 +1,4 @@
-namespace FSH.Modules.Auditing;
+namespace FSH.Modules.Auditing.Persistence;
 
 public sealed class AuditRecord
 {

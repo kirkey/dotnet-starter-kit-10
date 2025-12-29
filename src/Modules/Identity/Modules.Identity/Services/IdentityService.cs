@@ -1,6 +1,6 @@
 ﻿using Finbuckle.MultiTenant.Abstractions;
 using FSH.Framework.Core.Exceptions;
-using FSH.Framework.Shared.Constants;
+using FSH.Framework.Shared.Identity;
 using FSH.Framework.Shared.Multitenancy;
 using FSH.Modules.Identity.Contracts.Services;
 using FSH.Modules.Identity.Features.v1.Users;

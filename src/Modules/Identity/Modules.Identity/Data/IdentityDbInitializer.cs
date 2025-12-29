@@ -1,6 +1,6 @@
 ﻿using Finbuckle.MultiTenant.Abstractions;
 using FSH.Framework.Persistence;
-using FSH.Framework.Shared.Constants;
+using FSH.Framework.Shared.Identity;
 using FSH.Framework.Shared.Multitenancy;
 using FSH.Framework.Web.Origin;
 using FSH.Modules.Identity.Features.v1.RoleClaims;

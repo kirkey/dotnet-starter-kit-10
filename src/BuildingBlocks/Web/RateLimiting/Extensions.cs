@@ -1,4 +1,4 @@
-using FSH.Framework.Shared.Constants;
+using FSH.Framework.Shared.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

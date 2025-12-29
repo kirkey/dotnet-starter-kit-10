@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using System.Security.Claims;
 
-namespace FSH.Modules.Auditing;
+namespace FSH.Modules.Auditing.Core;
 
 public sealed class HttpAuditScope : IAuditScope
 {

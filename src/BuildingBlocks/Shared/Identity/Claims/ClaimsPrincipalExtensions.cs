@@ -1,5 +1,4 @@
-﻿using FSH.Framework.Shared.Constants;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace FSH.Framework.Shared.Identity.Claims;
 

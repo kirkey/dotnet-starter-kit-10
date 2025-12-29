@@ -1,7 +1,8 @@
 using FSH.Modules.Auditing.Contracts;
+using FSH.Modules.Auditing.Infrastructure.Serialization;
 using System.Diagnostics;
 
-namespace FSH.Modules.Auditing;
+namespace FSH.Modules.Auditing.Core;
 
 /// <summary>
 /// Fluent entry-point to create and publish audit events.

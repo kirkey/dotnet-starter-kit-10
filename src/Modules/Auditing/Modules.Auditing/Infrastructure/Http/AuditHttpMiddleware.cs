@@ -1,10 +1,12 @@
 // Modules.Auditing/AuditHttpMiddleware.cs
+
 using FSH.Modules.Auditing.Contracts;
+using FSH.Modules.Auditing.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 
-namespace FSH.Modules.Auditing;
+namespace FSH.Modules.Auditing.Infrastructure.Http;
 
 public sealed class AuditHttpMiddleware
 {

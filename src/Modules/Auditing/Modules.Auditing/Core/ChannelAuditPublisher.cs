@@ -2,7 +2,7 @@ using FSH.Modules.Auditing.Contracts;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Channels;
 
-namespace FSH.Modules.Auditing;
+namespace FSH.Modules.Auditing.Core;
 
 /// <summary>
 /// Non-blocking publisher using a bounded channel. Writer is used on request path; reader is drained by a background worker.

@@ -1,4 +1,5 @@
 using FSH.Framework.Persistence;
+using FSH.Framework.Persistence.Specifications;
 using FSH.Framework.Shared.Multitenancy;
 using FSH.Modules.Multitenancy.Contracts.Dtos;
 using FSH.Modules.Multitenancy.Contracts.v1.GetTenants;

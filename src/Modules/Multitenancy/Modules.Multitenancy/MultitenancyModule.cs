@@ -5,7 +5,7 @@ using Finbuckle.MultiTenant.EntityFrameworkCore.Stores;
 using Finbuckle.MultiTenant.Extensions;
 using Finbuckle.MultiTenant.Stores;
 using FSH.Framework.Persistence;
-using FSH.Framework.Shared.Constants;
+using FSH.Framework.Shared.Identity;
 using FSH.Framework.Shared.Multitenancy;
 using FSH.Framework.Web.Modules;
 using FSH.Modules.Multitenancy.Contracts;

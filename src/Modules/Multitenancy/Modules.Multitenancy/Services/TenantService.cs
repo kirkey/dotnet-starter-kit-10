@@ -1,6 +1,8 @@
 using Finbuckle.MultiTenant.Abstractions;
 using FSH.Framework.Core.Exceptions;
 using FSH.Framework.Persistence;
+using FSH.Framework.Persistence.Pagination;
+using FSH.Framework.Persistence.Specifications;
 using FSH.Framework.Shared.Multitenancy;
 using FSH.Framework.Shared.Persistence;
 using FSH.Modules.Multitenancy.Contracts;
