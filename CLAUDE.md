@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **⚠️ IMPORTANT FOR COPILOT AGENTS**: Before making ANY changes to this codebase, read `/COPILOT_INSTRUCTIONS.md` in the repository root. It contains comprehensive patterns, conventions, and anti-patterns you MUST follow for code consistency.
+
 ## Build & Run Commands
 
 ```bash
