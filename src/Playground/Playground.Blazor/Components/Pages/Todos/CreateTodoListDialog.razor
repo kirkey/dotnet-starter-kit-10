@@ -1,0 +1,134 @@
+@using MudBlazor
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <TitleContent>
+        <MudStack Spacing="0">
+            <MudText Typo="Typo.h6" Class="fw-600">@(IsEditMode ? "Edit Todo List" : "Create New Todo List")</MudText>
+            <MudText Typo="Typo.caption" Class="text-muted">
+                @(IsEditMode ? "Modify list details" : "Organize your tasks with a new list")
+            </MudText>
+        </MudStack>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="_form" Model="_model">
+            <MudStack Spacing="3" Class="mt-2">
+                <MudTextField @bind-Value="_model.Name"
+                              Label="List Name"
+                              Placeholder="e.g., Project Alpha, Shopping, Weekly Tasks"
+                              Required="true"
+                              RequiredError="List name is required"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.List"
+                              Immediate="true" />
+
+                <MudTextField @bind-Value="_model.Description"
+                              Label="Description"
+                              Placeholder="Brief description of this list"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Description"
+                              Lines="2" />
+
+                <MudTextField @bind-Value="_model.Color"
+                              Label="Color"
+                              Placeholder="#4CAF50"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Palette"
+                              HelperText="Hex color code for visual identification" />
+
+                <MudCheckBox @bind-Value="_model.IsActive"
+                             Label="Active"
+                             Color="Color.Primary">
+                    <MudText Typo="Typo.body2" Class="ml-1">Mark this list as active</MudText>
+                </MudCheckBox>
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Default" OnClick="Cancel" Disabled="_busy">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" Disabled="_busy">
+            @if (_busy)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                <span>@(IsEditMode ? "Saving..." : "Creating...")</span>
+            }
+            else
+            {
+                <span>@(IsEditMode ? "Save Changes" : "Create List")</span>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = default!;
+    
+    [Parameter] public object? ExistingList { get; set; }
+
+    private MudForm? _form;
+    private bool _busy;
+    private TodoListModel _model = new();
+
+    private bool IsEditMode => ExistingList != null;
+
+    protected override void OnInitialized()
+    {
+        if (ExistingList != null)
+        {
+            // Map existing list to model
+            _model = new TodoListModel
+            {
+                Name = (ExistingList as dynamic)?.Name ?? string.Empty,
+                Description = (ExistingList as dynamic)?.Description,
+                Color = (ExistingList as dynamic)?.Color,
+                IsActive = (ExistingList as dynamic)?.IsActive ?? true
+            };
+        }
+        else
+        {
+            _model.IsActive = true;
+        }
+    }
+
+    private async Task Submit()
+    {
+        await _form!.Validate();
+        if (!_form.IsValid) return;
+
+        _busy = true;
+        try
+        {
+            // TODO: Replace with actual API call
+            // if (IsEditMode)
+            //     await TodoClient.UpdateTodoListAsync(...);
+            // else
+            //     await TodoClient.CreateTodoListAsync(...);
+            
+            await Task.Delay(500);
+            Snackbar.Add(IsEditMode ? "Todo list updated successfully" : "Todo list created successfully", Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to {(IsEditMode ? "update" : "create")} todo list: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private class TodoListModel
+    {
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? Color { get; set; }
+        public bool IsActive { get; set; } = true;
+    }
+}

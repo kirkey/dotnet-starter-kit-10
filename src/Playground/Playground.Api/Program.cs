@@ -7,6 +7,7 @@ using FSH.Modules.Identity.Features.v1.Tokens.TokenGeneration;
 using FSH.Modules.Multitenancy;
 using FSH.Modules.Multitenancy.Contracts.v1.GetTenantStatus;
 using FSH.Modules.Multitenancy.Features.v1.GetTenantStatus;
+using FSH.Modules.Todo;
 using System.Reflection;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -36,14 +37,16 @@ builder.Services.AddMediator(o =>
         typeof(GetTenantStatusQuery),
         typeof(GetTenantStatusQueryHandler),
         typeof(FSH.Modules.Auditing.Contracts.AuditEnvelope),
-        typeof(FSH.Modules.Auditing.Persistence.AuditDbContext)];
+        typeof(FSH.Modules.Auditing.Persistence.AuditDbContext),
+        typeof(FSH.Modules.Todo.TodoModule)];
 });
 
 Assembly[] moduleAssemblies = new Assembly[]
 {
     typeof(IdentityModule).Assembly,
     typeof(MultitenancyModule).Assembly,
-    typeof(AuditingModule).Assembly
+    typeof(AuditingModule).Assembly,
+    typeof(TodoModule).Assembly
 };
 
 builder.AddHeroPlatform(o =>

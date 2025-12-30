@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>FSH.Modules.Todo</RootNamespace>
+		<AssemblyName>FSH.Modules.Todo</AssemblyName>
+		<PackageId>FullStackHero.Modules.Todo</PackageId>
+		<NoWarn>$(NoWarn);CA1031;CA1812;CA1859;S3267;S1135</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Persistence\Persistence.csproj" />
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Web\Web.csproj" />
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Eventing\Eventing.csproj" />
+	  <ProjectReference Include="..\Modules.Todo.Contracts\Modules.Todo.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -48,27 +48,31 @@ public class TenantTheme : BaseEntity<Guid>, IHasTenant, IAuditableEntity
 
     // IAuditableEntity
     public DateTimeOffset CreatedOnUtc { get; private set; } = DateTimeOffset.UtcNow;
-    public string? CreatedBy { get; private set; }
+    public Guid? CreatedBy { get; private set; }
+    public string? CreatedByUserName { get; private set; }
     public DateTimeOffset? LastModifiedOnUtc { get; private set; }
-    public string? LastModifiedBy { get; private set; }
+    public Guid? LastModifiedBy { get; private set; }
+    public string? LastModifiedByUserName { get; private set; }
 
     private TenantTheme() { } // EF Core
 
-    public static TenantTheme Create(string tenantId, string? createdBy = null)
+    public static TenantTheme Create(string tenantId, Guid? createdBy = null, string? createdByUserName = null)
     {
         return new TenantTheme
         {
             Id = Guid.NewGuid(),
             TenantId = tenantId,
             CreatedBy = createdBy,
+            CreatedByUserName = createdByUserName,
             CreatedOnUtc = DateTimeOffset.UtcNow
         };
     }
 
-    public void Update(string? modifiedBy)
+    public void Update(Guid? modifiedBy, string? modifiedByUserName)
     {
         LastModifiedOnUtc = DateTimeOffset.UtcNow;
         LastModifiedBy = modifiedBy;
+        LastModifiedByUserName = modifiedByUserName;
     }
 
     public void ResetToDefaults()
