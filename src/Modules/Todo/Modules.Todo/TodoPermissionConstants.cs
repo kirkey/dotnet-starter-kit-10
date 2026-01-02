@@ -22,7 +22,7 @@ public static class TodoPermissionConstants
         new("Create Todos", ActionConstants.Create, ResourceConstants.Todos),
         new("Update Todos", ActionConstants.Update, ResourceConstants.Todos),
         new("Delete Todos", ActionConstants.Delete, ResourceConstants.Todos),
-        new("Export Todos", ActionConstants.Export, ResourceConstants.Todos),
+        new("Export Todos", ActionConstants.Export, ResourceConstants.Todos, IsBasic: true),
         new("Import Todos", ActionConstants.Import, ResourceConstants.Todos),
     };
 }

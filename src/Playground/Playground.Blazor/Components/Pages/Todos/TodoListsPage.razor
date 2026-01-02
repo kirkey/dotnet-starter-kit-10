@@ -9,6 +9,7 @@
 @inject ITodosClient TodoClient
 @inject IGlobalErrorHandler ErrorHandler
 @inject IJSRuntime JSRuntime
+@inject IHttpClientFactory HttpClientFactory
 
 <FshPageHeader Title="Todo Lists"
                Description="Manage your todo lists and organize tasks efficiently">
@@ -842,11 +843,19 @@
             if (result == null) return; // Cancelled
             format = result == true ? "csv" : "json";
 
-            // Trigger download via JavaScript
-            var url = $"https://localhost:7030/api/v1/todo/export?format={format}";
-            await JSRuntime.InvokeVoidAsync("open", url, "_blank");
+            // Use authenticated HttpClient to download file
+            var httpClient = HttpClientFactory.CreateClient("ApiClient");
+            var response = await httpClient.GetAsync($"api/v1/todo/export?format={format}");
+            response.EnsureSuccessStatusCode();
             
-            Snackbar.Add($"Exporting todos as {format.ToUpper()}...", Severity.Info);
+            var fileBytes = await response.Content.ReadAsByteArrayAsync();
+            var fileName = $"todos-{DateTime.Now:yyyy-MM-dd}.{format}";
+            var contentType = format == "csv" ? "text/csv" : "application/json";
+            
+            // Trigger download via JavaScript
+            await JSRuntime.InvokeVoidAsync("downloadFileFromBytes", fileName, contentType, fileBytes);
+            
+            Snackbar.Add($"Exported todos as {format.ToUpper()}", Severity.Success);
         }
         catch (Exception ex)
         {

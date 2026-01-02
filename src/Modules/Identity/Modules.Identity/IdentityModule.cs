@@ -81,6 +81,7 @@ public class IdentityModule : IModule
                 name: "db:identity",
                 failureStatus: HealthStatus.Unhealthy);
         services.AddScoped<IDbInitializer, IdentityDbInitializer>();
+        services.AddScoped<IDbInitializer, PermissionUpdater>();
 
         // Configure password policy options
         services.Configure<PasswordPolicyOptions>(builder.Configuration.GetSection("PasswordPolicy"));
