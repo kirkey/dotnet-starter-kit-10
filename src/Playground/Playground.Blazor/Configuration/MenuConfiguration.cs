@@ -4,6 +4,16 @@ namespace FSH.Playground.Blazor.Configuration;
 
 /// <summary>
 /// Defines the navigation menu structure for the Playground application.
+/// 
+/// NOTE: Permission-based menu filtering:
+/// The RequiredPermission property filters menu items based on JWT claims.
+/// By default, permissions are checked server-side (not in JWT claims).
+/// To use client-side permission filtering, you need to:
+/// 1. Add permissions as claims in the JWT token (see IdentityService.cs)
+/// 2. Update the claim type extraction in FshNavMenu.razor if using custom claim types
+/// 
+/// For now, all menu items are visible and actual authorization is enforced
+/// when users try to navigate to restricted pages.
 /// </summary>
 public static class MenuConfiguration
 {
@@ -11,7 +21,7 @@ public static class MenuConfiguration
     {
         return new List<MenuSection>
         {
-            // Welcome Section
+            // Welcome & Dashboard Section
             new MenuSection
             {
                 Title = string.Empty, // No title for welcome section
@@ -23,6 +33,20 @@ public static class MenuConfiguration
                         Title = "Welcome",
                         Icon = Icons.Material.Outlined.WavingHand,
                         Href = "/",
+                        PageStatus = PageStatus.Completed
+                    },
+                    new MenuItem
+                    {
+                        Title = "Dashboard",
+                        Icon = Icons.Material.Outlined.Dashboard,
+                        Href = "/dashboard",
+                        PageStatus = PageStatus.Completed
+                    },
+                    new MenuItem
+                    {
+                        Title = "Home",
+                        Icon = Icons.Material.Outlined.Home,
+                        Href = "/home",
                         PageStatus = PageStatus.Completed
                     }
                 }
@@ -40,40 +64,41 @@ public static class MenuConfiguration
                         Title = "Users",
                         Icon = Icons.Material.Outlined.Person,
                         Href = "/users",
-                        PageStatus = PageStatus.Completed,
-                        RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Users)
+                        PageStatus = PageStatus.Completed
+                        // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Users)
+                        // Note: Uncomment above if permissions are added to JWT claims
                     },
                     new MenuItem
                     {
                         Title = "Roles",
                         Icon = Icons.Material.Outlined.AdminPanelSettings,
                         Href = "/roles",
-                        PageStatus = PageStatus.Completed,
-                        RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Roles)
+                        PageStatus = PageStatus.Completed
+                        // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Roles)
                     },
                     new MenuItem
                     {
                         Title = "Tenants",
                         Icon = Icons.Material.Outlined.CorporateFare,
                         Href = "/tenants",
-                        PageStatus = PageStatus.Completed,
-                        RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Tenants)
+                        PageStatus = PageStatus.Completed
+                        // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Tenants)
                     },
                     new MenuItem
                     {
                         Title = "Tenant Settings",
                         Icon = Icons.Material.Outlined.Tune,
                         Href = "/tenants/settings",
-                        PageStatus = PageStatus.Completed,
-                        RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Tenants)
+                        PageStatus = PageStatus.Completed
+                        // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Tenants)
                     },
                     new MenuItem
                     {
                         Title = "Audit Logs",
                         Icon = Icons.Material.Outlined.History,
                         Href = "/audits",
-                        PageStatus = PageStatus.Completed,
-                        RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.AuditTrails)
+                        PageStatus = PageStatus.Completed
+                        // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.AuditTrails)
                     }
                 }
             },
@@ -131,16 +156,30 @@ public static class MenuConfiguration
                         Title = "Health",
                         Icon = Icons.Material.Outlined.MonitorHeart,
                         Href = "/health",
-                        PageStatus = PageStatus.Completed,
-                        RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Dashboard)
+                        PageStatus = PageStatus.Completed
+                        // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Dashboard)
                     },
                     new MenuItem
                     {
                         Title = "Logs",
                         Icon = Icons.Material.Outlined.Terminal,
                         Href = "/logs",
-                        PageStatus = PageStatus.Planned,
-                        RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Dashboard)
+                        PageStatus = PageStatus.Planned
+                        // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Dashboard)
+                    },
+                    new MenuItem
+                    {
+                        Title = "Counter",
+                        Icon = Icons.Material.Outlined.Calculate,
+                        Href = "/counter",
+                        PageStatus = PageStatus.Completed
+                    },
+                    new MenuItem
+                    {
+                        Title = "Weather",
+                        Icon = Icons.Material.Outlined.Cloud,
+                        Href = "/weather",
+                        PageStatus = PageStatus.Completed
                     }
                 }
             },

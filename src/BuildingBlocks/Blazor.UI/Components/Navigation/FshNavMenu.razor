@@ -123,20 +123,27 @@
     {
         try
         {
-            // Get user permissions
+            // Get user permissions from claims
+            // Note: Permissions are typically checked server-side, not in the client menu
+            // If permissions claims are not available, we pass null which allows all items through
+            // The actual authorization is enforced when navigating to the pages
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
 
             if (user.Identity?.IsAuthenticated == true)
             {
-                // Extract permissions from claims
-                _userPermissions = user.Claims
-                    .Where(c => c.Type == "permission" || c.Type == "Permission")
+                // Try to extract permissions from claims if they exist
+                var permissions = user.Claims
+                    .Where(c => c.Type == "permission" || c.Type == "Permission" || c.Type.EndsWith("/permission", StringComparison.OrdinalIgnoreCase))
                     .Select(c => c.Value)
                     .ToList();
+
+                // If we have permissions, use them for filtering; otherwise, pass null
+                _userPermissions = permissions.Any() ? permissions : null;
             }
 
             // Get filtered menu sections
+            // If _userPermissions is null, MenuService will return all items (no filtering applied)
             var sections = await MenuService.GetMenuSectionsAsync(_userPermissions);
             _menuSections = sections.ToList();
 
