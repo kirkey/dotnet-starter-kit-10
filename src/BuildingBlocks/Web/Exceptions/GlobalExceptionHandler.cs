@@ -67,7 +67,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         LogContext.PushProperty("exception_statusCode", problemDetails.Status);
         LogContext.PushProperty("exception_stackTrace", exception.StackTrace);
 
-        logger.LogError("Exception at {Path} - {Detail}", httpContext.Request.Path, problemDetails.Detail);
+        logger.LogError(exception, "Exception at {Path} - {Detail}", httpContext.Request.Path, problemDetails.Detail);
 
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken).ConfigureAwait(false);
         return true;

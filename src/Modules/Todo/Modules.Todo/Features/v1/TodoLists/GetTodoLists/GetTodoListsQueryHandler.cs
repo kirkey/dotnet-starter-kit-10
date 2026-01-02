@@ -9,7 +9,7 @@ public class GetTodoListsQueryHandler(TodoDbContext db) : IQueryHandler<GetTodoL
 {
     public async ValueTask<TodoListsResponse> Handle(GetTodoListsQuery query, CancellationToken ct)
     {
-        var baseQuery = db.TodoLists.AsQueryable();
+        var baseQuery = db.TodoLists.Include(x => x.Items).AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(query.SearchTerm))
         {
@@ -32,6 +32,9 @@ public class GetTodoListsQueryHandler(TodoDbContext db) : IQueryHandler<GetTodoL
             .OrderByDescending(x => x.CreatedOnUtc)
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize)
+            .ToListAsync(ct);
+
+        var mappedData = data
             .Select(x => new TodoListSummaryDto(
                 x.Id,
                 x.Name,
@@ -43,8 +46,8 @@ public class GetTodoListsQueryHandler(TodoDbContext db) : IQueryHandler<GetTodoL
                 x.Items.Count(i => i.Status == "Completed"),
                 x.CreatedOnUtc,
                 x.CreatedByUserName))
-            .ToListAsync(ct);
+            .ToList();
 
-        return new TodoListsResponse(data, totalCount, query.Page, query.PageSize);
+        return new TodoListsResponse(mappedData, totalCount, query.Page, query.PageSize);
     }
 }
