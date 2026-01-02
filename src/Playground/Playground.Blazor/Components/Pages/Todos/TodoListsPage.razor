@@ -115,16 +115,31 @@
                            Label="Status"
                            Clearable="true"
                            T="string">
-                    <MudSelectItem Value="@("Active")">Active</MudSelectItem>
-                    <MudSelectItem Value="@("Archived")">Archived</MudSelectItem>
+                    <MudSelectItem Value="@("NotStarted")">Not Started</MudSelectItem>
+                    <MudSelectItem Value="@("InProgress")">In Progress</MudSelectItem>
                     <MudSelectItem Value="@("Completed")">Completed</MudSelectItem>
+                    <MudSelectItem Value="@("OnHold")">On Hold</MudSelectItem>
                 </MudSelect>
             </MudItem>
             <MudItem xs="12" sm="6" md="4">
-                <MudCheckBox @bind-Value="_filter.IsActive"
-                             Label="Show Active Only"
-                             Color="Color.Primary"
-                             T="bool?" />
+                <MudSelect @bind-Value="_filter.Priority"
+                           Label="Priority"
+                           Clearable="true"
+                           T="int?">
+                    <MudSelectItem Value="@((int?)1)">Low</MudSelectItem>
+                    <MudSelectItem Value="@((int?)2)">Medium</MudSelectItem>
+                    <MudSelectItem Value="@((int?)3)">High</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect @bind-Value="_filter.CompletionFilter"
+                           Label="Completion Status"
+                           Clearable="true"
+                           T="string">
+                    <MudSelectItem Value="@("all")">All Todos</MudSelectItem>
+                    <MudSelectItem Value="@("active")">Active Only</MudSelectItem>
+                    <MudSelectItem Value="@("completed")">Completed Only</MudSelectItem>
+                </MudSelect>
             </MudItem>
             <MudItem xs="12" Class="d-flex align-center justify-end">
                 <MudButton StartIcon="@Icons.Material.Filled.FilterAltOff"
@@ -200,12 +215,44 @@
             </TemplateColumn>
             <TemplateColumn Title="Status" Sortable="true" SortBy="@(x => x.Status)">
                 <CellTemplate>
-                    <MudChip T="string" 
-                             Size="Size.Small" 
-                             Color="@GetStatusColor(context.Item.Status)" 
-                             Variant="Variant.Filled">
-                        @context.Item.Status
-                    </MudChip>
+                    <MudMenu Dense="true" FullWidth="false">
+                        <ActivatorContent>
+                            <MudChip T="string" 
+                                     Size="Size.Small" 
+                                     Color="@GetStatusColor(context.Item.Status)" 
+                                     Variant="Variant.Filled"
+                                     OnClick="@(() => {})">
+                                @context.Item.Status
+                                <MudIcon Icon="@Icons.Material.Filled.ArrowDropDown" Size="Size.Small" Class="ml-1" />
+                            </MudChip>
+                        </ActivatorContent>
+                        <ChildContent>
+                            <MudMenuItem OnClick="@(() => UpdateTodoStatus(context.Item, 0))">
+                                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.RadioButtonUnchecked" Size="Size.Small" />
+                                    <MudText>Not Started</MudText>
+                                </MudStack>
+                            </MudMenuItem>
+                            <MudMenuItem OnClick="@(() => UpdateTodoStatus(context.Item, 1))">
+                                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.PlayArrow" Color="Color.Info" Size="Size.Small" />
+                                    <MudText>In Progress</MudText>
+                                </MudStack>
+                            </MudMenuItem>
+                            <MudMenuItem OnClick="@(() => UpdateTodoStatus(context.Item, 2))">
+                                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small" />
+                                    <MudText>Completed</MudText>
+                                </MudStack>
+                            </MudMenuItem>
+                            <MudMenuItem OnClick="@(() => UpdateTodoStatus(context.Item, 3))">
+                                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.Pause" Color="Color.Warning" Size="Size.Small" />
+                                    <MudText>On Hold</MudText>
+                                </MudStack>
+                            </MudMenuItem>
+                        </ChildContent>
+                    </MudMenu>
                 </CellTemplate>
             </TemplateColumn>
             <TemplateColumn Title="Priority" Sortable="true" SortBy="@(x => x.Priority)">
@@ -238,6 +285,26 @@
             <TemplateColumn Title="Actions" Sortable="false" HeaderClass="text-right" CellClass="text-right">
                 <CellTemplate>
                     <MudStack Row="true" Justify="Justify.FlexEnd" Spacing="0">
+                        @if (!context.Item.IsCompleted)
+                        {
+                            <MudTooltip Text="Mark Complete">
+                                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle"
+                                               Size="Size.Small"
+                                               Color="Color.Success"
+                                               OnClick="@(() => CompleteTodo(context.Item))"
+                                               Disabled="@(_busyListId == context.Item.Id)" />
+                            </MudTooltip>
+                        }
+                        else
+                        {
+                            <MudTooltip Text="Reopen">
+                                <MudIconButton Icon="@Icons.Material.Filled.RestartAlt"
+                                               Size="Size.Small"
+                                               Color="Color.Info"
+                                               OnClick="@(() => ReopenTodo(context.Item))"
+                                               Disabled="@(_busyListId == context.Item.Id)" />
+                            </MudTooltip>
+                        }
                         <MudTooltip Text="View Details">
                             <MudIconButton Icon="@Icons.Material.Filled.Visibility"
                                            Size="Size.Small"
@@ -249,6 +316,13 @@
                                            Size="Size.Small"
                                            Color="Color.Info"
                                            OnClick="@(() => EditList(context.Item))" />
+                        </MudTooltip>
+                        <MudTooltip Text="Archive">
+                            <MudIconButton Icon="@Icons.Material.Filled.Archive"
+                                           Size="Size.Small"
+                                           Color="Color.Warning"
+                                           OnClick="@(() => ArchiveTodo(context.Item))"
+                                           Disabled="@(_busyListId == context.Item.Id)" />
                         </MudTooltip>
                         <MudTooltip Text="Delete List">
                             <MudIconButton Icon="@Icons.Material.Filled.Delete"
@@ -340,7 +414,8 @@
     {
         public string? SearchTerm { get; set; }
         public string? Status { get; set; }
-        public bool? IsActive { get; set; }
+        public int? Priority { get; set; }
+        public string? CompletionFilter { get; set; }
     }
 
     protected override async Task OnInitializedAsync()
@@ -398,16 +473,19 @@
             query = query.Where(l => l.Status?.Equals(_filter.Status, StringComparison.OrdinalIgnoreCase) ?? false);
         }
 
-        if (_filter.IsActive.HasValue)
+        if (_filter.Priority.HasValue)
         {
-            if (_filter.IsActive.Value)
+            query = query.Where(l => l.Priority == _filter.Priority.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(_filter.CompletionFilter))
+        {
+            query = _filter.CompletionFilter switch
             {
-                query = query.Where(l => !l.IsCompleted);
-            }
-            else
-            {
-                query = query.Where(l => l.IsCompleted);
-            }
+                "active" => query.Where(l => !l.IsCompleted),
+                "completed" => query.Where(l => l.IsCompleted),
+                _ => query
+            };
         }
 
         _filtered = query.OrderByDescending(l => l.DueDate).ToList();
@@ -476,9 +554,12 @@
     {
         return status?.ToLowerInvariant() switch
         {
+            "notstarted" => Color.Default,
+            "inprogress" => Color.Info,
+            "completed" => Color.Success,
+            "onhold" => Color.Warning,
             "active" => Color.Success,
             "archived" => Color.Default,
-            "completed" => Color.Info,
             _ => Color.Default
         };
     }
@@ -583,6 +664,101 @@
         catch (Exception ex)
         {
             Snackbar.Add($"Failed to delete todo list: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyListId = null;
+        }
+    }
+
+    private async Task CompleteTodo(TodoSummaryDto list)
+    {
+        _busyListId = list.Id;
+        try
+        {
+            await TodoClient.TodoCompleteAsync(list.Id, CancellationToken.None);
+            Snackbar.Add("Todo marked as complete.", Severity.Success);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to complete todo: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyListId = null;
+        }
+    }
+
+    private async Task ReopenTodo(TodoSummaryDto list)
+    {
+        _busyListId = list.Id;
+        try
+        {
+            await TodoClient.TodoReopenAsync(list.Id, CancellationToken.None);
+            Snackbar.Add("Todo reopened successfully.", Severity.Success);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to reopen todo: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyListId = null;
+        }
+    }
+
+    private async Task ArchiveTodo(TodoSummaryDto list)
+    {
+        var confirmed = await DialogService.ShowConfirmAsync(
+            "Archive Todo",
+            $"Archive '{list.Name}'? You can restore it later.",
+            "Archive",
+            "Cancel",
+            Color.Warning,
+            Icons.Material.Outlined.Archive,
+            Color.Warning);
+
+        if (!confirmed) return;
+
+        _busyListId = list.Id;
+        try
+        {
+            await TodoClient.TodoArchiveAsync(list.Id, CancellationToken.None);
+            Snackbar.Add("Todo archived successfully.", Severity.Success);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to archive todo: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyListId = null;
+        }
+    }
+
+    private async Task UpdateTodoStatus(TodoSummaryDto list, int status)
+    {
+        _busyListId = list.Id;
+        try
+        {
+            await TodoClient.TodoUpdateStatusAsync(list.Id, status, CancellationToken.None);
+            var statusName = status switch
+            {
+                0 => "Not Started",
+                1 => "In Progress",
+                2 => "Completed",
+                3 => "On Hold",
+                _ => "Unknown"
+            };
+            Snackbar.Add($"Todo status updated to {statusName}.", Severity.Success);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to update status: {ex.Message}", Severity.Error);
         }
         finally
         {

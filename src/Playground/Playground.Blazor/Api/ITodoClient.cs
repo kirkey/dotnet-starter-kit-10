@@ -13,11 +13,16 @@ public interface ITodosClient
     Task<TodoDto> TodoGetAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
     Task<Guid> TodoPutAsync(Guid id, UpdateTodoCommand body, CancellationToken cancellationToken = default(CancellationToken));
     Task TodoDeleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
+    Task TodoCompleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
+    Task TodoReopenAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
+    Task TodoUpdateStatusAsync(Guid id, int status, CancellationToken cancellationToken = default(CancellationToken));
+    Task TodoArchiveAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
 
     // Task operations
     Task<ICollection<TodoTaskDto>> TasksGetAsync(Guid todoId, CancellationToken cancellationToken = default(CancellationToken));
     Task<Guid> TasksPostAsync(Guid todoId, CreateTodoTaskCommand body, CancellationToken cancellationToken = default(CancellationToken));
     Task<Guid> TasksPutAsync(Guid id, UpdateTodoTaskCommand body, CancellationToken cancellationToken = default(CancellationToken));
     Task TasksDeleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
-    Task CompleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
+    Task TasksCompleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
+    Task TasksReorderAsync(Guid todoId, IEnumerable<TaskOrderItem> tasks, CancellationToken cancellationToken = default(CancellationToken));
 }

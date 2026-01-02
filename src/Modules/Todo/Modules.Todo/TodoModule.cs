@@ -3,15 +3,19 @@ using Asp.Versioning.Builder;
 using FSH.Framework.Persistence;
 using FSH.Framework.Web.Modules;
 using FSH.Modules.Todo.Data;
+using FSH.Modules.Todo.Features.v1.Todos.ArchiveTodo;
 using FSH.Modules.Todo.Features.v1.Todos.CompleteTodo;
 using FSH.Modules.Todo.Features.v1.Todos.CreateTodo;
 using FSH.Modules.Todo.Features.v1.Todos.DeleteTodo;
 using FSH.Modules.Todo.Features.v1.Todos.GetTodo;
 using FSH.Modules.Todo.Features.v1.Todos.GetTodos;
+using FSH.Modules.Todo.Features.v1.Todos.ReopenTodo;
 using FSH.Modules.Todo.Features.v1.Todos.UpdateTodo;
+using FSH.Modules.Todo.Features.v1.Todos.UpdateTodoStatus;
 using FSH.Modules.Todo.Features.v1.TodoTasks.CreateTodoTask;
 using FSH.Modules.Todo.Features.v1.TodoTasks.DeleteTodoTask;
 using FSH.Modules.Todo.Features.v1.TodoTasks.GetTodoTasks;
+using FSH.Modules.Todo.Features.v1.TodoTasks.ReorderTasks;
 using FSH.Modules.Todo.Features.v1.TodoTasks.ToggleTaskCompletion;
 using FSH.Modules.Todo.Features.v1.TodoTasks.UpdateTodoTask;
 using Microsoft.AspNetCore.Builder;
@@ -59,6 +63,9 @@ public class TodoModule : IModule
         group.MapUpdateTodoEndpoint();
         group.MapDeleteTodoEndpoint();
         group.MapCompleteTodoEndpoint();
+        group.MapReopenTodoEndpoint();
+        group.MapUpdateTodoStatusEndpoint();
+        group.MapArchiveTodoEndpoint();
 
         // TodoTask endpoints
         group.MapGetTodoTasksEndpoint();
@@ -66,5 +73,6 @@ public class TodoModule : IModule
         group.MapUpdateTodoTaskEndpoint();
         group.MapDeleteTodoTaskEndpoint();
         group.MapToggleTaskCompletionEndpoint();
+        group.MapReorderTasksEndpoint();
     }
 }

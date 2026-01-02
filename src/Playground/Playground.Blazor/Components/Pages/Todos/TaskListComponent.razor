@@ -108,7 +108,7 @@
         _busyTaskId = task.Id;
         try
         {
-            await TodoClient.CompleteAsync(task.Id);
+            await TodoClient.TasksCompleteAsync(task.Id);
             Snackbar.Add($"Task {(task.IsCompleted ? "reopened" : "completed")}", Severity.Success);
             await LoadTasks();
             await OnTasksChanged.InvokeAsync();

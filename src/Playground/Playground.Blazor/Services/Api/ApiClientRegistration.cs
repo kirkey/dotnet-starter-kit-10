@@ -63,10 +63,14 @@ internal static class ApiClientRegistration
         services.AddTransient<ITodoClient>(sp =>
             new TodoClient(ResolveApiClient(sp)));
 
+        services.AddTransient<ITasksClient>(sp =>
+            new TasksClient(ResolveApiClient(sp)));
+
         services.AddTransient<ITodosClient>(sp =>
             new TodosClient(
                 sp.GetRequiredService<IV1Client>(),
-                sp.GetRequiredService<ITodoClient>()));
+                sp.GetRequiredService<ITodoClient>(),
+                sp.GetRequiredService<ITasksClient>()));
 
         services.AddTransient<IHealthClient>(sp =>
             new HealthClient(ResolveApiClient(sp)));

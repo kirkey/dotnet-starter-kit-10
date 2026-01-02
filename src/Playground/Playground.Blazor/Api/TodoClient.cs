@@ -4,9 +4,9 @@ namespace FSH.Playground.Blazor.Api;
 
 /// <summary>
 /// Todo Client adapter - provides unified interface for all todo operations
-/// Combines V1Client (CRUD operations) and TodoClient (task/complete operations)
+/// Combines V1Client (CRUD operations), TodoClient (todo actions), and TasksClient (task operations)
 /// </summary>
-public class TodosClient(IV1Client v1Client, ITodoClient todoClient) : ITodosClient
+public class TodosClient(IV1Client v1Client, ITodoClient todoClient, ITasksClient tasksClient) : ITodosClient
 {
     // Delegate to V1Client for list operations
     public Task<TodosPagedResponse> TodoGetAsync(int page, int pageSize, string searchTerm = null, string status = null, int? priority = null, bool? isCompleted = null, CancellationToken cancellationToken = default(CancellationToken))
@@ -24,6 +24,18 @@ public class TodosClient(IV1Client v1Client, ITodoClient todoClient) : ITodosCli
     public Task TodoDeleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken))
         => v1Client.TodoDeleteAsync(id, cancellationToken);
 
+    public Task TodoCompleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken))
+        => todoClient.CompleteAsync(id, cancellationToken);
+
+    public Task TodoReopenAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken))
+        => todoClient.ReopenAsync(id, cancellationToken);
+
+    public Task TodoUpdateStatusAsync(Guid id, int status, CancellationToken cancellationToken = default(CancellationToken))
+        => todoClient.StatusAsync(id, status, cancellationToken);
+
+    public Task TodoArchiveAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken))
+        => todoClient.ArchiveAsync(id, cancellationToken);
+
     // Delegate to TodoClient for task operations
     public Task<ICollection<TodoTaskDto>> TasksGetAsync(Guid todoId, CancellationToken cancellationToken = default(CancellationToken))
         => todoClient.TasksGetAsync(todoId, cancellationToken);
@@ -37,6 +49,9 @@ public class TodosClient(IV1Client v1Client, ITodoClient todoClient) : ITodosCli
     public Task TasksDeleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken))
         => todoClient.TasksDeleteAsync(id, cancellationToken);
 
-    public Task CompleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken))
-        => todoClient.CompleteAsync(id, cancellationToken);
+    public Task TasksCompleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken))
+        => tasksClient.ToggleAsync(id, cancellationToken);
+
+    public Task TasksReorderAsync(Guid todoId, IEnumerable<TaskOrderItem> tasks, CancellationToken cancellationToken = default(CancellationToken))
+        => tasksClient.ReorderAsync(todoId, tasks, cancellationToken);
 }

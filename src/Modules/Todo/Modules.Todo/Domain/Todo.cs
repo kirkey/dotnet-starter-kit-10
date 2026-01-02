@@ -105,4 +105,22 @@ public class Todo : AuditableEntity<Guid>
             Complete();
         }
     }
+
+    /// <summary>
+    /// Archive the Todo
+    /// </summary>
+    public void Archive()
+    {
+        IsActive = false;
+        LastModifiedOnUtc = DateTimeOffset.UtcNow;
+    }
+
+    /// <summary>
+    /// Restore an archived Todo
+    /// </summary>
+    public void Restore()
+    {
+        IsActive = true;
+        LastModifiedOnUtc = DateTimeOffset.UtcNow;
+    }
 }
