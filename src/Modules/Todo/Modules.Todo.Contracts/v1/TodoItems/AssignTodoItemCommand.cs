@@ -9,4 +9,4 @@ public record AssignTodoItemCommand(
     Guid Id,
     string UserId,
     string UserName
-) : ICommand<bool>;
+) : ICommand<Unit>;

@@ -21,7 +21,6 @@ public static class GetTodoListEndpoint
                     : TypedResults.NotFound();
             })
             .WithName("GetTodoList")
-            .WithTags("Todo Lists")
             .WithSummary("Get Todo List by ID")
             .WithDescription("Gets a Todo List with all its items")
             .RequireAuthorization()

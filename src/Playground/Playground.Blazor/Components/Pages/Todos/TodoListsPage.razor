@@ -1,10 +1,11 @@
 @page "/todos"
 @using FSH.Framework.Blazor.UI.Components.Dialogs
-@using FSH.Playground.Blazor.ApiClient
+@using FSH.Playground.Blazor.Services
 @inherits ComponentBase
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject NavigationManager Navigation
+@inject ITodoClient TodoClient
 
 <FshPageHeader Title="Todo Lists"
                Description="Manage your todo lists and organize tasks efficiently">
@@ -302,20 +303,6 @@
         public bool? IsActive { get; set; }
     }
 
-    private class TodoListSummaryDto
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string? Description { get; set; }
-        public string Status { get; set; } = string.Empty;
-        public bool IsActive { get; set; }
-        public string? Color { get; set; }
-        public int ItemCount { get; set; }
-        public int CompletedItemCount { get; set; }
-        public DateTimeOffset CreatedOnUtc { get; set; }
-        public string? CreatedByUserName { get; set; }
-    }
-
     protected override async Task OnInitializedAsync()
     {
         await LoadData();
@@ -326,13 +313,8 @@
         _loading = true;
         try
         {
-            // TODO: Replace with actual API call
-            // var result = await TodoClient.GetTodoListsAsync(...);
-            // _lists = result?.Data?.ToList() ?? new List<TodoListSummaryDto>();
-            
-            // Temporary mock data for demonstration
-            await Task.Delay(500);
-            _lists = new List<TodoListSummaryDto>();
+            var result = await TodoClient.ListsGetAsync();
+            _lists = result?.Data?.ToList() ?? new List<TodoListSummaryDto>();
             
             CalculateStats();
             ApplyFilters();
@@ -492,9 +474,7 @@
         _busyListId = list.Id;
         try
         {
-            // TODO: Replace with actual API call
-            // await TodoClient.DeleteTodoListAsync(list.Id);
-            await Task.Delay(500);
+            await TodoClient.ListsDeleteAsync(list.Id, CancellationToken.None);
             
             Snackbar.Add("Todo list deleted successfully.", Severity.Success);
             await LoadData();
@@ -526,22 +506,34 @@
 
         _bulkBusy = true;
         var success = 0;
-        foreach (var list in _selectedLists)
+        var errors = 0;
+        
+        foreach (var list in _selectedLists.ToList())
         {
             try
             {
-                // TODO: Replace with actual API call
-                // await TodoClient.DeleteTodoListAsync(list.Id);
-                await Task.Delay(100);
+                await TodoClient.ListsDeleteAsync(list.Id, CancellationToken.None);
                 success++;
             }
-            catch
+            catch (Exception ex)
             {
-                // Continue with remaining items
+                errors++;
+                // Log but continue with remaining items
+                Console.WriteLine($"Failed to delete list {list.Id}: {ex.Message}");
             }
         }
+        
         _bulkBusy = false;
-        Snackbar.Add($"Deleted {success} of {_selectedLists.Count} lists.", Severity.Success);
+        
+        if (errors > 0)
+        {
+            Snackbar.Add($"Deleted {success} of {_selectedLists.Count} lists. {errors} failed.", Severity.Warning);
+        }
+        else
+        {
+            Snackbar.Add($"Successfully deleted {success} list(s).", Severity.Success);
+        }
+        
         ClearSelection();
         await LoadData();
     }

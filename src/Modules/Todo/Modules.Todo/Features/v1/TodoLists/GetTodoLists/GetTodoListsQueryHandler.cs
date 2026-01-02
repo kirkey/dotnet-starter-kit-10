@@ -5,18 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Todo.Features.v1.TodoLists.GetTodoLists;
 
-public class GetTodoListsQueryHandler : IQueryHandler<GetTodoListsQuery, TodoListsResponse>
+public class GetTodoListsQueryHandler(TodoDbContext db) : IQueryHandler<GetTodoListsQuery, TodoListsResponse>
 {
-    private readonly TodoDbContext _db;
-
-    public GetTodoListsQueryHandler(TodoDbContext db)
-    {
-        _db = db;
-    }
-
     public async ValueTask<TodoListsResponse> Handle(GetTodoListsQuery query, CancellationToken ct)
     {
-        var baseQuery = _db.TodoLists.AsQueryable();
+        var baseQuery = db.TodoLists.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(query.SearchTerm))
         {

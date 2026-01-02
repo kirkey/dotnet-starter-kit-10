@@ -7,21 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Todo.Features.v1.TodoItems.CreateTodoItem;
 
-public class CreateTodoItemCommandHandler : ICommandHandler<CreateTodoItemCommand, Guid>
+public class CreateTodoItemCommandHandler(TodoDbContext db, ICurrentUser currentUser)
+    : ICommandHandler<CreateTodoItemCommand, Guid>
 {
-    private readonly TodoDbContext _db;
-    private readonly ICurrentUser _currentUser;
-
-    public CreateTodoItemCommandHandler(TodoDbContext db, ICurrentUser currentUser)
-    {
-        _db = db;
-        _currentUser = currentUser;
-    }
-
     public async ValueTask<Guid> Handle(CreateTodoItemCommand command, CancellationToken ct)
     {
         // Verify the TodoList exists
-        var listExists = await _db.TodoLists.AnyAsync(l => l.Id == command.TodoListId, ct);
+        var listExists = await db.TodoLists.AnyAsync(l => l.Id == command.TodoListId, ct);
         if (!listExists)
         {
             throw new InvalidOperationException($"TodoList with ID {command.TodoListId} not found");
@@ -30,8 +22,8 @@ public class CreateTodoItemCommandHandler : ICommandHandler<CreateTodoItemComman
         var todoItem = TodoItem.Create(
             command.Name,
             command.TodoListId,
-            _currentUser.GetUserId(),
-            _currentUser.Name,
+            currentUser.GetUserId(),
+            currentUser.Name,
             command.Description,
             (TodoPriority)command.Priority);
 
@@ -50,8 +42,8 @@ public class CreateTodoItemCommandHandler : ICommandHandler<CreateTodoItemComman
             todoItem.EstimatedHours = command.EstimatedHours;
         }
 
-        _db.TodoItems.Add(todoItem);
-        await _db.SaveChangesAsync(ct);
+        db.TodoItems.Add(todoItem);
+        await db.SaveChangesAsync(ct);
 
         return todoItem.Id;
     }

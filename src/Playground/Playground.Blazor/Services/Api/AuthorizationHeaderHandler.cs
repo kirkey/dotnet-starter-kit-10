@@ -66,18 +66,21 @@ internal sealed class AuthorizationHeaderHandler(
         try
         {
             HttpContext? httpContext = httpContextAccessor.HttpContext;
-            if (httpContext is not null)
+            if (httpContext is not null && !httpContext.Response.HasStarted)
             {
                 await httpContext.SignOutAsync("Cookies");
                 logger.LogInformation("User signed out due to expired refresh token");
 
                 // Redirect to login page with session expired message
-                httpContext.Response.Redirect("/login?toast=session_expired");
+                if (!httpContext.Response.HasStarted)
+                {
+                    httpContext.Response.Redirect("/login?toast=session_expired");
+                }
             }
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to sign out user after token refresh failure");
+            logger.LogWarning(ex, "Failed to sign out user after token refresh failure");
         }
     }
 

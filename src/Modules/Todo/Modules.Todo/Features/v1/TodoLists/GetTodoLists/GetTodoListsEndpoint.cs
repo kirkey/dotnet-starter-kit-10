@@ -19,7 +19,7 @@ public static class GetTodoListsEndpoint
                 return TypedResults.Ok(result);
             })
             .WithName("GetTodoLists")
-            .WithTags("Todo Lists")
+            .WithTags("Todos")
             .WithSummary("Get all Todo Lists")
             .WithDescription("Gets paginated list of Todo Lists for the current tenant")
             .RequireAuthorization()

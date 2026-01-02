@@ -79,7 +79,7 @@ nswag:
 	fi; \
 	for f in $(NSWAG_FILES); do \
 		echo "Running $$RUNNER run $$f"; \
-		$$RUNNER run "$$f" || { echo "NSwag failed for $$f"; exit 1; }; \
+		$$RUNNER run "$$f" /variables:SpecUrl=https://localhost:7030/openapi/v1.json || { echo "NSwag failed for $$f"; exit 1; }; \
 	done
 kill-ports:
 	@echo "DRY_RUN=$(DRY_RUN)"

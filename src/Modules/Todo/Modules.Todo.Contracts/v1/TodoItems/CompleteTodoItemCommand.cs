@@ -5,4 +5,7 @@ namespace FSH.Modules.Todo.Contracts.v1.TodoItems;
 /// <summary>
 /// Command to complete a Todo Item.
 /// </summary>
-public record CompleteTodoItemCommand(Guid Id) : ICommand<bool>;
+public record CompleteTodoItemCommand(
+    Guid Id,
+    int? ActualHours = null
+) : ICommand;

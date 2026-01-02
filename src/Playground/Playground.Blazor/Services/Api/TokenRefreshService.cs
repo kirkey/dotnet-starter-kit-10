@@ -1,6 +1,5 @@
 using FSH.Playground.Blazor.ApiClient;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Components.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 

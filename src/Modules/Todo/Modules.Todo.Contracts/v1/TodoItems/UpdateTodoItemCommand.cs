@@ -15,5 +15,7 @@ public record UpdateTodoItemCommand(
     DateTimeOffset? DueDate = null,
     int? EstimatedHours = null,
     int? ActualHours = null,
-    bool? IsActive = null
-) : ICommand<bool>;
+    bool? IsActive = null,
+    string? AssignedToUserId = null,
+    string? AssignedToUserName = null
+) : ICommand;

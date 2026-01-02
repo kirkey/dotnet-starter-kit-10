@@ -17,6 +17,7 @@
 	<ItemGroup>
 	  <Folder Include="Audit\" />
 	  <Folder Include="MultiTenancy\" />
+	  <Folder Include="Todo\" />
 	</ItemGroup>
 
 </Project>

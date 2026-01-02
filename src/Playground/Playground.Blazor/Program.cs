@@ -1,11 +1,9 @@
 using FSH.Framework.Blazor.UI;
 using FSH.Framework.Blazor.UI.Theme;
-using FSH.Playground.Blazor;
 using FSH.Playground.Blazor.Components;
 using FSH.Playground.Blazor.Services;
 using FSH.Playground.Blazor.Services.Api;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server.Circuits;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

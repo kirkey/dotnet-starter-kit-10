@@ -5,18 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Todo.Features.v1.TodoLists.GetTodoList;
 
-public class GetTodoListQueryHandler : IQueryHandler<GetTodoListQuery, TodoListResponse?>
+public class GetTodoListQueryHandler(TodoDbContext db) : IQueryHandler<GetTodoListQuery, TodoListResponse?>
 {
-    private readonly TodoDbContext _db;
-
-    public GetTodoListQueryHandler(TodoDbContext db)
-    {
-        _db = db;
-    }
-
     public async ValueTask<TodoListResponse?> Handle(GetTodoListQuery query, CancellationToken ct)
     {
-        return await _db.TodoLists
+        return await db.TodoLists
             .Where(l => l.Id == query.Id)
             .Select(l => new TodoListResponse(
                 l.Id,

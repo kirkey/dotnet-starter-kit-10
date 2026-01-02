@@ -22,7 +22,6 @@ public static class UpdateTodoListEndpoint
                     : TypedResults.NotFound();
             })
             .WithName("UpdateTodoList")
-            .WithTags("Todo Lists")
             .WithSummary("Update a Todo List")
             .WithDescription("Updates an existing Todo List")
             .RequireAuthorization()

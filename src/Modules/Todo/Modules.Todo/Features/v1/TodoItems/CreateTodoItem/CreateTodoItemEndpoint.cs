@@ -19,7 +19,6 @@ public static class CreateTodoItemEndpoint
                 return TypedResults.Created($"/api/v1/todo/items/{id}", id);
             })
             .WithName("CreateTodoItem")
-            .WithTags("Todo Items")
             .WithSummary("Create a new Todo Item")
             .WithDescription("Creates a new Todo Item within a Todo List")
             .RequireAuthorization()

@@ -6,24 +6,16 @@ using Mediator;
 
 namespace FSH.Modules.Todo.Features.v1.TodoLists.CreateTodoList;
 
-public class CreateTodoListCommandHandler : ICommandHandler<CreateTodoListCommand, Guid>
+public class CreateTodoListCommandHandler(TodoDbContext db, ICurrentUser currentUser)
+    : ICommandHandler<CreateTodoListCommand, Guid>
 {
-    private readonly TodoDbContext _db;
-    private readonly ICurrentUser _currentUser;
-
-    public CreateTodoListCommandHandler(TodoDbContext db, ICurrentUser currentUser)
-    {
-        _db = db;
-        _currentUser = currentUser;
-    }
-
     public async ValueTask<Guid> Handle(CreateTodoListCommand command, CancellationToken ct)
     {
         var todoList = TodoList.Create(
             command.Name,
-            _currentUser.GetTenant()!,
-            _currentUser.GetUserId(),
-            _currentUser.Name,
+            currentUser.GetTenant()!,
+            currentUser.GetUserId(),
+            currentUser.Name,
             command.Description,
             command.Color);
 
@@ -32,8 +24,8 @@ public class CreateTodoListCommandHandler : ICommandHandler<CreateTodoListComman
             todoList.Notes = command.Notes;
         }
 
-        _db.TodoLists.Add(todoList);
-        await _db.SaveChangesAsync(ct);
+        db.TodoLists.Add(todoList);
+        await db.SaveChangesAsync(ct);
 
         return todoList.Id;
     }

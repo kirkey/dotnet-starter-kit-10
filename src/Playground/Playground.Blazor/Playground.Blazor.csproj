@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ApiClient\" />
+    <Folder Include="Api\" />
   </ItemGroup>
 
   <PropertyGroup>

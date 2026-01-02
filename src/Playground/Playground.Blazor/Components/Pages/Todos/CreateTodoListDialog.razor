@@ -1,5 +1,5 @@
-@using MudBlazor
 @inject ISnackbar Snackbar
+@inject ITodoClient TodoClient
 
 <MudDialog>
     <TitleContent>
@@ -102,13 +102,29 @@
         _busy = true;
         try
         {
-            // TODO: Replace with actual API call
-            // if (IsEditMode)
-            //     await TodoClient.UpdateTodoListAsync(...);
-            // else
-            //     await TodoClient.CreateTodoListAsync(...);
+            if (IsEditMode)
+            {
+                var command = new UpdateTodoListCommand
+                {
+                    Id = ((ExistingList as dynamic)?.Id ?? Guid.Empty),
+                    Name = _model.Name,
+                    Description = _model.Description,
+                    Color = _model.Color,
+                    IsActive = _model.IsActive
+                };
+                await TodoClient.ListsPutAsync(command.Id, command);
+            }
+            else
+            {
+                var command = new CreateTodoListCommand
+                {
+                    Name = _model.Name,
+                    Description = _model.Description,
+                    Color = _model.Color
+                };
+                await TodoClient.ListsPostAsync(command);
+            }
             
-            await Task.Delay(500);
             Snackbar.Add(IsEditMode ? "Todo list updated successfully" : "Todo list created successfully", Severity.Success);
             MudDialog.Close(DialogResult.Ok(true));
         }

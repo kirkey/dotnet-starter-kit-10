@@ -99,7 +99,7 @@
       "templateDirectory": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../../src/Playground/Playground.Blazor/ApiClient/Generated.cs",
+      "output": "../../src/Playground/Playground.Blazor/Api/Client.cs",
       "newLineBehavior": "Auto"
     }
   }
