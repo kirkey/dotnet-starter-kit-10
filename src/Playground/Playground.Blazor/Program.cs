@@ -136,4 +136,55 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+// Fallback route for 404 handling
+app.MapFallback(async (HttpContext context) =>
+{
+    context.Response.StatusCode = 404;
+    await context.Response.WriteAsync("""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <title>404 - Page Not Found | FSH Playground</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link href="_content/FSH.Framework.Blazor.UI/css/fsh-theme.css" rel="stylesheet" />
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f5f7fa; margin: 0; padding: 0; }
+        .not-found-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
+        .not-found-content { text-align: center; max-width: 600px; }
+        .not-found-icon { font-size: 120px; color: #2563EB; margin-bottom: 2rem; }
+        .not-found-title { font-size: 2.5rem; font-weight: 600; margin-bottom: 1rem; color: #1e293b; }
+        .not-found-code { font-size: 3rem; font-weight: 700; color: #2563EB; margin-bottom: 1rem; }
+        .not-found-description { font-size: 1.1rem; line-height: 1.8; color: #64748b; margin-bottom: 2rem; }
+        .btn { display: inline-block; padding: 12px 24px; margin: 0.5rem; border-radius: 4px; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+        .btn-primary { background: #2563EB; color: white; }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-outlined { border: 2px solid #2563EB; color: #2563EB; background: transparent; }
+        .btn-outlined:hover { background: #eff6ff; }
+    </style>
+</head>
+<body>
+    <div class="not-found-container">
+        <div class="not-found-content">
+            <div class="not-found-icon">🔍</div>
+            <h1 class="not-found-title">Page Not Found</h1>
+            <div class="not-found-code">404</div>
+            <p class="not-found-description">
+                The page you're looking for doesn't exist or has been moved.<br />
+                Let's get you back on track.
+            </p>
+            <div>
+                <a href="/" class="btn btn-primary">Go to Home</a>
+                <a href="javascript:history.back()" class="btn btn-outlined">Go Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+""");
+});
+
 await app.RunAsync();
