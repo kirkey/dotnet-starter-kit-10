@@ -32,6 +32,14 @@
                               AdornmentIcon="@Icons.Material.Filled.Description"
                               Lines="2" />
 
+                <MudTextField @bind-Value="_model.Notes"
+                              Label="Notes (Optional)"
+                              Placeholder="Additional notes, context, or details"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Notes"
+                              Lines="3" />
+
                 <MudSelect @bind-Value="_model.Priority"
                            Label="Priority"
                            Variant="Variant.Outlined"
@@ -117,11 +125,14 @@
                 {
                     var command = new UpdateTodoCommand
                     {
+                        Id = list.Id,
                         Name = _model.Name,
                         Description = _model.Description,
+                        Notes = _model.Notes,
                         Priority = _model.Priority,
                         DueDate = _model.DueDate.HasValue ? new DateTimeOffset(_model.DueDate.Value) : null
                     };
+                    
                     await TodoClient.TodoPutAsync(list.Id, command);
                 }
             }
@@ -131,9 +142,11 @@
                 {
                     Name = _model.Name,
                     Description = _model.Description,
+                    Notes = _model.Notes,
                     Priority = _model.Priority,
                     DueDate = _model.DueDate.HasValue ? new DateTimeOffset(_model.DueDate.Value) : null
                 };
+                
                 await TodoClient.TodoPostAsync(command);
             }
             
@@ -156,6 +169,7 @@
     {
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
+        public string? Notes { get; set; }
         public int Priority { get; set; } = 2;
         public DateTime? DueDate { get; set; }
     }

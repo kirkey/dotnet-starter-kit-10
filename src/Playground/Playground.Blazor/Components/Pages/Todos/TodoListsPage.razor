@@ -161,6 +161,14 @@
                  Class="todos-datagrid">
         <Columns>
             <SelectColumn T="TodoSummaryDto" ShowInFooter="false" />
+            <TemplateColumn Title="" Sortable="false" Filterable="false">
+                <CellTemplate>
+                    <MudIconButton Icon="@(context.Item.TaskCount > 0 ? Icons.Material.Filled.KeyboardArrowDown : Icons.Material.Filled.KeyboardArrowRight)"
+                                   Size="Size.Small"
+                                   OnClick="@(() => ToggleExpand(context.Item))"
+                                   Disabled="@(context.Item.TaskCount == 0)" />
+                </CellTemplate>
+            </TemplateColumn>
             <TemplateColumn Title="List" Sortable="true" SortBy="@(x => x.Name)">
                 <CellTemplate>
                     <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
@@ -208,6 +216,23 @@
                     </MudChip>
                 </CellTemplate>
             </TemplateColumn>
+            <TemplateColumn Title="Due Date" Sortable="true" SortBy="@(x => x.DueDate)">
+                <CellTemplate>
+                    @if (context.Item.DueDate.HasValue)
+                    {
+                        <MudChip T="string" 
+                                 Size="Size.Small" 
+                                 Icon="@Icons.Material.Filled.CalendarToday"
+                                 Color="@GetDueDateColor(context.Item.DueDate.Value)">
+                            @context.Item.DueDate.Value.ToString("MMM dd, yyyy")
+                        </MudChip>
+                    }
+                    else
+                    {
+                        <MudText Typo="Typo.caption" Class="text-muted">-</MudText>
+                    }
+                </CellTemplate>
+            </TemplateColumn>
             <TemplateColumn Title="Actions" Sortable="false" HeaderClass="text-right" CellClass="text-right">
                 <CellTemplate>
                     <MudStack Row="true" Justify="Justify.FlexEnd" Spacing="0">
@@ -234,6 +259,20 @@
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
+        <ChildRowContent>
+            @if (_expandedRows.Contains(context.Item.Id))
+            {
+                <MudTr>
+                    <td colspan="8">
+                        <MudCard Elevation="0" Class="ma-2">
+                            <MudCardContent>
+                                <TaskListComponent TodoId="@context.Item.Id" OnTasksChanged="@(() => RefreshTodoAfterTaskChange(context.Item.Id))" />
+                            </MudCardContent>
+                        </MudCard>
+                    </td>
+                </MudTr>
+            }
+        </ChildRowContent>
         <PagerContent>
             <MudDataGridPager T="TodoSummaryDto" PageSizeOptions="@_pageSizeOptions" />
         </PagerContent>
@@ -276,6 +315,7 @@
     private List<TodoSummaryDto> _lists = new();
     private List<TodoSummaryDto> _filtered = new();
     private HashSet<TodoSummaryDto> _selectedLists = new();
+    private HashSet<Guid> _expandedRows = new();
     private bool _loading = true;
     private Guid? _busyListId;
     private bool _bulkBusy;
@@ -395,6 +435,25 @@
         StateHasChanged();
     }
 
+    private void ToggleExpand(TodoSummaryDto item)
+    {
+        if (_expandedRows.Contains(item.Id))
+        {
+            _expandedRows.Remove(item.Id);
+        }
+        else
+        {
+            _expandedRows.Add(item.Id);
+        }
+        StateHasChanged();
+    }
+
+    private async Task RefreshTodoAfterTaskChange(Guid todoId)
+    {
+        // Refresh the list to update task counts
+        await LoadData();
+    }
+
     private double GetCompletionPercentage(TodoSummaryDto list)
     {
         return list.TaskCount > 0 ? (list.CompletedTaskCount * 100.0) / list.TaskCount : 0;
@@ -443,6 +502,20 @@
             1 => "Low",
             _ => "None"
         };
+    }
+
+    private Color GetDueDateColor(DateTimeOffset dueDate)
+    {
+        var daysUntilDue = (dueDate - DateTimeOffset.UtcNow).TotalDays;
+        
+        if (daysUntilDue < 0)
+            return Color.Error;      // Overdue
+        if (daysUntilDue < 3)
+            return Color.Warning;    // Due soon
+        if (daysUntilDue < 7)
+            return Color.Info;       // Due this week
+        
+        return Color.Default;        // Due later
     }
 
     private void ViewDetails(Guid id)
