@@ -8,6 +8,7 @@
 @inject NavigationManager Navigation
 @inject ITodosClient TodoClient
 @inject IGlobalErrorHandler ErrorHandler
+@inject IJSRuntime JSRuntime
 
 <FshPageHeader Title="Todo Lists"
                Description="Manage your todo lists and organize tasks efficiently">
@@ -27,6 +28,18 @@
                 </MudButton>
             </MudButtonGroup>
         }
+        <MudButtonGroup Variant="Variant.Outlined" Size="Size.Small" Class="mr-2">
+            <MudButton StartIcon="@Icons.Material.Filled.FileDownload"
+                       Color="Color.Info"
+                       OnClick="ExportTodos">
+                Export
+            </MudButton>
+            <MudButton StartIcon="@Icons.Material.Filled.FileUpload"
+                       Color="Color.Info"
+                       OnClick="ShowImportDialog">
+                Import
+            </MudButton>
+        </MudButtonGroup>
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
                    StartIcon="@Icons.Material.Filled.Add"
@@ -813,5 +826,47 @@
         
         ClearSelection();
         await LoadData();
+    }
+
+    private async Task ExportTodos()
+    {
+        try
+        {
+            var format = "csv"; // Default to CSV
+            var result = await DialogService.ShowMessageBox(
+                "Export Todos",
+                "Choose export format:",
+                yesText: "CSV", 
+                noText: "JSON");
+            
+            if (result == null) return; // Cancelled
+            format = result == true ? "csv" : "json";
+
+            // Trigger download via JavaScript
+            var url = $"https://localhost:7030/api/v1/todo/export?format={format}";
+            await JSRuntime.InvokeVoidAsync("open", url, "_blank");
+            
+            Snackbar.Add($"Exporting todos as {format.ToUpper()}...", Severity.Info);
+        }
+        catch (Exception ex)
+        {
+            await ErrorHandler.HandleExceptionAsync(ex);
+        }
+    }
+
+    private async Task ShowImportDialog()
+    {
+        var dialog = await DialogService.ShowAsync<ImportTodosDialog>("Import Todos", new DialogOptions
+        {
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true,
+            CloseButton = true
+        });
+
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            await LoadData();
+        }
     }
 }

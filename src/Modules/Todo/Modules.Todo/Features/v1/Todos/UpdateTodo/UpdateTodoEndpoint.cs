@@ -1,3 +1,4 @@
+using FSH.Framework.Shared.Identity.Authorization;
 using FSH.Modules.Todo.Contracts.v1.Todos;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +31,6 @@ public static class UpdateTodoEndpoint
         .Produces<Guid>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound)
         .ProducesValidationProblem()
-        .RequireAuthorization();
+        .RequirePermission(TodoPermissionConstants.Todos.Update);
     }
 }

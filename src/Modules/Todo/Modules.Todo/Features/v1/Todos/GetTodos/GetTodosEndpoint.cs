@@ -1,3 +1,4 @@
+using FSH.Framework.Shared.Identity.Authorization;
 using FSH.Modules.Todo.Contracts.v1.Todos;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
@@ -28,6 +29,6 @@ public static class GetTodosEndpoint
         .WithSummary("Get paginated list of todos")
         .WithDescription("Retrieves todos with optional filtering by search term, status, priority, and completion state")
         .Produces<TodosPagedResponse>(StatusCodes.Status200OK)
-        .RequireAuthorization();
+        .RequirePermission(TodoPermissionConstants.Todos.Search);
     }
 }

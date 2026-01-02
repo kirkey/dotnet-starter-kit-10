@@ -52,4 +52,11 @@ public class TodosClient(IV1Client v1Client, ITodoClient todoClient, ITasksClien
 
     public Task TasksReorderAsync(Guid todoId, IEnumerable<TaskOrderItem> tasks, CancellationToken cancellationToken = default(CancellationToken))
         => tasksClient.ReorderAsync(todoId, tasks, cancellationToken);
+
+    // Import/Export operations
+    public Task ExportAsync(string format, CancellationToken cancellationToken = default(CancellationToken))
+        => todoClient.ExportAsync(format, cancellationToken);
+
+    public Task ImportAsync(FileParameter file, CancellationToken cancellationToken = default(CancellationToken))
+        => todoClient.ImportAsync(file, cancellationToken);
 }

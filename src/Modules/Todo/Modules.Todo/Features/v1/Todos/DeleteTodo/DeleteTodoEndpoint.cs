@@ -1,3 +1,4 @@
+using FSH.Framework.Shared.Identity.Authorization;
 using FSH.Modules.Todo.Contracts.v1.Todos;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
@@ -24,6 +25,6 @@ public static class DeleteTodoEndpoint
         .WithDescription("Deletes a todo and all its tasks")
         .Produces(StatusCodes.Status204NoContent)
         .Produces(StatusCodes.Status404NotFound)
-        .RequireAuthorization();
+        .RequirePermission(TodoPermissionConstants.Todos.Delete);
     }
 }

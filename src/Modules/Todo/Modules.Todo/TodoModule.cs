@@ -1,14 +1,17 @@
 using Asp.Versioning;
 using Asp.Versioning.Builder;
 using FSH.Framework.Persistence;
+using FSH.Framework.Shared.Identity;
 using FSH.Framework.Web.Modules;
 using FSH.Modules.Todo.Data;
 using FSH.Modules.Todo.Features.v1.Todos.ArchiveTodo;
 using FSH.Modules.Todo.Features.v1.Todos.CompleteTodo;
 using FSH.Modules.Todo.Features.v1.Todos.CreateTodo;
 using FSH.Modules.Todo.Features.v1.Todos.DeleteTodo;
+using FSH.Modules.Todo.Features.v1.Todos.ExportTodos;
 using FSH.Modules.Todo.Features.v1.Todos.GetTodo;
 using FSH.Modules.Todo.Features.v1.Todos.GetTodos;
+using FSH.Modules.Todo.Features.v1.Todos.ImportTodos;
 using FSH.Modules.Todo.Features.v1.Todos.ReopenTodo;
 using FSH.Modules.Todo.Features.v1.Todos.UpdateTodo;
 using FSH.Modules.Todo.Features.v1.Todos.UpdateTodoStatus;
@@ -31,6 +34,9 @@ public class TodoModule : IModule
 {
     public void ConfigureServices(IHostApplicationBuilder builder)
     {
+        // Register permissions
+        PermissionConstants.Register(TodoPermissionConstants.GetPermissions());
+
         // Register DbContext
         builder.Services.AddHeroDbContext<TodoDbContext>();
 
@@ -66,6 +72,8 @@ public class TodoModule : IModule
         group.MapReopenTodoEndpoint();
         group.MapUpdateTodoStatusEndpoint();
         group.MapArchiveTodoEndpoint();
+        group.MapExportTodosEndpoint();
+        group.MapImportTodosEndpoint();
 
         // TodoTask endpoints
         group.MapGetTodoTasksEndpoint();

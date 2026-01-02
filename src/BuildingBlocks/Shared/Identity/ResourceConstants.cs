@@ -9,4 +9,5 @@ public static class ResourceConstants
     public const string Roles = nameof(Roles);
     public const string RoleClaims = nameof(RoleClaims);
     public const string AuditTrails = nameof(AuditTrails);
+    public const string Todos = nameof(Todos);
 }

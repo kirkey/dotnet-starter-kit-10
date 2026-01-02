@@ -1,3 +1,4 @@
+using FSH.Framework.Shared.Identity.Authorization;
 using FSH.Modules.Todo.Contracts.v1.Todos;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +24,6 @@ public static class CreateTodoEndpoint
         .WithDescription("Creates a new todo item")
         .Produces<Guid>(StatusCodes.Status201Created)
         .ProducesValidationProblem()
-        .RequireAuthorization();
+        .RequirePermission(TodoPermissionConstants.Todos.Create);
     }
 }

@@ -23,4 +23,8 @@ public interface ITodosClient
     Task TasksDeleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
     Task TasksCompleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
     Task TasksReorderAsync(Guid todoId, IEnumerable<TaskOrderItem> tasks, CancellationToken cancellationToken = default(CancellationToken));
+
+    // Import/Export operations  
+    Task ExportAsync(string format, CancellationToken cancellationToken = default(CancellationToken));
+    Task ImportAsync(FileParameter file, CancellationToken cancellationToken = default(CancellationToken));
 }
