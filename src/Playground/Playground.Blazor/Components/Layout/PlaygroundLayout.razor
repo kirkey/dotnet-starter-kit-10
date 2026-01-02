@@ -3,8 +3,8 @@
 @using System.Security.Claims
 @using FSH.Framework.Blazor.UI.Components.Dialogs
 @using FSH.Framework.Blazor.UI.Components.Layouts
+@using FSH.Framework.Blazor.UI.Components.Navigation
 @using FSH.Framework.Blazor.UI.Theme
-@using FSH.Playground.Blazor.Components.Pages
 @using FSH.Playground.Blazor.Services
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.WebUtilities
@@ -56,6 +56,9 @@ else
             <MudDrawerHeader>
                 <FshDrawerHeader Title="FSH Playground" />
             </MudDrawerHeader>
+            <div class="px-3 pb-3">
+                <FshMenuSearchBar SearchCssClass="w-100" />
+            </div>
             <NavMenu />
         </MudDrawer>
         <MudMainContent Class="pt-20" Style="padding-left:0;padding-right:0;">

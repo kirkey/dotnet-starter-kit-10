@@ -1,6 +1,4 @@
 ﻿@inherits LayoutComponentBase
-@using FSH.Framework.Blazor.UI.Components.Button
-@using FSH.Framework.Blazor.UI.Components.Layouts
 @using Microsoft.AspNetCore.Components.Authorization
 
 <MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
@@ -40,8 +38,8 @@
 
 @code {
     private bool _drawerOpen = true;
-    private bool _isDarkMode = false;
-    private MudTheme? _theme = null;
+    private bool _isDarkMode;
+    private MudTheme? _theme;
 
     protected override void OnInitialized()
     {

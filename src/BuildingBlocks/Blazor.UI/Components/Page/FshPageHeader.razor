@@ -1,5 +1,3 @@
-@using MudBlazor
-
 <PageTitle>@PageTitleText</PageTitle>
 
 <MudPaper Class="@CombinedClass" Elevation="@Elevation">
@@ -63,7 +61,7 @@
     /// Elevation of the paper component. Default is 0.
     /// </summary>
     [Parameter]
-    public int Elevation { get; set; } = 0;
+    public int Elevation { get; set; }
 
     /// <summary>
     /// Additional CSS classes to apply

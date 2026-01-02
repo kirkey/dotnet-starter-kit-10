@@ -1,9 +1,10 @@
 using FSH.Framework.Blazor.UI;
+using FSH.Framework.Blazor.UI.Components.Navigation.Services;
 using FSH.Framework.Blazor.UI.Theme;
 using FSH.Playground.Blazor.Components;
+using FSH.Playground.Blazor.Configuration;
 using FSH.Playground.Blazor.Services;
 using FSH.Playground.Blazor.Services.Api;
-using Microsoft.AspNetCore.Builder;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -79,7 +80,7 @@ builder.Services.Configure<Microsoft.AspNetCore.ResponseCompression.GzipCompress
 // Output Caching for static responses
 builder.Services.AddOutputCache(options =>
 {
-    options.AddBasePolicy(builder => builder
+    options.AddBasePolicy(policyBuilder => policyBuilder
 #pragma warning disable CA1307 // PathString.StartsWithSegments is case-insensitive by design
         .With(c => c.HttpContext.Request.Path.StartsWithSegments("/health"))
 #pragma warning restore CA1307
@@ -100,6 +101,10 @@ builder.Services.AddServerSideBlazor(options =>
 });
 
 WebApplication app = builder.Build();
+
+// Initialize menu service
+var menuService = app.Services.GetRequiredService<IMenuService>();
+menuService.RegisterMenuSections(MenuConfiguration.GetMenuSections());
 
 // Configure exception handler
 if (!app.Environment.IsDevelopment())

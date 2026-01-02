@@ -1,0 +1,149 @@
+@using FSH.Framework.Blazor.UI.Components.Navigation.Models
+@using FSH.Framework.Blazor.UI.Components.Navigation.Services
+@inject IMenuService MenuService
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<MudAutocomplete T="MenuItem"
+                 Value="_selectedItem"
+                 ValueChanged="OnSelectedItemChanged"
+                 SearchFunc="SearchMenuItems"
+                 ToStringFunc="@(item => item?.Title ?? string.Empty)"
+                 Placeholder="Search menu..."
+                 AdornmentIcon="@Icons.Material.Filled.Search"
+                 AdornmentColor="Color.Primary"
+                 Variant="Variant.Outlined"
+                 Dense="true"
+                 ResetValueOnEmptyText="true"
+                 CoerceText="false"
+                 CoerceValue="false"
+                 Class="@CssClass"
+                 MaxItems="10"
+                 DebounceInterval="300">
+    <ItemTemplate Context="item">
+        <div class="d-flex align-center gap-2">
+            @if (!string.IsNullOrWhiteSpace(item.Icon))
+            {
+                <MudIcon Icon="@item.Icon" Size="Size.Small" />
+            }
+            <MudText Typo="Typo.body2">@item.Title</MudText>
+        </div>
+    </ItemTemplate>
+    <NoItemsTemplate>
+        <MudText Typo="Typo.body2" Class="pa-4">No menu items found</MudText>
+    </NoItemsTemplate>
+</MudAutocomplete>
+
+@code {
+    private MenuItem? _selectedItem;
+    private List<MenuItemSearchResult>? _allMenuItems;
+
+    [Parameter]
+    public string CssClass { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAllMenuItemsAsync();
+        MenuService.MenuSectionsChanged += OnMenuSectionsChanged;
+    }
+
+    private async Task<IEnumerable<MenuItem>?> SearchMenuItems(string? searchText, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            return Array.Empty<MenuItem>();
+        }
+
+        await EnsureMenuItemsLoadedAsync();
+
+        var results = _allMenuItems!
+            .Where(x => x.MenuItem.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                       (!string.IsNullOrWhiteSpace(x.SectionTitle) && 
+                        x.SectionTitle.Contains(searchText, StringComparison.OrdinalIgnoreCase)))
+            .Take(10)
+            .Select(x => x.MenuItem)
+            .ToList();
+
+        return results;
+    }
+
+    private async Task LoadAllMenuItemsAsync()
+    {
+        try
+        {
+            var sections = await MenuService.GetMenuSectionsAsync();
+            _allMenuItems = new List<MenuItemSearchResult>();
+
+            foreach (var section in sections)
+            {
+                foreach (var item in section.SectionItems)
+                {
+                    if (!string.IsNullOrWhiteSpace(item.Href) && !item.IsParent)
+                    {
+                        _allMenuItems.Add(new MenuItemSearchResult
+                        {
+                            MenuItem = item,
+                            SectionTitle = section.Title
+                        });
+                    }
+
+                    // Add child items
+                    if (item.IsParent && item.MenuItems.Count > 0)
+                    {
+                        foreach (var childItem in item.MenuItems)
+                        {
+                            if (!string.IsNullOrWhiteSpace(childItem.Href))
+                            {
+                                _allMenuItems.Add(new MenuItemSearchResult
+                                {
+                                    MenuItem = childItem,
+                                    SectionTitle = $"{section.Title} > {item.Title}"
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading menu items: {ex.Message}");
+            _allMenuItems = new List<MenuItemSearchResult>();
+        }
+    }
+
+    private async Task EnsureMenuItemsLoadedAsync()
+    {
+        if (_allMenuItems == null)
+        {
+            await LoadAllMenuItemsAsync();
+        }
+    }
+
+    private async void OnMenuSectionsChanged(object? sender, EventArgs e)
+    {
+        await LoadAllMenuItemsAsync();
+        StateHasChanged();
+    }
+
+    private void OnSelectedItemChanged(MenuItem? item)
+    {
+        if (item?.Href != null)
+        {
+            Navigation.NavigateTo(item.Href);
+            _selectedItem = null; // Reset selection after navigation
+        }
+    }
+
+    public void Dispose()
+    {
+        MenuService.MenuSectionsChanged -= OnMenuSectionsChanged;
+    }
+
+    private class MenuItemSearchResult
+    {
+        public required MenuItem MenuItem { get; set; }
+        public required string SectionTitle { get; set; }
+    }
+}
+

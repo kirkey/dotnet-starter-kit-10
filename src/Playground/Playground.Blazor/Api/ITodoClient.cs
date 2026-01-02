@@ -1,5 +1,3 @@
-using FSH.Playground.Blazor.ApiClient;
-
 namespace FSH.Playground.Blazor.Api;
 
 /// <summary>

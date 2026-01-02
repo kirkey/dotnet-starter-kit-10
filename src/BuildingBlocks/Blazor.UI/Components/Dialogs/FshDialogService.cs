@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Components;
-using MudBlazor;
-
 namespace FSH.Framework.Blazor.UI.Components.Dialogs;
 
 public static class FshDialogService

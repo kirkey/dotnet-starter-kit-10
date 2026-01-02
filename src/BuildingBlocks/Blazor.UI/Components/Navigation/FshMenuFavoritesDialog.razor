@@ -1,0 +1,157 @@
+@using FSH.Framework.Blazor.UI.Components.Navigation.Models
+@using FSH.Framework.Blazor.UI.Components.Navigation.Services
+@inject IMenuFavoritesService FavoritesService
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer Style="max-height: 600px; overflow-y: auto;">
+            @if (_menuItems == null)
+            {
+                <div class="d-flex justify-center align-center pa-8">
+                    <MudProgressCircular Indeterminate="true" />
+                </div>
+            }
+            else if (_menuItems.Count == 0)
+            {
+                <MudText Typo="Typo.body1" Align="Align.Center" Class="pa-8">
+                    No menu items available
+                </MudText>
+            }
+            else
+            {
+                <MudTextField @bind-Value="_searchText"
+                              Placeholder="Search menu items..."
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              Immediate="true"
+                              Class="mb-4" />
+
+                <MudList T="MenuItemWithFavorite" Dense="true">
+                    @foreach (var group in GetGroupedMenuItems())
+                    {
+                        @if (!string.IsNullOrWhiteSpace(group.Key))
+                        {
+                            <MudListSubheader>
+                                <MudText Typo="Typo.body2" Color="Color.Primary">@group.Key</MudText>
+                            </MudListSubheader>
+                        }
+
+                        @foreach (var item in group)
+                        {
+                            <MudListItem T="MenuItemWithFavorite" OnClick="@(() => ToggleFavoriteAsync(item))">
+                                <div class="d-flex align-center justify-space-between" style="width: 100%;">
+                                    <div class="d-flex align-center gap-2">
+                                        @if (!string.IsNullOrWhiteSpace(item.MenuItem.Icon))
+                                        {
+                                            <MudIcon Icon="@item.MenuItem.Icon" Size="Size.Small" />
+                                        }
+                                        <div>
+                                            <MudText Typo="Typo.body2">@item.MenuItem.Title</MudText>
+                                            @if (item.MenuItem.PageStatus != PageStatus.None)
+                                            {
+                                                <MudChip T="string" Size="Size.Small" Color="@GetStatusColor(item.MenuItem.PageStatus)">
+                                                    @item.MenuItem.PageStatus.ToString()
+                                                </MudChip>
+                                            }
+                                        </div>
+                                    </div>
+                                    <MudIconButton Icon="@(item.IsFavorite ? Icons.Material.Filled.Star : Icons.Material.Outlined.StarBorder)"
+                                                   Color="@(item.IsFavorite ? Color.Warning : Color.Default)"
+                                                   Size="Size.Small"
+                                                   OnClick="@(() => ToggleFavoriteAsync(item))" />
+                                </div>
+                            </MudListItem>
+                        }
+                    }
+                </MudList>
+            }
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Close">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    private List<MenuItemWithFavorite>? _menuItems;
+    private string _searchText = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMenuItemsAsync();
+        FavoritesService.FavoritesChanged += OnFavoritesChanged;
+    }
+
+    private async Task LoadMenuItemsAsync()
+    {
+        try
+        {
+            var items = await FavoritesService.GetAllMenuItemsWithFavoriteStatusAsync();
+            _menuItems = items.ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading menu items: {ex.Message}");
+            _menuItems = new List<MenuItemWithFavorite>();
+        }
+    }
+
+    private async Task ToggleFavoriteAsync(MenuItemWithFavorite item)
+    {
+        if (string.IsNullOrWhiteSpace(item.MenuItem.Href))
+        {
+            return;
+        }
+
+        await FavoritesService.ToggleFavoriteAsync(item.MenuItem.Href);
+        item.IsFavorite = !item.IsFavorite;
+        StateHasChanged();
+    }
+
+    private IEnumerable<IGrouping<string, MenuItemWithFavorite>> GetGroupedMenuItems()
+    {
+        if (_menuItems == null)
+        {
+            return Enumerable.Empty<IGrouping<string, MenuItemWithFavorite>>();
+        }
+
+        var filtered = string.IsNullOrWhiteSpace(_searchText)
+            ? _menuItems
+            : _menuItems.Where(x => 
+                x.MenuItem.Title.Contains(_searchText, StringComparison.OrdinalIgnoreCase) ||
+                x.SectionTitle.Contains(_searchText, StringComparison.OrdinalIgnoreCase));
+
+        return filtered.GroupBy(x => x.SectionTitle);
+    }
+
+    private static Color GetStatusColor(PageStatus status)
+    {
+        return status switch
+        {
+            PageStatus.Completed => Color.Success,
+            PageStatus.InProgress => Color.Warning,
+            PageStatus.Planned => Color.Info,
+            _ => Color.Default
+        };
+    }
+
+    private async void OnFavoritesChanged(object? sender, EventArgs e)
+    {
+        await LoadMenuItemsAsync();
+        StateHasChanged();
+    }
+
+    private void Close()
+    {
+        MudDialog?.Close();
+    }
+
+    public void Dispose()
+    {
+        FavoritesService.FavoritesChanged -= OnFavoritesChanged;
+    }
+}
+

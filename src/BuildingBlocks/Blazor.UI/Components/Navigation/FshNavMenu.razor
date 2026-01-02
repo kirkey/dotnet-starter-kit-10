@@ -1,0 +1,194 @@
+@using FSH.Framework.Blazor.UI.Components.Navigation.Models
+@using FSH.Framework.Blazor.UI.Components.Navigation.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Routing
+@inject IMenuService MenuService
+@inject IMenuFavoritesService FavoritesService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@implements IDisposable
+
+<MudNavMenu Class="@CssClass" Rounded="@Rounded" Margin="@Margin" Color="@Color">
+    @* Favorites Section *@
+    @if (_favoriteItems is { Count: > 0 })
+    {
+        <div class="fsh-nav-section-title">
+            <MudIcon Icon="@Icons.Material.Filled.Star" Size="Size.Small" Class="mr-2" Color="Color.Warning" />
+            Favorites
+        </div>
+        @foreach (var item in _favoriteItems)
+        {
+            <MudNavLink Href="@item.Href"
+                        Match="NavLinkMatch.Prefix"
+                        Icon="@item.Icon"
+                        Target="@item.Target">
+                <div class="d-flex align-center justify-space-between" style="width: 100%;">
+                    <span>@item.Title</span>
+                </div>
+            </MudNavLink>
+        }
+    }
+
+    @* Regular Menu Sections *@
+    @if (_menuSections is { Count: > 0 })
+    {
+        @foreach (var section in _menuSections)
+        {
+            @if (!string.IsNullOrWhiteSpace(section.Title))
+            {
+                <div class="fsh-nav-section-title">
+                    @(section.Title)
+                </div>
+            }
+
+            @foreach (var item in section.SectionItems)
+            {
+                @if (item is { IsParent: true, MenuItems.Count: > 0 })
+                {
+                    <MudNavGroup Title="@item.Title" Icon="@item.Icon" Expanded="true">
+                        @foreach (var childItem in item.MenuItems)
+                        {
+                            <MudNavLink Href="@childItem.Href"
+                                        Match="NavLinkMatch.Prefix"
+                                        Icon="@childItem.Icon"
+                                        Target="@childItem.Target">
+                                <div class="d-flex align-center justify-space-between" style="width: 100%;">
+                                    <span>@childItem.Title</span>
+                                    @if (!string.IsNullOrWhiteSpace(childItem.BadgeText))
+                                    {
+                                        <MudChip T="string" Size="Size.Small" Color="@childItem.BadgeColor" Class="ml-2">@childItem.BadgeText</MudChip>
+                                    }
+                                    @if (childItem.PageStatus != PageStatus.None)
+                                    {
+                                        <MudChip T="string" Size="Size.Small" Color="@GetStatusColor(childItem.PageStatus)" Class="ml-2">@childItem.PageStatus.ToString()</MudChip>
+                                    }
+                                </div>
+                            </MudNavLink>
+                        }
+                    </MudNavGroup>
+                }
+                else
+                {
+                    <MudNavLink Href="@item.Href"
+                                Match="NavLinkMatch.Prefix"
+                                Icon="@item.Icon"
+                                Target="@item.Target">
+                        <div class="d-flex align-center justify-space-between" style="width: 100%;">
+                            <span>@item.Title</span>
+                            @if (!string.IsNullOrWhiteSpace(item.BadgeText))
+                            {
+                                <MudChip T="string" Size="Size.Small" Color="@item.BadgeColor" Class="ml-2">@item.BadgeText</MudChip>
+                            }
+                            @if (item.PageStatus != PageStatus.None)
+                            {
+                                <MudChip T="string" Size="Size.Small" Color="@GetStatusColor(item.PageStatus)" Class="ml-2">@item.PageStatus.ToString()</MudChip>
+                            }
+                        </div>
+                    </MudNavLink>
+                }
+            }
+        }
+    }
+    else
+    {
+        <MudText Typo="Typo.body2" Class="pa-4">No menu items available</MudText>
+    }
+</MudNavMenu>
+
+@code {
+    private List<MenuSection>? _menuSections;
+    private List<MenuItem>? _favoriteItems;
+    private IEnumerable<string>? _userPermissions;
+
+    [Parameter]
+    public string CssClass { get; set; } = "pa-2";
+
+    [Parameter]
+    public bool Rounded { get; set; } = true;
+
+    [Parameter]
+    public Margin Margin { get; set; } = Margin.Dense;
+
+    [Parameter]
+    public Color Color { get; set; } = Color.Primary;
+
+    protected override async Task OnInitializedAsync()
+    {
+        MenuService.MenuSectionsChanged += OnMenuSectionsChanged;
+        FavoritesService.FavoritesChanged += OnFavoritesChanged;
+        await LoadMenuAsync();
+        await LoadFavoritesAsync();
+    }
+
+    private async Task LoadMenuAsync()
+    {
+        try
+        {
+            // Get user permissions
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                // Extract permissions from claims
+                _userPermissions = user.Claims
+                    .Where(c => c.Type == "permission" || c.Type == "Permission")
+                    .Select(c => c.Value)
+                    .ToList();
+            }
+
+            // Get filtered menu sections
+            var sections = await MenuService.GetMenuSectionsAsync(_userPermissions);
+            _menuSections = sections.ToList();
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading menu: {ex.Message}");
+            _menuSections = new List<MenuSection>();
+        }
+    }
+
+    private async Task LoadFavoritesAsync()
+    {
+        try
+        {
+            var favorites = await FavoritesService.GetFavoritesAsync();
+            _favoriteItems = favorites.ToList();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading favorites: {ex.Message}");
+            _favoriteItems = new List<MenuItem>();
+        }
+    }
+
+    private async void OnMenuSectionsChanged(object? sender, EventArgs e)
+    {
+        await LoadMenuAsync();
+    }
+
+    private async void OnFavoritesChanged(object? sender, EventArgs e)
+    {
+        await LoadFavoritesAsync();
+    }
+
+    private static Color GetStatusColor(PageStatus status)
+    {
+        return status switch
+        {
+            PageStatus.Completed => Color.Success,
+            PageStatus.InProgress => Color.Warning,
+            PageStatus.Planned => Color.Info,
+            _ => Color.Default
+        };
+    }
+
+    public void Dispose()
+    {
+        MenuService.MenuSectionsChanged -= OnMenuSectionsChanged;
+        FavoritesService.FavoritesChanged -= OnFavoritesChanged;
+    }
+}
+

@@ -1,5 +1,3 @@
-using MudBlazor;
-
 namespace FSH.Framework.Blazor.UI.Components.Feedback.Snackbar;
 
 /// <summary>

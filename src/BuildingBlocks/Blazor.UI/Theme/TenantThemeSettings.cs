@@ -1,4 +1,3 @@
-using MudBlazor;
 using System.Globalization;
 
 namespace FSH.Framework.Blazor.UI.Theme;
@@ -31,7 +30,7 @@ public sealed class TenantThemeSettings
             {
                 DefaultBorderRadius = Layout.BorderRadius
             },
-            Typography = new MudBlazor.Typography
+            Typography = new Typography
             {
                 Default =
                 {

@@ -1,0 +1,42 @@
+@using FSH.Framework.Blazor.UI.Components.Navigation.Services
+@inject IDialogService DialogService
+
+<div class="fsh-menu-search-bar d-flex align-center gap-2" style="@Style">
+    <div class="flex-grow-1">
+        <FshMenuSearch CssClass="@SearchCssClass" />
+    </div>
+    <MudIconButton Icon="@Icons.Material.Outlined.Star"
+                   Color="Color.Default"
+                   Size="@IconSize"
+                   OnClick="OpenFavoritesDialog"
+                   Title="Manage Favorites" />
+</div>
+
+@code {
+    [Parameter]
+    public string Style { get; set; } = string.Empty;
+
+    [Parameter]
+    public string SearchCssClass { get; set; } = string.Empty;
+
+    [Parameter]
+    public Size IconSize { get; set; } = Size.Medium;
+
+    private async Task OpenFavoritesDialog()
+    {
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.Medium,
+            FullWidth = true,
+            CloseButton = true,
+            BackdropClick = false
+        };
+
+        var dialog = await DialogService.ShowAsync<FshMenuFavoritesDialog>(
+            "Manage Favorite Menus",
+            options);
+
+        await dialog.Result;
+    }
+}
+
