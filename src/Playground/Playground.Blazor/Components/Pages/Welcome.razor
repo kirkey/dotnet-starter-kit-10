@@ -5,565 +5,333 @@
 
 <PageTitle>Welcome to FSH Framework</PageTitle>
 
-<div class="welcome-page">
-    <!-- Hero Section -->
-    <MudContainer MaxWidth="MaxWidth.Large" Class="welcome-hero">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <MudChip T="string" Icon="@Icons.Material.Filled.Bolt" Color="Color.Primary" Size="Size.Small">
-                    .NET 10 | Blazor | Multi-Tenant
-                </MudChip>
-            </div>
-            <MudText Typo="Typo.h2" Class="hero-title" Align="Align.Center">
-                <strong>Full Stack Hero</strong> Framework
-            </MudText>
-            <MudText Typo="Typo.h5" Class="hero-subtitle" Align="Align.Center" Color="Color.Secondary">
-                Enterprise-Grade .NET Starter Kit for Modern Applications
-            </MudText>
-            <MudText Typo="Typo.body1" Class="hero-description" Align="Align.Center">
-                Build scalable, multi-tenant SaaS applications with clean architecture, 
-                modular design, and production-ready features out of the box.
-            </MudText>
-            
-            <div class="hero-actions">
-                <AuthorizeView>
-                    <Authorized>
+<AuthorizeView>
+    <Authorized>
+        <!-- Authenticated View with Standard App Layout -->
+        <FshPageHeader Title="Welcome to FSH Framework"
+                       Description="Enterprise-Grade .NET Starter Kit for Modern Applications" />
+        
+        <div class="welcome-authenticated">
+            <!-- Quick Actions -->
+            <MudPaper Class="fsh-card pa-6 mb-4">
+                <MudText Typo="Typo.h5" Class="mb-4 fw-700">Quick Actions</MudText>
+                <MudGrid Spacing="3">
+                    <MudItem xs="12" sm="6" md="3">
                         <MudButton Variant="Variant.Filled" 
                                    Color="Color.Primary" 
-                                   Size="Size.Large"
+                                   FullWidth="true"
                                    StartIcon="@Icons.Material.Filled.Dashboard"
-                                   Href="/dashboard">
-                            Go to Dashboard
+                                   Href="/dashboard"
+                                   Size="Size.Large">
+                            Dashboard
                         </MudButton>
-                        <MudButton Variant="Variant.Outlined" 
-                                   Color="Color.Primary" 
-                                   Size="Size.Large"
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudButton Variant="Variant.Filled" 
+                                   Color="Color.Secondary" 
+                                   FullWidth="true"
                                    StartIcon="@Icons.Material.Filled.CheckCircle"
-                                   Href="/todos">
-                            View Todo Lists
+                                   Href="/todos"
+                                   Size="Size.Large">
+                            Todo Lists
                         </MudButton>
-                    </Authorized>
-                    <NotAuthorized>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
                         <MudButton Variant="Variant.Filled" 
-                                   Color="Color.Primary" 
-                                   Size="Size.Large"
-                                   StartIcon="@Icons.Material.Filled.Login"
-                                   OnClick="NavigateToLogin">
-                            Get Started
+                                   Color="Color.Info" 
+                                   FullWidth="true"
+                                   StartIcon="@Icons.Material.Filled.People"
+                                   Href="/users"
+                                   Size="Size.Large">
+                            Users
                         </MudButton>
-                        <MudButton Variant="Variant.Outlined" 
-                                   Color="Color.Primary" 
-                                   Size="Size.Large"
-                                   StartIcon="@Icons.Material.Filled.Info"
-                                   Href="#features">
-                            Learn More
-                        </MudButton>
-                    </NotAuthorized>
-                </AuthorizeView>
-            </div>
-        </div>
-    </MudContainer>
-
-    <!-- Stats Section -->
-    <MudContainer MaxWidth="MaxWidth.Large" Class="welcome-stats">
-        <MudGrid Spacing="4">
-            <MudItem xs="12" sm="6" md="3">
-                <MudCard Class="stat-card">
-                    <MudCardContent>
-                        <div class="stat-icon primary">
-                            <MudIcon Icon="@Icons.Material.Filled.Speed" Size="Size.Large" />
-                        </div>
-                        <MudText Typo="Typo.h4" Class="stat-value">Fast</MudText>
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">
-                            Built on .NET 10 with performance optimizations
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem xs="12" sm="6" md="3">
-                <MudCard Class="stat-card">
-                    <MudCardContent>
-                        <div class="stat-icon secondary">
-                            <MudIcon Icon="@Icons.Material.Filled.Security" Size="Size.Large" />
-                        </div>
-                        <MudText Typo="Typo.h4" Class="stat-value">Secure</MudText>
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">
-                            JWT authentication, role-based access control
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem xs="12" sm="6" md="3">
-                <MudCard Class="stat-card">
-                    <MudCardContent>
-                        <div class="stat-icon info">
-                            <MudIcon Icon="@Icons.Material.Filled.Architecture" Size="Size.Large" />
-                        </div>
-                        <MudText Typo="Typo.h4" Class="stat-value">Modular</MudText>
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">
-                            Clean architecture with independent modules
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-            <MudItem xs="12" sm="6" md="3">
-                <MudCard Class="stat-card">
-                    <MudCardContent>
-                        <div class="stat-icon success">
-                            <MudIcon Icon="@Icons.Material.Filled.CorporateFare" Size="Size.Large" />
-                        </div>
-                        <MudText Typo="Typo.h4" Class="stat-value">Multi-Tenant</MudText>
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">
-                            Database-per-tenant isolation for SaaS
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-        </MudGrid>
-    </MudContainer>
-
-    <!-- Features Section -->
-    <MudContainer MaxWidth="MaxWidth.Large" Class="welcome-features" id="features">
-        <div class="section-header">
-            <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">
-                <strong>Powerful Features</strong>
-            </MudText>
-            <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Secondary" Class="section-subtitle">
-                Everything you need to build enterprise applications
-            </MudText>
-        </div>
-
-        <MudGrid Spacing="4">
-            <!-- Authentication & Authorization -->
-            <MudItem xs="12" md="6" lg="4">
-                <MudCard Class="feature-card">
-                    <MudCardContent>
-                        <div class="feature-icon">
-                            <MudIcon Icon="@Icons.Material.Filled.Lock" Color="Color.Primary" Size="Size.Large" />
-                        </div>
-                        <MudText Typo="Typo.h6" GutterBottom="true">Authentication & Authorization</MudText>
-                        <MudText Typo="Typo.body2">
-                            JWT-based authentication with refresh tokens, role-based and permission-based access control.
-                        </MudText>
-                        <MudList T="string" Dense="true" Class="feature-list">
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                JWT Token Management
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Role & Permission System
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Session Management
-                            </MudListItem>
-                        </MudList>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <!-- Multi-Tenancy -->
-            <MudItem xs="12" md="6" lg="4">
-                <MudCard Class="feature-card">
-                    <MudCardContent>
-                        <div class="feature-icon">
-                            <MudIcon Icon="@Icons.Material.Filled.Business" Color="Color.Secondary" Size="Size.Large" />
-                        </div>
-                        <MudText Typo="Typo.h6" GutterBottom="true">Multi-Tenancy</MudText>
-                        <MudText Typo="Typo.body2">
-                            Full multi-tenant support with database-per-tenant isolation and tenant provisioning.
-                        </MudText>
-                        <MudList T="string" Dense="true" Class="feature-list">
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Database Isolation
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Tenant Provisioning
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Tenant Management
-                            </MudListItem>
-                        </MudList>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <!-- Modular Architecture -->
-            <MudItem xs="12" md="6" lg="4">
-                <MudCard Class="feature-card">
-                    <MudCardContent>
-                        <div class="feature-icon">
-                            <MudIcon Icon="@Icons.Material.Filled.ViewModule" Color="Color.Info" Size="Size.Large" />
-                        </div>
-                        <MudText Typo="Typo.h6" GutterBottom="true">Modular Architecture</MudText>
-                        <MudText Typo="Typo.body2">
-                            Clean architecture with independent, reusable modules for better maintainability.
-                        </MudText>
-                        <MudList T="string" Dense="true" Class="feature-list">
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Clean Architecture
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Domain-Driven Design
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                CQRS Pattern
-                            </MudListItem>
-                        </MudList>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <!-- Audit Logging -->
-            <MudItem xs="12" md="6" lg="4">
-                <MudCard Class="feature-card">
-                    <MudCardContent>
-                        <div class="feature-icon">
-                            <MudIcon Icon="@Icons.Material.Filled.History" Color="Color.Warning" Size="Size.Large" />
-                        </div>
-                        <MudText Typo="Typo.h6" GutterBottom="true">Audit Logging</MudText>
-                        <MudText Typo="Typo.body2">
-                            Comprehensive audit trails for all operations with detailed user activity tracking.
-                        </MudText>
-                        <MudList T="string" Dense="true" Class="feature-list">
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Activity Tracking
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Change History
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Compliance Ready
-                            </MudListItem>
-                        </MudList>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <!-- Background Jobs -->
-            <MudItem xs="12" md="6" lg="4">
-                <MudCard Class="feature-card">
-                    <MudCardContent>
-                        <div class="feature-icon">
-                            <MudIcon Icon="@Icons.Material.Filled.Schedule" Color="Color.Success" Size="Size.Large" />
-                        </div>
-                        <MudText Typo="Typo.h6" GutterBottom="true">Background Jobs</MudText>
-                        <MudText Typo="Typo.body2">
-                            Hangfire integration for reliable background job processing and scheduling.
-                        </MudText>
-                        <MudList T="string" Dense="true" Class="feature-list">
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Job Scheduling
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Retry Mechanisms
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Job Dashboard
-                            </MudListItem>
-                        </MudList>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <!-- API Documentation -->
-            <MudItem xs="12" md="6" lg="4">
-                <MudCard Class="feature-card">
-                    <MudCardContent>
-                        <div class="feature-icon">
-                            <MudIcon Icon="@Icons.Material.Filled.Description" Color="Color.Tertiary" Size="Size.Large" />
-                        </div>
-                        <MudText Typo="Typo.h6" GutterBottom="true">API Documentation</MudText>
-                        <MudText Typo="Typo.body2">
-                            Auto-generated OpenAPI documentation with Scalar for beautiful API exploration.
-                        </MudText>
-                        <MudList T="string" Dense="true" Class="feature-list">
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                OpenAPI/Swagger
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                API Versioning
-                            </MudListItem>
-                            <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle" IconSize="Size.Small">
-                                Interactive Testing
-                            </MudListItem>
-                        </MudList>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-        </MudGrid>
-    </MudContainer>
-
-    <!-- Technology Stack Section -->
-    <MudContainer MaxWidth="MaxWidth.Large" Class="welcome-tech">
-        <div class="section-header">
-            <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">
-                <strong>Built With Modern Technology</strong>
-            </MudText>
-            <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Secondary" Class="section-subtitle">
-                Leveraging the latest and greatest from the .NET ecosystem
-            </MudText>
-        </div>
-
-        <MudGrid Spacing="3">
-            <MudItem xs="6" sm="4" md="3">
-                <MudPaper Class="tech-item" Elevation="0">
-                    <MudText Typo="Typo.h6" Align="Align.Center">.NET 10</MudText>
-                    <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">Runtime</MudText>
-                </MudPaper>
-            </MudItem>
-            <MudItem xs="6" sm="4" md="3">
-                <MudPaper Class="tech-item" Elevation="0">
-                    <MudText Typo="Typo.h6" Align="Align.Center">Blazor</MudText>
-                    <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">UI Framework</MudText>
-                </MudPaper>
-            </MudItem>
-            <MudItem xs="6" sm="4" md="3">
-                <MudPaper Class="tech-item" Elevation="0">
-                    <MudText Typo="Typo.h6" Align="Align.Center">MudBlazor</MudText>
-                    <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">Component Library</MudText>
-                </MudPaper>
-            </MudItem>
-            <MudItem xs="6" sm="4" md="3">
-                <MudPaper Class="tech-item" Elevation="0">
-                    <MudText Typo="Typo.h6" Align="Align.Center">EF Core 10</MudText>
-                    <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">ORM</MudText>
-                </MudPaper>
-            </MudItem>
-            <MudItem xs="6" sm="4" md="3">
-                <MudPaper Class="tech-item" Elevation="0">
-                    <MudText Typo="Typo.h6" Align="Align.Center">PostgreSQL</MudText>
-                    <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">Database</MudText>
-                </MudPaper>
-            </MudItem>
-            <MudItem xs="6" sm="4" md="3">
-                <MudPaper Class="tech-item" Elevation="0">
-                    <MudText Typo="Typo.h6" Align="Align.Center">Redis</MudText>
-                    <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">Caching</MudText>
-                </MudPaper>
-            </MudItem>
-            <MudItem xs="6" sm="4" md="3">
-                <MudPaper Class="tech-item" Elevation="0">
-                    <MudText Typo="Typo.h6" Align="Align.Center">Hangfire</MudText>
-                    <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">Background Jobs</MudText>
-                </MudPaper>
-            </MudItem>
-            <MudItem xs="6" sm="4" md="3">
-                <MudPaper Class="tech-item" Elevation="0">
-                    <MudText Typo="Typo.h6" Align="Align.Center">Serilog</MudText>
-                    <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">Logging</MudText>
-                </MudPaper>
-            </MudItem>
-        </MudGrid>
-    </MudContainer>
-
-    <!-- Modules Section -->
-    <MudContainer MaxWidth="MaxWidth.Large" Class="welcome-modules">
-        <div class="section-header">
-            <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">
-                <strong>Pre-Built Modules</strong>
-            </MudText>
-            <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Secondary" Class="section-subtitle">
-                Start building faster with ready-to-use functional modules
-            </MudText>
-        </div>
-
-        <MudGrid Spacing="4">
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Class="module-card" Elevation="2">
-                    <MudCardHeader>
-                        <CardHeaderAvatar>
-                            <MudAvatar Color="Color.Primary">
-                                <MudIcon Icon="@Icons.Material.Filled.People" />
-                            </MudAvatar>
-                        </CardHeaderAvatar>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h6">Identity Module</MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2">
-                            Complete user management with authentication, authorization, roles, and permissions.
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Class="module-card" Elevation="2">
-                    <MudCardHeader>
-                        <CardHeaderAvatar>
-                            <MudAvatar Color="Color.Secondary">
-                                <MudIcon Icon="@Icons.Material.Filled.Business" />
-                            </MudAvatar>
-                        </CardHeaderAvatar>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h6">Multitenancy Module</MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2">
-                            Full multi-tenant support with tenant provisioning, isolation, and management.
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Class="module-card" Elevation="2">
-                    <MudCardHeader>
-                        <CardHeaderAvatar>
-                            <MudAvatar Color="Color.Info">
-                                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" />
-                            </MudAvatar>
-                        </CardHeaderAvatar>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h6">Todo Module</MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2">
-                            Task management with lists, items, priorities, and status tracking.
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Class="module-card" Elevation="2">
-                    <MudCardHeader>
-                        <CardHeaderAvatar>
-                            <MudAvatar Color="Color.Warning">
-                                <MudIcon Icon="@Icons.Material.Filled.History" />
-                            </MudAvatar>
-                        </CardHeaderAvatar>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h6">Auditing Module</MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2">
-                            Comprehensive audit logging for tracking all user activities and changes.
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Class="module-card" Elevation="2">
-                    <MudCardHeader>
-                        <CardHeaderAvatar>
-                            <MudAvatar Color="Color.Success">
-                                <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" />
-                            </MudAvatar>
-                        </CardHeaderAvatar>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h6">Catalog Module</MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2">
-                            Product catalog management with categories, brands, and inventory tracking.
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Class="module-card" Elevation="2">
-                    <MudCardHeader>
-                        <CardHeaderAvatar>
-                            <MudAvatar Color="Color.Tertiary">
-                                <MudIcon Icon="@Icons.Material.Filled.Extension" />
-                            </MudAvatar>
-                        </CardHeaderAvatar>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h6">Custom Modules</MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2">
-                            Easily add your own modules following the established patterns and structure.
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-        </MudGrid>
-    </MudContainer>
-
-    <!-- Call to Action -->
-    <MudContainer MaxWidth="MaxWidth.Large" Class="welcome-cta">
-        <MudPaper Class="cta-paper" Elevation="4">
-            <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">
-                <strong>Ready to Get Started?</strong>
-            </MudText>
-            <MudText Typo="Typo.body1" Align="Align.Center" Class="cta-subtitle">
-                Build your next enterprise application with confidence
-            </MudText>
-            
-            <div class="cta-actions">
-                <AuthorizeView>
-                    <Authorized>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
                         <MudButton Variant="Variant.Filled" 
-                                   Color="Color.Primary" 
-                                   Size="Size.Large"
-                                   StartIcon="@Icons.Material.Filled.Rocket"
-                                   Href="/todos">
-                            Start Building
+                                   Color="Color.Tertiary" 
+                                   FullWidth="true"
+                                   StartIcon="@Icons.Material.Filled.History"
+                                   Href="/audits"
+                                   Size="Size.Large">
+                            Audit Logs
                         </MudButton>
-                    </Authorized>
-                    <NotAuthorized>
-                        <MudButton Variant="Variant.Filled" 
-                                   Color="Color.Primary" 
-                                   Size="Size.Large"
-                                   StartIcon="@Icons.Material.Filled.Rocket"
-                                   OnClick="NavigateToLogin">
-                            Sign In to Continue
-                        </MudButton>
-                    </NotAuthorized>
-                </AuthorizeView>
-                <MudButton Variant="Variant.Text" 
-                           Color="Color.Primary" 
-                           Size="Size.Large"
-                           StartIcon="@Icons.Material.Filled.Code"
-                           Href="https://github.com/fullstackhero"
-                           Target="_blank">
-                    View on GitHub
-                </MudButton>
-            </div>
-        </MudPaper>
-    </MudContainer>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
 
-    <!-- Footer -->
-    <MudContainer MaxWidth="MaxWidth.Large" Class="welcome-footer">
-        <MudDivider Class="mb-4" />
-        <MudGrid>
-            <MudItem xs="12" md="4">
-                <MudText Typo="Typo.h6" GutterBottom="true">FSH Framework</MudText>
-                <MudText Typo="Typo.body2" Color="Color.Secondary">
-                    A production-ready .NET starter kit for building modern enterprise applications.
-                </MudText>
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudText Typo="Typo.h6" GutterBottom="true">Resources</MudText>
-                <MudStack Spacing="1">
-                    <MudLink Href="https://fullstackhero.net" Target="_blank" Typo="Typo.body2">Documentation</MudLink>
-                    <MudLink Href="https://github.com/fullstackhero" Target="_blank" Typo="Typo.body2">GitHub</MudLink>
-                    <MudLink Href="#features" Typo="Typo.body2">Features</MudLink>
-                </MudStack>
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudText Typo="Typo.h6" GutterBottom="true">Community</MudText>
-                <MudStack Spacing="1">
-                    <MudLink Href="https://discord.gg/fullstackhero" Target="_blank" Typo="Typo.body2">Discord</MudLink>
-                    <MudLink Href="https://twitter.com/fullstackhero" Target="_blank" Typo="Typo.body2">Twitter</MudLink>
-                    <MudLink Href="https://www.youtube.com/c/fullstackhero" Target="_blank" Typo="Typo.body2">YouTube</MudLink>
-                </MudStack>
-            </MudItem>
-        </MudGrid>
-        <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary" Class="mt-6">
-            © @DateTime.Now.Year Full Stack Hero. Built with ❤️ using .NET 10 and Blazor
-        </MudText>
-    </MudContainer>
-</div>
+            <!-- Key Features -->
+            <MudPaper Class="fsh-card pa-6 mb-4">
+                <MudText Typo="Typo.h5" Class="mb-4 fw-700">Key Features</MudText>
+                <MudGrid Spacing="4">
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudCard Elevation="0" Class="feature-card-simple">
+                            <MudCardContent>
+                                <MudStack Spacing="2">
+                                    <MudIcon Icon="@Icons.Material.Filled.Speed" Color="Color.Primary" Size="Size.Large" />
+                                    <MudText Typo="Typo.h6" Class="fw-700">High Performance</MudText>
+                                    <MudText Typo="Typo.body2">Built on .NET 10 with optimized runtime and async operations</MudText>
+                                </MudStack>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudCard Elevation="0" Class="feature-card-simple">
+                            <MudCardContent>
+                                <MudStack Spacing="2">
+                                    <MudIcon Icon="@Icons.Material.Filled.Security" Color="Color.Secondary" Size="Size.Large" />
+                                    <MudText Typo="Typo.h6" Class="fw-700">Enterprise Security</MudText>
+                                    <MudText Typo="Typo.body2">JWT authentication with role-based access control</MudText>
+                                </MudStack>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudCard Elevation="0" Class="feature-card-simple">
+                            <MudCardContent>
+                                <MudStack Spacing="2">
+                                    <MudIcon Icon="@Icons.Material.Filled.Architecture" Color="Color.Info" Size="Size.Large" />
+                                    <MudText Typo="Typo.h6" Class="fw-700">Clean Architecture</MudText>
+                                    <MudText Typo="Typo.body2">Modular design with domain-driven development</MudText>
+                                </MudStack>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudCard Elevation="0" Class="feature-card-simple">
+                            <MudCardContent>
+                                <MudStack Spacing="2">
+                                    <MudIcon Icon="@Icons.Material.Filled.CorporateFare" Color="Color.Success" Size="Size.Large" />
+                                    <MudText Typo="Typo.h6" Class="fw-700">Multi-Tenancy</MudText>
+                                    <MudText Typo="Typo.body2">Database-per-tenant isolation for SaaS applications</MudText>
+                                </MudStack>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudCard Elevation="0" Class="feature-card-simple">
+                            <MudCardContent>
+                                <MudStack Spacing="2">
+                                    <MudIcon Icon="@Icons.Material.Filled.History" Color="Color.Warning" Size="Size.Large" />
+                                    <MudText Typo="Typo.h6" Class="fw-700">Audit Logging</MudText>
+                                    <MudText Typo="Typo.body2">Comprehensive audit trails for compliance</MudText>
+                                </MudStack>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudCard Elevation="0" Class="feature-card-simple">
+                            <MudCardContent>
+                                <MudStack Spacing="2">
+                                    <MudIcon Icon="@Icons.Material.Filled.Code" Color="Color.Tertiary" Size="Size.Large" />
+                                    <MudText Typo="Typo.h6" Class="fw-700">Developer Friendly</MudText>
+                                    <MudText Typo="Typo.body2">OpenAPI docs, Swagger UI, and code generation</MudText>
+                                </MudStack>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+
+            <!-- Available Modules -->
+            <MudPaper Class="fsh-card pa-6">
+                <MudText Typo="Typo.h5" Class="mb-4 fw-700">Available Modules</MudText>
+                <MudGrid Spacing="3">
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudPaper Class="pa-4" Elevation="2">
+                            <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                <MudAvatar Color="Color.Primary" Size="Size.Medium">
+                                    <MudIcon Icon="@Icons.Material.Filled.People" />
+                                </MudAvatar>
+                                <div>
+                                    <MudText Typo="Typo.subtitle1" Class="fw-700">Identity</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Secondary">User management</MudText>
+                                </div>
+                            </MudStack>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudPaper Class="pa-4" Elevation="2">
+                            <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                <MudAvatar Color="Color.Secondary" Size="Size.Medium">
+                                    <MudIcon Icon="@Icons.Material.Filled.Business" />
+                                </MudAvatar>
+                                <div>
+                                    <MudText Typo="Typo.subtitle1" Class="fw-700">Multitenancy</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Secondary">Tenant management</MudText>
+                                </div>
+                            </MudStack>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudPaper Class="pa-4" Elevation="2">
+                            <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                <MudAvatar Color="Color.Info" Size="Size.Medium">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" />
+                                </MudAvatar>
+                                <div>
+                                    <MudText Typo="Typo.subtitle1" Class="fw-700">Todo</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Secondary">Task management</MudText>
+                                </div>
+                            </MudStack>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudPaper Class="pa-4" Elevation="2">
+                            <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                <MudAvatar Color="Color.Warning" Size="Size.Medium">
+                                    <MudIcon Icon="@Icons.Material.Filled.History" />
+                                </MudAvatar>
+                                <div>
+                                    <MudText Typo="Typo.subtitle1" Class="fw-700">Auditing</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Secondary">Activity tracking</MudText>
+                                </div>
+                            </MudStack>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudPaper Class="pa-4" Elevation="2">
+                            <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                <MudAvatar Color="Color.Success" Size="Size.Medium">
+                                    <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" />
+                                </MudAvatar>
+                                <div>
+                                    <MudText Typo="Typo.subtitle1" Class="fw-700">Catalog</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Secondary">Product catalog</MudText>
+                                </div>
+                            </MudStack>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudPaper Class="pa-4" Elevation="2">
+                            <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                <MudAvatar Color="Color.Tertiary" Size="Size.Medium">
+                                    <MudIcon Icon="@Icons.Material.Filled.Extension" />
+                                </MudAvatar>
+                                <div>
+                                    <MudText Typo="Typo.subtitle1" Class="fw-700">Custom</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Secondary">Add your own</MudText>
+                                </div>
+                            </MudStack>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <!-- Unauthenticated View - Landing Page Style -->
+        <div class="welcome-landing">
+            <MudContainer MaxWidth="MaxWidth.Large">
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <MudChip T="string" Icon="@Icons.Material.Filled.Bolt" Color="Color.Primary" Size="Size.Small" Class="mb-4">
+                            .NET 10 | Blazor | Multi-Tenant
+                        </MudChip>
+                        <MudText Typo="Typo.h2" Class="hero-title mb-4" Align="Align.Center">
+                            <strong>Full Stack Hero</strong> Framework
+                        </MudText>
+                        <MudText Typo="Typo.h5" Class="hero-subtitle mb-4" Align="Align.Center">
+                            Enterprise-Grade .NET Starter Kit
+                        </MudText>
+                        <MudText Typo="Typo.body1" Class="hero-description mb-6" Align="Align.Center">
+                            Build scalable, multi-tenant SaaS applications with clean architecture, 
+                            modular design, and production-ready features out of the box.
+                        </MudText>
+                        <MudStack Row="true" Justify="Justify.Center" Spacing="3" Class="mb-8">
+                            <MudButton Variant="Variant.Filled" 
+                                       Color="Color.Primary" 
+                                       Size="Size.Large"
+                                       StartIcon="@Icons.Material.Filled.Login"
+                                       OnClick="NavigateToLogin">
+                                Get Started
+                            </MudButton>
+                            <MudButton Variant="Variant.Outlined" 
+                                       Color="Color.Primary" 
+                                       Size="Size.Large"
+                                       StartIcon="@Icons.Material.Filled.Code"
+                                       Href="https://github.com/fullstackhero"
+                                       Target="_blank">
+                                View on GitHub
+                            </MudButton>
+                        </MudStack>
+                    </div>
+                </div>
+
+                <!-- Features Grid -->
+                <MudGrid Spacing="4" Class="mt-8">
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="fsh-card pa-4 text-center">
+                            <MudIcon Icon="@Icons.Material.Filled.Speed" Color="Color.Primary" Size="Size.Large" Class="mb-2" />
+                            <MudText Typo="Typo.h6" Class="fw-700 mb-2">Fast</MudText>
+                            <MudText Typo="Typo.body2">Built on .NET 10 with performance optimizations</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="fsh-card pa-4 text-center">
+                            <MudIcon Icon="@Icons.Material.Filled.Security" Color="Color.Secondary" Size="Size.Large" Class="mb-2" />
+                            <MudText Typo="Typo.h6" Class="fw-700 mb-2">Secure</MudText>
+                            <MudText Typo="Typo.body2">JWT authentication and role-based access control</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="fsh-card pa-4 text-center">
+                            <MudIcon Icon="@Icons.Material.Filled.Architecture" Color="Color.Info" Size="Size.Large" Class="mb-2" />
+                            <MudText Typo="Typo.h6" Class="fw-700 mb-2">Modular</MudText>
+                            <MudText Typo="Typo.body2">Clean architecture with independent modules</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="fsh-card pa-4 text-center">
+                            <MudIcon Icon="@Icons.Material.Filled.CorporateFare" Color="Color.Success" Size="Size.Large" Class="mb-2" />
+                            <MudText Typo="Typo.h6" Class="fw-700 mb-2">Multi-Tenant</MudText>
+                            <MudText Typo="Typo.body2">Database isolation for SaaS applications</MudText>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+
+                <!-- Technology Stack -->
+                <MudPaper Class="fsh-card pa-6 mt-6">
+                    <MudText Typo="Typo.h5" Align="Align.Center" Class="mb-4 fw-700">Built With Modern Technology</MudText>
+                    <MudGrid Spacing="3">
+                        <MudItem xs="6" sm="4" md="3" Class="text-center">
+                            <MudText Typo="Typo.h6">.NET 10</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">Runtime</MudText>
+                        </MudItem>
+                        <MudItem xs="6" sm="4" md="3" Class="text-center">
+                            <MudText Typo="Typo.h6">Blazor</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">UI Framework</MudText>
+                        </MudItem>
+                        <MudItem xs="6" sm="4" md="3" Class="text-center">
+                            <MudText Typo="Typo.h6">EF Core 10</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">ORM</MudText>
+                        </MudItem>
+                        <MudItem xs="6" sm="4" md="3" Class="text-center">
+                            <MudText Typo="Typo.h6">PostgreSQL</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">Database</MudText>
+                        </MudItem>
+                        <MudItem xs="6" sm="4" md="3" Class="text-center">
+                            <MudText Typo="Typo.h6">Redis</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">Caching</MudText>
+                        </MudItem>
+                        <MudItem xs="6" sm="4" md="3" Class="text-center">
+                            <MudText Typo="Typo.h6">Hangfire</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">Background Jobs</MudText>
+                        </MudItem>
+                        <MudItem xs="6" sm="4" md="3" Class="text-center">
+                            <MudText Typo="Typo.h6">MudBlazor</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">Components</MudText>
+                        </MudItem>
+                        <MudItem xs="6" sm="4" md="3" Class="text-center">
+                            <MudText Typo="Typo.h6">Serilog</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">Logging</MudText>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudContainer>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     private async Task NavigateToLogin()

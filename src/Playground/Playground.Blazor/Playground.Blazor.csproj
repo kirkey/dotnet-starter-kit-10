@@ -29,10 +29,6 @@
     <ProjectReference Include="..\..\BuildingBlocks\Shared\Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Api\" />
-  </ItemGroup>
-
   <PropertyGroup>
     <!-- Analyzer suppressions (PRD-0019): Mud analyzer attribute warnings and demo/sample warnings -->
     <NoWarn>$(NoWarn);MUD0002;S3260;S2933;S3459;S3923;S108;S1144;S4487;CA1031;CA5394;CA1812</NoWarn>

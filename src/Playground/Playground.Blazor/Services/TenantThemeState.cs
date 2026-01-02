@@ -1,5 +1,4 @@
 using FSH.Framework.Blazor.UI.Theme;
-using MudBlazor;
 using System.Text.Json.Serialization;
 
 namespace FSH.Playground.Blazor.Services;

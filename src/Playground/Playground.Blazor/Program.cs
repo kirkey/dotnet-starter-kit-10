@@ -3,7 +3,6 @@ using FSH.Framework.Blazor.UI.Theme;
 using FSH.Playground.Blazor.Components;
 using FSH.Playground.Blazor.Services;
 using FSH.Playground.Blazor.Services.Api;
-using Microsoft.AspNetCore.Components.Authorization;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -55,23 +54,6 @@ builder.Services.AddScoped<AuthorizationHeaderHandler>();
 
 // Token refresh service for handling expired access tokens
 builder.Services.AddScoped<ITokenRefreshService, TokenRefreshService>();
-
-builder.Services.AddHttpClient();
-
-string apiBaseUrl = builder.Configuration["Api:BaseUrl"]
-                    ?? throw new InvalidOperationException("Api:BaseUrl configuration is missing.");
-
-// Configure HttpClient with authorization handler for API calls
-builder.Services.AddScoped(sp =>
-{
-    AuthorizationHeaderHandler handler = sp.GetRequiredService<AuthorizationHeaderHandler>();
-    handler.InnerHandler = new HttpClientHandler();
-
-    return new HttpClient(handler)
-    {
-        BaseAddress = new Uri(apiBaseUrl)
-    };
-});
 
 builder.Services.AddApiClients(builder.Configuration);
 

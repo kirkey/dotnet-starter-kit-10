@@ -4,24 +4,25 @@ namespace FSH.Playground.Blazor.Api;
 
 /// <summary>
 /// Todo Client adapter - provides unified interface for all todo operations
+/// Combines V1Client (CRUD operations) and TodoClient (task/complete operations)
 /// </summary>
-public class TodosClient(ITodosClient todoClient) : ITodosClient
+public class TodosClient(IV1Client v1Client, ITodoClient todoClient) : ITodosClient
 {
     // Delegate to V1Client for list operations
     public Task<TodosPagedResponse> TodoGetAsync(int page, int pageSize, string searchTerm = null, string status = null, int? priority = null, bool? isCompleted = null, CancellationToken cancellationToken = default(CancellationToken))
-        => todoClient.TodoGetAsync(page, pageSize, searchTerm, status, priority, isCompleted, cancellationToken);
+        => v1Client.TodoGetAsync(page, pageSize, searchTerm, status, priority, isCompleted, cancellationToken);
 
     public Task<Guid> TodoPostAsync(CreateTodoCommand body, CancellationToken cancellationToken = default(CancellationToken))
-        => todoClient.TodoPostAsync(body, cancellationToken);
+        => v1Client.TodoPostAsync(body, cancellationToken);
 
     public Task<TodoDto> TodoGetAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken))
-        => todoClient.TodoGetAsync(id, cancellationToken);
+        => v1Client.TodoGetAsync(id, cancellationToken);
 
     public Task<Guid> TodoPutAsync(Guid id, UpdateTodoCommand body, CancellationToken cancellationToken = default(CancellationToken))
-        => todoClient.TodoPutAsync(id, body, cancellationToken);
+        => v1Client.TodoPutAsync(id, body, cancellationToken);
 
     public Task TodoDeleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken))
-        => todoClient.TodoDeleteAsync(id, cancellationToken);
+        => v1Client.TodoDeleteAsync(id, cancellationToken);
 
     // Delegate to TodoClient for task operations
     public Task<ICollection<TodoTaskDto>> TasksGetAsync(Guid todoId, CancellationToken cancellationToken = default(CancellationToken))

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
 using System.Net;
-using System.Security.Claims;
 
 namespace FSH.Playground.Blazor.Services.Api;
 
