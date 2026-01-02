@@ -3,6 +3,7 @@ using FSH.Framework.Blazor.UI.Theme;
 using FSH.Playground.Blazor.Components;
 using FSH.Playground.Blazor.Services;
 using FSH.Playground.Blazor.Services.Api;
+using Microsoft.AspNetCore.Builder;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -88,12 +89,27 @@ builder.Services.AddOutputCache(options =>
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+// Configure Blazor Server Circuit Options
+builder.Services.AddServerSideBlazor(options =>
+{
+    options.DetailedErrors = builder.Environment.IsDevelopment();
+    options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(3);
+    options.DisconnectedCircuitMaxRetained = 100;
+    options.JSInteropDefaultCallTimeout = TimeSpan.FromMinutes(1);
+    options.MaxBufferedUnacknowledgedRenderBatches = 10;
+});
+
 WebApplication app = builder.Build();
 
+// Configure exception handler
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
+}
+else
+{
+    app.UseDeveloperExceptionPage();
 }
 
 // Simple health endpoints for ALB/ECS

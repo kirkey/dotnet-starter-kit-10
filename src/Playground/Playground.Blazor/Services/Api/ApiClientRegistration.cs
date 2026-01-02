@@ -68,6 +68,9 @@ internal static class ApiClientRegistration
                 sp.GetRequiredService<IV1Client>(),
                 sp.GetRequiredService<ITodoClient>()));
 
+        services.AddTransient<IHealthClient>(sp =>
+            new HealthClient(ResolveApiClient(sp)));
+
         return services;
     }
 }

@@ -344,8 +344,8 @@
             "db:multitenancy" => "Multitenancy Database",
             "db:tenants-migrations" => "Tenant Migrations",
             _ => name.Replace(":", " - ").Replace("-", " ")
-                     .Split(' ')
-                     .Select(w => char.ToUpper(w[0]) + w[1..].ToLower())
+                     .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                     .Select(w => string.IsNullOrEmpty(w) ? w : char.ToUpper(w[0]) + w[1..].ToLower())
                      .Aggregate((a, b) => $"{a} {b}")
         };
     }
