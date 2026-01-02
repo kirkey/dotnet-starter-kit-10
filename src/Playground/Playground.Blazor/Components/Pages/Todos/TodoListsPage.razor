@@ -1,11 +1,11 @@
 @page "/todos"
 @using FSH.Framework.Blazor.UI.Components.Dialogs
-@using FSH.Playground.Blazor.Services
+@using FSH.Playground.Blazor.Api
 @inherits ComponentBase
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject NavigationManager Navigation
-@inject ITodoClient TodoClient
+@inject ITodosClient TodoClient
 
 <FshPageHeader Title="Todo Lists"
                Description="Manage your todo lists and organize tasks efficiently">
@@ -145,7 +145,7 @@
 
 @* Todo Lists Grid *@
 <MudPaper Class="fsh-card pa-0" Style="overflow: hidden;">
-    <MudDataGrid T="TodoListSummaryDto"
+    <MudDataGrid T="TodoSummaryDto"
                  @ref="_dataGrid"
                  Items="_filtered"
                  Loading="_loading"
@@ -160,14 +160,10 @@
                  RowsPerPage="@_pageSize"
                  Class="todos-datagrid">
         <Columns>
-            <SelectColumn T="TodoListSummaryDto" ShowInFooter="false" />
+            <SelectColumn T="TodoSummaryDto" ShowInFooter="false" />
             <TemplateColumn Title="List" Sortable="true" SortBy="@(x => x.Name)">
                 <CellTemplate>
                     <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
-                        @if (!string.IsNullOrEmpty(context.Item.Color))
-                        {
-                            <MudAvatar Size="Size.Small" Style="@($"background-color: {context.Item.Color}; width: 6px; height: 24px; border-radius: 3px;")"></MudAvatar>
-                        }
                         <MudStack Spacing="0">
                             <MudLink Typo="Typo.body1" Class="fw-600" OnClick="@(() => ViewDetails(context.Item.Id))">
                                 @context.Item.Name
@@ -187,7 +183,7 @@
                                            Size="Size.Small" 
                                            Rounded="true" />
                         <MudText Typo="Typo.caption">
-                            @context.Item.CompletedItemCount / @context.Item.ItemCount tasks
+                            @context.Item.CompletedTaskCount / @context.Item.TaskCount tasks
                         </MudText>
                     </MudStack>
                 </CellTemplate>
@@ -202,12 +198,14 @@
                     </MudChip>
                 </CellTemplate>
             </TemplateColumn>
-            <TemplateColumn Title="Created" Sortable="true" SortBy="@(x => x.CreatedOnUtc)">
+            <TemplateColumn Title="Priority" Sortable="true" SortBy="@(x => x.Priority)">
                 <CellTemplate>
-                    <MudStack Spacing="0">
-                        <MudText Typo="Typo.body2">@context.Item.CreatedOnUtc.ToString("MMM dd, yyyy")</MudText>
-                        <MudText Typo="Typo.caption" Class="text-muted">by @context.Item.CreatedByUserName</MudText>
-                    </MudStack>
+                    <MudChip T="string" 
+                             Size="Size.Small" 
+                             Color="@GetPriorityColor(context.Item.Priority)" 
+                             Variant="Variant.Outlined">
+                        @GetPriorityText(context.Item.Priority)
+                    </MudChip>
                 </CellTemplate>
             </TemplateColumn>
             <TemplateColumn Title="Actions" Sortable="false" HeaderClass="text-right" CellClass="text-right">
@@ -237,7 +235,7 @@
             </TemplateColumn>
         </Columns>
         <PagerContent>
-            <MudDataGridPager T="TodoListSummaryDto" PageSizeOptions="@_pageSizeOptions" />
+            <MudDataGridPager T="TodoSummaryDto" PageSizeOptions="@_pageSizeOptions" />
         </PagerContent>
         <NoRecordsContent>
             <MudStack AlignItems="AlignItems.Center" Spacing="4" Class="pa-8">
@@ -274,10 +272,10 @@
 </style>
 
 @code {
-    private MudDataGrid<TodoListSummaryDto>? _dataGrid;
-    private List<TodoListSummaryDto> _lists = new();
-    private List<TodoListSummaryDto> _filtered = new();
-    private HashSet<TodoListSummaryDto> _selectedLists = new();
+    private MudDataGrid<TodoSummaryDto>? _dataGrid;
+    private List<TodoSummaryDto> _lists = new();
+    private List<TodoSummaryDto> _filtered = new();
+    private HashSet<TodoSummaryDto> _selectedLists = new();
     private bool _loading = true;
     private Guid? _busyListId;
     private bool _bulkBusy;
@@ -313,8 +311,8 @@
         _loading = true;
         try
         {
-            var result = await TodoClient.ListsGetAsync();
-            _lists = result?.Data?.ToList() ?? new List<TodoListSummaryDto>();
+            var result = await TodoClient.TodoGetAsync(1, 100);
+            _lists = result?.Data?.ToList() ?? new List<TodoSummaryDto>();
             
             CalculateStats();
             ApplyFilters();
@@ -334,10 +332,10 @@
         _stats = new TodoListStats
         {
             TotalLists = _lists.Count,
-            ActiveLists = _lists.Count(l => l.IsActive),
-            TotalItems = _lists.Sum(l => l.ItemCount),
-            CompletionRate = _lists.Any() && _lists.Sum(l => l.ItemCount) > 0
-                ? (int)((_lists.Sum(l => l.CompletedItemCount) * 100.0) / _lists.Sum(l => l.ItemCount))
+            ActiveLists = _lists.Count(l => !l.IsCompleted),
+            TotalItems = _lists.Sum(l => l.TaskCount),
+            CompletionRate = _lists.Any() && _lists.Sum(l => l.TaskCount) > 0
+                ? (int)((_lists.Sum(l => l.CompletedTaskCount) * 100.0) / _lists.Sum(l => l.TaskCount))
                 : 0
         };
     }
@@ -361,10 +359,17 @@
 
         if (_filter.IsActive.HasValue)
         {
-            query = query.Where(l => l.IsActive == _filter.IsActive.Value);
+            if (_filter.IsActive.Value)
+            {
+                query = query.Where(l => !l.IsCompleted);
+            }
+            else
+            {
+                query = query.Where(l => l.IsCompleted);
+            }
         }
 
-        _filtered = query.OrderByDescending(l => l.CreatedOnUtc).ToList();
+        _filtered = query.OrderByDescending(l => l.DueDate).ToList();
     }
 
     private void RefreshData()
@@ -379,7 +384,7 @@
         ApplyFilters();
     }
 
-    private void OnSelectionChanged(HashSet<TodoListSummaryDto> items)
+    private void OnSelectionChanged(HashSet<TodoSummaryDto> items)
     {
         _selectedLists = items;
     }
@@ -390,12 +395,12 @@
         StateHasChanged();
     }
 
-    private double GetCompletionPercentage(TodoListSummaryDto list)
+    private double GetCompletionPercentage(TodoSummaryDto list)
     {
-        return list.ItemCount > 0 ? (list.CompletedItemCount * 100.0) / list.ItemCount : 0;
+        return list.TaskCount > 0 ? (list.CompletedTaskCount * 100.0) / list.TaskCount : 0;
     }
 
-    private Color GetProgressColor(TodoListSummaryDto list)
+    private Color GetProgressColor(TodoSummaryDto list)
     {
         var percentage = GetCompletionPercentage(list);
         return percentage switch
@@ -415,6 +420,28 @@
             "archived" => Color.Default,
             "completed" => Color.Info,
             _ => Color.Default
+        };
+    }
+
+    private Color GetPriorityColor(int priority)
+    {
+        return priority switch
+        {
+            3 => Color.Error,    // High
+            2 => Color.Warning,  // Medium
+            1 => Color.Info,     // Low
+            _ => Color.Default
+        };
+    }
+
+    private string GetPriorityText(int priority)
+    {
+        return priority switch
+        {
+            3 => "High",
+            2 => "Medium",
+            1 => "Low",
+            _ => "None"
         };
     }
 
@@ -442,7 +469,7 @@
         }
     }
 
-    private async Task EditList(TodoListSummaryDto list)
+    private async Task EditList(TodoSummaryDto list)
     {
         var parameters = new DialogParameters<CreateTodoListDialog>
         {
@@ -466,7 +493,7 @@
         }
     }
 
-    private async Task DeleteList(TodoListSummaryDto list)
+    private async Task DeleteList(TodoSummaryDto list)
     {
         var confirmed = await DialogService.ShowDeleteConfirmAsync(list.Name ?? "this list");
         if (!confirmed) return;
@@ -474,7 +501,7 @@
         _busyListId = list.Id;
         try
         {
-            await TodoClient.ListsDeleteAsync(list.Id, CancellationToken.None);
+            await TodoClient.TodoDeleteAsync(list.Id, CancellationToken.None);
             
             Snackbar.Add("Todo list deleted successfully.", Severity.Success);
             await LoadData();
@@ -512,7 +539,7 @@
         {
             try
             {
-                await TodoClient.ListsDeleteAsync(list.Id, CancellationToken.None);
+                await TodoClient.TodoDeleteAsync(list.Id, CancellationToken.None);
                 success++;
             }
             catch (Exception ex)

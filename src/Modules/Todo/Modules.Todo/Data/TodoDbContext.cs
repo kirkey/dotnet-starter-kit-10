@@ -2,10 +2,11 @@ using Finbuckle.MultiTenant.Abstractions;
 using FSH.Framework.Persistence;
 using FSH.Framework.Shared.Multitenancy;
 using FSH.Framework.Shared.Persistence;
-using FSH.Modules.Todo.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using TodoEntity = FSH.Modules.Todo.Domain.Todo;
+using TodoTaskEntity = FSH.Modules.Todo.Domain.TodoTask;
 
 namespace FSH.Modules.Todo.Data;
 
@@ -16,8 +17,8 @@ public class TodoDbContext : DbContext
     private readonly IHostEnvironment _environment;
 
     // DbSets
-    public DbSet<TodoList> TodoLists => Set<TodoList>();
-    public DbSet<TodoItem> TodoItems => Set<TodoItem>();
+    public DbSet<TodoEntity> Todos => Set<TodoEntity>();
+    public DbSet<TodoTaskEntity> TodoTasks => Set<TodoTaskEntity>();
 
     public TodoDbContext(
         IMultiTenantContextAccessor<AppTenantInfo> multiTenantContextAccessor,

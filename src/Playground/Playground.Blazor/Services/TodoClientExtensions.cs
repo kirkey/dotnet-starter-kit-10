@@ -8,13 +8,13 @@ namespace FSH.Playground.Blazor.Services;
 /// </summary>
 internal static class TodoClientExtensions
 {
-    public static async System.Threading.Tasks.Task ListsDeleteAsync(
+    public static async Task ListsDeleteAsync(
         this ITodoClient client,
-        System.Guid id,
-        System.Threading.CancellationToken cancellationToken = default)
+        Guid id,
+        CancellationToken cancellationToken = default)
     {
         if (id == Guid.Empty)
-            throw new System.ArgumentException("id cannot be empty", nameof(id));
+            throw new ArgumentException("id cannot be empty", nameof(id));
 
         // Cast to TodoClient to access the protected HttpClient field via reflection
         if (client is not TodoClient todoClient)
@@ -29,7 +29,7 @@ internal static class TodoClientExtensions
         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
         
         if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            throw new ApiException("Not Found", 404, "", new Dictionary<string, System.Collections.Generic.IEnumerable<string>>(), null);
+            throw new ApiException("Not Found", 404, "", new Dictionary<string, IEnumerable<string>>(), null);
         
         response.EnsureSuccessStatusCode();
     }

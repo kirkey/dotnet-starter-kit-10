@@ -1,6 +1,6 @@
 @page "/settings/profile"
 @using Microsoft.AspNetCore.Components.Authorization
-@inject ApiClient.IIdentityClient IdentityClient
+@inject IIdentityClient IdentityClient
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -336,7 +336,7 @@ else
     private bool _loading = true;
     private bool _saving;
     private bool _changingPassword;
-    private ApiClient.UserDto? _profile;
+    private UserDto? _profile;
     private string? _avatarPreviewUrl;
     private bool _hasImageChanges;
     private bool _deleteCurrentImage;
@@ -493,7 +493,7 @@ else
         _saving = true;
         try
         {
-            var command = new ApiClient.UpdateUserCommand
+            var command = new UpdateUserCommand
             {
                 Id = _profile?.Id ?? string.Empty,
                 FirstName = _profileModel.FirstName,
@@ -506,7 +506,7 @@ else
             // Add image upload if pending
             if (_pendingImageData is not null && _pendingImageFileName is not null && _pendingImageContentType is not null)
             {
-                command.Image = new ApiClient.FileUploadRequest
+                command.Image = new FileUploadRequest
                 {
                     FileName = _pendingImageFileName,
                     ContentType = _pendingImageContentType,
@@ -525,7 +525,7 @@ else
             // Notify other components (e.g., header) about the profile change
             NotifyProfileChanged();
         }
-        catch (ApiClient.ApiException ex)
+        catch (ApiException ex)
         {
             Snackbar.Add($"Failed to update profile: {ex.Message}", Severity.Error);
         }
@@ -580,7 +580,7 @@ else
         _changingPassword = true;
         try
         {
-            var command = new ApiClient.ChangePasswordCommand
+            var command = new ChangePasswordCommand
             {
                 Password = _passwordModel.CurrentPassword,
                 NewPassword = _passwordModel.NewPassword,
@@ -592,7 +592,7 @@ else
             Snackbar.Add("Password changed successfully!", Severity.Success);
             ResetPasswordForm();
         }
-        catch (ApiClient.ApiException ex)
+        catch (ApiException ex)
         {
             Snackbar.Add($"Failed to change password: {ex.Message}", Severity.Error);
         }

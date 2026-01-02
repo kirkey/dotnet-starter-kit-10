@@ -38,8 +38,8 @@ builder.Services.AddMediator(o =>
         typeof(GetTenantStatusQueryHandler),
         typeof(FSH.Modules.Auditing.Contracts.AuditEnvelope),
         typeof(FSH.Modules.Auditing.Persistence.AuditDbContext),
-        typeof(FSH.Modules.Todo.Contracts.v1.TodoLists.GetTodoListsQuery),
-        typeof(FSH.Modules.Todo.Data.TodoDbContext)];
+        typeof(FSH.Modules.Todo.Contracts.v1.Todos.GetTodosQuery),
+        typeof(FSH.Modules.Todo.Features.v1.Todos.GetTodos.GetTodosQueryHandler)];
 });
 
 Assembly[] moduleAssemblies = new Assembly[]

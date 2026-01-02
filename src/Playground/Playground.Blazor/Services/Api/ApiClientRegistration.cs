@@ -1,3 +1,4 @@
+using FSH.Playground.Blazor.Api;
 using FSH.Playground.Blazor.ApiClient;
 
 namespace FSH.Playground.Blazor.Services.Api;
@@ -45,11 +46,11 @@ internal static class ApiClientRegistration
         services.AddTransient<IV1Client>(sp =>
             new V1Client(ResolveClient(sp)));
 
-        services.AddTransient<IHealthClient>(sp =>
-            new HealthClient(ResolveClient(sp)));
-
         services.AddTransient<ITodoClient>(sp =>
             new TodoClient(ResolveClient(sp)));
+
+        services.AddTransient<ITodosClient>(sp =>
+            new TodosClient(sp.GetRequiredService<ITodosClient>()));
 
         return services;
     }

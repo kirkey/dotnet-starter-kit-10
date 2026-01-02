@@ -3,18 +3,17 @@ using Asp.Versioning.Builder;
 using FSH.Framework.Persistence;
 using FSH.Framework.Web.Modules;
 using FSH.Modules.Todo.Data;
-using FSH.Modules.Todo.Features.v1.TodoItems.AssignTodoItem;
-using FSH.Modules.Todo.Features.v1.TodoItems.CompleteTodoItem;
-using FSH.Modules.Todo.Features.v1.TodoItems.CreateTodoItem;
-using FSH.Modules.Todo.Features.v1.TodoItems.DeleteTodoItem;
-using FSH.Modules.Todo.Features.v1.TodoItems.GetTodoItem;
-using FSH.Modules.Todo.Features.v1.TodoItems.GetTodoItems;
-using FSH.Modules.Todo.Features.v1.TodoItems.UpdateTodoItem;
-using FSH.Modules.Todo.Features.v1.TodoLists.CreateTodoList;
-using FSH.Modules.Todo.Features.v1.TodoLists.DeleteTodoList;
-using FSH.Modules.Todo.Features.v1.TodoLists.GetTodoList;
-using FSH.Modules.Todo.Features.v1.TodoLists.GetTodoLists;
-using FSH.Modules.Todo.Features.v1.TodoLists.UpdateTodoList;
+using FSH.Modules.Todo.Features.v1.Todos.CompleteTodo;
+using FSH.Modules.Todo.Features.v1.Todos.CreateTodo;
+using FSH.Modules.Todo.Features.v1.Todos.DeleteTodo;
+using FSH.Modules.Todo.Features.v1.Todos.GetTodo;
+using FSH.Modules.Todo.Features.v1.Todos.GetTodos;
+using FSH.Modules.Todo.Features.v1.Todos.UpdateTodo;
+using FSH.Modules.Todo.Features.v1.TodoTasks.CreateTodoTask;
+using FSH.Modules.Todo.Features.v1.TodoTasks.DeleteTodoTask;
+using FSH.Modules.Todo.Features.v1.TodoTasks.GetTodoTasks;
+using FSH.Modules.Todo.Features.v1.TodoTasks.ToggleTaskCompletion;
+using FSH.Modules.Todo.Features.v1.TodoTasks.UpdateTodoTask;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -53,20 +52,19 @@ public class TodoModule : IModule
             .WithTags("Todos")
             .WithApiVersionSet(apiVersionSet);
 
-        // TodoList endpoints
-        group.MapCreateTodoListEndpoint();
-        group.MapGetTodoListsEndpoint();
-        group.MapGetTodoListEndpoint();
-        group.MapUpdateTodoListEndpoint();
-        group.MapDeleteTodoListEndpoint();
+        // Todo endpoints
+        group.MapGetTodosEndpoint();
+        group.MapGetTodoEndpoint();
+        group.MapCreateTodoEndpoint();
+        group.MapUpdateTodoEndpoint();
+        group.MapDeleteTodoEndpoint();
+        group.MapCompleteTodoEndpoint();
 
-        // TodoItem endpoints
-        group.MapCreateTodoItemEndpoint();
-        group.MapGetTodoItemsEndpoint();
-        group.MapGetTodoItemEndpoint();
-        group.MapUpdateTodoItemEndpoint();
-        group.MapDeleteTodoItemEndpoint();
-        group.MapCompleteTodoItemEndpoint();
-        group.MapAssignTodoItemEndpoint();
+        // TodoTask endpoints
+        group.MapGetTodoTasksEndpoint();
+        group.MapCreateTodoTaskEndpoint();
+        group.MapUpdateTodoTaskEndpoint();
+        group.MapDeleteTodoTaskEndpoint();
+        group.MapToggleTaskCompletionEndpoint();
     }
 }

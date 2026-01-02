@@ -1,19 +1,11 @@
 namespace FSH.Modules.Todo.Domain;
 
-public static class TodoStatus
+public enum TodoStatus
 {
-    public const string Active = "Active";
-    public const string Archived = "Archived";
-    public const string Completed = "Completed";
-}
-
-public static class TodoItemStatus
-{
-    public const string Pending = "Pending";
-    public const string InProgress = "In Progress";
-    public const string Completed = "Completed";
-    public const string Cancelled = "Cancelled";
-    public const string OnHold = "On Hold";
+    NotStarted = 0,
+    InProgress = 1,
+    Completed = 2,
+    OnHold = 3
 }
 
 public enum TodoPriority

@@ -3,8 +3,8 @@
 @attribute [StreamRendering(true)]
 @using System.Linq
 @inherits ComponentBase
-@inject ApiClient.IV1Client V1Client
-@inject ApiClient.IIdentityClient IdentityClient
+@inject IV1Client V1Client
+@inject IIdentityClient IdentityClient
 @inject ISnackbar Snackbar
 
 <FshPageHeader Title="Dashboard"
@@ -59,7 +59,7 @@
 
 @code {
     private SummaryDto _summary = new();
-    private List<ApiClient.AuditSummaryDto> _recentAudits = new();
+    private List<AuditSummaryDto> _recentAudits = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -74,12 +74,12 @@
             var result = await V1Client.AuditsGetAsync(pageNumber: 1, pageSize: 5);
             if (result is null)
             {
-                _recentAudits = new List<ApiClient.AuditSummaryDto>();
+                _recentAudits = new List<AuditSummaryDto>();
                 _summary.RecentAudits = 0;
                 return;
             }
 
-            _recentAudits = result.Items?.ToList() ?? new List<ApiClient.AuditSummaryDto>();
+            _recentAudits = result.Items?.ToList() ?? new List<AuditSummaryDto>();
             _summary.RecentAudits = (int)result.TotalCount;
         }
         catch (Exception ex)
