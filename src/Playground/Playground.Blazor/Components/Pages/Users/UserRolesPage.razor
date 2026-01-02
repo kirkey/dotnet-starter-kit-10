@@ -1,11 +1,13 @@
 @page "/users/{Id:guid}/roles"
 @using FSH.Framework.Blazor.UI.Components.Dialogs
+@using FSH.Playground.Blazor.Services.Api
 @inherits ComponentBase
 @inject IIdentityClient IdentityClient
 @inject IUsersClient UsersClient
 @inject NavigationManager Navigation
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
+@inject IGlobalErrorHandler ErrorHandler
 
 <FshPageHeader Title="Manage User Roles"
                Description="Assign or remove roles for this user">
@@ -249,10 +251,14 @@ else
         try
         {
             // Load user details
-            _user = await IdentityClient.UsersGetAsync(Id);
+            _user = await ErrorHandler.ExecuteAsync(
+                async () => await IdentityClient.UsersGetAsync(Id),
+                ex => Snackbar.Add($"Failed to load user: {ex.Message}", Severity.Error));
 
             // Load user's current roles
-            var userRoles = await UsersClient.RolesGetAsync(Id);
+            var userRoles = await ErrorHandler.ExecuteAsync(
+                async () => await UsersClient.RolesGetAsync(Id),
+                ex => Snackbar.Add($"Failed to load user roles: {ex.Message}", Severity.Error));
             var enabledRoleIds = userRoles?.Where(r => r.Enabled).Select(r => r.RoleId ?? "").ToHashSet() ?? new HashSet<string>();
 
             // Store original state and current state
@@ -260,7 +266,9 @@ else
             _currentRoleIds = new HashSet<string>(enabledRoleIds);
 
             // Load all available roles
-            var allRoles = await IdentityClient.RolesGetAsync();
+            var allRoles = await ErrorHandler.ExecuteAsync(
+                async () => await IdentityClient.RolesGetAsync(),
+                ex => Snackbar.Add($"Failed to load roles: {ex.Message}", Severity.Error));
             _allRoles = allRoles?.ToList() ?? new List<RoleDto>();
         }
         catch (Exception ex)

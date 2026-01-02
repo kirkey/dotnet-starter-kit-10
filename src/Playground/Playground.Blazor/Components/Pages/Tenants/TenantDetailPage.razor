@@ -2,6 +2,7 @@
 @using FSH.Framework.Blazor.UI.Components.Dialogs
 @using FSH.Framework.Shared.Identity
 @using FSH.Framework.Shared.Multitenancy
+@using FSH.Playground.Blazor.Services.Api
 @using Microsoft.AspNetCore.Components.Authorization
 @inherits ComponentBase
 @inject ITenantsClient TenantsClient
@@ -9,6 +10,7 @@
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IGlobalErrorHandler ErrorHandler
 
 @if (!_isRootTenantAdmin)
 {
@@ -350,11 +352,9 @@ else
         _loading = true;
         try
         {
-            _tenant = await TenantsClient.StatusAsync(Id);
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load tenant: {ex.Message}", Severity.Error);
+            _tenant = await ErrorHandler.ExecuteAsync(
+                async () => await TenantsClient.StatusAsync(Id),
+                ex => Snackbar.Add($"Failed to load tenant: {ex.Message}", Severity.Error));
         }
         finally
         {
@@ -367,11 +367,9 @@ else
         _provisioningLoading = true;
         try
         {
-            _provisioningStatus = await TenantsClient.ProvisioningAsync(Id);
-        }
-        catch
-        {
-            _provisioningStatus = null;
+            _provisioningStatus = await ErrorHandler.ExecuteAsync(
+                async () => await TenantsClient.ProvisioningAsync(Id),
+                ex => { /* Silent failure for provisioning status */ });
         }
         finally
         {

@@ -1,10 +1,12 @@
 @page "/settings/profile"
 @using Microsoft.AspNetCore.Components.Authorization
+@using FSH.Playground.Blazor.Services.Api
 @inject IIdentityClient IdentityClient
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject Services.IUserProfileState UserProfileState
+@inject IGlobalErrorHandler ErrorHandler
 
 <!-- Hero Section -->
 <FshPageHeader Title="Profile Settings"
@@ -369,7 +371,10 @@ else
         _loading = true;
         try
         {
-            _profile = await IdentityClient.ProfileGetAsync();
+            _profile = await ErrorHandler.ExecuteAsync(
+                async () => await IdentityClient.ProfileGetAsync(),
+                ex => Snackbar.Add($"Failed to load profile: {ex.Message}", Severity.Error));
+            
             if (_profile is not null)
             {
                 _profileModel = new ProfileModel
@@ -381,10 +386,6 @@ else
                 };
                 _avatarPreviewUrl = _profile.ImageUrl;
             }
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load profile: {ex.Message}", Severity.Error);
         }
         finally
         {

@@ -2,6 +2,7 @@
 @using System.Linq
 @using System.Text
 @using System.Text.Json
+@using FSH.Playground.Blazor.Services.Api
 <!-- Hero Section -->
 <FshPageHeader Title="Audit Center"
                Description="Comprehensive audit trail with advanced analytics, filtering, and insights">
@@ -704,6 +705,8 @@
     [Inject] private IAuditsClient AuditsClient { get; set; } = default!;
     [Inject] private ISnackbar Snackbar { get; set; } = default!;
     [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+    [Inject] private IGlobalErrorHandler ErrorHandler { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
@@ -714,15 +717,19 @@
     {
         try
         {
-            _summary = await AuditsClient.SummaryAsync(
-                fromUtc: _filter.FromUtc,
-                toUtc: _filter.ToUtc,
-                tenantId: string.IsNullOrWhiteSpace(_filter.TenantId) ? null : _filter.TenantId);
+            _summary = await ErrorHandler.ExecuteAsync(
+                async () => await AuditsClient.SummaryAsync(
+                    fromUtc: _filter.FromUtc,
+                    toUtc: _filter.ToUtc,
+                    tenantId: string.IsNullOrWhiteSpace(_filter.TenantId) ? null : _filter.TenantId),
+                ex => {
+                    Snackbar.Add($"Failed to load summary: {ex.Message}", Severity.Warning);
+                    _showSummary = false;
+                });
         }
-        catch (Exception ex)
+        catch
         {
-            Snackbar.Add($"Failed to load summary: {ex.Message}", Severity.Warning);
-            _showSummary = false;
+            // Error already handled by ErrorHandler
         }
     }
 

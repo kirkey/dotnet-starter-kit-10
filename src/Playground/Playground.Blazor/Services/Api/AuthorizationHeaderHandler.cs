@@ -65,13 +65,15 @@ internal sealed class AuthorizationHeaderHandler(
         try
         {
             HttpContext? httpContext = httpContextAccessor.HttpContext;
-            if (httpContext is not null && !httpContext.Response.HasStarted)
+            if (httpContext is not null)
             {
                 await httpContext.SignOutAsync("Cookies");
                 logger.LogInformation("User signed out due to expired refresh token");
 
-                // Redirect to login page with session expired message
-                if (!httpContext.Response.HasStarted)
+                // For SSR requests, redirect to login
+                // For API/fetch requests, the client will handle the redirect
+                if (!httpContext.Response.HasStarted && 
+                    !httpContext.Request.Headers.ContainsKey("X-Requested-With"))
                 {
                     httpContext.Response.Redirect("/login?toast=session_expired");
                 }

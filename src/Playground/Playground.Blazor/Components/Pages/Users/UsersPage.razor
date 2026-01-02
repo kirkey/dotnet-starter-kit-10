@@ -4,12 +4,14 @@
 @using FSH.Framework.Shared.Identity
 @inherits ComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
+@using FSH.Playground.Blazor.Services.Api
 @inject IIdentityClient IdentityClient
 @inject IUsersClient UsersClient
 @inject NavigationManager Navigation
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IGlobalErrorHandler ErrorHandler
 
 <FshPageHeader Title="Users"
                Description="Manage user accounts and permissions">
@@ -371,15 +373,14 @@
         _loading = true;
         try
         {
-            var result = await IdentityClient.UsersGetAsync();
+            var result = await ErrorHandler.ExecuteAsync(
+                async () => await IdentityClient.UsersGetAsync(),
+                ex => Snackbar.Add($"Failed to load users: {ex.Message}", Severity.Error));
+            
             _users = result?.ToList() ?? new List<UserDto>();
             CalculateStats();
             ApplyFilters();
             await LoadRolesForUsers();
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load users: {ex.Message}", Severity.Error);
         }
         finally
         {

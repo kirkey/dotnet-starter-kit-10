@@ -1,10 +1,12 @@
 @page "/roles"
 @using FSH.Framework.Blazor.UI.Components.Dialogs
+@using FSH.Playground.Blazor.Services.Api
 @inherits ComponentBase
 @inject IIdentityClient IdentityClient
 @inject NavigationManager Navigation
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
+@inject IGlobalErrorHandler ErrorHandler
 
 <FshPageHeader Title="Roles"
                Description="Manage roles and their permissions">
@@ -285,14 +287,13 @@
         _loading = true;
         try
         {
-            var result = await IdentityClient.RolesGetAsync();
+            var result = await ErrorHandler.ExecuteAsync(
+                async () => await IdentityClient.RolesGetAsync(),
+                ex => Snackbar.Add($"Failed to load roles: {ex.Message}", Severity.Error));
+            
             _roles = result?.ToList() ?? new List<RoleDto>();
             CalculateStats();
             ApplyFilters();
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load roles: {ex.Message}", Severity.Error);
         }
         finally
         {

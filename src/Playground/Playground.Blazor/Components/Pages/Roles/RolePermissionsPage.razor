@@ -1,9 +1,11 @@
 @page "/roles/{Id:guid}/permissions"
+@using FSH.Playground.Blazor.Services.Api
 @inherits ComponentBase
 @inject IIdentityClient IdentityClient
 @inject NavigationManager Navigation
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
+@inject IGlobalErrorHandler ErrorHandler
 
 <FshPageHeader Title="Manage Role Permissions"
                Description="Configure what actions this role can perform">
@@ -441,10 +443,14 @@ else
         try
         {
             // Load role with its current permissions
-            _role = await IdentityClient.PermissionsGetAsync(Id);
+            _role = await ErrorHandler.ExecuteAsync(
+                async () => await IdentityClient.PermissionsGetAsync(Id),
+                ex => Snackbar.Add($"Failed to load role: {ex.Message}", Severity.Error));
 
             // Load all available permissions first
-            var allPerms = await IdentityClient.PermissionsGetAsync();
+            var allPerms = await ErrorHandler.ExecuteAsync(
+                async () => await IdentityClient.PermissionsGetAsync(),
+                ex => Snackbar.Add($"Failed to load permissions: {ex.Message}", Severity.Error));
             _allPermissions = allPerms?.ToList() ?? new List<string>();
 
             if (_role is not null)

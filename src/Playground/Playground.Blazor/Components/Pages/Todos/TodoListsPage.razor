@@ -1,11 +1,13 @@
 @page "/todos"
 @using FSH.Framework.Blazor.UI.Components.Dialogs
 @using FSH.Playground.Blazor.Api
+@using FSH.Playground.Blazor.Services.Api
 @inherits ComponentBase
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject NavigationManager Navigation
 @inject ITodosClient TodoClient
+@inject IGlobalErrorHandler ErrorHandler
 
 <FshPageHeader Title="Todo Lists"
                Description="Manage your todo lists and organize tasks efficiently">
@@ -351,15 +353,14 @@
         _loading = true;
         try
         {
-            var result = await TodoClient.TodoGetAsync(1, 100);
+            var result = await ErrorHandler.ExecuteAsync(
+                async () => await TodoClient.TodoGetAsync(1, 100),
+                ex => Snackbar.Add($"Failed to load todo lists: {ex.Message}", Severity.Error));
+            
             _lists = result?.Data?.ToList() ?? new List<TodoSummaryDto>();
             
             CalculateStats();
             ApplyFilters();
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load todo lists: {ex.Message}", Severity.Error);
         }
         finally
         {

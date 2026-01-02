@@ -2,6 +2,7 @@
 @using System.Security.Claims
 @using FSH.Framework.Blazor.UI.Components.Dialogs
 @using FSH.Framework.Shared.Identity
+@using FSH.Playground.Blazor.Services.Api
 @inherits ComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
 @inject IIdentityClient IdentityClient
@@ -10,6 +11,7 @@
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IGlobalErrorHandler ErrorHandler
 
 <FshPageHeader Title="User Details"
                Description="@(_user != null ? $"{_user.FirstName} {_user.LastName}" : "Loading...")">
@@ -363,15 +365,18 @@ else
         _loading = true;
         try
         {
-            _user = await IdentityClient.UsersGetAsync(Id);
-            _roles = (await UsersClient.RolesGetAsync(Id))?.ToList() ?? new List<UserRoleDto>();
+            _user = await ErrorHandler.ExecuteAsync(
+                async () => await IdentityClient.UsersGetAsync(Id),
+                ex => Snackbar.Add($"Failed to load user: {ex.Message}", Severity.Error));
+            
+            var rolesResult = await ErrorHandler.ExecuteAsync(
+                async () => await UsersClient.RolesGetAsync(Id),
+                ex => Snackbar.Add($"Failed to load user roles: {ex.Message}", Severity.Error));
+            _roles = rolesResult?.ToList() ?? new List<UserRoleDto>();
+            
             _resetModel.Email = _user?.Email ?? string.Empty;
             _confirmModel.UserId = _user?.Id ?? string.Empty;
             _targetIsAdmin = _roles.Any(r => string.Equals(r.RoleName, RoleConstants.Admin, StringComparison.OrdinalIgnoreCase) && r.Enabled);
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load user: {ex.Message}", Severity.Error);
         }
         finally
         {

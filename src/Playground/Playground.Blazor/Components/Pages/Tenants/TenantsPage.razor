@@ -2,6 +2,7 @@
 @using FSH.Framework.Blazor.UI.Components.Dialogs
 @using FSH.Framework.Shared.Identity
 @using FSH.Framework.Shared.Multitenancy
+@using FSH.Playground.Blazor.Services.Api
 @using Microsoft.AspNetCore.Components.Authorization
 @inherits ComponentBase
 @inject IV1Client V1Client
@@ -10,6 +11,7 @@
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IGlobalErrorHandler ErrorHandler
 
 @if (!_isRootTenantAdmin)
 {
@@ -347,14 +349,13 @@ else
         _loading = true;
         try
         {
-            var result = await V1Client.TenantsGetAsync(pageSize: 100);
+            var result = await ErrorHandler.ExecuteAsync(
+                async () => await V1Client.TenantsGetAsync(pageSize: 100),
+                ex => Snackbar.Add($"Failed to load tenants: {ex.Message}", Severity.Error));
+            
             _tenants = result?.Items?.ToList() ?? new List<TenantDto>();
             CalculateStats();
             ApplyFilters();
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load tenants: {ex.Message}", Severity.Error);
         }
         finally
         {

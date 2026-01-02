@@ -1,7 +1,9 @@
 @using FSH.Playground.Blazor.Api
+@using FSH.Playground.Blazor.Services.Api
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject ITodosClient TodoClient
+@inject IGlobalErrorHandler ErrorHandler
 
 <MudStack Spacing="2">
     @if (_loading)
@@ -89,12 +91,11 @@
         _loading = true;
         try
         {
-            var result = await TodoClient.TasksGetAsync(TodoId);
+            var result = await ErrorHandler.ExecuteAsync(
+                async () => await TodoClient.TasksGetAsync(TodoId),
+                ex => Snackbar.Add($"Failed to load tasks: {ex.Message}", Severity.Error));
+            
             _tasks = result?.ToList() ?? new List<TodoTaskDto>();
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load tasks: {ex.Message}", Severity.Error);
         }
         finally
         {

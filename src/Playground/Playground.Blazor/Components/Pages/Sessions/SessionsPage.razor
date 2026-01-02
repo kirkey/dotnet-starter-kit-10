@@ -1,5 +1,6 @@
 @page "/sessions"
 @using FSH.Framework.Blazor.UI.Components.Dialogs
+@using FSH.Playground.Blazor.Services.Api
 @inherits ComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
 @inject ISessionsClient SessionsClient
@@ -8,6 +9,7 @@
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IGlobalErrorHandler ErrorHandler
 
 <FshPageHeader Title="Active Sessions"
                Description="Manage your active sessions and connected devices">
@@ -257,13 +259,12 @@
         _loading = true;
         try
         {
-            var result = await SessionsClient.MeAsync();
+            var result = await ErrorHandler.ExecuteAsync(
+                async () => await SessionsClient.MeAsync(),
+                ex => Snackbar.Add($"Failed to load sessions: {ex.Message}", Severity.Error));
+            
             _sessions = result?.ToList() ?? new List<UserSessionDto>();
             CalculateStats();
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load sessions: {ex.Message}", Severity.Error);
         }
         finally
         {

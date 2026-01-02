@@ -10,6 +10,9 @@ internal static class ApiClientRegistration
         string apiBaseUrl = configuration["Api:BaseUrl"]
                             ?? throw new InvalidOperationException("Api:BaseUrl configuration is missing.");
 
+        // Register global error handler
+        services.AddScoped<IGlobalErrorHandler, GlobalErrorHandler>();
+
         // Register named HttpClient with auth handler for API clients
         services.AddHttpClient("ApiClient", (sp, client) =>
         {
