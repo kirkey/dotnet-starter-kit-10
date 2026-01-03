@@ -47,13 +47,9 @@ public partial class TodoDetailPage
     {
         if (_todo is null) return;
 
-        var parameters = new DialogParameters
+        var parameters = new DialogParameters<CreateTodoListDialog>
         {
-            { "TodoId", _todo.Id },
-            { "Name", _todo.Name },
-            { "Description", _todo.Description },
-            { "Priority", _todo.Priority },
-            { "DueDate", _todo.DueDate }
+            { x => x.ExistingList, _todo }
         };
 
         var dialog = await DialogService.ShowAsync<CreateTodoListDialog>("Edit Todo", parameters, new DialogOptions

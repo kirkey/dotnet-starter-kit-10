@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: fsh-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - fsh-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: fsh-postgres-dev
+    environment:
+      POSTGRES_DB: fsh_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - fsh-network
+
+  # Optional: Jaeger for OpenTelemetry traces
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: fsh-jaeger-dev
+    ports:
+      - "4317:4317"  # OTLP gRPC
+      - "16686:16686"  # Jaeger UI
+    networks:
+      - fsh-network
+
+volumes:
+  redis_data:
+  postgres_data:
+
+networks:
+  fsh-network:
+    driver: bridge
+
