@@ -1,0 +1,263 @@
+﻿@page "/Error"
+@using System.Diagnostics
+@inject NavigationManager Navigation
+
+<PageTitle>Error - FSH Playground</PageTitle>
+
+<div class="error-container">
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="error-content">
+        <div class="error-icon-wrapper">
+            <MudIcon Icon="@Icons.Material.Outlined.ErrorOutline" 
+                     Class="error-icon" />
+            <div class="error-icon-bg"></div>
+        </div>
+
+        <MudText Typo="Typo.h2" Align="Align.Center" Class="error-title">
+            Oops! Something Went Wrong
+        </MudText>
+
+        <MudText Typo="Typo.body1" Align="Align.Center" Class="error-description">
+            We encountered an unexpected error while processing your request.
+            <br />
+            Our team has been notified and is working to fix the issue.
+        </MudText>
+
+        @if (ShowRequestId)
+        {
+            <MudPaper Elevation="0" Class="error-details">
+                <MudText Typo="Typo.subtitle2" Class="mb-2">
+                    <MudIcon Icon="@Icons.Material.Outlined.Info" Size="Size.Small" Class="mr-2" />
+                    Error Details
+                </MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                    <strong>Request ID:</strong> <code class="error-code">@RequestId</code>
+                </MudText>
+                <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mt-2">
+                    Please include this ID when reporting the issue to support.
+                </MudText>
+            </MudPaper>
+        }
+
+        <div class="error-actions">
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Size="Size.Large"
+                       StartIcon="@Icons.Material.Filled.Refresh"
+                       OnClick="Refresh"
+                       Class="error-button">
+                Try Again
+            </MudButton>
+
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Primary"
+                       Size="Size.Large"
+                       StartIcon="@Icons.Material.Filled.Home"
+                       OnClick="GoHome"
+                       Class="error-button">
+                Go to Home
+            </MudButton>
+        </div>
+
+        <MudDivider Class="my-6" />
+
+        <div class="error-help">
+            <MudText Typo="Typo.subtitle2" Align="Align.Center" Class="mb-3">
+                What can you do?
+            </MudText>
+            <MudStack Spacing="2">
+                <div class="error-help-item">
+                    <MudIcon Icon="@Icons.Material.Outlined.Refresh" Size="Size.Small" Color="Color.Primary" />
+                    <MudText Typo="Typo.body2">Refresh the page and try again</MudText>
+                </div>
+                <div class="error-help-item">
+                    <MudIcon Icon="@Icons.Material.Outlined.ArrowBack" Size="Size.Small" Color="Color.Primary" />
+                    <MudText Typo="Typo.body2">Go back to the previous page</MudText>
+                </div>
+                <div class="error-help-item">
+                    <MudIcon Icon="@Icons.Material.Outlined.Home" Size="Size.Small" Color="Color.Primary" />
+                    <MudText Typo="Typo.body2">Return to the home page</MudText>
+                </div>
+                <div class="error-help-item">
+                    <MudIcon Icon="@Icons.Material.Outlined.Support" Size="Size.Small" Color="Color.Primary" />
+                    <MudText Typo="Typo.body2">Contact support if the problem persists</MudText>
+                </div>
+            </MudStack>
+        </div>
+    </MudContainer>
+</div>
+
+<style>
+    .error-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+
+    .error-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .error-icon-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .error-icon {
+        font-size: 120px !important;
+        width: 120px;
+        height: 120px;
+        color: var(--mud-palette-error);
+        position: relative;
+        z-index: 2;
+        animation: shake 3s ease-in-out infinite;
+    }
+
+    .error-icon-bg {
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        background: var(--mud-palette-error);
+        opacity: 0.1;
+        border-radius: 50%;
+        z-index: 1;
+        animation: pulse-error 2s ease-in-out infinite;
+    }
+
+    .error-title {
+        font-weight: 600;
+        color: var(--mud-palette-text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .error-description {
+        color: var(--mud-palette-text-secondary);
+        max-width: 600px;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .error-details {
+        width: 100%;
+        max-width: 600px;
+        padding: 1.5rem;
+        background: var(--mud-palette-background);
+        border: 1px solid var(--mud-palette-divider);
+        border-radius: 8px;
+    }
+
+    .error-code {
+        background: var(--mud-palette-surface);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+        border: 1px solid var(--mud-palette-divider);
+    }
+
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+
+    .error-button {
+        min-width: 150px;
+    }
+
+    .error-help {
+        width: 100%;
+        max-width: 600px;
+        margin-top: 1rem;
+    }
+
+    .error-help-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem;
+    }
+
+    @@keyframes shake {
+        0%, 100% {
+            transform: rotate(0deg);
+        }
+        25% {
+            transform: rotate(-5deg);
+        }
+        75% {
+            transform: rotate(5deg);
+        }
+    }
+
+    @@keyframes pulse-error {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 0.1;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.15;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .error-icon {
+            font-size: 80px !important;
+            width: 80px;
+            height: 80px;
+        }
+
+        .error-icon-bg {
+            width: 120px;
+            height: 120px;
+        }
+
+        .error-title {
+            font-size: 1.75rem !important;
+        }
+
+        .error-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .error-button {
+            width: 100%;
+        }
+
+        .error-details {
+            padding: 1rem;
+        }
+    }
+</style>
+
+@code {
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    private string? RequestId { get; set; }
+    private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
+    protected override void OnInitialized() =>
+        RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
+
+    private void Refresh()
+    {
+        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+    }
+
+    private void GoHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+}

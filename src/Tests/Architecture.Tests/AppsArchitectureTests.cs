@@ -12,8 +12,8 @@ public class AppsArchitectureTests
         // Assemblies / namespaces that represent Apps hosts.
         string[] appsNamespaces =
         {
-            "FSH.Apps.Api",
-            "Apps.Blazor"
+            "FSH.Basic.Api",
+            "Bsic.Blazor"
         };
 
         TestResult? result = Types
@@ -51,7 +51,7 @@ public class AppsArchitectureTests
             .That()
             .ResideInNamespace("FSH.Apps")
             .Or()
-            .ResideInNamespace("Apps.Blazor")
+            .ResideInNamespace("Bsic.Blazor")
             .Should()
             .NotHaveDependencyOnAny(forbiddenNamespaces)
             .GetResult();

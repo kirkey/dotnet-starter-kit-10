@@ -1,0 +1,272 @@
+@inject NavigationManager Navigation
+@inject IJSRuntime JsRuntime
+
+<PageTitle>404 - Page Not Found</PageTitle>
+
+<div class="not-found-container">
+    <MudContainer MaxWidth="MaxWidth.Small" Class="not-found-content">
+        <div class="not-found-icon-wrapper">
+            <MudIcon Icon="@Icons.Material.Outlined.SearchOff" 
+                     Class="not-found-icon" />
+            <div class="not-found-icon-bg"></div>
+        </div>
+
+        <MudText Typo="Typo.h2" Align="Align.Center" Class="not-found-title">
+            Page Not Found
+        </MudText>
+
+        <MudText Typo="Typo.h4" Align="Align.Center" Class="not-found-code">
+            404
+        </MudText>
+
+        <MudText Typo="Typo.body1" Align="Align.Center" Class="not-found-description">
+            The page you're looking for doesn't exist or has been moved.
+            <br />
+            Let's get you back on track.
+        </MudText>
+
+        <div class="not-found-actions">
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Size="Size.Large"
+                       StartIcon="@Icons.Material.Filled.Home"
+                       Href="/"
+                       Class="not-found-button">
+                Go to Home
+            </MudButton>
+
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Primary"
+                       Size="Size.Large"
+                       StartIcon="@Icons.Material.Filled.ArrowBack"
+                       OnClick="GoBack"
+                       Class="not-found-button">
+                Go Back
+            </MudButton>
+        </div>
+
+        <MudDivider Class="my-6" />
+
+        <div class="not-found-suggestions">
+            <MudText Typo="Typo.subtitle2" Align="Align.Center" Class="mb-4">
+                Popular Pages
+            </MudText>
+            <MudStack Row="true" Justify="Justify.Center" Spacing="2" Class="flex-wrap">
+                <MudChip T="string" 
+                         Icon="@Icons.Material.Outlined.Dashboard" 
+                         OnClick="@(() => NavigateTo("/dashboard"))"
+                         Color="Color.Default"
+                         Variant="Variant.Outlined">
+                    Dashboard
+                </MudChip>
+                <MudChip T="string" 
+                         Icon="@Icons.Material.Outlined.Person" 
+                         OnClick="@(() => NavigateTo("/users"))"
+                         Color="Color.Default"
+                         Variant="Variant.Outlined">
+                    Users
+                </MudChip>
+                <MudChip T="string" 
+                         Icon="@Icons.Material.Outlined.ChecklistRtl" 
+                         OnClick="@(() => NavigateTo("/todos"))"
+                         Color="Color.Default"
+                         Variant="Variant.Outlined">
+                    Todos
+                </MudChip>
+                <MudChip T="string" 
+                         Icon="@Icons.Material.Outlined.ManageAccounts" 
+                         OnClick="@(() => NavigateTo("/settings/profile"))"
+                         Color="Color.Default"
+                         Variant="Variant.Outlined">
+                    Settings
+                </MudChip>
+            </MudStack>
+        </div>
+
+        <div class="not-found-help">
+            <MudText Typo="Typo.caption" Align="Align.Center" Color="Color.Secondary">
+                Need help? Contact support or visit our documentation.
+            </MudText>
+        </div>
+    </MudContainer>
+</div>
+
+<style>
+    .not-found-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+
+    .not-found-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .not-found-icon-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .not-found-icon {
+        font-size: 120px !important;
+        width: 120px;
+        height: 120px;
+        color: #2563EB;
+        position: relative;
+        z-index: 2;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .not-found-icon-bg {
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        background: #2563EB;
+        opacity: 0.1;
+        border-radius: 50%;
+        z-index: 1;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    .not-found-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .not-found-code {
+        font-weight: 700;
+        color: #2563EB;
+        font-family: 'Inter', sans-serif;
+        letter-spacing: 0.1em;
+    }
+
+    .not-found-description {
+        max-width: 500px;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .not-found-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+
+    .not-found-button {
+        min-width: 150px;
+    }
+
+    .not-found-suggestions {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .not-found-help {
+        margin-top: 2rem;
+    }
+
+    .flex-wrap {
+        flex-wrap: wrap;
+    }
+
+    @@keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    @@keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 0.1;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.15;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .not-found-icon {
+            font-size: 80px !important;
+            width: 80px;
+            height: 80px;
+        }
+
+        .not-found-icon-bg {
+            width: 120px;
+            height: 120px;
+        }
+
+        .not-found-title {
+            font-size: 2rem !important;
+        }
+
+        .not-found-code {
+            font-size: 3rem !important;
+        }
+
+        .not-found-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .not-found-button {
+            width: 100%;
+        }
+    }
+
+    /* Dark mode support */
+    @@media (prefers-color-scheme: dark) {
+        .not-found-icon {
+            color: #38BDF8;
+        }
+
+        .not-found-icon-bg {
+            background: #38BDF8;
+        }
+
+        .not-found-code {
+            color: #38BDF8;
+        }
+    }
+</style>
+
+@code {
+    private void GoHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private async Task GoBack()
+    {
+        try
+        {
+            await JsRuntime.InvokeVoidAsync("history.back");
+        }
+        catch (InvalidOperationException)
+        {
+            // JSInterop not available during prerendering, fallback to home
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    private void NavigateTo(string url)
+    {
+        Navigation.NavigateTo(url);
+    }
+}
+

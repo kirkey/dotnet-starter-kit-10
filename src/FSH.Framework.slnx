@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Apps/Basic/Migrations/">
+    <Project Path="Apps/Basic/Migrations.PostgreSQL/Basic.Migrations.PostgreSQL.csproj" />
+  </Folder>
   <Folder Name="/BuildingBlocks/">
     <Project Path="BuildingBlocks/Blazor.UI/Blazor.UI.csproj" Id="b8ed01df-1c7f-4be1-afa4-f41d3ac7208e" />
     <Project Path="BuildingBlocks/Caching/Caching.csproj" />
@@ -32,13 +35,18 @@
     <Project Path="Modules/Todo/Modules.Todo.Contracts/Modules.Todo.Contracts.csproj" />
     <Project Path="Modules/Todo/Modules.Todo/Modules.Todo.csproj" />
   </Folder>
-  <Folder Name="/Apps/">
-    <Project Path="Apps/FSH.Apps.AppHost/FSH.Apps.AppHost.csproj" Id="86bd02ee-f1b5-472c-b5bd-bc607fe084de" />
-    <Project Path="Apps/Apps.Api/Apps.Api.csproj" Id="187ce245-0a57-469c-96c2-a88902f2d40d" />
-    <Project Path="Apps/Apps.Blazor/Apps.Blazor.csproj" />
+  <Folder Name="/Apps/" />
+  <Folder Name="/Apps/Accounting/">
+    <Project Path="Apps/Accounting/Accounting.Api/Accounting.Api.csproj" />
+    <Project Path="Apps/Accounting/Accounting.Blazor/Accounting.Blazor.csproj" />
   </Folder>
-  <Folder Name="/Apps/Migrations/">
-    <Project Path="Apps/Migrations.PostgreSQL/Apps.Migrations.PostgreSQL.csproj" Id="2c21903e-5dfa-47e0-82d9-1a0bd627fcbd" />
+  <Folder Name="/Apps/Accounting/Migrations/">
+    <Project Path="Apps/Accounting/Migrations.PostgreSQL/Accounting.Migrations.PostgreSQL.csproj" />
+  </Folder>
+  <Folder Name="/Apps/Basic/">
+    <Project Path="Apps/Basic/Basic.Blazor/Basic.Blazor.csproj" />
+    <Project Path="Apps\Basic\Basic.Api\Basic.Api.csproj" Id="187ce245-0a57-469c-96c2-a88902f2d40d" />
+    <Project Path="Apps\Basic\FSH.Basic.AppHost\FSH.Basic.AppHost.csproj" Id="86bd02ee-f1b5-472c-b5bd-bc607fe084de" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="Tests/Architecture.Tests/Architecture.Tests.csproj" />

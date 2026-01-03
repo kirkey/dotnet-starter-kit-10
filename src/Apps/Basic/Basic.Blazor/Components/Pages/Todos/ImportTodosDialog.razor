@@ -1,0 +1,157 @@
+@using FSH.Basic.Blazor.Api
+@using FSH.Basic.Blazor.Services.Api
+@using Microsoft.AspNetCore.Components.Forms
+@inject ITodosClient TodoClient
+@inject ISnackbar Snackbar
+@inject IGlobalErrorHandler ErrorHandler
+
+<MudDialog>
+    <DialogContent>
+        <MudStack Spacing="3">
+            <MudText Typo="Typo.body1">
+                Upload a CSV or JSON file containing todos to import.
+            </MudText>
+            
+            <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">
+                <MudText Typo="Typo.body2" Class="mb-2">
+                    <strong>Expected format:</strong>
+                </MudText>
+                <MudText Typo="Typo.caption">
+                    <strong>CSV:</strong> Name, Description, Notes, Status, Priority, DueDate<br />
+                    <strong>JSON:</strong> Array of objects with same properties
+                </MudText>
+            </MudAlert>
+
+            <MudFileUpload T="IBrowserFile" Accept=".csv,.json" FilesChanged="OnFileSelected" MaximumFileCount="1">
+                <ActivatorContent>
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.CloudUpload"
+                               FullWidth="true"
+                               Disabled="_uploading">
+                        @if (_selectedFile != null)
+                        {
+                            <text>Selected: @_selectedFile.Name</text>
+                        }
+                        else
+                        {
+                            <text>Choose File</text>
+                        }
+                    </MudButton>
+                </ActivatorContent>
+            </MudFileUpload>
+
+            @if (_importResult != null)
+            {
+                <MudAlert Severity="@(_importResult.FailureCount > 0 ? Severity.Warning : Severity.Success)">
+                    <MudText Typo="Typo.body2">
+                        Successfully imported: @_importResult.SuccessCount<br />
+                        @if (_importResult.FailureCount > 0)
+                        {
+                            <text>Failed: @_importResult.FailureCount</text>
+                        }
+                    </MudText>
+                    @if (_importResult.Errors.Any())
+                    {
+                        <MudText Typo="Typo.caption" Class="mt-2">
+                            <strong>Errors:</strong><br />
+                            @foreach (var error in _importResult.Errors.Take(5))
+                            {
+                                <text>- @error<br /></text>
+                            }
+                            @if (_importResult.Errors.Count > 5)
+                            {
+                                <text>... and @(_importResult.Errors.Count - 5) more</text>
+                            }
+                        </MudText>
+                    }
+                </MudAlert>
+            }
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Close</MudButton>
+        <MudButton Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   OnClick="Import"
+                   Disabled="@(_selectedFile == null || _uploading)">
+            @if (_uploading)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ml-2">Importing...</MudText>
+            }
+            else
+            {
+                <text>Import</text>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private IBrowserFile? _selectedFile;
+    private bool _uploading;
+    private ImportResult? _importResult;
+
+    private void OnFileSelected(IBrowserFile file)
+    {
+        _selectedFile = file;
+        _importResult = null;
+    }
+
+    private async Task Import()
+    {
+        if (_selectedFile == null) return;
+
+        _uploading = true;
+        _importResult = null;
+
+        try
+        {
+            using var stream = _selectedFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); // 10MB max
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+            memoryStream.Position = 0;
+
+            var fileParam = new FileParameter(memoryStream, _selectedFile.Name, _selectedFile.ContentType);
+            await TodoClient.ImportAsync(fileParam, CancellationToken.None);
+
+            _importResult = new ImportResult
+            {
+                SuccessCount = 1, // Placeholder - API should return proper counts
+                FailureCount = 0,
+                Errors = new List<string>()
+            };
+            
+            Snackbar.Add("Todos imported successfully!", Severity.Success);
+            
+            // Close dialog after successful import
+            await Task.Delay(2000);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            await ErrorHandler.HandleExceptionAsync(ex);
+            Snackbar.Add($"Failed to import: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _uploading = false;
+        }
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private class ImportResult
+    {
+        public int SuccessCount { get; set; }
+        public int FailureCount { get; set; }
+        public List<string> Errors { get; set; } = new();
+    }
+}

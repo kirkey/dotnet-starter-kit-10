@@ -1,0 +1,29 @@
+/* Login Container */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, 
+        rgba(var(--mud-palette-primary-rgb), 0.08) 0%, 
+        rgba(var(--mud-palette-secondary-rgb), 0.05) 100%
+    );
+    padding: 2rem 1rem;
+}
+.login-content {
+    width: 100%;
+    max-width: 480px;
+}
+/* Responsive */
+@media (max-width: 600px) {
+    .login-container {
+        padding: 1rem;
+    }
+}
+/* Dark Mode */
+.mud-theme-dark .login-container {
+    background: linear-gradient(135deg, 
+        rgba(var(--mud-palette-primary-rgb), 0.12) 0%, 
+        rgba(var(--mud-palette-secondary-rgb), 0.08) 100%
+    );
+}

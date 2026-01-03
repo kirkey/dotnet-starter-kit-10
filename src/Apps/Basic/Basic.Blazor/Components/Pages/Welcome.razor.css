@@ -1,0 +1,89 @@
+/* Welcome Page - Authenticated View */
+.welcome-authenticated {
+    /* Uses standard app layout classes */
+}
+
+.feature-card-simple {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.feature-card-simple:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Welcome Page - Unauthenticated Landing View */
+.welcome-landing {
+    min-height: calc(100vh - 64px);
+    padding: 3rem 1rem;
+    background: linear-gradient(180deg, 
+        rgba(var(--mud-palette-primary-rgb), 0.03) 0%, 
+        transparent 50%
+    );
+}
+
+.hero-section {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-weight: 500;
+    color: var(--mud-palette-text-secondary);
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--mud-palette-text-secondary);
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 960px) {
+    .hero-section {
+        padding: 2rem 0;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .welcome-landing {
+        padding: 2rem 1rem;
+    }
+    
+    .hero-section {
+        padding: 1.5rem 0;
+    }
+}
+
+/* Dark Mode Support */
+.mud-theme-dark .feature-card-simple {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.mud-theme-dark .feature-card-simple:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+

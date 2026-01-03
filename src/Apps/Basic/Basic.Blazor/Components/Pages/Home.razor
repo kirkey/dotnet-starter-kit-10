@@ -1,0 +1,47 @@
+@page "/home"
+@inherits ComponentBase
+
+<FshPageHeader Title="Home"
+               Description="Welcome to your dashboard. Navigate to different sections using the menu." />
+
+<MudGrid Spacing="4">
+    <MudItem xs="12" md="6">
+        <MudPaper Class="fsh-card pa-6">
+            <MudText Typo="Typo.h5" Class="mb-4 fw-700">Getting Started</MudText>
+            <MudList T="string" Dense="true">
+                <MudListItem T="string" Icon="@Icons.Material.Filled.Dashboard">
+                    <MudLink Href="/dashboard">View Dashboard</MudLink>
+                </MudListItem>
+                <MudListItem T="string" Icon="@Icons.Material.Filled.Person">
+                    <MudLink Href="/users">Manage Users</MudLink>
+                </MudListItem>
+                <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle">
+                    <MudLink Href="/todos">Todo Lists</MudLink>
+                </MudListItem>
+                <MudListItem T="string" Icon="@Icons.Material.Filled.History">
+                    <MudLink Href="/audits">Audit Logs</MudLink>
+                </MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
+    
+    <MudItem xs="12" md="6">
+        <MudPaper Class="fsh-card pa-6">
+            <MudText Typo="Typo.h5" Class="mb-4 fw-700">Quick Links</MudText>
+            <MudList T="string" Dense="true">
+                <MudListItem T="string" Icon="@Icons.Material.Filled.Settings">
+                    <MudLink Href="/profile/settings">Profile Settings</MudLink>
+                </MudListItem>
+                <MudListItem T="string" Icon="@Icons.Material.Filled.Palette">
+                    <MudLink Href="/theme/settings">Theme Settings</MudLink>
+                </MudListItem>
+                <MudListItem T="string" Icon="@Icons.Material.Filled.AdminPanelSettings">
+                    <MudLink Href="/roles">Role Management</MudLink>
+                </MudListItem>
+                <MudListItem T="string" Icon="@Icons.Material.Filled.Business">
+                    <MudLink Href="/tenants">Tenant Management</MudLink>
+                </MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
