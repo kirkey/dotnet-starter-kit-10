@@ -20,7 +20,7 @@
 #pragma warning disable 8625 // Disable "CS8625 Cannot convert null literal to non-nullable reference type"
 #pragma warning disable 8765 // Disable "CS8765 Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes)."
 
-namespace FSH.Basic.Blazor.ApiClient
+namespace FSH.Playground.Blazor.ApiClient
 {
     using System = global::System;
 
@@ -10477,20 +10477,6 @@ namespace FSH.Basic.Blazor.ApiClient
             : base(message, statusCode, response, headers, innerException)
         {
             Result = result;
-        }
-    }
-
-    public partial class FileParameter
-    {
-        public System.IO.Stream Data { get; set; }
-        public string? FileName { get; set; }
-        public string? ContentType { get; set; }
-
-        public FileParameter(System.IO.Stream data, string? fileName = null, string? contentType = null)
-        {
-            Data = data;
-            FileName = fileName;
-            ContentType = contentType;
         }
     }
 

@@ -32,8 +32,6 @@
     <ProjectReference Include="..\..\..\Modules\Multitenancy\Modules.Multitenancy\Modules.Multitenancy.csproj" />
     <ProjectReference Include="..\..\..\Modules\Todos\Modules.Todos.Contracts\Modules.Todos.Contracts.csproj" />
     <ProjectReference Include="..\..\..\Modules\Todos\Modules.Todos\Modules.Todos.csproj" />
-    <ProjectReference Include="..\..\..\Modules\Todo\Modules.Todos.Contracts\Modules.Todos.Contracts.csproj" />
-    <ProjectReference Include="..\..\..\Modules\Todo\Modules.Todos\Modules.Todos.csproj" />
     <ProjectReference Include="..\Migrations.PostgreSQL\Basic.Migrations.PostgreSQL.csproj" />
   </ItemGroup>
 

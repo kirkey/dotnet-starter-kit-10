@@ -1,4 +1,4 @@
-.PHONY: help docker-up docker-down docker-restart clean build test run
+.PHONY: help docker-up docker-down docker-restart clean build test run nswag-basic
 
 help:
 	@echo "FSH Framework Development Commands"
@@ -12,6 +12,7 @@ help:
 	@echo "make test               - Run unit tests"
 	@echo "make api                - Run the API project"
 	@echo "make blazor             - Run the Blazor UI project"
+	@echo "make nswag-basic        - Generate NSwag C# client for Basic.Blazor"
 	@echo "make clean              - Clean build artifacts"
 	@echo "make kill-ports         - Kill processes on default ports"
 
@@ -76,3 +77,14 @@ dev-setup: docker-up build
 migrate:
 	cd src && dotnet ef database update --project Apps/Migrations.PostgreSQL/Apps.Migrations.PostgreSQL.csproj --startup-project Apps/Apps.Api/Apps.Api.csproj
 
+nswag-basic:
+	@echo "🔄 Generating NSwag C# client for Basic.Blazor..."
+	@if command -v nswag >/dev/null 2>&1; then \
+		RUNNER="nswag"; \
+	elif dotnet tool list -g 2>/dev/null | grep -qi nswag; then \
+		RUNNER="dotnet tool run nswag"; \
+	else \
+		echo "❌ NSwag not found. Install with: dotnet tool install --global NSwag.ConsoleCore"; exit 1; \
+	fi; \
+	$$RUNNER run scripts/openapi/nswag-basic.json /variables:SpecUrl=https://localhost:7030/openapi/v1.json && \
+	echo "✓ NSwag client generated successfully for Basic.Blazor"
