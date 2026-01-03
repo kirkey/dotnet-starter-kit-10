@@ -33,21 +33,21 @@ public static class MenuConfiguration
                         Title = "Welcome",
                         Icon = Icons.Material.Outlined.WavingHand,
                         Href = "/",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                     },
                     new MenuItem
                     {
                         Title = "Dashboard",
                         Icon = Icons.Material.Outlined.Dashboard,
                         Href = "/dashboard",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                     },
                     new MenuItem
                     {
                         Title = "Home",
                         Icon = Icons.Material.Outlined.Home,
                         Href = "/home",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                     }
                 }
             },
@@ -64,7 +64,7 @@ public static class MenuConfiguration
                         Title = "Users",
                         Icon = Icons.Material.Outlined.Person,
                         Href = "/users",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                         // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Users)
                         // Note: Uncomment above if permissions are added to JWT claims
                     },
@@ -73,7 +73,7 @@ public static class MenuConfiguration
                         Title = "Roles",
                         Icon = Icons.Material.Outlined.AdminPanelSettings,
                         Href = "/roles",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                         // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Roles)
                     },
                     new MenuItem
@@ -81,7 +81,7 @@ public static class MenuConfiguration
                         Title = "Tenants",
                         Icon = Icons.Material.Outlined.CorporateFare,
                         Href = "/tenants",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                         // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Tenants)
                     },
                     new MenuItem
@@ -89,7 +89,7 @@ public static class MenuConfiguration
                         Title = "Tenant Settings",
                         Icon = Icons.Material.Outlined.Tune,
                         Href = "/tenants/settings",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                         // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Tenants)
                     },
                     new MenuItem
@@ -139,7 +139,7 @@ public static class MenuConfiguration
                         Title = "Todo Lists",
                         Icon = Icons.Material.Outlined.ChecklistRtl,
                         Href = "/todos",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.InProgress
                     }
                 }
             },
@@ -156,7 +156,7 @@ public static class MenuConfiguration
                         Title = "Health",
                         Icon = Icons.Material.Outlined.MonitorHeart,
                         Href = "/health",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                         // RequiredPermission = FshPermission.NameFor(ActionConstants.View, ResourceConstants.Dashboard)
                     },
                     new MenuItem
@@ -172,14 +172,14 @@ public static class MenuConfiguration
                         Title = "Counter",
                         Icon = Icons.Material.Outlined.Calculate,
                         Href = "/counter",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                     },
                     new MenuItem
                     {
                         Title = "Weather",
                         Icon = Icons.Material.Outlined.Cloud,
                         Href = "/weather",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                     }
                 }
             },
@@ -196,35 +196,35 @@ public static class MenuConfiguration
                         Title = "Account",
                         Icon = Icons.Material.Outlined.ManageAccounts,
                         Href = "/settings/profile",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                     },
                     new MenuItem
                     {
                         Title = "Theme",
                         Icon = Icons.Material.Outlined.Palette,
                         Href = "/settings/theme",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                     },
                     new MenuItem
                     {
                         Title = "Security",
                         Icon = Icons.Material.Outlined.Security,
                         Href = "/settings/security",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.Planned
                     },
                     new MenuItem
                     {
                         Title = "Sessions",
                         Icon = Icons.Material.Outlined.Devices,
                         Href = "/sessions",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.None
                     },
                     new MenuItem
                     {
                         Title = "About",
                         Icon = Icons.Material.Outlined.Info,
                         Href = "/about",
-                        PageStatus = PageStatus.Completed
+                        PageStatus = PageStatus.Planned
                     }
                 }
             }
