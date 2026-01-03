@@ -7,31 +7,22 @@ namespace FSH.Framework.Blazor.UI.Components.Navigation.Services;
 /// <summary>
 /// Implementation of menu favorites service using browser local storage.
 /// </summary>
-public class MenuFavoritesService : IMenuFavoritesService
+public class MenuFavoritesService(
+    IJSRuntime jsRuntime,
+    IMenuService menuService,
+    ILogger<MenuFavoritesService> logger)
+    : IMenuFavoritesService
 {
     private const string LocalStorageKey = "fsh.menu.favorites";
-    private readonly IJSRuntime _jsRuntime;
-    private readonly IMenuService _menuService;
-    private readonly ILogger<MenuFavoritesService> _logger;
     private List<string> _favoriteHrefs = new();
 
     public event EventHandler? FavoritesChanged;
-
-    public MenuFavoritesService(
-        IJSRuntime jsRuntime,
-        IMenuService menuService,
-        ILogger<MenuFavoritesService> logger)
-    {
-        _jsRuntime = jsRuntime;
-        _menuService = menuService;
-        _logger = logger;
-    }
 
     public async Task<IEnumerable<MenuItem>> GetFavoritesAsync()
     {
         await LoadFavoritesFromStorageAsync();
 
-        var allSections = await _menuService.GetMenuSectionsAsync();
+        var allSections = await menuService.GetMenuSectionsAsync();
         var favoriteItems = new List<MenuItem>();
 
         foreach (var section in allSections)
@@ -74,7 +65,7 @@ public class MenuFavoritesService : IMenuFavoritesService
             _favoriteHrefs.Add(menuItem.Href);
             await SaveFavoritesToStorageAsync();
             FavoritesChanged?.Invoke(this, EventArgs.Empty);
-            _logger.LogInformation("Added {MenuTitle} to favorites", menuItem.Title);
+            logger.LogInformation("Added {MenuTitle} to favorites", menuItem.Title);
         }
     }
 
@@ -91,7 +82,7 @@ public class MenuFavoritesService : IMenuFavoritesService
         {
             await SaveFavoritesToStorageAsync();
             FavoritesChanged?.Invoke(this, EventArgs.Empty);
-            _logger.LogInformation("Removed {Href} from favorites", menuItemHref);
+            logger.LogInformation("Removed {Href} from favorites", menuItemHref);
         }
     }
 
@@ -110,7 +101,7 @@ public class MenuFavoritesService : IMenuFavoritesService
     {
         await LoadFavoritesFromStorageAsync();
 
-        var allSections = await _menuService.GetMenuSectionsAsync();
+        var allSections = await menuService.GetMenuSectionsAsync();
         var result = new List<MenuItemWithFavorite>();
 
         foreach (var section in allSections)
@@ -165,7 +156,7 @@ public class MenuFavoritesService : IMenuFavoritesService
         else
         {
             // Find the menu item to add
-            var allSections = await _menuService.GetMenuSectionsAsync();
+            var allSections = await menuService.GetMenuSectionsAsync();
             MenuItem? itemToAdd = null;
 
             foreach (var section in allSections)
@@ -210,16 +201,26 @@ public class MenuFavoritesService : IMenuFavoritesService
     {
         try
         {
-            var json = await _jsRuntime.InvokeAsync<string?>("localStorage.getItem", LocalStorageKey);
+            var json = await jsRuntime.InvokeAsync<string?>("localStorage.getItem", LocalStorageKey);
 
             if (!string.IsNullOrWhiteSpace(json))
             {
                 _favoriteHrefs = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
             }
         }
+        catch (InvalidOperationException)
+        {
+            // JS interop not available during SSR/static rendering - this is expected
+            _favoriteHrefs = new List<string>();
+        }
+        catch (JSDisconnectedException)
+        {
+            // Circuit disconnected - ignore
+            _favoriteHrefs = new List<string>();
+        }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load favorites from local storage");
+            logger.LogError(ex, "Failed to load favorites from local storage");
             _favoriteHrefs = new List<string>();
         }
     }
@@ -229,11 +230,19 @@ public class MenuFavoritesService : IMenuFavoritesService
         try
         {
             var json = JsonSerializer.Serialize(_favoriteHrefs);
-            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", LocalStorageKey, json);
+            await jsRuntime.InvokeVoidAsync("localStorage.setItem", LocalStorageKey, json);
+        }
+        catch (InvalidOperationException)
+        {
+            // JS interop not available during SSR/static rendering - ignore silently
+        }
+        catch (JSDisconnectedException)
+        {
+            // Circuit disconnected - ignore silently
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to save favorites to local storage");
+            logger.LogError(ex, "Failed to save favorites to local storage");
         }
     }
 }

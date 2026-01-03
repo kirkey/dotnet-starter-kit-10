@@ -46,7 +46,14 @@ builder.Services.AddScoped<AuthenticationStateProvider, CookieAuthenticationStat
 
 // Tenant theme services
 builder.Services.AddScoped<ITenantThemeState, TenantThemeState>(); // For Interactive mode
-builder.Services.AddScoped<IThemeStateFactory, CachedThemeStateFactory>(); // For SSR mode
+
+// Register HttpClient for theme factory with proper base address
+builder.Services.AddHttpClient<IThemeStateFactory, CachedThemeStateFactory>((sp, client) =>
+{
+    var apiBaseUrl = builder.Configuration["Api:BaseUrl"] ?? "https://localhost:7030";
+    client.BaseAddress = new Uri(apiBaseUrl);
+});
+
 
 // User profile state for syncing across components
 builder.Services.AddScoped<IUserProfileState, UserProfileState>();
