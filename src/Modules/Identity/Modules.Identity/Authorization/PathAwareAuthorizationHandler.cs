@@ -24,7 +24,8 @@ public class PathAwareAuthorizationHandler : IAuthorizationMiddlewareResultHandl
         {
             new PathString("/scalar"),
             new PathString("/openapi"),
-            new PathString("/favicon.ico")
+            new PathString("/favicon.ico"),
+            new PathString("/assets")
         };
         if (allowedPaths.Any(p => path.StartsWithSegments(p, StringComparison.OrdinalIgnoreCase)))
         {

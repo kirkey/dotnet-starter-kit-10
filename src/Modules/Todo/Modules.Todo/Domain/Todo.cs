@@ -39,12 +39,13 @@ public class Todo : AuditableEntity<Guid>
             Name = name,
             Description = description,
             Priority = priority,
-            DueDate = dueDate,
+            // Convert to UTC to ensure PostgreSQL compatibility
+            DueDate = dueDate?.ToUniversalTime(),
             TenantId = tenantId,
             CreatedBy = createdBy,
             CreatedByUserName = createdByUserName,
             CreatedOnUtc = DateTimeOffset.UtcNow,
-            Status = TodoStatus.NotStarted.ToString(),
+            Status = nameof(TodoStatus.NotStarted),
             IsActive = true,
             IsCompleted = false
         };
@@ -66,7 +67,8 @@ public class Todo : AuditableEntity<Guid>
         Name = name;
         Description = description;
         Priority = priority;
-        DueDate = dueDate;
+        // Convert to UTC to ensure PostgreSQL compatibility
+        DueDate = dueDate?.ToUniversalTime();
         SetModifiedBy(modifiedBy, modifiedByUserName);
     }
 
@@ -77,7 +79,7 @@ public class Todo : AuditableEntity<Guid>
     {
         IsCompleted = true;
         CompletedAt = DateTimeOffset.UtcNow;
-        Status = TodoStatus.Completed.ToString();
+        Status = nameof(TodoStatus.Completed);
         LastModifiedOnUtc = DateTimeOffset.UtcNow;
     }
 
@@ -88,7 +90,7 @@ public class Todo : AuditableEntity<Guid>
     {
         IsCompleted = false;
         CompletedAt = null;
-        Status = TodoStatus.InProgress.ToString();
+        Status = nameof(TodoStatus.InProgress);
         LastModifiedOnUtc = DateTimeOffset.UtcNow;
     }
 
