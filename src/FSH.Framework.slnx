@@ -20,6 +20,10 @@
     <Project Path="Modules/Identity/Modules.Identity.Contracts/Modules.Identity.Contracts.csproj" />
     <Project Path="Modules/Identity/Modules.Identity/Modules.Identity.csproj" Id="ebeb33cd-9cce-41b0-9bbc-43988dae9a46" />
   </Folder>
+  <Folder Name="/Modules/Microfinance/">
+    <Project Path="Modules/Microfinance/Modules.Microfinance.Contracts/Modules.Microfinance.Contracts.csproj" />
+    <Project Path="Modules/Microfinance/Modules.Microfinance/Modules.Microfinance.csproj" />
+  </Folder>
   <Folder Name="/Modules/Multitenancy/">
     <Project Path="Modules/Multitenancy/Modules.Multitenancy.Contracts/Modules.Multitenancy.Contracts.csproj" Id="61165a24-94b0-402c-9d9f-345898ce79c4" />
     <Project Path="Modules/Multitenancy/Modules.Multitenancy/Modules.Multitenancy.csproj" Id="69bca64d-0cf5-4236-8da6-1d775aa2a1cc" />
@@ -39,6 +43,11 @@
   <Folder Name="/Tests/">
     <Project Path="Tests/Architecture.Tests/Architecture.Tests.csproj" />
     <Project Path="Tests/Multitenacy.Tests/Multitenacy.Tests.csproj" Id="985345a2-edb4-4ef9-9a1b-59b704f523b6" />
+  </Folder>
+  <Folder Name="/ToBeMigrated/">
+    <Project Path="../../ExternalProjects/src/api/modules/MicroFinance/MicroFinance.Application/MicroFinance.Application.csproj" />
+    <Project Path="../../ExternalProjects/src/api/modules/MicroFinance/MicroFinance.Domain/MicroFinance.Domain.csproj" />
+    <Project Path="../../ExternalProjects/src/api/modules/MicroFinance/MicroFinance.Infrastructure/MicroFinance.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/Tools/">
     <Project Path="Tools/CLI/FSH.CLI.csproj" />
