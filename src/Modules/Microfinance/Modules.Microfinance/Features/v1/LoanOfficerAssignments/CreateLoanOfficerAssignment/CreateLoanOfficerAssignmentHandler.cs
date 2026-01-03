@@ -1,0 +1,25 @@
+using FSH.Framework.Core.Context;
+using FSH.Framework.Core.Exceptions;
+using FSH.Modules.Microfinance.Data;
+using FSH.Modules.Microfinance.Domain;
+
+namespace FSH.Modules.Microfinance.Features.v1.LoanOfficerAssignments.CreateLoanOfficerAssignment;
+
+public record CreateLoanOfficerAssignmentCommand(string Name) : ICommand<Guid>;
+
+public class CreateLoanOfficerAssignmentHandler(ICurrentUser currentUser,
+    MicrofinanceDbContext context) : ICommandHandler<CreateLoanOfficerAssignmentCommand, Guid>
+{
+    public async ValueTask<Guid> Handle(CreateLoanOfficerAssignmentCommand command, CancellationToken ct)
+    {
+        var entity = LoanOfficerAssignment.Create(
+            command.Name,
+            currentUser.GetTenant() ?? "root",
+            currentUser.GetUserId(),
+            currentUser.Name ?? "System");
+        
+        context.LoanOfficerAssignments.Add(entity);
+        await context.SaveChangesAsync(ct);
+        return entity.Id;
+    }
+}

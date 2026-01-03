@@ -1,0 +1,26 @@
+using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Modules.Microfinance.Contracts.v1.ApprovalWorkflows;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+
+namespace FSH.Modules.Microfinance.Features.v1.ApprovalWorkflows.GetApprovalWorkflow;
+
+public static class GetApprovalWorkflowEndpoint
+{
+    public static RouteHandlerBuilder MapGetApprovalWorkflowEndpoint(this IEndpointRouteBuilder endpoints)
+    {
+        return endpoints.MapGet("/{id:guid}", async (
+            Guid id,
+            IMediator mediator,
+            CancellationToken ct) =>
+        {
+            var result = await mediator.Send(new GetApprovalWorkflowQuery(id), ct);
+            return TypedResults.Ok(result);
+        })
+        .WithName(nameof(GetApprovalWorkflowEndpoint))
+        .WithSummary("Get ApprovalWorkflow")
+        .Produces<ApprovalWorkflowDto>(StatusCodes.Status200OK)
+        .RequirePermission(MicrofinancePermissionConstants.ApprovalWorkflows.View);
+    }
+}
