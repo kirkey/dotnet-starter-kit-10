@@ -1,4 +1,3 @@
-using System.Reflection;
 using Finbuckle.MultiTenant.Abstractions;
 using FSH.Framework.Persistence;
 using FSH.Framework.Shared.Multitenancy;
@@ -6,6 +5,7 @@ using FSH.Framework.Shared.Persistence;
 using FSH.Modules.Microfinance.Domain;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 
 namespace FSH.Modules.Microfinance.Data;
 

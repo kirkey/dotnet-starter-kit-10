@@ -32,10 +32,6 @@
     <Project Path="Modules/Multitenancy/Modules.Multitenancy.Contracts/Modules.Multitenancy.Contracts.csproj" Id="61165a24-94b0-402c-9d9f-345898ce79c4" />
     <Project Path="Modules/Multitenancy/Modules.Multitenancy/Modules.Multitenancy.csproj" Id="69bca64d-0cf5-4236-8da6-1d775aa2a1cc" />
   </Folder>
-  <Folder Name="/Modules/Todo/">
-    <Project Path="Modules/Todo/Modules.Todo.Contracts/Modules.Todo.Contracts.csproj" />
-    <Project Path="Modules/Todo/Modules.Todo/Modules.Todo.csproj" />
-  </Folder>
   <Folder Name="/Apps/" />
   <Folder Name="/Apps/Accounting/">
     <Project Path="Apps/Accounting/Accounting.Api/Accounting.Api.csproj" />
@@ -56,6 +52,10 @@
   <Folder Name="/ToBeMigrated/" />
   <Folder Name="/Tools/">
     <Project Path="Tools/CLI/FSH.CLI.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Todos/">
+    <Project Path="Modules/Todos/Modules.Todos.Contracts/Modules.Todos.Contracts.csproj" />
+    <Project Path="Modules/Todos/Modules.Todos/Modules.Todos.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.gitignore" />

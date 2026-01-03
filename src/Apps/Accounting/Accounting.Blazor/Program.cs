@@ -1,10 +1,10 @@
-using FSH.Framework.Blazor.UI;
-using FSH.Framework.Blazor.UI.Components.Navigation.Services;
-using FSH.Framework.Blazor.UI.Theme;
 using FSH.Basic.Blazor.Components;
 using FSH.Basic.Blazor.Configuration;
 using FSH.Basic.Blazor.Services;
 using FSH.Basic.Blazor.Services.Api;
+using FSH.Framework.Blazor.UI;
+using FSH.Framework.Blazor.UI.Components.Navigation.Services;
+using FSH.Framework.Blazor.UI.Theme;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

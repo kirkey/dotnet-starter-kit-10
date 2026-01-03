@@ -1,6 +1,6 @@
 using FSH.Framework.Core.Context;
-using FSH.Modules.Microfinance.Data;
 using FSH.Modules.Microfinance.Contracts.v1.Members;
+using FSH.Modules.Microfinance.Data;
 using FSH.Modules.Microfinance.Domain;
 
 namespace FSH.Modules.Microfinance.Features.v1.Members.CreateMember;

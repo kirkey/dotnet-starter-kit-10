@@ -1,5 +1,5 @@
-using FSH.Modules.Microfinance.Data;
 using FSH.Framework.Core.Exceptions;
+using FSH.Modules.Microfinance.Data;
 
 namespace FSH.Modules.Microfinance.Features.v1.Members.ActivateMember;
 public record ActivateMemberCommand(Guid MemberId) : ICommand;

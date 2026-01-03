@@ -2,12 +2,8 @@
 using FSH.Framework.Web.Modules;
 using FSH.Modules.Auditing;
 using FSH.Modules.Identity;
-using FSH.Modules.Identity.Contracts.v1.Tokens.TokenGeneration;
-using FSH.Modules.Identity.Features.v1.Tokens.TokenGeneration;
 using FSH.Modules.Multitenancy;
-using FSH.Modules.Multitenancy.Contracts.v1.GetTenantStatus;
-using FSH.Modules.Multitenancy.Features.v1.GetTenantStatus;
-using FSH.Modules.Todo;
+using FSH.Modules.Todos;
 using System.Reflection;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -28,27 +24,32 @@ if (builder.Environment.IsProduction())
     Require(config, "JwtOptions:SigningKey");
 }
 
-builder.Services.AddMediator(o =>
-{
-    o.ServiceLifetime = ServiceLifetime.Scoped;
-    o.Assemblies = [
-        typeof(GenerateTokenCommand),
-        typeof(GenerateTokenCommandHandler),
-        typeof(GetTenantStatusQuery),
-        typeof(GetTenantStatusQueryHandler),
-        typeof(FSH.Modules.Auditing.Contracts.AuditEnvelope),
-        typeof(FSH.Modules.Auditing.Persistence.AuditDbContext),
-        typeof(FSH.Modules.Todo.Contracts.v1.Todos.GetTodosQuery),
-        typeof(FSH.Modules.Todo.Features.v1.Todos.GetTodos.GetTodosQueryHandler)];
-});
-
-Assembly[] moduleAssemblies = new Assembly[]
-{
+// Define module assemblies - these will be used for module registration
+Assembly[] moduleAssemblies =
+[
     typeof(IdentityModule).Assembly,
     typeof(MultitenancyModule).Assembly,
     typeof(AuditingModule).Assembly,
     typeof(TodoModule).Assembly
-};
+];
+
+// Register Mediator with automatic assembly scanning
+// Using marker types from each module and contract assembly
+builder.Services.AddMediator(o =>
+{
+    o.ServiceLifetime = ServiceLifetime.Scoped;
+    o.Assemblies =
+    [
+        typeof(IdentityModule),
+        typeof(MultitenancyModule),
+        typeof(AuditingModule),
+        typeof(TodoModule),
+        typeof(FSH.Modules.Identity.Contracts.Services.IUserService),
+        typeof(FSH.Modules.Multitenancy.Contracts.ITenantService),
+        typeof(FSH.Modules.Auditing.Contracts.AuditEnvelope),
+        typeof(FSH.Modules.Todos.Contracts.v1.Todos.GetTodosQuery)
+    ];
+});
 
 builder.AddHeroPlatform(o =>
 {

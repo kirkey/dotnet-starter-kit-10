@@ -30,8 +30,8 @@
     <ProjectReference Include="..\..\..\Modules\Auditing\Modules.Auditing\Modules.Auditing.csproj" />
     <ProjectReference Include="..\..\..\Modules\Identity\Modules.Identity\Modules.Identity.csproj" />
     <ProjectReference Include="..\..\..\Modules\Multitenancy\Modules.Multitenancy\Modules.Multitenancy.csproj" />
-    <ProjectReference Include="..\..\..\Modules\Todo\Modules.Todo.Contracts\Modules.Todo.Contracts.csproj" />
-    <ProjectReference Include="..\..\..\Modules\Todo\Modules.Todo\Modules.Todo.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Todos\Modules.Todos.Contracts\Modules.Todos.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Todos\Modules.Todos\Modules.Todos.csproj" />
     <ProjectReference Include="..\Migrations.PostgreSQL\Accounting.Migrations.PostgreSQL.csproj" />
   </ItemGroup>
 
