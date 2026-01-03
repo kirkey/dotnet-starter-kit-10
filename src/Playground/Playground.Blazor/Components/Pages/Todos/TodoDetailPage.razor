@@ -1,0 +1,231 @@
+@page "/todos/{Id:guid}"
+@using FSH.Framework.Blazor.UI.Components.Dialogs
+@using FSH.Playground.Blazor.Api
+@using FSH.Playground.Blazor.Services.Api
+@inherits ComponentBase
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager Navigation
+@inject ITodosClient TodoClient
+@inject IGlobalErrorHandler ErrorHandler
+
+@if (_loading)
+{
+    <FshPageHeader Title="Todo Details"
+                   Description="Loading todo details..." />
+    <MudStack AlignItems="AlignItems.Center" Class="pa-8">
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        <MudText>Loading todo details...</MudText>
+    </MudStack>
+}
+else if (_todo is null)
+{
+    <FshPageHeader Title="Todo Details"
+                   Description="Todo not found" />
+    <MudAlert Severity="Severity.Error" Class="mb-4">
+        <MudText>Todo not found.</MudText>
+    </MudAlert>
+}
+else
+{
+    <FshPageHeader Title="@_todo.Name"
+                   Description="@_todo.Description">
+        <ActionContent>
+            <MudButton Variant="Variant.Text"
+                       Color="Color.Default"
+                       StartIcon="@Icons.Material.Outlined.ArrowBack"
+                       OnClick="GoBack">
+                Back to Todos
+            </MudButton>
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Info"
+                       StartIcon="@Icons.Material.Filled.Edit"
+                       OnClick="EditTodo"
+                       Disabled="_busy">
+                Edit
+            </MudButton>
+            @if (_todo.IsCompleted)
+            {
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Warning"
+                           StartIcon="@Icons.Material.Filled.Refresh"
+                           OnClick="ReopenTodo"
+                           Disabled="_busy">
+                    Reopen
+                </MudButton>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Success"
+                           StartIcon="@Icons.Material.Filled.CheckCircle"
+                           OnClick="CompleteTodo"
+                           Disabled="_busy">
+                    Complete
+                </MudButton>
+            }
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Error"
+                       StartIcon="@Icons.Material.Filled.Delete"
+                       OnClick="DeleteTodo"
+                       Disabled="_busy">
+                Delete
+            </MudButton>
+        </ActionContent>
+    </FshPageHeader>
+
+    <MudGrid>
+        @* Todo Overview *@
+        <MudItem xs="12" md="8">
+            <MudPaper Class="hero-card pa-4 mb-4">
+                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" Class="mb-3">
+                    <MudStack Spacing="1">
+                        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                            <MudIcon Icon="@Icons.Material.Filled.Description" Color="Color.Primary" />
+                            <MudText Typo="Typo.h6" Class="fw-600">Overview</MudText>
+                        </MudStack>
+                    </MudStack>
+                    <MudStack Row="true" Spacing="1">
+                        <MudChip T="string" Size="Size.Small" Color="@GetStatusColor(_todo.Status)" Variant="Variant.Filled">
+                            @_todo.Status
+                        </MudChip>
+                        <MudChip T="string" Size="Size.Small" Color="@GetPriorityColor(_todo.Priority)" Variant="Variant.Filled">
+                            @GetPriorityText(_todo.Priority)
+                        </MudChip>
+                        @if (_todo.IsCompleted)
+                        {
+                            <MudChip T="string" Size="Size.Small" Color="Color.Success" Icon="@Icons.Material.Filled.CheckCircle">
+                                Completed
+                            </MudChip>
+                        }
+                    </MudStack>
+                </MudStack>
+                <MudDivider Class="mb-3" />
+                
+                <MudStack Spacing="3">
+                    @if (!string.IsNullOrWhiteSpace(_todo.Description))
+                    {
+                        <MudStack Spacing="1">
+                            <MudText Typo="Typo.body2" Class="text-muted fw-600">Description</MudText>
+                            <MudText Typo="Typo.body1">@_todo.Description</MudText>
+                        </MudStack>
+                    }
+                    
+                    @if (!string.IsNullOrWhiteSpace(_todo.Notes))
+                    {
+                        <MudStack Spacing="1">
+                            <MudText Typo="Typo.body2" Class="text-muted fw-600">Notes</MudText>
+                            <MudText Typo="Typo.body1">@_todo.Notes</MudText>
+                        </MudStack>
+                    }
+
+                    <MudGrid>
+                        <MudItem xs="12" sm="6">
+                            <MudStack Spacing="1">
+                                <MudText Typo="Typo.body2" Class="text-muted fw-600">Due Date</MudText>
+                                <MudText Typo="Typo.body1">
+                                    @if (_todo.DueDate.HasValue)
+                                    {
+                                        <MudChip T="string" Size="Size.Small" Color="@GetDueDateColor(_todo.DueDate.Value)" Icon="@Icons.Material.Filled.CalendarToday">
+                                            @_todo.DueDate.Value.ToString("MMM dd, yyyy")
+                                        </MudChip>
+                                    }
+                                    else
+                                    {
+                                        <span>No due date</span>
+                                    }
+                                </MudText>
+                            </MudStack>
+                        </MudItem>
+                        
+                        @if (_todo.CompletedAt.HasValue)
+                        {
+                            <MudItem xs="12" sm="6">
+                                <MudStack Spacing="1">
+                                    <MudText Typo="Typo.body2" Class="text-muted fw-600">Completed At</MudText>
+                                    <MudText Typo="Typo.body1" Color="Color.Success">
+                                        @_todo.CompletedAt.Value.ToString("MMM dd, yyyy hh:mm tt")
+                                    </MudText>
+                                </MudStack>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </MudStack>
+            </MudPaper>
+
+            @* Tasks Section *@
+            <MudPaper Class="hero-card pa-4">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-3">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                        <MudIcon Icon="@Icons.Material.Filled.Task" Color="Color.Primary" />
+                        <MudText Typo="Typo.h6" Class="fw-600">Tasks</MudText>
+                        <MudChip T="string" Size="Size.Small" Variant="Variant.Text">
+                            @_todo.CompletedTaskCount / @_todo.TaskCount
+                        </MudChip>
+                    </MudStack>
+                    @if (_todo.TaskCount > 0)
+                    {
+                        <MudText Typo="Typo.body2" Class="text-muted">
+                            @GetCompletionPercentage(_todo.TaskCount, _todo.CompletedTaskCount)% Complete
+                        </MudText>
+                    }
+                </MudStack>
+                
+                @if (_todo.TaskCount > 0)
+                {
+                    <MudProgressLinear Color="Color.Success" 
+                                       Value="@GetCompletionPercentage(_todo.TaskCount, _todo.CompletedTaskCount)" 
+                                       Class="mb-3" />
+                }
+                
+                <MudDivider Class="mb-3" />
+                
+                <TaskListComponent TodoId="@Id" OnTasksChanged="RefreshTodo" />
+            </MudPaper>
+        </MudItem>
+
+        @* Metadata Sidebar *@
+        <MudItem xs="12" md="4">
+            <MudPaper Class="hero-card pa-4">
+                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="mb-3">
+                    <MudIcon Icon="@Icons.Material.Filled.Info" Color="Color.Primary" />
+                    <MudText Typo="Typo.h6" Class="fw-600">Information</MudText>
+                </MudStack>
+                <MudDivider Class="mb-3" />
+                
+                <MudStack Spacing="3">
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.body2" Class="text-muted fw-600">Created By</MudText>
+                        <MudText Typo="Typo.body1">@_todo.CreatedByUserName</MudText>
+                    </MudStack>
+                    
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.body2" Class="text-muted fw-600">Created On</MudText>
+                        <MudText Typo="Typo.body1">@_todo.CreatedOnUtc.ToString("MMM dd, yyyy hh:mm tt")</MudText>
+                    </MudStack>
+                    
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.body2" Class="text-muted fw-600">Status</MudText>
+                        <MudChip T="string" Size="Size.Small" Color="@GetStatusColor(_todo.Status)">
+                            @_todo.Status
+                        </MudChip>
+                    </MudStack>
+                    
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.body2" Class="text-muted fw-600">Priority</MudText>
+                        <MudChip T="string" Size="Size.Small" Color="@GetPriorityColor(_todo.Priority)">
+                            @GetPriorityText(_todo.Priority)
+                        </MudChip>
+                    </MudStack>
+                    
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.body2" Class="text-muted fw-600">Active</MudText>
+                        <MudChip T="string" Size="Size.Small" Color="@(_todo.IsActive ? Color.Success : Color.Default)">
+                            @(_todo.IsActive ? "Yes" : "No")
+                        </MudChip>
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
