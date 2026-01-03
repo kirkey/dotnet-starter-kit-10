@@ -19,10 +19,10 @@ public static class TodoPermissionConstants
     {
         new("View Todos", ActionConstants.View, ResourceConstants.Todos, IsBasic: true),
         new("Search Todos", ActionConstants.Search, ResourceConstants.Todos, IsBasic: true),
-        new("Create Todos", ActionConstants.Create, ResourceConstants.Todos),
-        new("Update Todos", ActionConstants.Update, ResourceConstants.Todos),
-        new("Delete Todos", ActionConstants.Delete, ResourceConstants.Todos),
+        new("Create Todos", ActionConstants.Create, ResourceConstants.Todos, IsBasic: true),
+        new("Update Todos", ActionConstants.Update, ResourceConstants.Todos, IsBasic: true),
+        new("Delete Todos", ActionConstants.Delete, ResourceConstants.Todos, IsBasic: true),
         new("Export Todos", ActionConstants.Export, ResourceConstants.Todos, IsBasic: true),
-        new("Import Todos", ActionConstants.Import, ResourceConstants.Todos),
+        new("Import Todos", ActionConstants.Import, ResourceConstants.Todos, IsBasic: true),
     };
 }
