@@ -139,10 +139,10 @@ This is a **Modular Monolith** architecture using **.NET 9** with the following 
 │       ├── Modules.Multitenancy/          # Implementation
 │       └── Modules.Multitenancy.Contracts/ # Public contracts
 │
-├── Playground/             # Host applications
-│   ├── Playground.Api/     # Backend API host
-│   ├── Playground.Blazor/  # Frontend Blazor host
-│   ├── FSH.Playground.AppHost/ # .NET Aspire orchestrator
+├── Apps/             # Host applications
+│   ├── Apps.Api/     # Backend API host
+│   ├── Apps.Blazor/  # Frontend Blazor host
+│   ├── FSH.Apps.AppHost/ # .NET Aspire orchestrator
 │   └── Migrations.PostgreSQL/  # Database migrations
 │
 ├── Tests/                  # Test projects
@@ -708,7 +708,7 @@ public class ProductsModule : IModule
 
 #### **Step 8: Register Module in Host Application**
 
-**File: `Playground/Playground.Api/Program.cs`**
+**File: `Apps/Apps.Api/Program.cs`**
 ```csharp
 // Add to using statements
 using FSH.Modules.Products;
@@ -738,22 +738,22 @@ builder.Services.AddMediator(o =>
 
 ```bash
 # Navigate to Migrations project
-cd Playground/Migrations.PostgreSQL
+cd Apps/Migrations.PostgreSQL
 
 # Add migration
 dotnet ef migrations add AddProductsModule \
     --context ProductsDbContext \
-    --startup-project ../Playground.Api
+    --startup-project ../Apps.Api
 
 # Update database
 dotnet ef database update \
     --context ProductsDbContext \
-    --startup-project ../Playground.Api
+    --startup-project ../Apps.Api
 ```
 
 #### **Step 10: Add Blazor UI (Optional)**
 
-**File: `Playground/Playground.Blazor/Components/Pages/Products/ProductsList.razor`**
+**File: `Apps/Apps.Blazor/Components/Pages/Products/ProductsList.razor`**
 ```razor
 @page "/products"
 @attribute [Authorize(Policy = "products:read")]
@@ -806,7 +806,7 @@ dotnet ef database update \
 Update NSwag configuration and regenerate:
 
 ```bash
-# Add to nswag.json in Playground.Blazor
+# Add to nswag.json in Apps.Blazor
 {
   "operationGenerationMode": "MultipleClientsFromOperationId",
   "className": "ProductsClient",
@@ -1002,9 +1002,9 @@ Move compute-intensive or event-driven workloads to serverless:
 
 ### **Adding a New UI Page**
 
-**Location:** `Playground/Playground.Blazor/Components/Pages/{Feature}/{PageName}.razor`
+**Location:** `Apps/Apps.Blazor/Components/Pages/{Feature}/{PageName}.razor`
 
-**Example:** `Playground/Playground.Blazor/Components/Pages/Products/ProductsList.razor`
+**Example:** `Apps/Apps.Blazor/Components/Pages/Products/ProductsList.razor`
 
 ### **Adding a Shared Component**
 
@@ -1116,10 +1116,10 @@ make nswag
 make kill-ports
 
 # Add migration
-cd Playground/Migrations.PostgreSQL
+cd Apps/Migrations.PostgreSQL
 dotnet ef migrations add MigrationName \
     --context {YourContext} \
-    --startup-project ../Playground.Api
+    --startup-project ../Apps.Api
 
 # Run tests
 dotnet test

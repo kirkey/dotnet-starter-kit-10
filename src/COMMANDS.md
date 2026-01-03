@@ -151,10 +151,10 @@ dotnet dev-certs https --check --trust
 ├── REDIS_ASPIRE_GUIDE.md        # Detailed Aspire guide
 ├── DEVELOPMENT.md               # Development setup
 ├── QUICKSTART.md                # Quick reference
-├── Playground/
-│   ├── Playground.Api/          # API service
-│   ├── Playground.Blazor/       # Blazor UI
-│   ├── FSH.Playground.AppHost/  # Aspire orchestrator
+├── Apps/
+│   ├── Apps.Api/          # API service
+│   ├── Apps.Blazor/       # Blazor UI
+│   ├── FSH.Apps.AppHost/  # Aspire orchestrator
 │   └── Migrations.PostgreSQL/   # Database migrations
 └── BuildingBlocks/              # Shared libraries
 ```

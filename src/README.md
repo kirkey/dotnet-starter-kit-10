@@ -102,8 +102,8 @@ Connection timeout in backlog (5000ms)
 
 ### The Solution
 Updated 2 configuration files to disable Redis in Development mode:
-- `Playground/Playground.Api/appsettings.Development.json`
-- `Playground/Playground.Blazor/appsettings.Development.json`
+- `Apps/Apps.Api/appsettings.Development.json`
+- `Apps/Apps.Blazor/appsettings.Development.json`
 
 Both now explicitly disable Redis for standalone development.
 
@@ -112,8 +112,8 @@ Both now explicitly disable Redis for standalone development.
 ## Key Files Modified
 
 ### Configuration Files (Updated)
-- ✏️ `Playground/Playground.Api/appsettings.Development.json`
-- ✏️ `Playground/Playground.Blazor/appsettings.Development.json`
+- ✏️ `Apps/Apps.Api/appsettings.Development.json`
+- ✏️ `Apps/Apps.Blazor/appsettings.Development.json`
 
 ### Makefile (Enhanced)
 - ✏️ `Makefile` - Added `make apphost` target

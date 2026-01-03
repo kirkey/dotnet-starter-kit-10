@@ -15,7 +15,7 @@ Conducted comprehensive code review and implemented best practices improvements 
 ### 🔴 CRITICAL - Security Issues
 
 #### 1. Weak Production Configuration Validation ✅ FIXED
-**File:** `Playground/Playground.Api/Program.cs`
+**File:** `Apps/Apps.Api/Program.cs`
 
 **Issue:**
 - Production environment validation didn't check for default/insecure values
@@ -91,7 +91,7 @@ options.Lockout.AllowedForNewUsers = true;
 ---
 
 #### 3. Short JWT Token Lifetime ✅ FIXED
-**File:** `Playground/Playground.Api/appsettings.json`
+**File:** `Apps/Apps.Api/appsettings.json`
 
 **Issue:**
 - Access token expiry was only 2 minutes (too short for practical use)
@@ -113,7 +113,7 @@ options.Lockout.AllowedForNewUsers = true;
 ### 🟡 HIGH - Configuration Issues
 
 #### 4. Debug Logging in Production Config ✅ FIXED
-**File:** `Playground/Playground.Api/appsettings.json`
+**File:** `Apps/Apps.Api/appsettings.json`
 
 **Issue:**
 - Default logging level set to "Debug"
@@ -230,7 +230,7 @@ private static bool IsOpenApiEnabled(IConfiguration configuration)
 ---
 
 #### 8. Improved Root Endpoint ✅ FIXED
-**File:** `Playground/Playground.Api/Program.cs`
+**File:** `Apps/Apps.Api/Program.cs`
 
 **Issue:**
 - Simple "hello world" message not useful
@@ -481,11 +481,11 @@ export CachingOptions__Redis="<redis-connection-string>"
 
 ## Files Modified
 
-1. ✅ `Playground/Playground.Api/Program.cs`
+1. ✅ `Apps/Apps.Api/Program.cs`
    - Enhanced production configuration validation
    - Improved root endpoint with caching
 
-2. ✅ `Playground/Playground.Api/appsettings.json`
+2. ✅ `Apps/Apps.Api/appsettings.json`
    - Changed logging level to Information
    - Increased JWT token lifetime to 15 minutes
 

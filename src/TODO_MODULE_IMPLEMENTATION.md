@@ -162,7 +162,7 @@ To complete the module:
 
 2. **Add migrations**: Generate EF Core migrations for PostgreSQL
 
-3. **Wire module in Playground**: Add TodoModule to Playground.Api
+3. **Wire module in Apps**: Add TodoModule to Apps.Api
 
 4. **Create Blazor UI**: Implement todo management pages
 

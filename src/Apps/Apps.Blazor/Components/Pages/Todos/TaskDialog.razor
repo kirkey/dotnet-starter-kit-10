@@ -1,0 +1,132 @@
+@using FSH.Apps.Blazor.Api
+@inject ISnackbar Snackbar
+@inject ITodosClient TodoClient
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">@(IsEditMode ? "Edit Task" : "Add Task")</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="_form" Model="_model">
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="_model.Name"
+                              Label="Task Name"
+                              Placeholder="e.g., Research options, Write report"
+                              Required="true"
+                              RequiredError="Task name is required"
+                              Variant="Variant.Outlined"
+                              Immediate="true"
+                              Counter="100"
+                              MaxLength="100" />
+
+                <MudTextField @bind-Value="_model.Description"
+                              Label="Description (Optional)"
+                              Placeholder="Additional details"
+                              Variant="Variant.Outlined"
+                              Lines="2"
+                              Counter="250"
+                              MaxLength="250" />
+
+                <MudNumericField @bind-Value="_model.SortOrder"
+                                 Label="Sort Order"
+                                 Variant="Variant.Outlined"
+                                 Min="0"
+                                 Max="999"
+                                 HelperText="Lower numbers appear first" />
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Default" OnClick="Cancel" Disabled="_busy">
+            Cancel
+        </MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" Disabled="_busy">
+            @if (_busy)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+            }
+            <span>@(IsEditMode ? "Save" : "Add")</span>
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    [Parameter] public Guid TodoId { get; set; }
+    [Parameter] public TodoTaskDto? ExistingTask { get; set; }
+
+    private MudForm? _form;
+    private bool _busy;
+    private TaskModel _model = new();
+
+    private bool IsEditMode => ExistingTask != null;
+
+    protected override void OnInitialized()
+    {
+        if (ExistingTask != null)
+        {
+            _model = new TaskModel
+            {
+                Name = ExistingTask.Name,
+                Description = ExistingTask.Description,
+                SortOrder = ExistingTask.SortOrder
+            };
+        }
+    }
+
+    private async Task Submit()
+    {
+        await _form!.Validate();
+        if (!_form.IsValid) return;
+
+        _busy = true;
+        try
+        {
+            if (IsEditMode)
+            {
+                var command = new UpdateTodoTaskCommand
+                {
+                    Id = ExistingTask!.Id,
+                    Name = _model.Name,
+                    Description = _model.Description,
+                    SortOrder = _model.SortOrder
+                };
+                await TodoClient.TasksPutAsync(ExistingTask.Id, command);
+                Snackbar.Add("Task updated successfully", Severity.Success);
+            }
+            else
+            {
+                var command = new CreateTodoTaskCommand
+                {
+                    TodoId = TodoId,
+                    Name = _model.Name,
+                    Description = _model.Description,
+                    SortOrder = _model.SortOrder
+                };
+                await TodoClient.TasksPostAsync(TodoId, command);
+                Snackbar.Add("Task added successfully", Severity.Success);
+            }
+
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to {(IsEditMode ? "update" : "add")} task: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private class TaskModel
+    {
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public int SortOrder { get; set; }
+    }
+}

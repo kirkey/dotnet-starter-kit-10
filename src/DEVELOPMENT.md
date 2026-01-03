@@ -1,6 +1,6 @@
 # Development Guide
 
-This guide helps you set up and run the FSH Framework Playground application locally.
+This guide helps you set up and run the FSH Framework Apps application locally.
 
 ## Quick Start
 
@@ -167,12 +167,12 @@ make nswag
 
 ```bash
 # Build both projects
-dotnet build Playground/Playground.Api
-dotnet build Playground/Playground.Blazor
+dotnet build Apps/Apps.Api
+dotnet build Apps/Apps.Blazor
 
 # Publish
-dotnet publish -c Release Playground/Playground.Api
-dotnet publish -c Release Playground/Playground.Blazor
+dotnet publish -c Release Apps/Apps.Api
+dotnet publish -c Release Apps/Apps.Blazor
 ```
 
 ## Getting Help

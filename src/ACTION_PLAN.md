@@ -43,14 +43,14 @@ Your application is running with:
 ### Configuration Files Updated
 Two settings files were updated to explicitly disable Redis:
 
-**File 1**: `Playground/Playground.Api/appsettings.Development.json`
+**File 1**: `Apps/Apps.Api/appsettings.Development.json`
 ```json
 "CachingOptions": {
   "Redis": ""
 }
 ```
 
-**File 2**: `Playground/Playground.Blazor/appsettings.Development.json`
+**File 2**: `Apps/Apps.Blazor/appsettings.Development.json`
 ```json
 "CachingOptions": {
   "Redis": ""

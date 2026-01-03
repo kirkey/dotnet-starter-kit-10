@@ -6,7 +6,7 @@
 /src
 ├── 🧱 BuildingBlocks/          Infrastructure (reusable)
 ├── 📦 Modules/                 Business logic (your features)
-├── 🎮 Playground/              Host applications (API + Blazor)
+├── 🎮 Apps/              Host applications (API + Blazor)
 ├── 🧪 Tests/                   Test projects
 └── 🛠️ Tools/                   CLI utilities
 ```
@@ -252,14 +252,14 @@ builder.Services.AddMediator(o =>
 
 ### 8️⃣ Create Migration
 ```bash
-cd Playground/Migrations.PostgreSQL
+cd Apps/Migrations.PostgreSQL
 dotnet ef migrations add AddYourModule \
     --context YourModuleDbContext \
-    --startup-project ../Playground.Api
+    --startup-project ../Apps.Api
 
 dotnet ef database update \
     --context YourModuleDbContext \
-    --startup-project ../Playground.Api
+    --startup-project ../Apps.Api
 ```
 
 ---
@@ -268,7 +268,7 @@ dotnet ef database update \
 
 ### 1️⃣ Create Page Component
 ```razor
-@* Playground/Playground.Blazor/Components/Pages/YourModule/YourEntityList.razor *@
+@* Apps/Apps.Blazor/Components/Pages/YourModule/YourEntityList.razor *@
 @page "/your-entities"
 @attribute [Authorize(Policy = "your-entities:read")]
 @inject IYourModuleClient ApiClient
@@ -317,7 +317,7 @@ make nswag
 
 ### 3️⃣ Add to Navigation
 ```razor
-@* Playground/Playground.Blazor/Components/Layout/NavMenu.razor *@
+@* Apps/Apps.Blazor/Components/Layout/NavMenu.razor *@
 <MudNavLink Href="/your-entities" Icon="@Icons.Material.Filled.List">
     Your Entities
 </MudNavLink>

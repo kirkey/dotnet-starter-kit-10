@@ -1,0 +1,881 @@
+@page "/todos"
+@using FSH.Framework.Blazor.UI.Components.Dialogs
+@using FSH.Apps.Blazor.Api
+@using FSH.Apps.Blazor.Services.Api
+@inherits ComponentBase
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager Navigation
+@inject ITodosClient TodoClient
+@inject IGlobalErrorHandler ErrorHandler
+@inject IJSRuntime JSRuntime
+@inject IHttpClientFactory HttpClientFactory
+
+<FshPageHeader Title="Todo Lists"
+               Description="Manage your todo lists and organize tasks efficiently">
+    <ActionContent>
+        @if (_selectedLists.Any())
+        {
+            <MudButtonGroup Variant="Variant.Outlined" Color="Color.Default" Size="Size.Small" Class="mr-2">
+                <MudButton StartIcon="@Icons.Material.Filled.Delete"
+                           Color="Color.Error"
+                           OnClick="BulkDelete"
+                           Disabled="_bulkBusy">
+                    Delete (@_selectedLists.Count)
+                </MudButton>
+                <MudButton StartIcon="@Icons.Material.Filled.Clear"
+                           OnClick="ClearSelection">
+                    Clear
+                </MudButton>
+            </MudButtonGroup>
+        }
+        <MudButtonGroup Variant="Variant.Outlined" Size="Size.Small" Class="mr-2">
+            <MudButton StartIcon="@Icons.Material.Filled.FileDownload"
+                       Color="Color.Info"
+                       OnClick="ExportTodos">
+                Export
+            </MudButton>
+            <MudButton StartIcon="@Icons.Material.Filled.FileUpload"
+                       Color="Color.Info"
+                       OnClick="ShowImportDialog">
+                Import
+            </MudButton>
+        </MudButtonGroup>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   OnClick="ShowCreateDialog">
+            New Todo List
+        </MudButton>
+    </ActionContent>
+</FshPageHeader>
+
+@* Stats Cards *@
+<MudGrid Class="mb-4">
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="stats-card" Elevation="2">
+            <MudCardContent Class="pa-4">
+                <MudStack Spacing="2">
+                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+                        <MudIcon Icon="@Icons.Material.Filled.List" Color="Color.Primary" Size="Size.Large" />
+                        <MudChip T="string" Size="Size.Small" Color="Color.Primary" Variant="Variant.Text">Total</MudChip>
+                    </MudStack>
+                    <MudText Typo="Typo.h4" Class="fw-700">@_stats.TotalLists</MudText>
+                    <MudText Typo="Typo.body2" Class="text-muted">Total Lists</MudText>
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="stats-card" Elevation="2">
+            <MudCardContent Class="pa-4">
+                <MudStack Spacing="2">
+                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+                        <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Large" />
+                        <MudChip T="string" Size="Size.Small" Color="Color.Success" Variant="Variant.Text">Active</MudChip>
+                    </MudStack>
+                    <MudText Typo="Typo.h4" Class="fw-700">@_stats.ActiveLists</MudText>
+                    <MudText Typo="Typo.body2" Class="text-muted">Active Lists</MudText>
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="stats-card" Elevation="2">
+            <MudCardContent Class="pa-4">
+                <MudStack Spacing="2">
+                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+                        <MudIcon Icon="@Icons.Material.Filled.Task" Color="Color.Info" Size="Size.Large" />
+                        <MudChip T="string" Size="Size.Small" Color="Color.Info" Variant="Variant.Text">Items</MudChip>
+                    </MudStack>
+                    <MudText Typo="Typo.h4" Class="fw-700">@_stats.TotalItems</MudText>
+                    <MudText Typo="Typo.body2" Class="text-muted">Total Tasks</MudText>
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Class="stats-card" Elevation="2">
+            <MudCardContent Class="pa-4">
+                <MudStack Spacing="2">
+                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+                        <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Color="Color.Warning" Size="Size.Large" />
+                        <MudChip T="string" Size="Size.Small" Color="Color.Warning" Variant="Variant.Text">Progress</MudChip>
+                    </MudStack>
+                    <MudText Typo="Typo.h4" Class="fw-700">@_stats.CompletionRate%</MudText>
+                    <MudText Typo="Typo.body2" Class="text-muted">Completion Rate</MudText>
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@* Filter Panel *@
+<MudExpansionPanels Class="mb-4" Elevation="0">
+    <MudExpansionPanel Text="Filters" IsInitiallyExpanded="true" Class="fsh-card">
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4">
+                <MudTextField @bind-Value="_filter.SearchTerm"
+                              Label="Search"
+                              Placeholder="Search by name or description"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              Immediate="true"
+                              DebounceInterval="400"
+                              OnDebounceIntervalElapsed="@((string _) => RefreshData())" />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect @bind-Value="_filter.Status"
+                           Label="Status"
+                           Clearable="true"
+                           T="string">
+                    <MudSelectItem Value="@("NotStarted")">Not Started</MudSelectItem>
+                    <MudSelectItem Value="@("InProgress")">In Progress</MudSelectItem>
+                    <MudSelectItem Value="@("Completed")">Completed</MudSelectItem>
+                    <MudSelectItem Value="@("OnHold")">On Hold</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect @bind-Value="_filter.Priority"
+                           Label="Priority"
+                           Clearable="true"
+                           T="int?">
+                    <MudSelectItem Value="@((int?)1)">Low</MudSelectItem>
+                    <MudSelectItem Value="@((int?)2)">Medium</MudSelectItem>
+                    <MudSelectItem Value="@((int?)3)">High</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudSelect @bind-Value="_filter.CompletionFilter"
+                           Label="Completion Status"
+                           Clearable="true"
+                           T="string">
+                    <MudSelectItem Value="@("all")">All Todos</MudSelectItem>
+                    <MudSelectItem Value="@("active")">Active Only</MudSelectItem>
+                    <MudSelectItem Value="@("completed")">Completed Only</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" Class="d-flex align-center justify-end">
+                <MudButton StartIcon="@Icons.Material.Filled.FilterAltOff"
+                           Color="Color.Default"
+                           Variant="Variant.Text"
+                           OnClick="ClearFilters">
+                    Clear Filters
+                </MudButton>
+                <MudButton StartIcon="@Icons.Material.Filled.Refresh"
+                           Color="Color.Primary"
+                           Variant="Variant.Filled"
+                           OnClick="LoadData"
+                           Class="ml-2">
+                    Refresh
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudExpansionPanel>
+</MudExpansionPanels>
+
+@* Todo Lists Grid *@
+<MudPaper Class="fsh-card pa-0" Style="overflow: hidden;">
+    <MudDataGrid T="TodoSummaryDto"
+                 @ref="_dataGrid"
+                 Items="_filtered"
+                 Loading="_loading"
+                 Hover="true"
+                 Dense="true"
+                 Striped="true"
+                 MultiSelection="true"
+                 SelectedItems="_selectedLists"
+                 SelectedItemsChanged="OnSelectionChanged"
+                 SortMode="SortMode.Single"
+                 Filterable="false"
+                 RowsPerPage="@_pageSize"
+                 Class="todos-datagrid">
+        <Columns>
+            <SelectColumn T="TodoSummaryDto" ShowInFooter="false" />
+            <TemplateColumn Title="" Sortable="false" Filterable="false">
+                <CellTemplate>
+                    <MudIconButton Icon="@(context.Item.TaskCount > 0 ? Icons.Material.Filled.KeyboardArrowDown : Icons.Material.Filled.KeyboardArrowRight)"
+                                   Size="Size.Small"
+                                   OnClick="@(() => ToggleExpand(context.Item))"
+                                   Disabled="@(context.Item.TaskCount == 0)" />
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="List" Sortable="true" SortBy="@(x => x.Name)">
+                <CellTemplate>
+                    <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                        <MudStack Spacing="0">
+                            <MudLink Typo="Typo.body1" Class="fw-600" OnClick="@(() => ViewDetails(context.Item.Id))">
+                                @context.Item.Name
+                            </MudLink>
+                            <MudText Typo="Typo.caption" Class="text-muted">
+                                @(string.IsNullOrEmpty(context.Item.Description) ? "No description" : context.Item.Description)
+                            </MudText>
+                        </MudStack>
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Progress" Sortable="false">
+                <CellTemplate>
+                    <MudStack Spacing="1">
+                        <MudProgressLinear Value="@GetCompletionPercentage(context.Item)" 
+                                           Color="@GetProgressColor(context.Item)" 
+                                           Size="Size.Small" 
+                                           Rounded="true" />
+                        <MudText Typo="Typo.caption">
+                            @context.Item.CompletedTaskCount / @context.Item.TaskCount tasks
+                        </MudText>
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Status" Sortable="true" SortBy="@(x => x.Status)">
+                <CellTemplate>
+                    <MudMenu Dense="true" FullWidth="false">
+                        <ActivatorContent>
+                            <MudChip T="string" 
+                                     Size="Size.Small" 
+                                     Color="@GetStatusColor(context.Item.Status)" 
+                                     Variant="Variant.Filled"
+                                     OnClick="@(() => {})">
+                                @context.Item.Status
+                                <MudIcon Icon="@Icons.Material.Filled.ArrowDropDown" Size="Size.Small" Class="ml-1" />
+                            </MudChip>
+                        </ActivatorContent>
+                        <ChildContent>
+                            <MudMenuItem OnClick="@(() => UpdateTodoStatus(context.Item, 0))">
+                                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.RadioButtonUnchecked" Size="Size.Small" />
+                                    <MudText>Not Started</MudText>
+                                </MudStack>
+                            </MudMenuItem>
+                            <MudMenuItem OnClick="@(() => UpdateTodoStatus(context.Item, 1))">
+                                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.PlayArrow" Color="Color.Info" Size="Size.Small" />
+                                    <MudText>In Progress</MudText>
+                                </MudStack>
+                            </MudMenuItem>
+                            <MudMenuItem OnClick="@(() => UpdateTodoStatus(context.Item, 2))">
+                                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small" />
+                                    <MudText>Completed</MudText>
+                                </MudStack>
+                            </MudMenuItem>
+                            <MudMenuItem OnClick="@(() => UpdateTodoStatus(context.Item, 3))">
+                                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.Pause" Color="Color.Warning" Size="Size.Small" />
+                                    <MudText>On Hold</MudText>
+                                </MudStack>
+                            </MudMenuItem>
+                        </ChildContent>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Priority" Sortable="true" SortBy="@(x => x.Priority)">
+                <CellTemplate>
+                    <MudChip T="string" 
+                             Size="Size.Small" 
+                             Color="@GetPriorityColor(context.Item.Priority)" 
+                             Variant="Variant.Outlined">
+                        @GetPriorityText(context.Item.Priority)
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Due Date" Sortable="true" SortBy="@(x => x.DueDate)">
+                <CellTemplate>
+                    @if (context.Item.DueDate.HasValue)
+                    {
+                        <MudChip T="string" 
+                                 Size="Size.Small" 
+                                 Icon="@Icons.Material.Filled.CalendarToday"
+                                 Color="@GetDueDateColor(context.Item.DueDate.Value)">
+                            @context.Item.DueDate.Value.ToString("MMM dd, yyyy")
+                        </MudChip>
+                    }
+                    else
+                    {
+                        <MudText Typo="Typo.caption" Class="text-muted">-</MudText>
+                    }
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Actions" Sortable="false" HeaderClass="text-right" CellClass="text-right">
+                <CellTemplate>
+                    <MudStack Row="true" Justify="Justify.FlexEnd" Spacing="0">
+                        @if (!context.Item.IsCompleted)
+                        {
+                            <MudTooltip Text="Mark Complete">
+                                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle"
+                                               Size="Size.Small"
+                                               Color="Color.Success"
+                                               OnClick="@(() => CompleteTodo(context.Item))"
+                                               Disabled="@(_busyListId == context.Item.Id)" />
+                            </MudTooltip>
+                        }
+                        else
+                        {
+                            <MudTooltip Text="Reopen">
+                                <MudIconButton Icon="@Icons.Material.Filled.RestartAlt"
+                                               Size="Size.Small"
+                                               Color="Color.Info"
+                                               OnClick="@(() => ReopenTodo(context.Item))"
+                                               Disabled="@(_busyListId == context.Item.Id)" />
+                            </MudTooltip>
+                        }
+                        <MudTooltip Text="View Details">
+                            <MudIconButton Icon="@Icons.Material.Filled.Visibility"
+                                           Size="Size.Small"
+                                           Color="Color.Primary"
+                                           OnClick="@(() => ViewDetails(context.Item.Id))" />
+                        </MudTooltip>
+                        <MudTooltip Text="Edit List">
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                           Size="Size.Small"
+                                           Color="Color.Info"
+                                           OnClick="@(() => EditList(context.Item))" />
+                        </MudTooltip>
+                        <MudTooltip Text="Archive">
+                            <MudIconButton Icon="@Icons.Material.Filled.Archive"
+                                           Size="Size.Small"
+                                           Color="Color.Warning"
+                                           OnClick="@(() => ArchiveTodo(context.Item))"
+                                           Disabled="@(_busyListId == context.Item.Id)" />
+                        </MudTooltip>
+                        <MudTooltip Text="Delete List">
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                           Size="Size.Small"
+                                           Color="Color.Error"
+                                           OnClick="@(() => DeleteList(context.Item))"
+                                           Disabled="@(_busyListId == context.Item.Id)" />
+                        </MudTooltip>
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+        <ChildRowContent>
+            @if (_expandedRows.Contains(context.Item.Id))
+            {
+                <MudTr>
+                    <td colspan="8">
+                        <MudCard Elevation="0" Class="ma-2">
+                            <MudCardContent>
+                                <TaskListComponent TodoId="@context.Item.Id" OnTasksChanged="@(() => RefreshTodoAfterTaskChange(context.Item.Id))" />
+                            </MudCardContent>
+                        </MudCard>
+                    </td>
+                </MudTr>
+            }
+        </ChildRowContent>
+        <PagerContent>
+            <MudDataGridPager T="TodoSummaryDto" PageSizeOptions="@_pageSizeOptions" />
+        </PagerContent>
+        <NoRecordsContent>
+            <MudStack AlignItems="AlignItems.Center" Spacing="4" Class="pa-8">
+                <MudIcon Icon="@Icons.Material.Filled.ChecklistRtl" Size="Size.Large" Color="Color.Default" />
+                <MudText Typo="Typo.h6">No todo lists found</MudText>
+                <MudText Typo="Typo.body2" Class="text-muted">Create your first todo list to get started.</MudText>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="ShowCreateDialog">
+                    Create Todo List
+                </MudButton>
+            </MudStack>
+        </NoRecordsContent>
+    </MudDataGrid>
+</MudPaper>
+
+<style>
+    .stats-card {
+        border-radius: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .stats-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+    .todos-datagrid .mud-table-head .mud-table-row .mud-table-cell {
+        font-weight: 600;
+        background-color: rgba(var(--mud-palette-primary-rgb), 0.04);
+    }
+
+    .todos-datagrid .mud-table-row:hover {
+        background-color: rgba(var(--mud-palette-primary-rgb), 0.02);
+    }
+</style>
+
+@code {
+    private MudDataGrid<TodoSummaryDto>? _dataGrid;
+    private List<TodoSummaryDto> _lists = new();
+    private List<TodoSummaryDto> _filtered = new();
+    private HashSet<TodoSummaryDto> _selectedLists = new();
+    private HashSet<Guid> _expandedRows = new();
+    private bool _loading = true;
+    private Guid? _busyListId;
+    private bool _bulkBusy;
+
+    private readonly int _pageSize = 10;
+    private readonly int[] _pageSizeOptions = { 5, 10, 25, 50 };
+
+    private TodoListStats _stats = new();
+    private FilterModel _filter = new();
+
+    private class TodoListStats
+    {
+        public int TotalLists { get; set; }
+        public int ActiveLists { get; set; }
+        public int TotalItems { get; set; }
+        public int CompletionRate { get; set; }
+    }
+
+    private class FilterModel
+    {
+        public string? SearchTerm { get; set; }
+        public string? Status { get; set; }
+        public int? Priority { get; set; }
+        public string? CompletionFilter { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        _loading = true;
+        try
+        {
+            var result = await ErrorHandler.ExecuteAsync(
+                async () => await TodoClient.TodoGetAsync(1, 100),
+                ex => Snackbar.Add($"Failed to load todo lists: {ex.Message}", Severity.Error));
+            
+            _lists = result?.Data?.ToList() ?? new List<TodoSummaryDto>();
+            
+            CalculateStats();
+            ApplyFilters();
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void CalculateStats()
+    {
+        _stats = new TodoListStats
+        {
+            TotalLists = _lists.Count,
+            ActiveLists = _lists.Count(l => !l.IsCompleted),
+            TotalItems = _lists.Sum(l => l.TaskCount),
+            CompletionRate = _lists.Any() && _lists.Sum(l => l.TaskCount) > 0
+                ? (int)((_lists.Sum(l => l.CompletedTaskCount) * 100.0) / _lists.Sum(l => l.TaskCount))
+                : 0
+        };
+    }
+
+    private void ApplyFilters()
+    {
+        var query = _lists.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(_filter.SearchTerm))
+        {
+            var term = _filter.SearchTerm.ToLowerInvariant();
+            query = query.Where(l =>
+                (l.Name?.ToLowerInvariant().Contains(term) ?? false) ||
+                (l.Description?.ToLowerInvariant().Contains(term) ?? false));
+        }
+
+        if (!string.IsNullOrWhiteSpace(_filter.Status))
+        {
+            query = query.Where(l => l.Status?.Equals(_filter.Status, StringComparison.OrdinalIgnoreCase) ?? false);
+        }
+
+        if (_filter.Priority.HasValue)
+        {
+            query = query.Where(l => l.Priority == _filter.Priority.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(_filter.CompletionFilter))
+        {
+            query = _filter.CompletionFilter switch
+            {
+                "active" => query.Where(l => !l.IsCompleted),
+                "completed" => query.Where(l => l.IsCompleted),
+                _ => query
+            };
+        }
+
+        _filtered = query.OrderByDescending(l => l.DueDate).ToList();
+    }
+
+    private void RefreshData()
+    {
+        ApplyFilters();
+        StateHasChanged();
+    }
+
+    private void ClearFilters()
+    {
+        _filter = new FilterModel();
+        ApplyFilters();
+    }
+
+    private void OnSelectionChanged(HashSet<TodoSummaryDto> items)
+    {
+        _selectedLists = items;
+    }
+
+    private void ClearSelection()
+    {
+        _selectedLists.Clear();
+        StateHasChanged();
+    }
+
+    private void ToggleExpand(TodoSummaryDto item)
+    {
+        if (_expandedRows.Contains(item.Id))
+        {
+            _expandedRows.Remove(item.Id);
+        }
+        else
+        {
+            _expandedRows.Add(item.Id);
+        }
+        StateHasChanged();
+    }
+
+    private async Task RefreshTodoAfterTaskChange(Guid todoId)
+    {
+        // Refresh the list to update task counts
+        await LoadData();
+    }
+
+    private double GetCompletionPercentage(TodoSummaryDto list)
+    {
+        return list.TaskCount > 0 ? (list.CompletedTaskCount * 100.0) / list.TaskCount : 0;
+    }
+
+    private Color GetProgressColor(TodoSummaryDto list)
+    {
+        var percentage = GetCompletionPercentage(list);
+        return percentage switch
+        {
+            >= 75 => Color.Success,
+            >= 50 => Color.Info,
+            >= 25 => Color.Warning,
+            _ => Color.Error
+        };
+    }
+
+    private Color GetStatusColor(string? status)
+    {
+        return status?.ToLowerInvariant() switch
+        {
+            "notstarted" => Color.Default,
+            "inprogress" => Color.Info,
+            "completed" => Color.Success,
+            "onhold" => Color.Warning,
+            "active" => Color.Success,
+            "archived" => Color.Default,
+            _ => Color.Default
+        };
+    }
+
+    private Color GetPriorityColor(int priority)
+    {
+        return priority switch
+        {
+            3 => Color.Error,    // High
+            2 => Color.Warning,  // Medium
+            1 => Color.Info,     // Low
+            _ => Color.Default
+        };
+    }
+
+    private string GetPriorityText(int priority)
+    {
+        return priority switch
+        {
+            3 => "High",
+            2 => "Medium",
+            1 => "Low",
+            _ => "None"
+        };
+    }
+
+    private Color GetDueDateColor(DateTimeOffset dueDate)
+    {
+        var daysUntilDue = (dueDate - DateTimeOffset.UtcNow).TotalDays;
+        
+        if (daysUntilDue < 0)
+            return Color.Error;      // Overdue
+        if (daysUntilDue < 3)
+            return Color.Warning;    // Due soon
+        if (daysUntilDue < 7)
+            return Color.Info;       // Due this week
+        
+        return Color.Default;        // Due later
+    }
+
+    private void ViewDetails(Guid id)
+    {
+        Navigation.NavigateTo($"/todos/{id}");
+    }
+
+    private async Task ShowCreateDialog()
+    {
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true,
+            CloseOnEscapeKey = true,
+            CloseButton = true
+        };
+
+        var dialog = await DialogService.ShowAsync<CreateTodoListDialog>("Create Todo List", options);
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            await LoadData();
+        }
+    }
+
+    private async Task EditList(TodoSummaryDto list)
+    {
+        var parameters = new DialogParameters<CreateTodoListDialog>
+        {
+            { x => x.ExistingList, list }
+        };
+
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true,
+            CloseOnEscapeKey = true,
+            CloseButton = true
+        };
+
+        var dialog = await DialogService.ShowAsync<CreateTodoListDialog>("Edit Todo List", parameters, options);
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+        {
+            await LoadData();
+        }
+    }
+
+    private async Task DeleteList(TodoSummaryDto list)
+    {
+        var confirmed = await DialogService.ShowDeleteConfirmAsync(list.Name ?? "this list");
+        if (!confirmed) return;
+
+        _busyListId = list.Id;
+        try
+        {
+            await TodoClient.TodoDeleteAsync(list.Id, CancellationToken.None);
+            
+            Snackbar.Add("Todo list deleted successfully.", Severity.Success);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to delete todo list: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyListId = null;
+        }
+    }
+
+    private async Task CompleteTodo(TodoSummaryDto list)
+    {
+        _busyListId = list.Id;
+        try
+        {
+            await TodoClient.TodoCompleteAsync(list.Id, CancellationToken.None);
+            Snackbar.Add("Todo marked as complete.", Severity.Success);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to complete todo: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyListId = null;
+        }
+    }
+
+    private async Task ReopenTodo(TodoSummaryDto list)
+    {
+        _busyListId = list.Id;
+        try
+        {
+            await TodoClient.TodoReopenAsync(list.Id, CancellationToken.None);
+            Snackbar.Add("Todo reopened successfully.", Severity.Success);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to reopen todo: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyListId = null;
+        }
+    }
+
+    private async Task ArchiveTodo(TodoSummaryDto list)
+    {
+        var confirmed = await DialogService.ShowConfirmAsync(
+            "Archive Todo",
+            $"Archive '{list.Name}'? You can restore it later.",
+            "Archive",
+            "Cancel",
+            Color.Warning,
+            Icons.Material.Outlined.Archive,
+            Color.Warning);
+
+        if (!confirmed) return;
+
+        _busyListId = list.Id;
+        try
+        {
+            await TodoClient.TodoArchiveAsync(list.Id, CancellationToken.None);
+            Snackbar.Add("Todo archived successfully.", Severity.Success);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to archive todo: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyListId = null;
+        }
+    }
+
+    private async Task UpdateTodoStatus(TodoSummaryDto list, int status)
+    {
+        _busyListId = list.Id;
+        try
+        {
+            await TodoClient.TodoUpdateStatusAsync(list.Id, status, CancellationToken.None);
+            var statusName = status switch
+            {
+                0 => "Not Started",
+                1 => "In Progress",
+                2 => "Completed",
+                3 => "On Hold",
+                _ => "Unknown"
+            };
+            Snackbar.Add($"Todo status updated to {statusName}.", Severity.Success);
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to update status: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyListId = null;
+        }
+    }
+
+    private async Task BulkDelete()
+    {
+        if (!_selectedLists.Any()) return;
+
+        var confirmed = await DialogService.ShowConfirmAsync(
+            "Bulk Delete",
+            $"Delete {_selectedLists.Count} list(s)? This action cannot be undone.",
+            "Delete All",
+            "Cancel",
+            Color.Error,
+            Icons.Material.Outlined.DeleteForever,
+            Color.Error);
+
+        if (!confirmed) return;
+
+        _bulkBusy = true;
+        var success = 0;
+        var errors = 0;
+        
+        foreach (var list in _selectedLists.ToList())
+        {
+            try
+            {
+                await TodoClient.TodoDeleteAsync(list.Id, CancellationToken.None);
+                success++;
+            }
+            catch (Exception ex)
+            {
+                errors++;
+                // Log but continue with remaining items
+                Console.WriteLine($"Failed to delete list {list.Id}: {ex.Message}");
+            }
+        }
+        
+        _bulkBusy = false;
+        
+        if (errors > 0)
+        {
+            Snackbar.Add($"Deleted {success} of {_selectedLists.Count} lists. {errors} failed.", Severity.Warning);
+        }
+        else
+        {
+            Snackbar.Add($"Successfully deleted {success} list(s).", Severity.Success);
+        }
+        
+        ClearSelection();
+        await LoadData();
+    }
+
+    private async Task ExportTodos()
+    {
+        try
+        {
+            var format = "csv"; // Default to CSV
+            var result = await DialogService.ShowMessageBox(
+                "Export Todos",
+                "Choose export format:",
+                yesText: "CSV", 
+                noText: "JSON");
+            
+            if (result == null) return; // Cancelled
+            format = result == true ? "csv" : "json";
+
+            // Use authenticated HttpClient to download file
+            var httpClient = HttpClientFactory.CreateClient("ApiClient");
+            var response = await httpClient.GetAsync($"api/v1/todo/export?format={format}");
+            response.EnsureSuccessStatusCode();
+            
+            var fileBytes = await response.Content.ReadAsByteArrayAsync();
+            var fileName = $"todos-{DateTime.Now:yyyy-MM-dd}.{format}";
+            var contentType = format == "csv" ? "text/csv" : "application/json";
+            
+            // Trigger download via JavaScript
+            await JSRuntime.InvokeVoidAsync("downloadFileFromBytes", fileName, contentType, fileBytes);
+            
+            Snackbar.Add($"Exported todos as {format.ToUpper()}", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            await ErrorHandler.HandleExceptionAsync(ex);
+        }
+    }
+
+    private async Task ShowImportDialog()
+    {
+        var dialog = await DialogService.ShowAsync<ImportTodosDialog>("Import Todos", new DialogOptions
+        {
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true,
+            CloseButton = true
+        });
+
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            await LoadData();
+        }
+    }
+}

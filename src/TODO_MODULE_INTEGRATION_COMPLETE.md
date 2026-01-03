@@ -12,12 +12,12 @@ Successfully integrated the Todo module end-to-end into the FSH .NET 10 Starter 
   - Modules.Todo
 
 ### Project References:
-- **Playground.Api.csproj** - Added references to Todo modules
+- **Apps.Api.csproj** - Added references to Todo modules
 - **Migrations.PostgreSQL.csproj** - Added reference to Todo module for migrations
 
 ## 2. Database Migrations
 
-Created EF Core migrations for PostgreSQL in `src/Playground/Migrations.PostgreSQL/Todo/`:
+Created EF Core migrations for PostgreSQL in `src/Apps/Migrations.PostgreSQL/Todo/`:
 
 ### Generated Files:
 1. **20251230045114_Initial.cs** - Initial migration
@@ -63,7 +63,7 @@ Created EF Core migrations for PostgreSQL in `src/Playground/Migrations.PostgreS
 ## 4. OpenAPI Client Generation
 
 Generated NSwag client from live OpenAPI spec:
-- Generated to: `src/Playground/Playground.Blazor/ApiClient/Generated.cs`
+- Generated to: `src/Apps/Apps.Blazor/ApiClient/Generated.cs`
 - Includes all Todo endpoints
 - Type-safe C# client proxies
 
@@ -162,14 +162,14 @@ Updated `NavMenu.razor` to include Todo section:
 ### Start API:
 ```bash
 cd src
-dotnet run --project Playground/Playground.Api/Playground.Api.csproj --launch-profile https
+dotnet run --project Apps/Apps.Api/Apps.Api.csproj --launch-profile https
 ```
 API: `https://localhost:7030`
 
 ### Start Blazor:
 ```bash
 cd src
-dotnet run --project Playground/Playground.Blazor/Playground.Blazor.csproj
+dotnet run --project Apps/Apps.Blazor/Apps.Blazor.csproj
 ```
 UI: `https://localhost:7140`
 
@@ -201,7 +201,7 @@ None - Module is fully integrated and operational.
 Todo Module Architecture:
 
 ┌─────────────────────────────────────┐
-│     Playground.Blazor (UI)          │
+│     Apps.Blazor (UI)          │
 │  - TodoLists.razor                  │
 │  - TodoDetail.razor                 │
 │  - NavMenu updated                  │
@@ -209,7 +209,7 @@ Todo Module Architecture:
                │ HTTP/OpenAPI
                ▼
 ┌─────────────────────────────────────┐
-│    Playground.Api (REST API)        │
+│    Apps.Api (REST API)        │
 │  - Todo Endpoints                   │
 │  - MediatR/Mediator Commands        │
 │  - CQRS Pattern                     │

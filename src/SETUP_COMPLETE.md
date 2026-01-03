@@ -48,8 +48,8 @@ Quick reference card with:
 
 | Service | HTTPS | HTTP |
 |---------|-------|------|
-| **API (Playground.Api)** | 7030 | 5030 |
-| **Blazor UI (Playground.Blazor)** | 7140 | 5032 |
+| **API (Apps.Api)** | 7030 | 5030 |
+| **Blazor UI (Apps.Blazor)** | 7140 | 5032 |
 | **AppHost** | 17000 | 5000 |
 
 ## Quick Start (Next Steps)

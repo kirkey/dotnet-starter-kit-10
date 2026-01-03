@@ -45,25 +45,25 @@ apphost:
 	@echo "This will start:"
 	@echo "  - PostgreSQL database (localhost)"
 	@echo "  - Redis cache (localhost)"
-	@echo "  - Playground API"
-	@echo "  - Playground Blazor UI"
+	@echo "  - Apps API"
+	@echo "  - Apps Blazor UI"
 	@echo ""
 	@echo "The Aspire Dashboard will open automatically."
 	@echo "Press Ctrl+C to stop all services."
 	@echo ""
-	@dotnet run --project Playground/FSH.Playground.AppHost -- $(DOTNET_RUN_ARGS)
+	@dotnet run --project Apps/FSH.Apps.AppHost -- $(DOTNET_RUN_ARGS)
 api:
-	@echo "Running Playground.Api (HTTPS on 7030, HTTP on 5030)"
-	@dotnet run --project Playground/Playground.Api -- $(DOTNET_RUN_ARGS)
+	@echo "Running Apps.Api (HTTPS on 7030, HTTP on 5030)"
+	@dotnet run --project Apps/Apps.Api -- $(DOTNET_RUN_ARGS)
 api-http:
-	@echo "Running Playground.Api (HTTP only on port 5030)"
-	@ASPNETCORE_URLS="http://localhost:5030" dotnet run --project Playground/Playground.Api -- $(DOTNET_RUN_ARGS)
+	@echo "Running Apps.Api (HTTP only on port 5030)"
+	@ASPNETCORE_URLS="http://localhost:5030" dotnet run --project Apps/Apps.Api -- $(DOTNET_RUN_ARGS)
 blazor:
-	@echo "Running Playground.Blazor (HTTPS on 7140, HTTP on 5032)"
-	@dotnet run --project Playground/Playground.Blazor -- $(DOTNET_RUN_ARGS)
+	@echo "Running Apps.Blazor (HTTPS on 7140, HTTP on 5032)"
+	@dotnet run --project Apps/Apps.Blazor -- $(DOTNET_RUN_ARGS)
 blazor-http:
-	@echo "Running Playground.Blazor (HTTP only on port 5032)"
-	@ASPNETCORE_URLS="http://localhost:5032" dotnet run --project Playground/Playground.Blazor -- $(DOTNET_RUN_ARGS)
+	@echo "Running Apps.Blazor (HTTP only on port 5032)"
+	@ASPNETCORE_URLS="http://localhost:5032" dotnet run --project Apps/Apps.Blazor -- $(DOTNET_RUN_ARGS)
 nswag:
 	@if [ -z "$(NSWAG_FILES)" ]; then \
 		echo "No NSwag config files found (looked for .nswag and nswag*.json)."; \

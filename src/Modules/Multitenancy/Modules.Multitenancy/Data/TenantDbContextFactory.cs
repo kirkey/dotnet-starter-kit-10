@@ -27,7 +27,7 @@ public sealed class TenantDbContextFactory : IDesignTimeDbContextFactory<TenantD
             case "POSTGRESQL":
                 optionsBuilder.UseNpgsql(
                     connectionString,
-                    b => b.MigrationsAssembly("FSH.Playground.Migrations.PostgreSQL"));
+                    b => b.MigrationsAssembly("FSH.Apps.Migrations.PostgreSQL"));
                 break;
             default:
                 throw new NotSupportedException($"Database provider '{provider}' is not supported for TenantDbContext migrations.");

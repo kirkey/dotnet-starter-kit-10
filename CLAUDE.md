@@ -12,10 +12,10 @@ dotnet restore src/FSH.Framework.slnx
 dotnet build src/FSH.Framework.slnx
 
 # Run with Aspire (spins up Postgres + Redis via Docker)
-dotnet run --project src/Playground/FSH.Playground.AppHost
+dotnet run --project src/Apps/FSH.Apps.AppHost
 
 # Run API standalone (requires DB/Redis/JWT config in appsettings)
-dotnet run --project src/Playground/Playground.Api
+dotnet run --project src/Apps/Apps.Api
 
 # Run all tests
 dotnet test src/FSH.Framework.slnx
@@ -41,12 +41,12 @@ FullStackHero .NET 10 Starter Kit - multi-tenant SaaS framework using vertical s
 
 - **src/BuildingBlocks/** - Reusable framework components (packaged as NuGets): Core (DDD primitives), Persistence (EF Core + specifications), Caching (Redis), Mailing, Jobs (Hangfire), Storage, Web (host wiring), Eventing
 - **src/Modules/** - Feature modules (packaged as NuGets): Identity (JWT auth, users, roles), Multitenancy (Finbuckle), Auditing
-- **src/Playground/** - Reference implementation using direct project references for development; includes Aspire AppHost, API, Blazor UI, PostgreSQL migrations
+- **src/Apps/** - Reference implementation using direct project references for development; includes Aspire AppHost, API, Blazor UI, PostgreSQL migrations
 - **src/Tests/** - Architecture tests using NetArchTest.Rules, xUnit, Shouldly
-- **scripts/openapi/** - NSwag-based C# client generation from OpenAPI spec; outputs to `Playground.Blazor/ApiClient/Generated.cs`
+- **scripts/openapi/** - NSwag-based C# client generation from OpenAPI spec; outputs to `Apps.Blazor/ApiClient/Generated.cs`
 - **terraform/** - AWS infrastructure as code (modular)
   - `modules/` - Reusable: network, ecs_cluster, ecs_service, rds_postgres, elasticache_redis, alb, s3_bucket
-  - `apps/playground/` - Playground deployment stack with `envs/{dev,staging,prod}/{region}/`
+  - `apps/playground/` - Apps deployment stack with `envs/{dev,staging,prod}/{region}/`
   - `bootstrap/` - Initial AWS setup (S3 backend, etc.)
 
 ### Module Pattern
@@ -111,7 +111,7 @@ The framework provides reusable Blazor components in `BuildingBlocks/Blazor.UI/C
 
 ### FshPageHeader Component
 
-Use `FshPageHeader` for consistent page headers across Playground.Blazor:
+Use `FshPageHeader` for consistent page headers across Apps.Blazor:
 
 ```razor
 @using FSH.BuildingBlocks.Blazor.UI.Components.Page

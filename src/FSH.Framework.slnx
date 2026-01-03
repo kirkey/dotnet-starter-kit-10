@@ -32,19 +32,21 @@
     <Project Path="Modules/Todo/Modules.Todo.Contracts/Modules.Todo.Contracts.csproj" />
     <Project Path="Modules/Todo/Modules.Todo/Modules.Todo.csproj" />
   </Folder>
-  <Folder Name="/Playground/">
-    <Project Path="Playground/FSH.Playground.AppHost/FSH.Playground.AppHost.csproj" Id="86bd02ee-f1b5-472c-b5bd-bc607fe084de" />
-    <Project Path="Playground/Playground.Api/Playground.Api.csproj" Id="187ce245-0a57-469c-96c2-a88902f2d40d" />
-    <Project Path="Playground/Playground.Blazor/Playground.Blazor.csproj" />
+  <Folder Name="/Apps/">
+    <Project Path="Apps/FSH.Apps.AppHost/FSH.Apps.AppHost.csproj" Id="86bd02ee-f1b5-472c-b5bd-bc607fe084de" />
+    <Project Path="Apps/Apps.Api/Apps.Api.csproj" Id="187ce245-0a57-469c-96c2-a88902f2d40d" />
+    <Project Path="Apps/Apps.Blazor/Apps.Blazor.csproj" />
   </Folder>
-  <Folder Name="/Playground/Migrations/">
-    <Project Path="Playground/Migrations.PostgreSQL/Migrations.PostgreSQL.csproj" Id="2c21903e-5dfa-47e0-82d9-1a0bd627fcbd" />
+  <Folder Name="/Apps/Migrations/">
+    <Project Path="Apps/Migrations.PostgreSQL/Apps.Migrations.PostgreSQL.csproj" Id="2c21903e-5dfa-47e0-82d9-1a0bd627fcbd" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="Tests/Architecture.Tests/Architecture.Tests.csproj" />
     <Project Path="Tests/Multitenacy.Tests/Multitenacy.Tests.csproj" Id="985345a2-edb4-4ef9-9a1b-59b704f523b6" />
   </Folder>
-  <Folder Name="/ToBeMigrated/" />
+  <Folder Name="/ToBeMigrated/">
+    <Project Path="../../ExternalProjects/src/apps/blazor/microfinance/Microfinance.Client/Microfinance.Client.csproj" />
+  </Folder>
   <Folder Name="/Tools/">
     <Project Path="Tools/CLI/FSH.CLI.csproj" />
   </Folder>

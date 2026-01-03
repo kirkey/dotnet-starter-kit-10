@@ -14,8 +14,8 @@
 Conducted comprehensive code review of the FSH Framework codebase and implemented best practices improvements.
 
 ### Files Modified: 5
-1. ✅ `Playground/Playground.Api/Program.cs`
-2. ✅ `Playground/Playground.Api/appsettings.json`
+1. ✅ `Apps/Apps.Api/Program.cs`
+2. ✅ `Apps/Apps.Api/appsettings.json`
 3. ✅ `BuildingBlocks/Caching/Extensions.cs`
 4. ✅ `Modules/Identity/Modules.Identity/IdentityModule.cs`
 5. ✅ `BuildingBlocks/Caching/HybridCacheService.cs`

@@ -15,7 +15,7 @@
 ### 2. Configuration Changes ✅
 **Modified 2 Files:**
 
-#### File 1: Playground/Playground.Api/appsettings.Development.json
+#### File 1: Apps/Apps.Api/appsettings.Development.json
 ```json
 {
   "CachingOptions": {
@@ -24,7 +24,7 @@
 }
 ```
 
-#### File 2: Playground/Playground.Blazor/appsettings.Development.json
+#### File 2: Apps/Apps.Blazor/appsettings.Development.json
 ```json
 {
   "CachingOptions": {
@@ -85,8 +85,8 @@ make apphost
 ## Files Changed
 
 ### Configuration Files (Updated)
-- ✏️ Playground/Playground.Api/appsettings.Development.json
-- ✏️ Playground/Playground.Blazor/appsettings.Development.json
+- ✏️ Apps/Apps.Api/appsettings.Development.json
+- ✏️ Apps/Apps.Blazor/appsettings.Development.json
 
 ### Build Configuration (Enhanced)
 - ✏️ Makefile (added apphost target)

@@ -17,7 +17,7 @@ Error querying tenant."TenantThemes" table
 ## Solution Implemented
 
 ### 1. Created Migration
-**File:** `src/Playground/Migrations.PostgreSQL/MultiTenancy/20251230051930_AddAuditFieldsToTenantTheme.cs`
+**File:** `src/Apps/Migrations.PostgreSQL/MultiTenancy/20251230051930_AddAuditFieldsToTenantTheme.cs`
 
 **Changes in Migration:**
 - Added `CreatedByUserName` column (varchar(200), nullable)
@@ -28,7 +28,7 @@ Error querying tenant."TenantThemes" table
 - `LastModifiedBy`: string → uuid (Guid?)
 
 ### 2. Updated Model Snapshot
-**File:** `src/Playground/Migrations.PostgreSQL/MultiTenancy/TenantDbContextModelSnapshot.cs`
+**File:** `src/Apps/Migrations.PostgreSQL/MultiTenancy/TenantDbContextModelSnapshot.cs`
 
 Synchronized the model snapshot to reflect:
 - New `CreatedByUserName` property definition
@@ -106,7 +106,7 @@ dotnet build FSH.Framework.slnx
 
 ### API Start Test
 ```bash
-dotnet run --project Playground/Playground.Api/Playground.Api.csproj
+dotnet run --project Apps/Apps.Api/Apps.Api.csproj
 # Result: ✅ PASSED (No database errors)
 ```
 

@@ -764,7 +764,7 @@ public class GetProductQueryHandler : IQueryHandler<GetProductQuery, ProductResp
 
 **1. Response Compression**
 
-Already configured in `Playground.Blazor/Program.cs`:
+Already configured in `Apps.Blazor/Program.cs`:
 ```csharp
 builder.Services.AddResponseCompression(options =>
 {

@@ -1,0 +1,192 @@
+@using FSH.Apps.Blazor.Api
+@using FSH.Apps.Blazor.Services.Api
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject ITodosClient TodoClient
+@inject IGlobalErrorHandler ErrorHandler
+
+<MudStack Spacing="2">
+    @if (_loading)
+    {
+        <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+    }
+    else if (_tasks.Any())
+    {
+        @foreach (var task in _tasks.OrderBy(t => t.SortOrder))
+        {
+            <MudPaper Class="pa-3" Elevation="1">
+                <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                    <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Style="flex: 1">
+                        <MudCheckBox T="bool" 
+                                     Checked="@task.IsCompleted" 
+                                     CheckedChanged="@((bool value) => ToggleTask(task))"
+                                     Color="Color.Success"
+                                     Size="Size.Medium"
+                                     Disabled="@(_busyTaskId == task.Id)" />
+                        <MudStack Spacing="0" Style="flex: 1">
+                            <MudText Typo="Typo.body1" Class="@(task.IsCompleted ? "text-decoration-line-through text-secondary" : "")">
+                                @task.Name
+                            </MudText>
+                            @if (!string.IsNullOrWhiteSpace(task.Description))
+                            {
+                                <MudText Typo="Typo.caption" Class="text-muted">@task.Description</MudText>
+                            }
+                            @if (task.CompletedAt.HasValue)
+                            {
+                                <MudText Typo="Typo.caption" Color="Color.Success">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" /> 
+                                    Completed @task.CompletedAt.Value.ToString("MMM dd, yyyy")
+                                </MudText>
+                            }
+                        </MudStack>
+                    </MudStack>
+                    <MudStack Row="true" Spacing="1">
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                       Size="Size.Small"
+                                       Color="Color.Info"
+                                       OnClick="@(() => EditTask(task))"
+                                       Disabled="@(_busyTaskId == task.Id)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Size="Size.Small"
+                                       Color="Color.Error"
+                                       OnClick="@(() => DeleteTask(task))"
+                                       Disabled="@(_busyTaskId == task.Id)" />
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+        }
+    }
+    else
+    {
+        <MudAlert Severity="Severity.Info" Dense="true">
+            No tasks yet. Add your first task to get started!
+        </MudAlert>
+    }
+
+    <MudButton Variant="Variant.Outlined"
+               Color="Color.Primary"
+               StartIcon="@Icons.Material.Filled.Add"
+               Size="Size.Small"
+               OnClick="AddTask"
+               FullWidth="true">
+        Add Task
+    </MudButton>
+</MudStack>
+
+@code {
+    [Parameter] public Guid TodoId { get; set; }
+    [Parameter] public EventCallback OnTasksChanged { get; set; }
+
+    private List<TodoTaskDto> _tasks = new();
+    private bool _loading = true;
+    private Guid? _busyTaskId;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadTasks();
+    }
+
+    private async Task LoadTasks()
+    {
+        _loading = true;
+        try
+        {
+            var result = await ErrorHandler.ExecuteAsync(
+                async () => await TodoClient.TasksGetAsync(TodoId),
+                ex => Snackbar.Add($"Failed to load tasks: {ex.Message}", Severity.Error));
+            
+            _tasks = result?.ToList() ?? new List<TodoTaskDto>();
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task ToggleTask(TodoTaskDto task)
+    {
+        _busyTaskId = task.Id;
+        try
+        {
+            await TodoClient.TasksCompleteAsync(task.Id);
+            Snackbar.Add($"Task {(task.IsCompleted ? "reopened" : "completed")}", Severity.Success);
+            await LoadTasks();
+            await OnTasksChanged.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to toggle task: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyTaskId = null;
+        }
+    }
+
+    private async Task AddTask()
+    {
+        var result = await ShowTaskDialog(null);
+        if (result)
+        {
+            await LoadTasks();
+            await OnTasksChanged.InvokeAsync();
+        }
+    }
+
+    private async Task EditTask(TodoTaskDto task)
+    {
+        var result = await ShowTaskDialog(task);
+        if (result)
+        {
+            await LoadTasks();
+            await OnTasksChanged.InvokeAsync();
+        }
+    }
+
+    private async Task DeleteTask(TodoTaskDto task)
+    {
+        // Use simple confirmation
+        _busyTaskId = task.Id;
+        try
+        {
+            await TodoClient.TasksDeleteAsync(task.Id, CancellationToken.None);
+            Snackbar.Add("Task deleted successfully", Severity.Success);
+            await LoadTasks();
+            await OnTasksChanged.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to delete task: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _busyTaskId = null;
+        }
+    }
+
+    private async Task<bool> ShowTaskDialog(TodoTaskDto? existingTask)
+    {
+        var parameters = new DialogParameters<TaskDialog>();
+        parameters.Add("TodoId", TodoId);
+        
+        if (existingTask != null)
+        {
+            parameters.Add("ExistingTask", existingTask);
+        }
+
+        var options = new DialogOptions 
+        { 
+            CloseOnEscapeKey = true, 
+            MaxWidth = MaxWidth.Small, 
+            FullWidth = true 
+        };
+
+        var dialog = await DialogService.ShowAsync<TaskDialog>(
+            existingTask == null ? "Add Task" : "Edit Task", 
+            parameters, 
+            options);
+            
+        var result = await dialog.Result;
+        return result is not null && !result.Canceled;
+    }
+}
