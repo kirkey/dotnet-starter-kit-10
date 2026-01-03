@@ -1,4 +1,3 @@
-using FSH.Framework.Blazor.UI.Components.Navigation.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using System.Text.Json;

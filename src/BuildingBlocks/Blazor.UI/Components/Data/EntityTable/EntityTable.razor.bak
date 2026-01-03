@@ -1,0 +1,250 @@
+@typeparam TEntity
+@typeparam TId
+@typeparam TRequest
+
+<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+</style>
+
+<ErrorBoundary>
+    <ChildContent>
+        @if (_canSearch && (Context.AdvancedSearchEnabled || AdvancedSearchContent is not null))
+        {
+            <MudExpansionPanel @bind-IsExpanded="_advancedSearchExpanded"
+                               Class="mud-elevation-25" 
+                               Style="padding:5px!important; margin-bottom:10px!important;border-radius: var(--mud-default-borderradius) !important;" 
+                               Text="Advanced Search and Settings">
+                <MudTextField Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              @bind-Value="SearchString"
+                              IconSize="Size.Medium"
+                              Immediate=false
+                              Placeholder="@($"Search for {Context.EntityNamePlural}")"
+                              Style="flex:none!important;margin:0px!important"
+                              TextChanged="OnSearchStringChanged">
+                </MudTextField>
+                @if (Context.AdvancedSearchEnabled)
+                {
+                    <MudPaper Elevation=0 Class="d-flex flex-wrap align-content-start" style="margin-top:10px!important">
+                        <MudCheckBox Class="mr-4" Label="All Columns" T="bool" Value="Context.AllColumnsChecked" ValueChanged="Context.AllColumnsCheckChanged"></MudCheckBox>
+                        @foreach (var field in Context.Fields
+                                      .Where(field => field.Type != typeof(bool)
+                                                      && field.Type != typeof(double)
+                                                      && field.Type != typeof(decimal)
+                                                      && field.Type != typeof(DateOnly)
+                                                      && field.Type != typeof(TimeOnly)
+                                                      && field.Type != typeof(DateTime)
+                                                      && field.Type != typeof(byte)))
+                        {
+                            <MudSwitch Class="mt-1" @bind-Value="@field.CheckedForSearch" Label="@(field.DisplayName)" Color="Color.Primary"></MudSwitch>
+                        }
+                    </MudPaper>
+                }
+                @AdvancedSearchContent
+            </MudExpansionPanel>
+        }
+
+        <FshTable ChildRowContent="@ChildRowContent"
+                  Class="mud-elevation-25"
+                  Filter="LocalSearch" 
+                  Items="@_entityList" 
+                  Loading="@Loading" 
+                  LoadingProgressColor="@Color.Secondary" 
+                  @ref="_table" 
+                  ServerData="@ServerReloadFunc">
+            <ToolBarContent>
+                <div class="d-flex flex-row flex-wrap justify-center mud-text-align-center" style="gap: 1rem;">
+                    @if (_canCreate && Context.CreateFunc is not null)
+                    {
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false"
+                                   OnClick="@(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add"
+                                   IconColor="Color.Surface" Class="mr-0">Create</MudButton>
+                    }
+                    <MudButton Variant="Variant.Filled" OnClick="@(() => ReloadDataAsync())" DropShadow="false"
+                               StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary">Reload</MudButton>
+                    
+                    @if (_canExport)
+                    {
+                        <MudButton Class="ml-0" 
+                                   Color="Color.Tertiary"
+                                   Disabled="Exporting"
+                                   OnClick="@(() => ExportAsync())"
+                                   StartIcon="@Icons.Material.Filled.FileDownload"
+                                   Size="Size.Medium"
+                                   Variant="Variant.Filled">
+                            @if (Exporting)
+                            {
+                                <MudProgressCircular Class="mr-2" Color="Color.Inherit" Indeterminate Size="Size.Small"/>
+                                <span>Exporting...</span>
+                            }
+                            else
+                            {
+                                <span>Export</span>
+                            }
+                        </MudButton>
+                    }
+                </div>
+                
+                <MudSpacer />
+                @if (_canSearch && !_advancedSearchExpanded)
+                {
+                    <MudTextField @bind-Value="SearchString" Immediate="true" FullWidth="false"
+                                  Placeholder="@($"Search for {Context.EntityNamePlural}")" Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"
+                                  TextChanged="OnSearchStringChanged">
+                    </MudTextField>
+                }
+            </ToolBarContent>
+
+            <HeaderContent>
+                @if (Context.Fields is not null)
+                {
+                    foreach (var field in Context.Fields)
+                    {
+                        <MudTh>
+                            @if (Context.IsClientContext)
+                            {
+                                <MudTableSortLabel SortBy="@field.ValueFunc">@field.DisplayName</MudTableSortLabel>
+                            }
+                            else
+                            {
+                                <MudTableSortLabel T="TEntity" SortLabel="@field.SortLabel">@field.DisplayName</MudTableSortLabel>
+                            }
+                        </MudTh>
+                    }
+                }
+                <MudTh Style="text-align:right">Actions</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                @foreach (var field in Context.Fields)
+                {
+                    <MudTd DataLabel="@field.DisplayName">
+                        @if (field.Template is not null)
+                        {
+                            @field.Template(context)
+                        }
+                        else if (field.Type == typeof(bool))
+                        {
+                            <MudSwitch Value="@field.ValueFunc(context)" Color="Color.Tertiary" ReadOnly/>
+                        }
+                        else if (field.Type == typeof(int))
+                        {
+                            <MudText Align="Align.Right">
+                                @Convert.ToDouble(field.ValueFunc(context)).ToString("N0")
+                            </MudText>
+                        }
+                        else if (field.Type == typeof(double))
+                        {
+                            <MudText Align="Align.Right">
+                                @Convert.ToDouble(field.ValueFunc(context)).ToString("N2")
+                            </MudText>
+                        }
+                        else if (field.Type == typeof(decimal))
+                        {
+                            <MudText Align="Align.Right">
+                                @Convert.ToDecimal(field.ValueFunc(context)).ToString("N2")
+                            </MudText>
+                        }
+                        else if (field.Type == typeof(DateOnly))
+                        {
+                            <MudText Align="Align.Right">
+                                @Convert.ToDateTime(field.ValueFunc(context)).ToString("MMM dd, yyyy")
+                            </MudText>
+                        }
+                        else if (field.Type == typeof(TimeOnly))
+                        {
+                            <MudText Align="Align.Right">
+                                @Convert.ToDateTime(field.ValueFunc(context)).ToString("HH:mm")
+                            </MudText>
+                        }
+                        else if (field.Type == typeof(DateTime))
+                        {
+                            <MudText Align="Align.Right">
+                                @Convert.ToDateTime(field.ValueFunc(context)).ToString("MMM dd, HH:mm:ss")
+                            </MudText>
+                        }
+                        else
+                        {
+                            <MudHighlighter Text="@field.ValueFunc(context)?.ToString()" HighlightedText="@SearchString"/>
+                        }
+                    </MudTd>
+                }
+                <MudTd DataLabel="Actions" Style="text-align: right">
+                    @if (ActionsContent is not null)
+                    {
+                        @ActionsContent(context)
+                    }
+                    else if (HasActions)
+                    {
+                        <MudMenu Label="Actions" Variant="Variant.Filled"
+                                 EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Secondary" TransformOrigin="Origin.TopCenter">
+                            <MudMenuItem Icon="@Icons.Material.Filled.Visibility"
+                                         OnClick="@(() => InvokeModal(context, isViewMode: true))">
+                                View
+                            </MudMenuItem>
+                            @if (CanUpdateEntity(context) && Context.UpdateFunc is not null)
+                            {
+                                <MudMenuItem Icon="@Icons.Material.Filled.EditNote"
+                                             OnClick="@(() => InvokeModal(context))">
+                                    Edit
+                                </MudMenuItem>
+                            }
+                            @if (_canCreate && CanUpdateEntity(context) && Context.CreateFunc is not null)
+                            {
+                                <MudMenuItem Icon="@Icons.Material.Filled.ContentCopy"
+                                             OnClick="@(() => InvokeModal(entityToDuplicate: context))">
+                                    Duplicate
+                                </MudMenuItem>
+                            }
+                            @if (CanDeleteEntity(context))
+                            {
+                                <MudMenuItem Icon="@Icons.Material.Filled.Delete" 
+                                             IconColor="Color.Error"
+                                             OnClick="@(() => Delete(context))" 
+                                             Style="color:red!important">
+                                    Delete
+                                </MudMenuItem>
+                            }
+                            @if (ExtraActions is not null)
+                            {
+                                <MudDivider/>
+                                @ExtraActions(context)
+                            }
+                        </MudMenu>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Filled" DropShadow="false" 
+                                   StartIcon="@Icons.Material.Filled.DoNotTouch" IconColor="Color.Secondary" Size="Size.Small"
+                                   Color="Color.Surface">
+                            No Allowed Actions
+                        </MudButton>
+                    }
+                </MudTd>
+            </RowTemplate>
+
+            <PagerContent>
+                <div>
+                    <div class="d-flex justify-end mt-2">
+                        <MudTablePager PageSizeOptions="@PageSizes"/>
+                    </div>
+                </div>
+            </PagerContent>
+        </FshTable>
+    </ChildContent>
+    <ErrorContent>
+        <FshCustomError />
+    </ErrorContent>
+</ErrorBoundary>
+
+<style>
+    @@media (max-width: 600px) {
+        .d-flex.flex-row.flex-wrap.justify-center.mud-text-align-center {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+    }
+</style>

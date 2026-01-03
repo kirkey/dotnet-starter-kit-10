@@ -15,7 +15,7 @@ NSWAG_FILES := $(shell find . -type f \( -iname '*.nswag' -o -iname 'nswag*.json
 # Extract ports from any applicationUrl entries in launchSettings.json (handles multiple URLs separated by ';')
 # Properly extract port numbers from URLs like "https://localhost:7030;http://localhost:5030"
 EXTRACTED_PORTS := $(shell grep -rh '"applicationUrl"' . 2>/dev/null | grep -o ':[0-9]\+' | grep -o '[0-9]\+' | sort -u | tr '\n' ' ')
-.PHONY: help setup apphost api api-http blazor blazor-http nswag kill-ports
+.PHONY: help setup apphost api api-http blazor blazor-http nswag kill-ports clean
 help:
 	@echo "Makefile targets:"
 	@echo ""
@@ -30,11 +30,13 @@ help:
 	@echo "  blazor-http - Run Blazor with HTTP only (port 5032) - recommended"
 	@echo "  nswag       - Run NSwag code generator"
 	@echo "  kill-ports  - Kill processes on detected ports"
+	@echo "  clean       - Delete all bin and obj folders in the solution"
 	@echo ""
 	@echo "Examples:"
 	@echo "  make apphost             # Run full Aspire stack (recommended for production-like setup)"
 	@echo "  make api-http && make blazor-http  # Quick development setup (two terminals)"
 	@echo "  make kill-ports DRY_RUN=1 # Preview ports before killing"
+	@echo "  make clean               # Clean all build artifacts"
 setup:
 	@echo "Setting up HTTPS developer certificate..."
 	@dotnet dev-certs https --check --trust || dotnet dev-certs https --trust
@@ -106,3 +108,11 @@ kill-ports:
 		done; \
 	done
 	@echo "Done."
+
+clean:
+	@echo "🧹 Cleaning all bin and obj folders in the solution..."
+	@echo "Finding and removing bin folders..."
+	@find . -type d -name "bin" -not -path "*/node_modules/*" -print0 2>/dev/null | xargs -0 rm -rf 2>/dev/null || true
+	@echo "Finding and removing obj folders..."
+	@find . -type d -name "obj" -not -path "*/node_modules/*" -print0 2>/dev/null | xargs -0 rm -rf 2>/dev/null || true
+	@echo "✅ Clean complete! All bin and obj folders have been deleted."

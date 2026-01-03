@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace FSH.Framework.Blazor.UI.Components.Base;
+﻿namespace FSH.Framework.Blazor.UI.Components.Base;
 
 public abstract class FshComponentBase : ComponentBase
 {

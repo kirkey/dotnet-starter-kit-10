@@ -1,5 +1,3 @@
-using FSH.Framework.Blazor.UI.Components.Navigation.Models;
-
 namespace FSH.Framework.Blazor.UI.Components.Navigation.Services;
 
 /// <summary>

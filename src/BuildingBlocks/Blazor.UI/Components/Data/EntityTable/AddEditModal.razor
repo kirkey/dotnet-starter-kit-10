@@ -1,0 +1,64 @@
+@typeparam TRequest
+
+<EditForm Model="@RequestModel" OnValidSubmit="SaveAsync">
+    <MudDialog>
+        <TitleContent>
+            <MudText Typo="Typo.h6">
+                @if (IsViewMode)
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.Visibility" Class="mr-3 mb-n1" />
+                }
+                else if (IsCreate)
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                }
+                else
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+                }
+                @Title
+            </MudText>
+        </TitleContent>
+
+        <DialogContent>
+            @if (!IsViewMode)
+            {
+                <DataAnnotationsValidator />
+                <FshValidation @ref="_customValidation" />
+            }
+            <MudGrid Spacing="2">
+                <CascadingValue Value="@IsViewMode" Name="IsReadOnly">
+                    @ChildContent(RequestModel)
+                </CascadingValue>
+            </MudGrid>
+        </DialogContent>
+
+        <DialogActions>
+            @if (!IsViewMode)
+            {
+                <MudButton OnClick="@(() => MudDialog.Cancel())" StartIcon="@Icons.Material.Filled.Cancel" Variant="Variant.Filled">
+                   Cancel
+                </MudButton>
+                @if (IsCreate)
+                {
+                    <MudButton ButtonType="ButtonType.Submit" Color="Color.Success" StartIcon="@Icons.Material.Filled.Save" Variant="Variant.Filled">
+                        Save
+                    </MudButton>
+                }
+                else
+                {
+                    <MudButton ButtonType="ButtonType.Submit" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.PlaylistAddCheck" Variant="Variant.Filled">
+                        Update
+                    </MudButton>
+                }
+            }
+            else
+            {
+                <MudButton OnClick="@(() => MudDialog.Cancel())" StartIcon="@Icons.Material.Filled.Close" Variant="Variant.Filled" Color="Color.Primary">
+                   Close
+                </MudButton>
+            }
+        </DialogActions>
+
+    </MudDialog>
+</EditForm>

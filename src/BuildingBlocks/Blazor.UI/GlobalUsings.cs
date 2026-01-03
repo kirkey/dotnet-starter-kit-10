@@ -1,2 +1,15 @@
-﻿global using MudBlazor;
+﻿global using FSH.Framework.Blazor.UI.Components.Base;
+global using FSH.Framework.Blazor.UI.Components.Navigation.Models;
+global using FSH.Framework.Blazor.UI.Components.Page;
+global using FSH.Framework.Blazor.UI.Components.Theme;
+global using FSH.Framework.Blazor.UI.Components.User;
+global using FSH.Framework.Blazor.UI.Theme;
+global using Microsoft.AspNetCore.Components;
+global using Microsoft.AspNetCore.Components.Forms;
+global using Microsoft.AspNetCore.Components.Web;
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Threading.Tasks;
+global using MudBlazor;
 global using MudBlazor.Services;
