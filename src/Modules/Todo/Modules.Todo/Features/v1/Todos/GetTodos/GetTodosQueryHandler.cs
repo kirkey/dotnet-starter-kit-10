@@ -5,9 +5,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Todo.Features.v1.Todos.GetTodos;
 
+/// <summary>
+/// Handles the retrieval of paginated todos with filtering and sorting.
+/// 
+/// **Purpose:**
+/// Processes the GetTodosQuery by:
+/// 1. Building a queryable set of todos with task relationships
+/// 2. Applying optional filters (search term, status, priority, completion)
+/// 3. Sorting by due date and creation date
+/// 4. Implementing pagination
+/// 5. Projecting to TodoSummaryDto
+/// 6. Returning paginated response with total count
+/// 
+/// **Filtering:**
+/// - SearchTerm: Case-sensitive contains search on Name or Description
+/// - Status: Exact match on status (e.g., "NotStarted", "InProgress", "Completed")
+/// - Priority: Filters by priority level
+/// - IsCompleted: Filters by completion status
+/// 
+/// **Sorting:**
+/// - Primary: By DueDate (earliest first)
+/// - Secondary: By CreatedOnUtc (newest first)
+/// 
+/// **Performance:**
+/// - Eager loads Tasks to count completed tasks
+/// - Uses AsNoTracking for read-only query
+/// - Projects to DTO before applying pagination
+/// 
+/// **Dependencies:**
+/// - TodoDbContext: For database access
+/// </summary>
 public sealed class GetTodosQueryHandler(TodoDbContext context)
     : IQueryHandler<GetTodosQuery, TodosPagedResponse>
 {
+    /// <summary>
+    /// Handles the GetTodosQuery to retrieve a paginated list of todos.
+    /// </summary>
+    /// <param name="query">The query containing pagination and filter criteria.</param>
+    /// <param name="cancellationToken">Cancellation token for the operation.</param>
+    /// <returns>A TodosPagedResponse containing the requested page of todos and metadata.</returns>
     public async ValueTask<TodosPagedResponse> Handle(GetTodosQuery query, CancellationToken cancellationToken)
     {
         var todosQuery = context.Todos

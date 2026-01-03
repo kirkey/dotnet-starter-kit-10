@@ -5,9 +5,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Todo.Features.v1.Todos.GetTodo;
 
+/// <summary>
+/// Handles retrieval of a single todo item by ID.
+/// 
+/// **Purpose:**
+/// Processes the GetTodoQuery by:
+/// 1. Finding the todo by ID with all related tasks eager-loaded
+/// 2. Projecting to the full TodoDto with task counts
+/// 3. Throwing InvalidOperationException if todo not found
+/// 
+/// **Eager Loading:**
+/// Includes related tasks to efficiently calculate:
+/// - Total task count
+/// - Completed task count
+/// 
+/// **Error Handling:**
+/// Throws InvalidOperationException if the todo doesn't exist.
+/// This is a 404-level error that should be caught by the endpoint.
+/// 
+/// **Dependencies:**
+/// - TodoDbContext: For database access
+/// </summary>
 public sealed class GetTodoQueryHandler(TodoDbContext context)
     : IQueryHandler<GetTodoQuery, TodoDto>
 {
+    /// <summary>
+    /// Handles the GetTodoQuery to retrieve a single todo by ID.
+    /// </summary>
+    /// <param name="query">The query containing the todo ID to retrieve.</param>
+    /// <param name="cancellationToken">Cancellation token for the operation.</param>
+    /// <returns>A complete TodoDto with all details including task counts.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the todo with the specified ID is not found.</exception>
     public async ValueTask<TodoDto> Handle(GetTodoQuery query, CancellationToken cancellationToken)
     {
         var todo = await context.Todos

@@ -7,11 +7,43 @@ using Microsoft.Extensions.Logging;
 
 namespace FSH.Modules.Todo.Data;
 
+/// <summary>
+/// Initializes the Todo module database with schema and seed data.
+/// 
+/// **Purpose:**
+/// Handles database migration and sample data seeding for the Todo module.
+/// Supports both schema creation/migration and initial data population.
+/// 
+/// **Responsibilities:**
+/// - Apply pending Entity Framework Core migrations
+/// - Seed the database with sample Todo and TodoTask data
+/// - Maintain tenant-specific database initialization
+/// - Provide logging for database operations
+/// 
+/// **Migrations:**
+/// - Runs all pending migrations when MigrateAsync is called
+/// - Logs migration status per tenant
+/// 
+/// **Seeding:**
+/// - Populates database with realistic sample todos and tasks if empty
+/// - Creates todos with various priorities and statuses
+/// - Marks some todos as in progress and some as completed
+/// - Demonstrates multi-tenancy support
+/// - Logs seeding status per tenant
+/// </summary>
 internal sealed class TodoDbInitializer(
     ILogger<TodoDbInitializer> logger,
     TodoDbContext context,
     IMultiTenantContextAccessor<AppTenantInfo> multiTenantContextAccessor) : IDbInitializer
 {
+    /// <summary>
+    /// Applies pending Entity Framework Core migrations to the Todo database.
+    /// 
+    /// Executes all pending migrations for the current tenant's database.
+    /// Logs the migration operation with tenant context for debugging.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public async Task MigrateAsync(CancellationToken cancellationToken)
     {
         if ((await context.Database.GetPendingMigrationsAsync(cancellationToken).ConfigureAwait(false)).Any())
@@ -22,6 +54,20 @@ internal sealed class TodoDbInitializer(
         }
     }
 
+    /// <summary>
+    /// Seeds the Todo database with sample data.
+    /// 
+    /// Populates the database with realistic sample todos and tasks if the database is empty.
+    /// Includes:
+    /// - 8 sample todos with varying priorities and statuses
+    /// - Multiple tasks per todo demonstrating the master-detail relationship
+    /// - Some todos marked as in progress with partial task completion
+    /// - Some todos marked as fully completed with all tasks completed
+    /// 
+    /// Only runs once - if any todos already exist, seeding is skipped.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public async Task SeedAsync(CancellationToken cancellationToken)
     {
         if (await context.Todos.AnyAsync(cancellationToken))
@@ -203,6 +249,21 @@ internal sealed class TodoDbInitializer(
             todos.Count);
     }
 
+    /// <summary>
+    /// Helper method to create a Todo with associated tasks.
+    /// 
+    /// Simplifies the creation of sample todos by accepting an array of task names
+    /// and automatically creating the Todo with all its tasks properly linked.
+    /// </summary>
+    /// <param name="name">The name of the todo.</param>
+    /// <param name="description">The description of the todo.</param>
+    /// <param name="priority">The priority level of the todo.</param>
+    /// <param name="dueDate">The due date for the todo.</param>
+    /// <param name="tenantId">The tenant ID for the todo.</param>
+    /// <param name="createdBy">The user ID of the creator.</param>
+    /// <param name="createdByUserName">The username of the creator.</param>
+    /// <param name="taskNames">Array of task names to create for this todo.</param>
+    /// <returns>A Todo instance with all specified tasks created and linked.</returns>
     private static Domain.Todo CreateTodoWithTasks(
         string name,
         string description,

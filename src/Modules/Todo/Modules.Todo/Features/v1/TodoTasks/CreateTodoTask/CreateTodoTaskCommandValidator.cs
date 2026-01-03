@@ -1,8 +1,9 @@
 using FluentValidation;
+using FSH.Modules.Todo.Contracts.v1.TodoTasks;
 
 namespace FSH.Modules.Todo.Features.v1.TodoTasks.CreateTodoTask;
 
-public class CreateTodoTaskCommandValidator : AbstractValidator<FSH.Modules.Todo.Contracts.v1.TodoTasks.CreateTodoTaskCommand>
+public class CreateTodoTaskCommandValidator : AbstractValidator<CreateTodoTaskCommand>
 {
     public CreateTodoTaskCommandValidator()
     {

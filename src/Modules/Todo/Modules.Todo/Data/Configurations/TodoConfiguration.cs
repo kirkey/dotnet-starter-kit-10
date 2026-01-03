@@ -5,8 +5,48 @@ using TodoEntity = FSH.Modules.Todo.Domain.Todo;
 
 namespace FSH.Modules.Todo.Data.Configurations;
 
+/// <summary>
+/// Entity Framework Core configuration for the Todo entity.
+/// 
+/// **Purpose:**
+/// Defines the database mapping, validation rules, and relationships for Todo entities.
+/// Configured for the "todo" schema to provide logical separation from other modules.
+/// 
+/// **Table Details:**
+/// - Schema: "todo"
+/// - Table: "Todos"
+/// - Primary Key: Id (Guid)
+/// 
+/// **Property Configuration:**
+/// - Name: Required, max 200 chars
+/// - Description: Optional, max 2000 chars
+/// - Notes: Optional, max 2000 chars
+/// - Status: Required, max 50 chars (enum string conversion)
+/// - Priority: Required, stored as int (enum conversion)
+/// - IsActive: Required, boolean (soft delete support)
+/// - DueDate: Optional, DateTimeOffset
+/// - IsCompleted: Required, boolean
+/// - TenantId: Required for multi-tenancy, max 64 chars
+/// - CreatedByUserName: Optional, max 256 chars
+/// - LastModifiedByUserName: Optional, max 256 chars
+/// 
+/// **Relationships:**
+/// - One-to-Many with TodoTask (cascade delete)
+/// 
+/// **Indexes:**
+/// - TenantId: Multi-tenancy queries
+/// - Status: Status filtering
+/// - Priority: Priority-based queries
+/// - DueDate: Due date sorting/filtering
+/// - CreatedOnUtc: Creation date sorting
+/// - IsActive: Active todos filtering
+/// </summary>
 public class TodoConfiguration : IEntityTypeConfiguration<TodoEntity>
 {
+    /// <summary>
+    /// Configures the Todo entity mapping in the database.
+    /// </summary>
+    /// <param name="builder">The entity type builder used to configure the entity.</param>
     public void Configure(EntityTypeBuilder<TodoEntity> builder)
     {
         builder.ToTable("Todos", "todo");
@@ -56,7 +96,7 @@ public class TodoConfiguration : IEntityTypeConfiguration<TodoEntity>
             .HasForeignKey(task => task.TodoId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Indexes
+        // Indexes for common query patterns
         builder.HasIndex(t => t.TenantId);
         builder.HasIndex(t => t.Status);
         builder.HasIndex(t => t.Priority);

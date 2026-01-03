@@ -30,6 +30,49 @@ using Microsoft.Extensions.Hosting;
 
 namespace FSH.Modules.Todo;
 
+/// <summary>
+/// Todo Module - A comprehensive module for managing todo items and tasks.
+/// 
+/// **Purpose:**
+/// Provides a complete feature set for creating, managing, and tracking todo items with support for:
+/// - Master-Detail relationship between Todos and TodoTasks
+/// - Status tracking and priority management
+/// - Completion tracking with timestamps
+/// - Archiving functionality for inactive todos
+/// - Bulk import/export operations
+/// - Full audit trail for compliance and tracking
+/// 
+/// **Key Features:**
+/// - Create, read, update, and delete todo items
+/// - Add and manage tasks within each todo
+/// - Track completion status and completion dates
+/// - Set priority levels (None, Low, Medium, High, Critical)
+/// - Manage todo status (NotStarted, InProgress, Completed, OnHold)
+/// - Reorder tasks with sort order support
+/// - Archive completed or inactive todos
+/// - Export todos to file formats
+/// - Import todos from external sources
+/// 
+/// **Architecture:**
+/// - Uses Entity Framework Core with PostgreSQL/MSSQL support
+/// - Implements Domain-Driven Design with aggregate pattern
+/// - Supports multi-tenancy through Finbuckle
+/// - Uses CQRS pattern with Mediator library for commands/queries
+/// - Includes FluentValidation for request validation
+/// 
+/// **Entities:**
+/// - Todo: Master entity representing a todo item with status, priority, and completion tracking
+/// - TodoTask: Detail entity representing a task within a todo
+/// 
+/// **Permissions:**
+/// - Todos.View: View todo items
+/// - Todos.Search: Search todo items
+/// - Todos.Create: Create new todo items
+/// - Todos.Update: Update existing todo items
+/// - Todos.Delete: Delete todo items
+/// - Todos.Export: Export todos
+/// - Todos.Import: Import todos
+/// </summary>
 public class TodoModule : IModule
 {
     public void ConfigureServices(IHostApplicationBuilder builder)

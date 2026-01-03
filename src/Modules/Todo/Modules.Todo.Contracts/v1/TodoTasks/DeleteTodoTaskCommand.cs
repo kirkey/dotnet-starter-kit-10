@@ -2,4 +2,17 @@ using Mediator;
 
 namespace FSH.Modules.Todo.Contracts.v1.TodoTasks;
 
-public record DeleteTodoTaskCommand(Guid Id) : ICommand;
+/// <summary>
+/// Command to delete a task from a todo item.
+/// 
+/// **Purpose:**
+/// Permanently removes a task from its parent todo.
+/// 
+/// **Parameters:**
+/// - Id: The ID of the task to delete
+/// </summary>
+public record DeleteTodoTaskCommand(
+    /// <summary>
+    /// Gets the ID of the task to delete.
+    /// </summary>
+    Guid Id) : ICommand;
