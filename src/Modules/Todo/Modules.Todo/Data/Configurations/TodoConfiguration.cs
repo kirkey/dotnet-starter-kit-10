@@ -1,4 +1,3 @@
-using FSH.Framework.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TodoEntity = FSH.Modules.Todo.Domain.Todo;

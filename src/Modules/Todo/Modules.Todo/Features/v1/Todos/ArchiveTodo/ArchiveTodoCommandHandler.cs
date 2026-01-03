@@ -1,18 +1,37 @@
-using FSH.Framework.Core.Exceptions;
 using FSH.Modules.Todo.Contracts.v1.Todos;
 using FSH.Modules.Todo.Data;
+using FSH.Modules.Todo.Exceptions;
 using Mediator;
-using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Todo.Features.v1.Todos.ArchiveTodo;
 
-public class ArchiveTodoCommandHandler(TodoDbContext dbContext) : ICommandHandler<ArchiveTodoCommand>
+/// <summary>
+/// Handles the archival of a todo item (soft delete).
+/// 
+/// **Purpose:**
+/// Processes the ArchiveTodoCommand to mark a todo as archived without deletion.
+/// 
+/// **Exception Handling:**
+/// Uses centralized TodoNotFoundException for missing todos.
+/// 
+/// **Dependencies:**
+/// - TodoDbContext: For database persistence
+/// </summary>
+public sealed class ArchiveTodoCommandHandler(TodoDbContext dbContext)
+    : ICommandHandler<ArchiveTodoCommand>
 {
+    /// <summary>
+    /// Handles the ArchiveTodoCommand to archive a todo.
+    /// </summary>
+    /// <param name="command">The command containing the todo ID.</param>
+    /// <param name="cancellationToken">Cancellation token for the operation.</param>
+    /// <returns>Unit (void) on successful archival.</returns>
+    /// <exception cref="TodoNotFoundException">Thrown when the todo is not found.</exception>
     public async ValueTask<Unit> Handle(ArchiveTodoCommand command, CancellationToken cancellationToken)
     {
         var todo = await dbContext.Todos
-            .FirstOrDefaultAsync(t => t.Id == command.Id, cancellationToken)
-            ?? throw new NotFoundException($"Todo with id {command.Id} not found.");
+            .Where(t => t.Id == command.Id)
+            .GetByIdOrThrowAsync(command.Id, cancellationToken);
 
         todo.Archive();
         await dbContext.SaveChangesAsync(cancellationToken);

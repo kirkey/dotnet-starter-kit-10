@@ -2,6 +2,7 @@ using FSH.Framework.Core.Context;
 using FSH.Modules.Todo.Contracts.v1.TodoTasks;
 using FSH.Modules.Todo.Data;
 using FSH.Modules.Todo.Domain;
+using FSH.Modules.Todo.Exceptions;
 using Mediator;
 
 namespace FSH.Modules.Todo.Features.v1.TodoTasks.CreateTodoTask;
@@ -11,26 +12,21 @@ namespace FSH.Modules.Todo.Features.v1.TodoTasks.CreateTodoTask;
 /// 
 /// **Purpose:**
 /// Processes the CreateTodoTaskCommand by:
-/// 1. Creating a new TodoTask aggregate using the factory method
-/// 2. Associating it with the parent todo
-/// 3. Setting the task's position via sort order
-/// 4. Recording creation audit trail with current user context
-/// 5. Persisting to the database
+/// 1. Validating parent Todo exists
+/// 2. Creating new TodoTask aggregate
+/// 3. Persisting to database
+/// 4. Recording audit trail
 /// 
 /// **Domain Logic:**
-/// Uses the TodoTask.Create factory method to ensure:
-/// - All required properties are initialized
-/// - Status is set to "Pending"
-/// - IsActive flag is set appropriately
-/// - Audit trail is recorded
-/// - Sort order is assigned for task list positioning
+/// Uses TodoTask.Create factory method with proper initialization.
+/// Validates parent Todo existence to maintain data integrity.
 /// 
-/// **Multi-Tenancy:**
-/// Associates the task with the current user's tenant for isolation.
+/// **Exception Handling:**
+/// - ParentTodoNotFoundException: Parent Todo doesn't exist
 /// 
 /// **Dependencies:**
 /// - TodoDbContext: For database persistence
-/// - ICurrentUser: For accessing current user context (ID, username, tenant)
+/// - ICurrentUser: For user context (ID, username, tenant)
 /// </summary>
 public sealed class CreateTodoTaskCommandHandler(
     TodoDbContext context,
@@ -43,8 +39,14 @@ public sealed class CreateTodoTaskCommandHandler(
     /// <param name="command">The command containing task creation details and parent todo ID.</param>
     /// <param name="cancellationToken">Cancellation token for the operation.</param>
     /// <returns>The ID of the newly created task.</returns>
+    /// <exception cref="ParentTodoNotFoundException">Thrown when parent Todo doesn't exist.</exception>
     public async ValueTask<Guid> Handle(CreateTodoTaskCommand command, CancellationToken cancellationToken)
     {
+        // Validate parent Todo exists
+        await context.Todos
+            .Where(t => t.Id == command.TodoId)
+            .EnsureExistsByIdAsync(command.TodoId, cancellationToken);
+
         var task = TodoTask.Create(
             command.TodoId,
             command.Name,

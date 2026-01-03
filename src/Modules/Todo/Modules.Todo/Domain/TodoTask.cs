@@ -164,6 +164,19 @@ public class TodoTask : AuditableEntity<Guid>
     }
 
     /// <summary>
+    /// Updates the sort order of the task.
+    /// 
+    /// Updates the position of the task within the parent Todo's task list.
+    /// Automatically records modification details for audit trail.
+    /// </summary>
+    /// <param name="newSortOrder">The new sort order position.</param>
+    public void UpdateSortOrder(int newSortOrder)
+    {
+        SortOrder = newSortOrder;
+        LastModifiedOnUtc = DateTimeOffset.UtcNow;
+    }
+
+    /// <summary>
     /// Toggles the completion status of this task.
     /// 
     /// If the task is currently completed, it will be reopened.
