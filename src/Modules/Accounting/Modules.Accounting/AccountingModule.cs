@@ -420,8 +420,12 @@ public class AccountingModule : IModule
         // RouteGroupBuilder memberGroup = group.MapGroup("/members");
 
         // Vendors
-        // TODO: Map Vendor endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder vendorGroup = group.MapGroup("/vendors");
+        RouteGroupBuilder vendorGroup = group.MapGroup("/vendors");
+        vendorGroup.MapCreateVendorEndpoint();
+        vendorGroup.MapGetVendorEndpoint();
+        vendorGroup.MapGetVendorsEndpoint();
+        vendorGroup.MapUpdateVendorEndpoint();
+        vendorGroup.MapDeleteVendorEndpoint();
 
         // Meters
         // TODO: Map Meter endpoints (Create, Get, GetList, Update, Delete)
@@ -456,8 +460,13 @@ public class AccountingModule : IModule
         // ========================================
 
         // Projects
-        // TODO: Map Project endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder projectGroup = group.MapGroup("/projects");
+        // Projects
+        RouteGroupBuilder projectGroup = group.MapGroup("/projects");
+        projectGroup.MapCreateProjectEndpoint();
+        projectGroup.MapGetProjectEndpoint();
+        projectGroup.MapGetProjectsEndpoint();
+        projectGroup.MapUpdateProjectEndpoint();
+        projectGroup.MapDeleteProjectEndpoint();
 
         // Project Costs
         // TODO: Map ProjectCost endpoints (Create, Get, GetList, Update, Delete)
