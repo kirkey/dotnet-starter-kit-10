@@ -11,8 +11,12 @@ public sealed class DeleteJournalEntryHandler(
         var entry = await repository.GetByIdAsync(request.Id, cancellationToken);
         if (entry == null) throw new JournalEntryNotFoundException(request.Id);
 
-        // Check if already posted - cannot delete posted entries
-        if (entry.IsPosted) throw new JournalEntryAlreadyPostedException(request.Id);
+        // Guard: cannot delete posted/approved or reversed journal entries
+        if (entry.Status == "Posted" || entry.Status == "Approved")
+            throw new JournalEntryAlreadyPostedException(request.Id);
+
+        if (entry.IsReversed)
+            throw new JournalEntryCannotBeModifiedException(request.Id);
 
         await repository.DeleteAsync(entry, cancellationToken);
         await repository.SaveChangesAsync(cancellationToken);
