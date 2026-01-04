@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Routing;
 
 namespace FSH.Module.Accounting.Features.v1.FuelConsumption.GetListFuelConsumption;
 
-public static class GetFuelConsumptionEndpoint
+public static class GetFuelConsumptionsEndpoint
 {
-    public static RouteHandlerBuilder MapGetFuelConsumptionEndpoint(this IEndpointRouteBuilder endpoints)
+    public static RouteHandlerBuilder MapGetFuelConsumptionsEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/", async (
             int page,
@@ -18,8 +18,8 @@ public static class GetFuelConsumptionEndpoint
         {
             return TypedResults.StatusCode(StatusCodes.Status501NotImplemented);
         })
-        .WithName(nameof(GetFuelConsumptionEndpoint))
-        .WithSummary("Get paginated list of FuelConsumption (not implemented)")
+        .WithName(nameof(GetFuelConsumptionsEndpoint))
+        .WithSummary("Get paginated list of FuelConsumptions (not implemented)")
         .Produces(StatusCodes.Status501NotImplemented)
         .RequirePermission(AccountingPermissionConstants.Consumption.Search);
     }

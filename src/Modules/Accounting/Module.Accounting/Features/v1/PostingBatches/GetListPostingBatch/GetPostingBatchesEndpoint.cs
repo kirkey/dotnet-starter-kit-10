@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace FSH.Module.Accounting.Features.v1.PostingBatches.GetPostingBatches;
+namespace FSH.Module.Accounting.Features.v1.PostingBatches.GetListPostingBatch;
 
 public static class GetPostingBatchesEndpoint
 {

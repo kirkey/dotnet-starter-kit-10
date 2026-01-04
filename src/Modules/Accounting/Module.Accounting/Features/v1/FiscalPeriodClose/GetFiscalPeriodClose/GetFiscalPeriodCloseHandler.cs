@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.GetFiscalPeriodClose;
 
-public record GetFiscalPeriodCloseQuery(Guid Id) : IQuery<FiscalPeriodCloseDto>;
+public record GetFiscalPeriodCloseByIdQuery(Guid Id) : IQuery<FiscalPeriodCloseDto>;
 
-public class GetFiscalPeriodCloseHandler(AccountingDbContext context) : IQueryHandler<GetFiscalPeriodCloseQuery, FiscalPeriodCloseDto>
+public class GetFiscalPeriodCloseByIdHandler(AccountingDbContext context) : IQueryHandler<GetFiscalPeriodCloseByIdQuery, FiscalPeriodCloseDto>
 {
-    public async ValueTask<FiscalPeriodCloseDto> Handle(GetFiscalPeriodCloseQuery query, CancellationToken ct)
+    public async ValueTask<FiscalPeriodCloseDto> Handle(GetFiscalPeriodCloseByIdQuery query, CancellationToken ct)
     {
         var entity = await context.FiscalPeriodClose
             .Where(x => x.Id == query.Id)

@@ -1,5 +1,5 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Framework.Core.Identity;
+using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using Mediator;
 

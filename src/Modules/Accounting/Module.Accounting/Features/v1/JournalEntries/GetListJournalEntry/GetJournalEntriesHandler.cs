@@ -3,7 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.JournalEntries.GetJournalEntries;
+namespace FSH.Module.Accounting.Features.v1.JournalEntries.GetListJournalEntry;
 
 public record GetJournalEntriesQuery(
     int Page = 1,

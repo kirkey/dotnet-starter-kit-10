@@ -3,7 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.PostingBatches.GetPostingBatches;
+namespace FSH.Module.Accounting.Features.v1.PostingBatches.GetListPostingBatch;
 
 public record GetPostingBatchesQuery(
     int Page = 1,

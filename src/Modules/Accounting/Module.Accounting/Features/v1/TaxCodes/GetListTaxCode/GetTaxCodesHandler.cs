@@ -3,7 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.TaxCodes.GetTaxCodes;
+namespace FSH.Module.Accounting.Features.v1.TaxCodes.GetListTaxCode;
 
 public record GetTaxCodesQuery(
     int Page = 1,

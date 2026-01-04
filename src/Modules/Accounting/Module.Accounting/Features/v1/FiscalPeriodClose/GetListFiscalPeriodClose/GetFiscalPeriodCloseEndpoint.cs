@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Routing;
 
 namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.GetFiscalPeriodClose;
 
-public static class GetFiscalPeriodCloseEndpoint
+public static class GetFiscalPeriodClosesEndpoint
 {
-    public static RouteHandlerBuilder MapGetFiscalPeriodCloseEndpoint(this IEndpointRouteBuilder endpoints)
+    public static RouteHandlerBuilder MapGetFiscalPeriodClosesEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/", async (
             int page,
@@ -23,8 +23,8 @@ public static class GetFiscalPeriodCloseEndpoint
                 new GetFiscalPeriodCloseQuery(page, pageSize, searchTerm, isActive), ct);
             return TypedResults.Ok(result);
         })
-        .WithName(nameof(GetFiscalPeriodCloseEndpoint))
-        .WithSummary("Get paginated list of FiscalPeriodClose")
+        .WithName(nameof(GetFiscalPeriodClosesEndpoint))
+        .WithSummary("Get paginated list of FiscalPeriodCloses")
         .Produces<FiscalPeriodClosePagedResponse>(StatusCodes.Status200OK)
         .ProducesValidationProblem()
         .RequirePermission(AccountingPermissionConstants.FiscalPeriodClose.Search);

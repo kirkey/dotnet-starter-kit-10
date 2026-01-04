@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.GetDeferredRevenue;
 
-public record GetDeferredRevenueQuery(Guid Id) : IQuery<DeferredRevenueDto>;
+public record GetDeferredRevenueByIdQuery(Guid Id) : IQuery<DeferredRevenueDto>;
 
-public class GetDeferredRevenueHandler(AccountingDbContext context) : IQueryHandler<GetDeferredRevenueQuery, DeferredRevenueDto>
+public class GetDeferredRevenueByIdHandler(AccountingDbContext context) : IQueryHandler<GetDeferredRevenueByIdQuery, DeferredRevenueDto>
 {
-    public async ValueTask<DeferredRevenueDto> Handle(GetDeferredRevenueQuery query, CancellationToken ct)
+    public async ValueTask<DeferredRevenueDto> Handle(GetDeferredRevenueByIdQuery query, CancellationToken ct)
     {
         var entity = await context.DeferredRevenue
             .Where(x => x.Id == query.Id)

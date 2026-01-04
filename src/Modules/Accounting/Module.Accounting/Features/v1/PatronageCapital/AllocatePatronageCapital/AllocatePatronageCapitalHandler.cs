@@ -1,6 +1,7 @@
 // TODO: Implement Allocate operation for PatronageCapital
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Framework.Core.Exceptions;
 
 namespace FSH.Module.Accounting.Features.v1.PatronageCapital.AllocatePatronageCapital;
 
@@ -13,22 +14,21 @@ public class AllocatePatronageCapitalHandler(AccountingDbContext context)
     {
         // Validate entity exists
         var entity = await context.PatronageCapital.FindAsync(command.Id, ct)
-            ?? throw new Accounting.Domain.Exceptions.PatronageCapitalByIdNotFoundException(command.Id);
+            ?? throw new NotFoundException($"PatronageCapital {command.Id} not found");
 
         // Validate member eligibility
         var member = await context.Members.FindAsync(entity.MemberId, ct)
-            ?? throw new FSH.Framework.Core.Exceptions.NotFoundException("Member not found");
+            ?? throw new NotFoundException("Member not found");
 
         if (!member.IsActive)
-            throw new Accounting.Domain.Exceptions.MemberNotEligibleForPatronageCapitalException(entity.MemberId);
+            throw new BadRequestException("Member not eligible for patronage capital allocation");
 
         // Validate amounts/status
         if (entity.AmountAllocated <= 0)
-            throw new Accounting.Domain.Exceptions.InvalidPatronageCapitalAmountException();
+            throw new BadRequestException("Invalid patronage capital amount");
 
         if (entity.AmountRetired >= entity.AmountAllocated)
-            throw new Accounting.Domain.Exceptions.CannotModifyRetiredPatronageCapitalException(entity.Id);
-
+            throw new BadRequestException("Cannot modify retired patronage capital");
         // No-op state change for now (allocation may create accounting entries externally)
         await context.SaveChangesAsync(ct);
         return Unit.Value;

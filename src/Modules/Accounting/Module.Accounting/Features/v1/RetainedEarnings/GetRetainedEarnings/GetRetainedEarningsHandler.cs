@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.GetRetainedEarnings;
 
-public record GetRetainedEarningsQuery(Guid Id) : IQuery<RetainedEarningsDto>;
+public record GetRetainedEarningsByIdQuery(Guid Id) : IQuery<RetainedEarningsDto>;
 
-public class GetRetainedEarningsHandler(AccountingDbContext context) : IQueryHandler<GetRetainedEarningsQuery, RetainedEarningsDto>
+public class GetRetainedEarningsByIdHandler(AccountingDbContext context) : IQueryHandler<GetRetainedEarningsByIdQuery, RetainedEarningsDto>
 {
-    public async ValueTask<RetainedEarningsDto> Handle(GetRetainedEarningsQuery query, CancellationToken ct)
+    public async ValueTask<RetainedEarningsDto> Handle(GetRetainedEarningsByIdQuery query, CancellationToken ct)
     {
         var entity = await context.RetainedEarnings
             .Where(x => x.Id == query.Id)

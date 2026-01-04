@@ -3,7 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.FixedAssets.GetFixedAssets;
+namespace FSH.Module.Accounting.Features.v1.FixedAssets.GetListFixedAsset;
 
 public record GetFixedAssetsQuery(
     int Page = 1,

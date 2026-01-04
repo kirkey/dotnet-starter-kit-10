@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Routing;
 
 namespace FSH.Module.Accounting.Features.v1.PatronageCapital.GetListPatronageCapital;
 
-public static class GetPatronageCapitalEndpoint
+public static class GetPatronageCapitalsEndpoint
 {
-    public static RouteHandlerBuilder MapGetPatronageCapitalEndpoint(this IEndpointRouteBuilder endpoints)
+    public static RouteHandlerBuilder MapGetPatronageCapitalsEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/", async (
             int page,
@@ -23,10 +23,10 @@ public static class GetPatronageCapitalEndpoint
                 new GetPatronageCapitalQuery(page, pageSize, searchTerm, isActive), ct);
             return TypedResults.Ok(result);
         })
-        .WithName(nameof(GetPatronageCapitalEndpoint))
-        .WithSummary("Get paginated list of PatronageCapital")
+        .WithName(nameof(GetPatronageCapitalsEndpoint))
+        .WithSummary("Get paginated list of PatronageCapitals")
         .Produces<PatronageCapitalPagedResponse>(StatusCodes.Status200OK)
         .ProducesValidationProblem()
         .RequirePermission(AccountingPermissionConstants.PatronageCapital.Search);
     }
-}
+} 

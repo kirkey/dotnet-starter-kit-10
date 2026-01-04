@@ -1,5 +1,5 @@
 using Finbuckle.MultiTenant.Abstractions;
-using FSH.Framework.Core.Identity;
+using FSH.Framework.Shared.Identity;
 using FSH.Framework.Persistence;
 using FSH.Framework.Shared.Multitenancy;
 using FSH.Framework.Shared.Persistence;

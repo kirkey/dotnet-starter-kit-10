@@ -1,4 +1,4 @@
-using FSH.Framework.Core.Identity;
+using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;

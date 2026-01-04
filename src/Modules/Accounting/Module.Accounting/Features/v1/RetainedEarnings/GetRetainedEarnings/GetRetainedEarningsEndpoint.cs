@@ -7,19 +7,19 @@ using Microsoft.AspNetCore.Routing;
 
 namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.GetRetainedEarnings;
 
-public static class GetRetainedEarningsEndpoint
+public static class GetRetainedEarningsByIdEndpoint
 {
-    public static RouteHandlerBuilder MapGetRetainedEarningsEndpoint(this IEndpointRouteBuilder endpoints)
+    public static RouteHandlerBuilder MapGetRetainedEarningsByIdEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/{id:guid}", async (
             Guid id,
             IMediator mediator,
             CancellationToken ct) =>
         {
-            var result = await mediator.Send(new GetRetainedEarningsQuery(id), ct);
+            var result = await mediator.Send(new GetRetainedEarningsByIdQuery(id), ct);
             return TypedResults.Ok(result);
         })
-        .WithName(nameof(GetRetainedEarningsEndpoint))
+        .WithName(nameof(GetRetainedEarningsByIdEndpoint))
         .WithSummary("Get RetainedEarnings by ID")
         .Produces<RetainedEarningsDto>(StatusCodes.Status200OK)
         .ProducesValidationProblem()

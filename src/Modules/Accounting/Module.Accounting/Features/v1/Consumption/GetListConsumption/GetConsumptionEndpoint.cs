@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Routing;
 
 namespace FSH.Module.Accounting.Features.v1.Consumption.GetListConsumption;
 
-public static class GetConsumptionEndpoint
+public static class GetConsumptionsEndpoint
 {
-    public static RouteHandlerBuilder MapGetConsumptionEndpoint(this IEndpointRouteBuilder endpoints)
+    public static RouteHandlerBuilder MapGetConsumptionsEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/", async (
             int page,
@@ -23,10 +23,10 @@ public static class GetConsumptionEndpoint
                 new GetConsumptionQuery(page, pageSize, searchTerm, isActive), ct);
             return TypedResults.Ok(result);
         })
-        .WithName(nameof(GetConsumptionEndpoint))
-        .WithSummary("Get paginated list of Consumption")
+        .WithName(nameof(GetConsumptionsEndpoint))
+        .WithSummary("Get paginated list of Consumptions")
         .Produces<ConsumptionPagedResponse>(StatusCodes.Status200OK)
         .ProducesValidationProblem()
         .RequirePermission(AccountingPermissionConstants.Consumption.Search);
     }
-}
+} 

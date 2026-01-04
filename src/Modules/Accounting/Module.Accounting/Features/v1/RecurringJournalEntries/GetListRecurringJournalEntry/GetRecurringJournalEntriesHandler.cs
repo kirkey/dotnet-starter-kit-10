@@ -3,7 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.RecurringJournalEntries.GetRecurringJournalEntries;
+namespace FSH.Module.Accounting.Features.v1.RecurringJournalEntries.GetListRecurringJournalEntry;
 
 public record GetRecurringJournalEntriesQuery(
     int Page = 1,

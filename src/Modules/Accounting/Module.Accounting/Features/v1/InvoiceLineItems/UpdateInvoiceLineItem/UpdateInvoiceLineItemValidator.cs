@@ -7,14 +7,17 @@ public class UpdateInvoiceLineItemValidator : AbstractValidator<UpdateInvoiceLin
     public UpdateInvoiceLineItemValidator()
     {
         RuleFor(x => x.Id).NotEmpty();
-        RuleFor(x => x.Name)
+        RuleFor(x => x.LineNumber).GreaterThan(0);
+        RuleFor(x => x.ItemDescription)
             .NotEmpty()
-            .MaximumLength(AccountingStringLengths.Name);
-            
-        When(x => !string.IsNullOrEmpty(x.Description), () =>
-        {
-            RuleFor(x => x.Description)
-                .MaximumLength(AccountingStringLengths.Description);
-        });
+            .MaximumLength(AccountingStringLengths.Description);
+        RuleFor(x => x.AccountId).NotEmpty();
+        RuleFor(x => x.AccountCode)
+            .NotEmpty()
+            .MaximumLength(AccountingStringLengths.AccountCode);
+        RuleFor(x => x.Quantity).GreaterThan(0);
+        RuleFor(x => x.UnitPrice).GreaterThanOrEqualTo(0);
+        RuleFor(x => x.DiscountPercent).InclusiveBetween(0, 100);
+        RuleFor(x => x.TaxRate).InclusiveBetween(0, 100);
     }
 }

@@ -25,6 +25,25 @@ using FSH.Module.Accounting.Features.v1.Consumption.GetListConsumption;
 using FSH.Module.Accounting.Features.v1.Consumption.UpdateConsumption;
 using FSH.Module.Accounting.Features.v1.Consumption.DeleteConsumption;
 
+// Accounting Periods
+using FSH.Module.Accounting.Features.v1.AccountingPeriods.CreateAccountingPeriod;
+using FSH.Module.Accounting.Features.v1.AccountingPeriods.GetAccountingPeriod;
+using FSH.Module.Accounting.Features.v1.AccountingPeriods.GetAccountingPeriods;
+using FSH.Module.Accounting.Features.v1.FiscalPeriodClose.CreateFiscalPeriodClose;
+using FSH.Module.Accounting.Features.v1.FiscalPeriodClose.GetFiscalPeriodClose;
+using FSH.Module.Accounting.Features.v1.FiscalPeriodClose.InitiateFiscalPeriodClose;
+using FSH.Module.Accounting.Features.v1.FiscalPeriodClose.CompleteFiscalPeriodClose;
+using FSH.Module.Accounting.Features.v1.FiscalPeriodClose.ReverseFiscalPeriodClose;
+using FSH.Module.Accounting.Features.v1.AccountingPeriods.UpdateAccountingPeriod;
+using FSH.Module.Accounting.Features.v1.AccountingPeriods.DeleteAccountingPeriod;
+using FSH.Module.Accounting.Features.v1.AccountingPeriods.CloseAccountingPeriod;
+using FSH.Module.Accounting.Features.v1.AccountingPeriods.ReopenAccountingPeriod;
+
+// Trial Balance
+using FSH.Module.Accounting.Features.v1.TrialBalance.GetTrialBalance;
+using FSH.Module.Accounting.Features.v1.TrialBalance.GenerateTrialBalance;
+using FSH.Module.Accounting.Features.v1.TrialBalance.ExportTrialBalance;
+
 // PatronageCapital endpoints
 using FSH.Module.Accounting.Features.v1.PatronageCapital.CreatePatronageCapital;
 using FSH.Module.Accounting.Features.v1.PatronageCapital.GetPatronageCapital;
@@ -38,6 +57,41 @@ using FSH.Module.Accounting.Features.v1.FuelConsumption.CreateFuelConsumption;
 using FSH.Module.Accounting.Features.v1.FuelConsumption.GetFuelConsumption;
 using FSH.Module.Accounting.Features.v1.FuelConsumption.GetListFuelConsumption;
 using FSH.Module.Accounting.Features.v1.FuelConsumption.UpdateFuelConsumption;
+
+// Power Purchase Agreements
+using FSH.Module.Accounting.Features.v1.PowerPurchaseAgreements.CreatePowerPurchaseAgreement;
+using FSH.Module.Accounting.Features.v1.PowerPurchaseAgreements.GetPowerPurchaseAgreement;
+using FSH.Module.Accounting.Features.v1.PowerPurchaseAgreements.GetPowerPurchaseAgreements;
+using FSH.Module.Accounting.Features.v1.PowerPurchaseAgreements.UpdatePowerPurchaseAgreement;
+using FSH.Module.Accounting.Features.v1.PowerPurchaseAgreements.DeletePowerPurchaseAgreement;
+
+// Rate Schedules
+using FSH.Module.Accounting.Features.v1.RateSchedules.CreateRateSchedule;
+using FSH.Module.Accounting.Features.v1.RateSchedules.GetRateSchedule;
+using FSH.Module.Accounting.Features.v1.RateSchedules.GetRateSchedules;
+using FSH.Module.Accounting.Features.v1.RateSchedules.UpdateRateSchedule;
+using FSH.Module.Accounting.Features.v1.RateSchedules.DeleteRateSchedule;
+
+// Projects
+using FSH.Module.Accounting.Features.v1.Projects.CreateProject;
+using FSH.Module.Accounting.Features.v1.Projects.GetProject;
+using FSH.Module.Accounting.Features.v1.Projects.GetProjects;
+using FSH.Module.Accounting.Features.v1.Projects.UpdateProject;
+using FSH.Module.Accounting.Features.v1.Projects.DeleteProject;
+
+// Project Costs
+using FSH.Module.Accounting.Features.v1.ProjectCosts.CreateProjectCost;
+using FSH.Module.Accounting.Features.v1.ProjectCosts.GetProjectCost;
+using FSH.Module.Accounting.Features.v1.ProjectCosts.GetProjectCosts;
+using FSH.Module.Accounting.Features.v1.ProjectCosts.UpdateProjectCost;
+using FSH.Module.Accounting.Features.v1.ProjectCosts.DeleteProjectCost;
+
+// Retained Earnings
+using FSH.Module.Accounting.Features.v1.RetainedEarnings.CreateRetainedEarnings;
+using FSH.Module.Accounting.Features.v1.RetainedEarnings.GetRetainedEarnings;
+using FSH.Module.Accounting.Features.v1.RetainedEarnings.GetRetainedEarnings;
+using FSH.Module.Accounting.Features.v1.RetainedEarnings.CloseRetainedEarnings;
+using FSH.Module.Accounting.Features.v1.RetainedEarnings.ReopenRetainedEarnings;
 using FSH.Module.Accounting.Features.v1.FuelConsumption.DeleteFuelConsumption;
 
 // JournalEntries endpoints
@@ -168,8 +222,8 @@ public class AccountingModule : IModule
         // Register DbContext
         builder.Services.AddHeroDbContext<AccountingDbContext>();
 
-        // Register Db Initializer (to be created)
-        // builder.Services.AddScoped<IDbInitializer, AccountingDbInitializer>();
+        // Register Db Initializer
+        builder.Services.AddScoped<IDbInitializer, AccountingDbInitializer>();
 
         // Health checks
         builder.Services.AddHealthChecks()
@@ -228,12 +282,23 @@ public class AccountingModule : IModule
         journalLinesGroup.MapDeleteJournalEntryLineEndpoint();
 
         // Accounting Periods
-        // TODO: Map AccountingPeriod endpoints (Create, Get, GetList, Update, Delete, Close, Reopen)
-        // RouteGroupBuilder periodsGroup = group.MapGroup("/accountingperiods");
+        RouteGroupBuilder periodsGroup = group.MapGroup("/accountingperiods");
+        periodsGroup.MapCreateAccountingPeriodEndpoint();
+        periodsGroup.MapGetAccountingPeriodsEndpoint();
+        periodsGroup.MapGetAccountingPeriodEndpoint();
+        periodsGroup.MapUpdateAccountingPeriodEndpoint();
+        periodsGroup.MapDeleteAccountingPeriodEndpoint();
+        periodsGroup.MapCloseAccountingPeriodEndpoint();
+        periodsGroup.MapReopenAccountingPeriodEndpoint();
 
         // Fiscal Period Close
-        // TODO: Map FiscalPeriodClose endpoints (Create, Get, GetList, Initiate, Complete, Reverse)
-        // RouteGroupBuilder fiscalCloseGroup = group.MapGroup("/fiscalperiodclose");
+        RouteGroupBuilder fiscalCloseGroup = group.MapGroup("/fiscalperiodclose");
+        fiscalCloseGroup.MapCreateFiscalPeriodCloseEndpoint();
+        fiscalCloseGroup.MapGetFiscalPeriodClosesEndpoint();
+        fiscalCloseGroup.MapGetFiscalPeriodCloseEndpoint();
+        fiscalCloseGroup.MapInitiateFiscalPeriodCloseEndpoint();
+        fiscalCloseGroup.MapCompleteFiscalPeriodCloseEndpoint();
+        fiscalCloseGroup.MapReverseFiscalPeriodCloseEndpoint();
 
         // Trial Balance
         RouteGroupBuilder trialBalanceGroup = group.MapGroup("/trialbalance");
@@ -472,7 +537,7 @@ public class AccountingModule : IModule
         // Consumption
         RouteGroupBuilder consumptionGroup = group.MapGroup("/consumptions");
         consumptionGroup.MapCreateConsumptionEndpoint();
-        consumptionGroup.MapGetConsumptionEndpoint();
+        consumptionGroup.MapGetConsumptionsEndpoint();
         consumptionGroup.MapGetConsumptionEndpoint();
         consumptionGroup.MapUpdateConsumptionEndpoint();
         consumptionGroup.MapDeleteConsumptionEndpoint();
@@ -480,7 +545,7 @@ public class AccountingModule : IModule
         // Patronage Capital
         RouteGroupBuilder patronageGroup = group.MapGroup("/patronagecapital");
         patronageGroup.MapCreatePatronageCapitalEndpoint();
-        patronageGroup.MapGetPatronageCapitalEndpoint();
+        patronageGroup.MapGetPatronageCapitalsEndpoint();
         patronageGroup.MapGetPatronageCapitalEndpoint();
         patronageGroup.MapUpdatePatronageCapitalEndpoint();
         patronageGroup.MapDeletePatronageCapitalEndpoint();
@@ -489,7 +554,7 @@ public class AccountingModule : IModule
         // Fuel Consumption (placeholder endpoints)
         RouteGroupBuilder fuelConsumptionGroup = group.MapGroup("/fuelconsumptions");
         fuelConsumptionGroup.MapCreateFuelConsumptionEndpoint();
-        fuelConsumptionGroup.MapGetFuelConsumptionEndpoint();
+        fuelConsumptionGroup.MapGetFuelConsumptionsEndpoint();
         fuelConsumptionGroup.MapGetFuelConsumptionEndpoint();
         fuelConsumptionGroup.MapUpdateFuelConsumptionEndpoint();
         fuelConsumptionGroup.MapDeleteFuelConsumptionEndpoint();
@@ -574,7 +639,7 @@ public class AccountingModule : IModule
         // List
         retainedEarningsGroup.MapGetRetainedEarningsEndpoint();
         // Detail
-        retainedEarningsGroup.MapGetRetainedEarningsEndpoint();
+        retainedEarningsGroup.MapGetRetainedEarningsByIdEndpoint();
         // Close & Reopen
         retainedEarningsGroup.MapCloseRetainedEarningsEndpoint();
         retainedEarningsGroup.MapReopenRetainedEarningsEndpoint();

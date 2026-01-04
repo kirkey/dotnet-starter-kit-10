@@ -57,7 +57,7 @@ public class Invoice : AuditableEntity<Guid>, IMustHaveTenant
     public string TenantId { get; private set; } = default!;
     
     // Navigation Properties
-    public ICollection<InvoiceLine>? Lines { get; private set; }
+    public ICollection<InvoiceLineItem>? Lines { get; private set; }
     
     private Invoice() { }
     

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace FSH.Module.Accounting.Features.v1.JournalEntryLines.GetJournalEntryLines;
+namespace FSH.Module.Accounting.Features.v1.JournalEntryLines.GetListJournalEntryLine;
 
 public static class GetJournalEntryLinesEndpoint
 {

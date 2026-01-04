@@ -7,19 +7,19 @@ using Microsoft.AspNetCore.Routing;
 
 namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.GetDeferredRevenue;
 
-public static class GetDeferredRevenueEndpoint
+public static class GetDeferredRevenueByIdEndpoint
 {
-    public static RouteHandlerBuilder MapGetDeferredRevenueEndpoint(this IEndpointRouteBuilder endpoints)
+    public static RouteHandlerBuilder MapGetDeferredRevenueByIdEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/{id:guid}", async (
             Guid id,
             IMediator mediator,
             CancellationToken ct) =>
         {
-            var result = await mediator.Send(new GetDeferredRevenueQuery(id), ct);
+            var result = await mediator.Send(new GetDeferredRevenueByIdQuery(id), ct);
             return TypedResults.Ok(result);
         })
-        .WithName(nameof(GetDeferredRevenueEndpoint))
+        .WithName(nameof(GetDeferredRevenueByIdEndpoint))
         .WithSummary("Get DeferredRevenue by ID")
         .Produces<DeferredRevenueDto>(StatusCodes.Status200OK)
         .ProducesValidationProblem()
