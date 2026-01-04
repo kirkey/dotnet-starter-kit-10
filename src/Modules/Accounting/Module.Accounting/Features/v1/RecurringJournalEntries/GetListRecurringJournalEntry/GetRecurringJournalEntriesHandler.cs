@@ -1,22 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.RecurringJournalEntries;
+using FSH.Module.Accounting.Contracts.v1.RecurringJournalEntries.GetListRecurringJournalEntry;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.RecurringJournalEntries.GetListRecurringJournalEntry;
-
-public record GetRecurringJournalEntriesQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null,
-    string? Frequency = null) : IQuery<RecurringJournalEntriesPagedResponse>;
-
-public record RecurringJournalEntriesPagedResponse(
-    List<RecurringJournalEntrySummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetRecurringJournalEntriesHandler(AccountingDbContext context) 
     : IQueryHandler<GetRecurringJournalEntriesQuery, RecurringJournalEntriesPagedResponse>

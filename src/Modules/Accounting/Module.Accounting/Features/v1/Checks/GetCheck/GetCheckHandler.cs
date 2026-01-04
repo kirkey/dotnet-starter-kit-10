@@ -1,16 +1,11 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.Checks;
+using FSH.Module.Accounting.Contracts.v1.Checks.GetCheck;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Checks.GetCheck;
-
-/// <summary>
-/// Query to retrieve a single check by ID.
-/// </summary>
-/// <param name="Id">Check ID (Guid) to retrieve</param>
-public record GetCheckQuery(Guid Id) : IQuery<CheckDto>;
 
 /// <summary>
 /// Handler for retrieving a single check by ID with complete DTO projection.

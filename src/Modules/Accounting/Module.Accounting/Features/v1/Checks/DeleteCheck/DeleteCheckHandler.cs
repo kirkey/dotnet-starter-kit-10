@@ -1,14 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Checks.DeleteCheck;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Checks.DeleteCheck;
-
-/// <summary>
-/// Command to delete an existing check from the system.
-/// </summary>
-/// <param name="Id">Check ID to delete (must exist, preferably Draft status)</param>
-public record DeleteCheckCommand(Guid Id) : ICommand;
 
 /// <summary>
 /// Handler for deleting a check from the system.

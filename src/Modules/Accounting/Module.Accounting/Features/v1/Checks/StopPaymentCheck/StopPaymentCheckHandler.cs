@@ -1,11 +1,10 @@
 // TODO: Implement StopPayment operation for Check
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Checks.StopPaymentCheck;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Checks.StopPaymentCheck;
-
-public record StopPaymentCheckCommand(Guid Id) : ICommand;
 
 public class StopPaymentCheckHandler(AccountingDbContext context) 
     : ICommandHandler<StopPaymentCheckCommand>

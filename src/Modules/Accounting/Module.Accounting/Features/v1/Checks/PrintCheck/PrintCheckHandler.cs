@@ -1,11 +1,10 @@
 // TODO: Implement Print operation for Check
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Checks.PrintCheck;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Checks.PrintCheck;
-
-public record PrintCheckCommand(Guid Id) : ICommand;
 
 public class PrintCheckHandler(AccountingDbContext context) 
     : ICommandHandler<PrintCheckCommand>

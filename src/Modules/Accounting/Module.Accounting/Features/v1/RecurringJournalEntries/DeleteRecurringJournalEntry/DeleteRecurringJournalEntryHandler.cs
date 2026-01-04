@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.RecurringJournalEntries.DeleteRecurringJournalEntry;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.RecurringJournalEntries.DeleteRecurringJournalEntry;
-
-public record DeleteRecurringJournalEntryCommand(Guid Id) : ICommand;
 
 public class DeleteRecurringJournalEntryHandler(AccountingDbContext context) : ICommandHandler<DeleteRecurringJournalEntryCommand>
 {

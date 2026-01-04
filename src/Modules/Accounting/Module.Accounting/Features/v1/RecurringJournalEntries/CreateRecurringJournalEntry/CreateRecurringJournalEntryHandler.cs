@@ -1,17 +1,10 @@
 using FSH.Framework.Shared.Identity;
+using FSH.Module.Accounting.Contracts.v1.RecurringJournalEntries.CreateRecurringJournalEntry;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.RecurringJournalEntries.CreateRecurringJournalEntry;
-
-public record CreateRecurringJournalEntryCommand(
-    string Name,
-    string Frequency,
-    DateTime? NextRunDate = null,
-    Guid? FiscalPeriodId = null,
-    bool IsAutoPost = false,
-    string? Description = null) : ICommand<Guid>;
 
 public class CreateRecurringJournalEntryHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateRecurringJournalEntryCommand, Guid>

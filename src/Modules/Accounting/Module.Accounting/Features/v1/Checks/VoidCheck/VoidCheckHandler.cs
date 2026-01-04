@@ -1,11 +1,10 @@
 // TODO: Implement Void operation for Check
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Checks.VoidCheck;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Checks.VoidCheck;
-
-public record VoidCheckCommand(Guid Id) : ICommand;
 
 public class VoidCheckHandler(AccountingDbContext context) 
     : ICommandHandler<VoidCheckCommand>

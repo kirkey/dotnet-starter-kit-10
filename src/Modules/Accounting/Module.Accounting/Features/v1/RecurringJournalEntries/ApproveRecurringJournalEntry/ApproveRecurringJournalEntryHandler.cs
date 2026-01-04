@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Context;
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.RecurringJournalEntries.ApproveRecurringJournalEntry;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.RecurringJournalEntries.ApproveRecurringJournalEntry;
-
-public record ApproveRecurringJournalEntryCommand(Guid Id) : ICommand;
 
 public class ApproveRecurringJournalEntryHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<ApproveRecurringJournalEntryCommand>

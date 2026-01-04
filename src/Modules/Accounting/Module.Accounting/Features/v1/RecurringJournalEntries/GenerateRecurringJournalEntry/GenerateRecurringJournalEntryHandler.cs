@@ -1,13 +1,12 @@
 using FSH.Framework.Core.Context;
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.RecurringJournalEntries.GenerateRecurringJournalEntry;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.RecurringJournalEntries.GenerateRecurringJournalEntry;
-
-public record GenerateRecurringJournalEntryCommand(Guid Id) : ICommand;
 
 public class GenerateRecurringJournalEntryHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<GenerateRecurringJournalEntryCommand>

@@ -1,15 +1,10 @@
 // TODO: Implement Issue operation for Check
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Checks.IssueCheck;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Checks.IssueCheck;
-
-/// <summary>
-/// Command to transition a check from Draft/Printed status to Issued status.
-/// </summary>
-/// <param name="Id">Check ID to issue (must exist in Draft or Printed status)</param>
-public record IssueCheckCommand(Guid Id) : ICommand;
 
 /// <summary>
 /// Handler for issuing a check - special operation for check workflow state transition.
