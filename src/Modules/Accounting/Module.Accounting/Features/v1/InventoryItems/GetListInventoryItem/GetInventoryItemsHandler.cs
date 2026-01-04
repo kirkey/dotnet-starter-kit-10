@@ -1,21 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.InventoryItems;
+using FSH.Module.Accounting.Contracts.v1.InventoryItems.GetListInventoryItem;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.InventoryItems.GetInventoryItems;
-
-public record GetInventoryItemsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<InventoryItemsPagedResponse>;
-
-public record InventoryItemsPagedResponse(
-    List<InventoryItemSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetInventoryItemsHandler(AccountingDbContext context) 
     : IQueryHandler<GetInventoryItemsQuery, InventoryItemsPagedResponse>

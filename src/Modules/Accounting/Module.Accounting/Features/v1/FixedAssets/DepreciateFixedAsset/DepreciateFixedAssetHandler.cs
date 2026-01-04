@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Context;
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.FixedAssets.DepreciateFixedAsset;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.FixedAssets.DepreciateFixedAsset;
-
-public record DepreciateFixedAssetCommand(Guid Id, decimal? Amount = null) : ICommand;
 
 public class DepreciateFixedAssetHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<DepreciateFixedAssetCommand>

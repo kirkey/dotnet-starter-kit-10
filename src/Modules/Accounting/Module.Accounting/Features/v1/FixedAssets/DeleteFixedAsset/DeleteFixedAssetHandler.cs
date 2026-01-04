@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.FixedAssets.DeleteFixedAsset;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.FixedAssets.DeleteFixedAsset;
-
-public record DeleteFixedAssetCommand(Guid Id) : ICommand;
 
 public class DeleteFixedAssetHandler(AccountingDbContext context) : ICommandHandler<DeleteFixedAssetCommand>
 {

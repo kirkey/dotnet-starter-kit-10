@@ -1,21 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.FixedAssets;
+using FSH.Module.Accounting.Contracts.v1.FixedAssets.GetListFixedAsset;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.FixedAssets.GetListFixedAsset;
-
-public record GetFixedAssetsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<FixedAssetsPagedResponse>;
-
-public record FixedAssetsPagedResponse(
-    List<FixedAssetSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetFixedAssetsHandler(AccountingDbContext context) 
     : IQueryHandler<GetFixedAssetsQuery, FixedAssetsPagedResponse>

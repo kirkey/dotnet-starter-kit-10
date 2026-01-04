@@ -1,11 +1,10 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.InventoryItems.AddStockInventoryItem;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.InventoryItems.AddStockInventoryItem;
-
-public record AddStockInventoryItemCommand(Guid Id, decimal Quantity) : ICommand;
 
 public class AddStockInventoryItemHandler(AccountingDbContext context) 
     : ICommandHandler<AddStockInventoryItemCommand>

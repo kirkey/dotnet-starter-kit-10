@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.FixedAssets;
+using FSH.Module.Accounting.Contracts.v1.FixedAssets.GetFixedAsset;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.FixedAssets.GetFixedAsset;
-
-public record GetFixedAssetQuery(Guid Id) : IQuery<FixedAssetDto>;
 
 public class GetFixedAssetHandler(AccountingDbContext context) : IQueryHandler<GetFixedAssetQuery, FixedAssetDto>
 {

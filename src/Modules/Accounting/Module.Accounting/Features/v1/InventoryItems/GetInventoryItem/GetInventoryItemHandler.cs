@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.InventoryItems;
+using FSH.Module.Accounting.Contracts.v1.InventoryItems.GetInventoryItem;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.InventoryItems.GetInventoryItem;
-
-public record GetInventoryItemQuery(Guid Id) : IQuery<InventoryItemDto>;
 
 public class GetInventoryItemHandler(AccountingDbContext context) : IQueryHandler<GetInventoryItemQuery, InventoryItemDto>
 {

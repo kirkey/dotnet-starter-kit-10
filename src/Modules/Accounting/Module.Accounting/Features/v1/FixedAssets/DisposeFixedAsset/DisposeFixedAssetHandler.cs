@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Context;
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.FixedAssets.DisposeFixedAsset;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.FixedAssets.DisposeFixedAsset;
-
-public record DisposeFixedAssetCommand(Guid Id, DateTime? DisposalDate = null, decimal? Proceeds = null) : ICommand;
 
 public class DisposeFixedAssetHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<DisposeFixedAssetCommand>

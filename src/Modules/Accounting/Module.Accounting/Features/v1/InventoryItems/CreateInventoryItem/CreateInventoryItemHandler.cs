@@ -1,11 +1,10 @@
 using FSH.Framework.Shared.Identity;
+using FSH.Module.Accounting.Contracts.v1.InventoryItems.CreateInventoryItem;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.InventoryItems.CreateInventoryItem;
-
-public record CreateInventoryItemCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreateInventoryItemHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateInventoryItemCommand, Guid>

@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.FixedAssets.UpdateFixedAsset;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.FixedAssets.UpdateFixedAsset;
-
-public record UpdateFixedAssetCommand(Guid Id, string Name, string? Description = null, DateTime? AcquisitionDate = null, decimal? Cost = null, decimal? ResidualValue = null, decimal? DepreciationRate = null) : ICommand<Guid>;
 
 public class UpdateFixedAssetHandler(AccountingDbContext context) : ICommandHandler<UpdateFixedAssetCommand, Guid>
 {
