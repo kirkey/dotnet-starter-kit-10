@@ -412,8 +412,12 @@ public class AccountingModule : IModule
         // ========================================
 
         // Customers
-        // TODO: Map Customer endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder customerGroup = group.MapGroup("/customers");
+        RouteGroupBuilder customerGroup = group.MapGroup("/customers");
+        customerGroup.MapCreateCustomerEndpoint();
+        customerGroup.MapGetCustomerEndpoint();
+        customerGroup.MapGetCustomersEndpoint();
+        customerGroup.MapUpdateCustomerEndpoint();
+        customerGroup.MapDeleteCustomerEndpoint();
 
         // Members
         // TODO: Map Member endpoints (Create, Get, GetList, Update, Delete)

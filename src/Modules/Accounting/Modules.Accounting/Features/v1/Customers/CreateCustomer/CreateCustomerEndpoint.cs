@@ -16,7 +16,7 @@ public static class CreateCustomerEndpoint
             CancellationToken ct) =>
         {
             var id = await mediator.Send(command, ct);
-            return TypedResults.Created($"/api/v1/accounting//{id}", id);
+            return TypedResults.Created($"/api/v1/accounting/customers/{id}", id);
         })
         .WithName(nameof(CreateCustomerEndpoint))
         .WithSummary("Create Customer")
