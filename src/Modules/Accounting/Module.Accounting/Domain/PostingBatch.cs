@@ -1,3 +1,5 @@
+using FSH.Framework.Core.Exceptions;
+
 namespace FSH.Module.Accounting.Domain;
 
 /// <summary>
@@ -22,6 +24,9 @@ public class PostingBatch : AuditableEntity<Guid>, IMustHaveTenant
 
     public DateTime? PostedOn { get; private set; }
     public Guid? PostedBy { get; private set; }
+
+    public Guid? ApprovedBy { get; private set; }
+    public DateTime? ApprovedOn { get; private set; }
 
     public DateTime? ReversedOn { get; private set; }
     public Guid? ReversedBy { get; private set; }

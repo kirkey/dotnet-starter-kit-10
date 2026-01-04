@@ -4,6 +4,9 @@ using FSH.Framework.Persistence;
 using FSH.Framework.Shared.Identity;
 using FSH.Framework.Web.Modules;
 using FSH.Module.Accounting.Data;
+using Accounting.Application.Reports.TrialBalance.v1.Services;
+using Accounting.Application.Reports.GeneralLedger.v1.Services;
+using Accounting.Application.Reports.BankReconciliation.v1.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -86,9 +89,59 @@ using FSH.Module.Accounting.Features.v1.ProjectCosts.GetProjectCosts;
 using FSH.Module.Accounting.Features.v1.ProjectCosts.UpdateProjectCost;
 using FSH.Module.Accounting.Features.v1.ProjectCosts.DeleteProjectCost;
 
+// Accounts Receivable (missing endpoints)
+using FSH.Module.Accounting.Features.v1.AccountsReceivable.CreateAccountsReceivableAccount;
+using FSH.Module.Accounting.Features.v1.AccountsReceivable.GetAccountsReceivableAccount;
+using FSH.Module.Accounting.Features.v1.AccountsReceivable.GetAccountsReceivable;
+using FSH.Module.Accounting.Features.v1.AccountsReceivable.UpdateAccountsReceivableAccount;
+using FSH.Module.Accounting.Features.v1.AccountsReceivable.DeleteAccountsReceivableAccount;
+
+// Bills (AP)
+using FSH.Module.Accounting.Features.v1.Bills.CreateBill;
+using FSH.Module.Accounting.Features.v1.Bills.GetBill;
+using FSH.Module.Accounting.Features.v1.Bills.GetBills;
+using FSH.Module.Accounting.Features.v1.Bills.UpdateBill;
+using FSH.Module.Accounting.Features.v1.Bills.DeleteBill;
+using FSH.Module.Accounting.Features.v1.Bills.ApproveBill;
+
+// Banks & Reconciliation
+using FSH.Module.Accounting.Features.v1.Banks.CreateBank;
+using FSH.Module.Accounting.Features.v1.Banks.GetBank;
+using FSH.Module.Accounting.Features.v1.Banks.GetBanks;
+using FSH.Module.Accounting.Features.v1.Banks.UpdateBank;
+using FSH.Module.Accounting.Features.v1.Banks.DeleteBank;
+using FSH.Module.Accounting.Features.v1.BankReconciliations.CreateBankReconciliation;
+using FSH.Module.Accounting.Features.v1.BankReconciliations.GetBankReconciliation;
+using FSH.Module.Accounting.Features.v1.BankReconciliations.GetBankReconciliations;
+
+// Checks
+using FSH.Module.Accounting.Features.v1.Checks.CreateCheck;
+using FSH.Module.Accounting.Features.v1.Checks.GetCheck;
+using FSH.Module.Accounting.Features.v1.Checks.GetChecks;
+using FSH.Module.Accounting.Features.v1.Checks.UpdateCheck;
+using FSH.Module.Accounting.Features.v1.Checks.DeleteCheck;
+using FSH.Module.Accounting.Features.v1.Checks.VoidCheck;
+using FSH.Module.Accounting.Features.v1.Checks.ClearCheck;
+using FSH.Module.Accounting.Features.v1.Checks.PrintCheck;
+using FSH.Module.Accounting.Features.v1.Checks.StopPaymentCheck;
+
+// Payments
+using FSH.Module.Accounting.Features.v1.Payments.CreatePayment;
+using FSH.Module.Accounting.Features.v1.Payments.GetPayment;
+using FSH.Module.Accounting.Features.v1.Payments.GetPayments;
+using FSH.Module.Accounting.Features.v1.Payments.UpdatePayment;
+using FSH.Module.Accounting.Features.v1.Payments.DeletePayment;
+using FSH.Module.Accounting.Features.v1.Payments.ApprovePayment;
+
+// Payment Allocations
+using FSH.Module.Accounting.Features.v1.PaymentAllocations.CreatePaymentAllocation;
+using FSH.Module.Accounting.Features.v1.PaymentAllocations.GetPaymentAllocation;
+using FSH.Module.Accounting.Features.v1.PaymentAllocations.GetPaymentAllocations;
+using FSH.Module.Accounting.Features.v1.PaymentAllocations.UpdatePaymentAllocation;
+using FSH.Module.Accounting.Features.v1.PaymentAllocations.DeletePaymentAllocation;
+
 // Retained Earnings
 using FSH.Module.Accounting.Features.v1.RetainedEarnings.CreateRetainedEarnings;
-using FSH.Module.Accounting.Features.v1.RetainedEarnings.GetRetainedEarnings;
 using FSH.Module.Accounting.Features.v1.RetainedEarnings.GetRetainedEarnings;
 using FSH.Module.Accounting.Features.v1.RetainedEarnings.CloseRetainedEarnings;
 using FSH.Module.Accounting.Features.v1.RetainedEarnings.ReopenRetainedEarnings;
@@ -207,7 +260,6 @@ namespace FSH.Module.Accounting;
 /// **Projects & Tax (6):**
 /// - Project, ProjectCost, InterCompanyTransaction
 /// - TaxCode, RecurringJournalEntry, RetainedEarnings
-/// 
 /// **Permissions:**
 /// ~250 permissions covering all operations across all entities
 /// See AccountingPermissionConstants for complete list
@@ -224,6 +276,11 @@ public class AccountingModule : IModule
 
         // Register Db Initializer
         builder.Services.AddScoped<IDbInitializer, AccountingDbInitializer>();
+
+        // Register report services
+        builder.Services.AddScoped<ITrialBalanceReportService, TrialBalanceReportService>();
+        builder.Services.AddScoped<IGeneralLedgerReportService, GeneralLedgerReportService>();
+        builder.Services.AddScoped<IBankReconciliationReportService, BankReconciliationReportService>();
 
         // Health checks
         builder.Services.AddHealthChecks()

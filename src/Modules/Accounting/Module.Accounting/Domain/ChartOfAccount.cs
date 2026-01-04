@@ -234,11 +234,13 @@ public class ChartOfAccount : AuditableEntity<Guid>, IMustHaveTenant
     /// Update account metadata while keeping invariants. Trims and length-limits inputs.
     /// </summary>
     public void Update(
+        string? accountCode = null,
         string? accountName = null,
         string? accountType = null,
         string? usoaCategory = null,
         Guid? parentAccountId = null,
         string? parentCode = null,
+        decimal? balance = null,
         bool? isControlAccount = null,
         string? normalBalance = null,
         bool? isUsoaCompliant = null,
@@ -246,6 +248,14 @@ public class ChartOfAccount : AuditableEntity<Guid>, IMustHaveTenant
         string? description = null,
         string? notes = null)
     {
+        if (!string.IsNullOrWhiteSpace(accountCode) && AccountCode != accountCode.Trim())
+        {
+            var ac = accountCode.Trim();
+            if (ac.Length > AccountingStringLengths.AccountCode)
+                throw new BadRequestException($"Account code cannot exceed {AccountingStringLengths.AccountCode} characters.");
+            AccountCode = ac;
+        }
+
         if (!string.IsNullOrWhiteSpace(accountName) && AccountName != accountName.Trim())
         {
             var an = accountName.Trim();
@@ -293,6 +303,11 @@ public class ChartOfAccount : AuditableEntity<Guid>, IMustHaveTenant
         {
             IsControlAccount = isControlAccount.Value;
             AllowDirectPosting = !IsControlAccount;
+        }
+
+        if (balance.HasValue)
+        {
+            Balance = balance.Value;
         }
 
         if (!string.IsNullOrWhiteSpace(normalBalance) && NormalBalance != normalBalance.Trim())

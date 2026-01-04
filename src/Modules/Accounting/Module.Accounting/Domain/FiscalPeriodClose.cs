@@ -1,3 +1,5 @@
+using FSH.Framework.Core.Exceptions;
+
 namespace FSH.Module.Accounting.Domain;
 
 /// <summary>
@@ -16,6 +18,8 @@ public class FiscalPeriodClose : AuditableEntity<Guid>, IMustHaveTenant
     public bool IsClosed => Status == "Closed";
 
     public decimal RetainedEarnings { get; private set; }
+    public decimal AdjustmentAmount { get; private set; } = 0m;
+    public string? AdjustmentNotes { get; private set; }
     public Guid? ClosingJournalEntryId { get; private set; }
     public Guid? ClosedBy { get; private set; }
 
@@ -89,6 +93,8 @@ public class FiscalPeriodClose : AuditableEntity<Guid>, IMustHaveTenant
 
     public void ApplyAdjustment(decimal amount, string? notes = null)
     {
+        AdjustmentAmount += amount;
+        AdjustmentNotes = notes ?? AdjustmentNotes;
         RetainedEarnings += amount;
         Description = notes ?? Description;
     }

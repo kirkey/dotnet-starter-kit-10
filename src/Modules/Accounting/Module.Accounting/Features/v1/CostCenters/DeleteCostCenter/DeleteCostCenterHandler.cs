@@ -19,10 +19,9 @@ public class DeleteCostCenterHandler(AccountingDbContext context) : ICommandHand
         var hasJournalLines = await context.JournalEntryLines.AnyAsync(x => x.CostCenterId == command.Id, ct).ConfigureAwait(false);
         var hasPrepaidExpenses = await context.PrepaidExpenses.AnyAsync(x => x.CostCenterId == command.Id, ct).ConfigureAwait(false);
         var hasProjectCosts = await context.ProjectCosts.AnyAsync(x => x.CostCenterId == command.Id, ct).ConfigureAwait(false);
-        var hasProjectCostEntries = await context.ProjectCostEntries.AnyAsync(x => x.CostCenterId == command.Id, ct).ConfigureAwait(false);
         var hasBillLineItems = await context.BillLineItems.AnyAsync(x => x.CostCenterId == command.Id, ct).ConfigureAwait(false);
 
-        if (hasChildren || hasJournalLines || hasPrepaidExpenses || hasProjectCosts || hasProjectCostEntries || hasBillLineItems)
+        if (hasChildren || hasJournalLines || hasPrepaidExpenses || hasProjectCosts || hasBillLineItems)
             throw new BadRequestException("Cannot delete cost center with dependent records. Remove or reassign dependent records first.");
         
         context.CostCenters.Remove(entity);

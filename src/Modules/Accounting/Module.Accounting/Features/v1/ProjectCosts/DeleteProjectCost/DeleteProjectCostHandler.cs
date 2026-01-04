@@ -14,10 +14,8 @@ public class DeleteProjectCostHandler(AccountingDbContext context) : ICommandHan
         var entity = await context.ProjectCosts.FindAsync(command.Id, ct)
             ?? throw new NotFoundException("ProjectCost not found");
 
-        // Business rule: cannot delete a project cost that has project cost entries
-        var hasEntries = await context.ProjectCostEntries.AnyAsync(e => e.ProjectCostId == command.Id, ct).ConfigureAwait(false);
-        if (hasEntries)
-            throw new BadRequestException("Cannot delete project cost with existing cost entries. Please remove or reassign the entries first.");
+        // TODO: enforce deletion constraints once ProjectCostEntry is implemented
+        // (Currently there is no ProjectCostEntry entity; re-add this check when implemented)
         
         context.ProjectCosts.Remove(entity);
         await context.SaveChangesAsync(ct);

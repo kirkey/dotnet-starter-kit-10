@@ -12,7 +12,7 @@ public class CreateConsumptionHandler(AccountingDbContext context, ICurrentUser 
 {
     public async ValueTask<Guid> Handle(CreateConsumptionCommand command, CancellationToken ct)
     {
-        var entity = Consumption.Create(
+        var entity = FSH.Module.Accounting.Domain.Consumption.Create(
             command.Name,
             currentUser.GetTenant() ?? "root",
             currentUser.GetUserId(),

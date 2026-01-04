@@ -254,6 +254,10 @@ public static class AccountingPermissionConstants
         public const string Clear = "Permissions.Accounting.Checks.Clear";
         public const string StopPayment = "Permissions.Accounting.Checks.StopPayment";
         public const string Print = "Permissions.Accounting.Checks.Print";
+        // Added standard CRUD permissions
+        public const string Create = "Permissions.Accounting.Checks.Create";
+        public const string Update = "Permissions.Accounting.Checks.Update";
+        public const string Delete = "Permissions.Accounting.Checks.Delete";
     }
 
     /// <summary>Permissions for Payment management</summary>

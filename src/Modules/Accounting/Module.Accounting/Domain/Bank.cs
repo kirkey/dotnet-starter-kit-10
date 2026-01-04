@@ -1,3 +1,5 @@
+using FSH.Framework.Core.Exceptions;
+
 namespace FSH.Module.Accounting.Domain;
 
 /// <summary>
