@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Bills.DeleteBill;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Bills.DeleteBill;
-
-public record DeleteBillCommand(Guid Id) : ICommand;
 
 public class DeleteBillHandler(AccountingDbContext context) : ICommandHandler<DeleteBillCommand>
 {

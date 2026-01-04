@@ -1,25 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Payments.UpdatePayment;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Payments.UpdatePayment;
-
-/// <summary>
-/// Update Payment command DTO.
-/// 
-/// **Purpose:**
-/// Encapsulates the request to update a Payment's metadata.
-/// Updates to allocations and amounts are managed separately.
-/// 
-/// **Parameters:**
-/// - Id: The Payment ID to update
-/// - Name: Payment identifier/name
-/// - Description: Optional description
-/// 
-/// **Multi-Tenancy:**
-/// Tenant context is automatically applied via DbContext filters.
-/// </summary>
-public record UpdatePaymentCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 /// <summary>
 /// Handler for updating a Payment.

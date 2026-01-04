@@ -11,13 +11,15 @@ public static class ExportBankReconciliationEndpoint
 {
     public static RouteHandlerBuilder MapExportBankReconciliationEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        return endpoints.MapPost("/{id:guid}/", async (
+        return endpoints.MapGet("/{id:guid}/export", async (
             Guid id,
+            string format,
             IMediator mediator,
             CancellationToken ct) =>
         {
-            await mediator.Send(new ExportBankReconciliationCommand(id), ct);
-            return TypedResults.Ok();
+            var query = new ExportBankReconciliationQuery(id, format);
+            var result = await mediator.Send(query, ct);
+            return Results.File(result.Data, result.ContentType, result.FileName);
         })
         .WithName(nameof(ExportBankReconciliationEndpoint))
         .WithSummary("Export BankReconciliation")

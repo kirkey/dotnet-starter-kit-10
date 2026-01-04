@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Bills.ApproveBill;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Bills.ApproveBill;
-
-public record ApproveBillCommand(Guid Id) : ICommand;
 
 public class ApproveBillHandler(AccountingDbContext context) 
     : ICommandHandler<ApproveBillCommand>

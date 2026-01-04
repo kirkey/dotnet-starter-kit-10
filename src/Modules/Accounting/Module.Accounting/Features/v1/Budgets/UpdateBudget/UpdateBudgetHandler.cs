@@ -1,16 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Budgets.UpdateBudget;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Budgets.UpdateBudget;
-
-/// <summary>
-/// Command to update budget metadata (Name, Description).
-/// </summary>
-/// <param name="Id">Budget ID to update</param>
-/// <param name="Name">Updated budget name</param>
-/// <param name="Description">Updated description or null</param>
-public record UpdateBudgetCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 /// <summary>
 /// Handler for updating budget header fields.

@@ -1,21 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.Bills;
+using FSH.Module.Accounting.Contracts.v1.Bills.GetListBill;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Bills.GetBills;
-
-public record GetBillsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<BillsPagedResponse>;
-
-public record BillsPagedResponse(
-    List<BillSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetBillsHandler(AccountingDbContext context) 
     : IQueryHandler<GetBillsQuery, BillsPagedResponse>

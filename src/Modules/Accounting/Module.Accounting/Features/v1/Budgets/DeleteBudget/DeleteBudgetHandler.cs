@@ -1,14 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Budgets.DeleteBudget;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Budgets.DeleteBudget;
-
-/// <summary>
-/// Command to delete a budget header.
-/// </summary>
-/// <param name="Id">Budget ID to delete</param>
-public record DeleteBudgetCommand(Guid Id) : ICommand;
 
 /// <summary>
 /// Handler for deleting a budget.

@@ -1,28 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Payments.DeletePayment;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Payments.DeletePayment;
-
-/// <summary>
-/// Delete Payment command DTO.
-/// 
-/// **Purpose:**
-/// Encapsulates the request to delete a Payment.
-/// Can only delete unapplied payments (no allocations).
-/// 
-/// **Parameters:**
-/// - Id: The unique identifier of the Payment to delete
-/// 
-/// **Multi-Tenancy:**
-/// Tenant context is automatically applied via DbContext filters.
-/// 
-/// **Validation:**
-/// The handler validates:
-/// - Payment exists in the current tenant
-/// - Payment has no active allocations
-/// </summary>
-public record DeletePaymentCommand(Guid Id) : ICommand;
 
 /// <summary>
 /// Handler for deleting a Payment.

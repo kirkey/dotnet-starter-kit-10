@@ -1,15 +1,10 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Budgets.ApproveBudget;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Budgets.ApproveBudget;
-
-/// <summary>
-/// Command to approve a budget (state transition to Approved).
-/// </summary>
-/// <param name="Id">Budget ID to approve</param>
-public record ApproveBudgetCommand(Guid Id) : ICommand;
 
 /// <summary>
 /// Handler for approving a budget. This should mark the budget as Approved and record approver metadata.

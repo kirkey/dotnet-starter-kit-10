@@ -1,16 +1,10 @@
 using FSH.Framework.Shared.Identity;
+using FSH.Module.Accounting.Contracts.v1.Budgets.CreateBudget;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Budgets.CreateBudget;
-
-/// <summary>
-/// Command to create a new budget header.
-/// </summary>
-/// <param name="Name">Budget name or label (required)</param>
-/// <param name="Description">Optional description for the budget</param>
-public record CreateBudgetCommand(string Name, string? Description) : ICommand<Guid>;
 
 /// <summary>
 /// Handler for creating a Budget aggregate using the domain factory.

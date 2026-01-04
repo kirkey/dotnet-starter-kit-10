@@ -4,6 +4,7 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.JournalEntries.PostJournalEntry;
 
 namespace FSH.Module.Accounting.Features.v1.JournalEntries.PostJournalEntry;
 
@@ -26,8 +27,6 @@ namespace FSH.Module.Accounting.Features.v1.JournalEntries.PostJournalEntry;
 /// **Multi-Tenancy:**
 /// Tenant context is automatically applied via DbContext filters.
 /// </summary>
-public record PostJournalEntryCommand(Guid Id) : ICommand;
-
 /// <summary>
 /// Handler for posting a Journal Entry.
 /// 

@@ -1,20 +1,10 @@
 using FSH.Framework.Shared.Identity;
+using FSH.Module.Accounting.Contracts.v1.JournalEntries.CreateJournalEntry;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.JournalEntries.CreateJournalEntry;
-
-public record CreateJournalEntryCommand(
-    string EntryNumber,
-    DateTime EntryDate,
-    string EntryType,
-    string ReferenceNumber,
-    Guid FiscalPeriodId,
-    string? ReferenceType = null,
-    string? Description = null,
-    string? Notes = null,
-    string? Memo = null) : ICommand<Guid>;
 
 public class CreateJournalEntryHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateJournalEntryCommand, Guid>

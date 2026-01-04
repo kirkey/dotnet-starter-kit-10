@@ -1,27 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Payments.ApprovePayment;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Payments.ApprovePayment;
-
-/// <summary>
-/// Approve Payment command DTO.
-/// 
-/// **Purpose:**
-/// Encapsulates the request to approve a Payment.
-/// Approval may be required before payment posting to GL.
-/// 
-/// **Parameters:**
-/// - Id: The Payment ID to approve
-/// 
-/// **Business Constraints:**
-/// - Payment must exist
-/// - May require approval authority
-/// 
-/// **Multi-Tenancy:**
-/// Tenant context is automatically applied via DbContext filters.
-/// </summary>
-public record ApprovePaymentCommand(Guid Id) : ICommand;
 
 /// <summary>
 /// Handler for approving a Payment.

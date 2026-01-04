@@ -1,6 +1,7 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.JournalEntries.DeleteJournalEntry;
 
 namespace FSH.Module.Accounting.Features.v1.JournalEntries.DeleteJournalEntry;
 
@@ -22,8 +23,6 @@ namespace FSH.Module.Accounting.Features.v1.JournalEntries.DeleteJournalEntry;
 /// - Entry exists in the current tenant
 /// - Entry status is Draft (cannot delete Posted or Approved entries)
 /// </summary>
-public record DeleteJournalEntryCommand(Guid Id) : ICommand;
-
 /// <summary>
 /// Handler for deleting a Journal Entry.
 /// 

@@ -428,6 +428,7 @@ public class AccountingModule : IModule
         glGroup.MapGetGeneralLedgerEndpoint();
         glGroup.MapGetGeneralLedgersEndpoint();
         glGroup.MapExportGeneralLedgerEndpoint();
+        glGroup.MapRecalculateBalancesEndpoint();
 
         // Journal Entries
         RouteGroupBuilder journalGroup = group.MapGroup("/journalentries");
@@ -591,6 +592,8 @@ public class AccountingModule : IModule
         bankReconGroup.MapGetBankReconciliationsEndpoint();
         bankReconGroup.MapApproveBankReconciliationEndpoint();
         bankReconGroup.MapExportBankReconciliationEndpoint();
+        bankReconGroup.MapAddBankReconciliationLineEndpoint();
+        bankReconGroup.MapRemoveBankReconciliationLineEndpoint();
 
         // Checks
         RouteGroupBuilder checkGroup = group.MapGroup("/checks");

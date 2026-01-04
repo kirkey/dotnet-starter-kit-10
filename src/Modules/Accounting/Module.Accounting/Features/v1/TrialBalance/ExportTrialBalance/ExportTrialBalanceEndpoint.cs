@@ -11,13 +11,15 @@ public static class ExportTrialBalanceEndpoint
 {
     public static RouteHandlerBuilder MapExportTrialBalanceEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        return endpoints.MapPost("/{id:guid}/", async (
+        return endpoints.MapGet("/{id:guid}/export", async (
             Guid id,
+            string format,
             IMediator mediator,
             CancellationToken ct) =>
         {
-            await mediator.Send(new ExportTrialBalanceCommand(id), ct);
-            return TypedResults.Ok();
+            var query = new ExportTrialBalanceQuery(id, format);
+            var result = await mediator.Send(query, ct);
+            return Results.File(result.Data, result.ContentType, result.FileName);
         })
         .WithName(nameof(ExportTrialBalanceEndpoint))
         .WithSummary("Export TrialBalance")

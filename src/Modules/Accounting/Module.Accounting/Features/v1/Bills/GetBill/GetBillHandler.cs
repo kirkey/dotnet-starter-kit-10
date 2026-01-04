@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.Bills;
+using FSH.Module.Accounting.Contracts.v1.Bills.GetBill;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Bills.GetBill;
-
-public record GetBillQuery(Guid Id) : IQuery<BillDto>;
 
 public class GetBillHandler(AccountingDbContext context) : IQueryHandler<GetBillQuery, BillDto>
 {

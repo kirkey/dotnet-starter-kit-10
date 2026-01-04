@@ -1,4 +1,3 @@
-// TODO: Implement Export endpoint for GeneralLedger
 using FSH.Framework.Shared.Identity.Authorization;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
@@ -11,13 +10,15 @@ public static class ExportGeneralLedgerEndpoint
 {
     public static RouteHandlerBuilder MapExportGeneralLedgerEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        return endpoints.MapPost("/{id:guid}/", async (
+        return endpoints.MapGet("/{id:guid}/export", async (
             Guid id,
+            string format,
             IMediator mediator,
             CancellationToken ct) =>
         {
-            await mediator.Send(new ExportGeneralLedgerCommand(id), ct);
-            return TypedResults.Ok();
+            var query = new ExportGeneralLedgerQuery(id, format);
+            var result = await mediator.Send(query, ct);
+            return Results.File(result.Data, result.ContentType, result.FileName);
         })
         .WithName(nameof(ExportGeneralLedgerEndpoint))
         .WithSummary("Export GeneralLedger")

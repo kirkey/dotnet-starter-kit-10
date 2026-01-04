@@ -1,36 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.Payments;
+using FSH.Module.Accounting.Contracts.v1.Payments.GetListPayment;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Payments.GetPayments;
-
-/// <summary>
-/// Get Payments list query DTO.
-/// 
-/// **Purpose:**
-/// Encapsulates the request to retrieve a paginated list of Payments with filtering.
-/// 
-/// **Parameters:**
-/// - Page: Page number for pagination (default: 1)
-/// - PageSize: Number of items per page (default: 10)
-/// - SearchTerm: Text search across Payment Name
-/// - IsActive: Filter by active status (null = all)
-/// 
-/// **Multi-Tenancy:**
-/// Tenant context is automatically applied via query filters.
-/// </summary>
-public record GetPaymentsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<PaymentsPagedResponse>;
-
-public record PaymentsPagedResponse(
-    List<PaymentSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 /// <summary>
 /// Handler for retrieving paginated list of Payments.

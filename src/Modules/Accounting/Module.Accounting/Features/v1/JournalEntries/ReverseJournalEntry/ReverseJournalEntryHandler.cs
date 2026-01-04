@@ -4,6 +4,7 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.JournalEntries.ReverseJournalEntry;
 
 namespace FSH.Module.Accounting.Features.v1.JournalEntries.ReverseJournalEntry;
 
@@ -26,8 +27,6 @@ namespace FSH.Module.Accounting.Features.v1.JournalEntries.ReverseJournalEntry;
 /// **Multi-Tenancy:**
 /// Tenant context is automatically applied via DbContext filters.
 /// </summary>
-public record ReverseJournalEntryCommand(Guid Id) : ICommand;
-
 /// <summary>
 /// Handler for reversing a Journal Entry.
 /// 

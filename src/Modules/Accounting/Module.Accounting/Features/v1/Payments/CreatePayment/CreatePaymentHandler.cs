@@ -1,30 +1,10 @@
 using FSH.Framework.Shared.Identity;
+using FSH.Module.Accounting.Contracts.v1.Payments.CreatePayment;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Payments.CreatePayment;
-
-/// <summary>
-/// Create Payment command DTO.
-/// 
-/// **Purpose:**
-/// Encapsulates the request to create a new Payment record.
-/// Payments represent cash flows (checks, ACH, credit card, wire transfers, etc.).
-/// 
-/// **Parameters:**
-/// - Name: Payment identifier/name (e.g., "Check #1234", "ACH Transfer 01-15")
-/// - Description: Optional description of the payment
-/// 
-/// **Multi-Tenancy:**
-/// Tenant is automatically assigned from the current user context.
-/// 
-/// **Validation:**
-/// Validated by CreatePaymentCommandValidator to ensure:
-/// - Name is not empty and unique (within context)
-/// - Description length is reasonable
-/// </summary>
-public record CreatePaymentCommand(string Name, string? Description) : ICommand<Guid>;
 
 /// <summary>
 /// Handler for creating a new Payment.

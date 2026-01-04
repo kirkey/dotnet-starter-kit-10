@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Bills.UpdateBill;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Bills.UpdateBill;
-
-public record UpdateBillCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdateBillHandler(AccountingDbContext context) : ICommandHandler<UpdateBillCommand, Guid>
 {

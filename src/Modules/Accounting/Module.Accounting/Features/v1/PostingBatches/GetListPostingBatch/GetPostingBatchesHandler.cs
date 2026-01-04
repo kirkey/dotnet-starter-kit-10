@@ -1,24 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.PostingBatches;
+using FSH.Module.Accounting.Contracts.v1.PostingBatches.GetListPostingBatch;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.PostingBatches.GetListPostingBatch;
-
-public record GetPostingBatchesQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null,
-    string? Status = null,
-    DateTime? FromDate = null,
-    DateTime? ToDate = null) : IQuery<PostingBatchesPagedResponse>;
-
-public record PostingBatchesPagedResponse(
-    List<PostingBatchSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetPostingBatchesHandler(AccountingDbContext context) 
     : IQueryHandler<GetPostingBatchesQuery, PostingBatchesPagedResponse>

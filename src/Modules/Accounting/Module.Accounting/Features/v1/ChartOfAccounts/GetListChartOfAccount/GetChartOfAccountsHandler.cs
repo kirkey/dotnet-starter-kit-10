@@ -1,44 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.ChartOfAccounts;
+using FSH.Module.Accounting.Contracts.v1.ChartOfAccounts.GetChartOfAccounts;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.ChartOfAccounts.GetChartOfAccounts;
-
-/// <summary>
-/// Get Chart of Accounts list query DTO.
-/// 
-/// **Purpose:**
-/// Encapsulates the request to retrieve a paginated list of Chart of Accounts with filtering and sorting.
-/// 
-/// **Parameters:**
-/// - Page: Page number for pagination (default: 1)
-/// - PageSize: Number of items per page (default: 10)
-/// - SearchTerm: Text search across AccountCode and AccountName
-/// - IsActive: Filter by active status (null = all)
-/// - AccountType: Filter by account type (Asset, Liability, Equity, Revenue, Expense, etc.)
-/// 
-/// **Multi-Tenancy:**
-/// Tenant context is automatically applied via query filters.
-/// 
-/// **Filtering:**
-/// Supports multiple filter combinations:
-/// - Text search on AccountCode and AccountName
-/// - Active/Inactive status filtering
-/// - Account type classification filtering
-/// </summary>
-public record GetChartOfAccountsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null,
-    string? AccountType = null) : IQuery<ChartOfAccountsPagedResponse>;
-
-public record ChartOfAccountsPagedResponse(
-    List<ChartOfAccountSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 /// <summary>
 /// Handler for retrieving paginated list of Chart of Accounts.

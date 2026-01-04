@@ -1,44 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.JournalEntries.UpdateJournalEntry;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.JournalEntries.UpdateJournalEntry;
-
-/// <summary>
-/// Update Journal Entry command DTO.
-/// 
-/// **Purpose:**
-/// Encapsulates the request to update metadata of a Journal Entry (before posting).
-/// Note: Line items cannot be updated after creation; delete and recreate instead.
-/// 
-/// **Parameters:**
-/// - Id: The Journal Entry ID to update
-/// - EntryNumber: Unique entry reference number
-/// - EntryDate: Date the entry was recorded
-/// - EntryType: Type of entry (Manual, Automatic, Adjustment, etc.)
-/// - ReferenceNumber: External reference (invoice, check, etc.)
-/// - FiscalPeriodId: Fiscal period for the entry
-/// - ReferenceType, Description, Notes, Memo: Descriptive fields
-/// 
-/// **Constraints:**
-/// - Can only be updated if Status is Draft
-/// - Cannot change line items via update (delete/recreate instead)
-/// - FiscalPeriodId cannot change if entry is locked
-/// 
-/// **Multi-Tenancy:**
-/// Tenant context is automatically applied via DbContext filters.
-/// </summary>
-public record UpdateJournalEntryCommand(
-    Guid Id,
-    string EntryNumber,
-    DateTime EntryDate,
-    string EntryType,
-    string ReferenceNumber,
-    Guid FiscalPeriodId,
-    string? ReferenceType = null,
-    string? Description = null,
-    string? Notes = null,
-    string? Memo = null) : ICommand<Guid>;
 
 /// <summary>
 /// Handler for updating a Journal Entry.

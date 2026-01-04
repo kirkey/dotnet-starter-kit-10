@@ -6,8 +6,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.TrialBalance.GenerateTrialBalance;
 
+/// <summary>
+/// Command to generate or refresh a Trial Balance report for a specified TrialBalance entity.
+/// </summary>
+/// <param name="Id">TrialBalance entity Id</param>
 public record GenerateTrialBalanceCommand(Guid Id) : ICommand;
 
+/// <summary>
+/// Handler for generating a Trial Balance report using the trial balance report service.
+/// </summary>
+/// <remarks>
+/// Responsibility: Validate TrialBalance entity presence and invoke report generation logic (AsOf date currently set to now).
+/// 
+/// Execution Flow:
+/// 1. Validate TrialBalance entity exists
+/// 2. Call reportService.GenerateReportAsync(asOfDate, options)
+/// 3. (Optional) Persist or return generated report (TODO)
+/// 
+/// Notes:
+/// - The handler currently uses DateTime.UtcNow for AsOf date; consider parameterizing the command for AsOf or period
+/// 
+/// Permissions: Requires access to trial balance reporting (Reports privilege)
+/// 
+/// Exceptions:
+/// - NotFoundException: Thrown if specified TrialBalance entity not found
+/// - ReportGenerationException: Possible from underlying report service
+/// </remarks>
 public class GenerateTrialBalanceHandler(AccountingDbContext context, ITrialBalanceReportService reportService) 
     : ICommandHandler<GenerateTrialBalanceCommand>
 {
@@ -22,4 +46,4 @@ public class GenerateTrialBalanceHandler(AccountingDbContext context, ITrialBala
 
         return Unit.Value;
     }
-}
+} 

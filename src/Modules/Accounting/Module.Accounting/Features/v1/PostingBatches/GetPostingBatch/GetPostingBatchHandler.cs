@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.PostingBatches;
+using FSH.Module.Accounting.Contracts.v1.PostingBatches.GetPostingBatch;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.PostingBatches.GetPostingBatch;
-
-public record GetPostingBatchQuery(Guid Id) : IQuery<PostingBatchDto>;
 
 public class GetPostingBatchHandler(AccountingDbContext context) : IQueryHandler<GetPostingBatchQuery, PostingBatchDto>
 {

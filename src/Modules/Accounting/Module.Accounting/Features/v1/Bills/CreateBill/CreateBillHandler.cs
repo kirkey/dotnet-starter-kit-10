@@ -1,11 +1,10 @@
 using FSH.Framework.Shared.Identity;
+using FSH.Module.Accounting.Contracts.v1.Bills.CreateBill;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Bills.CreateBill;
-
-public record CreateBillCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreateBillHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateBillCommand, Guid>

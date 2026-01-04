@@ -1,45 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.Invoices;
+using FSH.Module.Accounting.Contracts.v1.Invoices.GetListInvoice;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Invoices.GetInvoices;
-
-/// <summary>
-/// Query to retrieve a paginated list of invoices with optional filtering by multiple criteria.
-/// </summary>
-/// <param name="Page">Page number for pagination (1-based, default=1)</param>
-/// <param name="PageSize">Number of items per page (default=10)</param>
-/// <param name="SearchTerm">Optional filter by InvoiceNumber, BillToName, or ReferenceNumber (contains search)</param>
-/// <param name="IsActive">Optional filter by active status (null = all)</param>
-/// <param name="InvoiceType">Optional filter by invoice type (e.g., "Sales", "Purchase")</param>
-/// <param name="Status">Optional filter by invoice status (e.g., "Draft", "Posted", "Approved", "Paid")</param>
-/// <param name="IsPaid">Optional filter by payment status (true = fully paid, false = unpaid/partial, null = all)</param>
-/// <param name="FromDate">Optional filter by invoice date >= FromDate (inclusive)</param>
-/// <param name="ToDate">Optional filter by invoice date <= ToDate (inclusive)</param>
-public record GetInvoicesQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null,
-    string? InvoiceType = null,
-    string? Status = null,
-    bool? IsPaid = null,
-    DateTime? FromDate = null,
-    DateTime? ToDate = null) : IQuery<InvoicesPagedResponse>;
-
-/// <summary>
-/// Response object for paginated invoice list with summary data.
-/// </summary>
-/// <param name="Items">List of InvoiceSummaryDto with summary fields</param>
-/// <param name="TotalCount">Total count of invoices matching filters (excluding pagination)</param>
-/// <param name="Page">Requested page number</param>
-/// <param name="PageSize">Items per page</param>
-public record InvoicesPagedResponse(
-    List<InvoiceSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 /// <summary>
 /// Handler for retrieving a paginated, filtered list of invoices with complex filtering and workflow support.
