@@ -5,6 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.GetFiscalPeriodClose;
 
+/// <summary>
+/// Query to retrieve a paginated list of FiscalPeriodClose entries with optional filtering.
+/// </summary>
+/// <param name="Page">Page number for pagination (1-based)</param>
+/// <param name="PageSize">Items per page</param>
+/// <param name="SearchTerm">Optional filter by period name or fiscal year</param>
+/// <param name="IsActive">Optional active status filter</param>
+/// <param name="FiscalYear">Optional filter by fiscal year</param>
+/// <param name="FiscalPeriodId">Optional filter by fiscal period identifier</param>
+/// <param name="Status">Optional filter by period close status (Draft, Initiated, Completed)</param>
+/// <param name="FromDate">Inclusive StartDate filter</param>
+/// <param name="ToDate">Inclusive EndDate filter</param>
 public record GetFiscalPeriodCloseQuery(
     int Page = 1,
     int PageSize = 10,
@@ -16,12 +28,27 @@ public record GetFiscalPeriodCloseQuery(
     DateTime? FromDate = null,
     DateTime? ToDate = null) : IQuery<FiscalPeriodClosePagedResponse>;
 
+/// <summary>
+/// Response for paginated FiscalPeriodClose summaries.
+/// </summary>
 public record FiscalPeriodClosePagedResponse(
     List<FiscalPeriodCloseSummaryDto> Items,
     int TotalCount,
     int Page,
     int PageSize);
 
+/// <summary>
+/// Handler for listing FiscalPeriodClose entries with basic filtering and pagination.
+/// </summary>
+/// <remarks>
+/// Responsibility: Build queryable with optional filters (SearchTerm, Status, FiscalYear, Date range), compute total count, and return paged summary DTOs ordered by StartDate DESC.
+/// 
+/// Use Cases: Period management dashboard, administrative review prior to initiating or completing close
+/// 
+/// Permissions: Requires FiscalPeriodClose.Search/View
+/// 
+/// Exceptions: None; returns empty page when no matches
+/// </remarks>
 public class GetFiscalPeriodCloseHandler(AccountingDbContext context) 
     : IQueryHandler<GetFiscalPeriodCloseQuery, FiscalPeriodClosePagedResponse>
 {

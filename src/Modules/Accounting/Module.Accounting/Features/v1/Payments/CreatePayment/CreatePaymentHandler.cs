@@ -5,11 +5,61 @@ using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Payments.CreatePayment;
 
+/// <summary>
+/// Create Payment command DTO.
+/// 
+/// **Purpose:**
+/// Encapsulates the request to create a new Payment record.
+/// Payments represent cash flows (checks, ACH, credit card, wire transfers, etc.).
+/// 
+/// **Parameters:**
+/// - Name: Payment identifier/name (e.g., "Check #1234", "ACH Transfer 01-15")
+/// - Description: Optional description of the payment
+/// 
+/// **Multi-Tenancy:**
+/// Tenant is automatically assigned from the current user context.
+/// 
+/// **Validation:**
+/// Validated by CreatePaymentCommandValidator to ensure:
+/// - Name is not empty and unique (within context)
+/// - Description length is reasonable
+/// </summary>
 public record CreatePaymentCommand(string Name, string? Description) : ICommand<Guid>;
 
+/// <summary>
+/// Handler for creating a new Payment.
+/// 
+/// **Responsibility:**
+/// Processes the CreatePaymentCommand by creating a new Payment aggregate.
+/// Initializes payment with no allocations (amount applied is zero initially).
+/// 
+/// **Execution Flow:**
+/// 1. Call Payment.Create() factory method with command data
+/// 2. Initialize payment status (Draft or Active)
+/// 3. Set amount applied to zero (allocations added separately)
+/// 4. Record creation user and tenant
+/// 5. Add to DbSet and persist
+/// 6. Return new payment ID
+/// 
+/// **Initial State:**
+/// - Status: Active (or Draft, depending on workflow)
+/// - AmountApplied: 0 (updated as allocations are added)
+/// - Allocations: Empty collection (managed separately)
+/// - IsActive: true
+/// 
+/// **Dependencies:**
+/// - AccountingDbContext: For database persistence
+/// - ICurrentUser: For accessing current user context
+/// </summary>
 public class CreatePaymentHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreatePaymentCommand, Guid>
 {
+    /// <summary>
+    /// Handles the CreatePaymentCommand to create a new payment.
+    /// </summary>
+    /// <param name="command">The command containing payment creation details</param>
+    /// <param name="ct">Cancellation token for the operation</param>
+    /// <returns>The ID of the newly created payment</returns>
     public async ValueTask<Guid> Handle(CreatePaymentCommand command, CancellationToken ct)
     {
         var entity = Payment.Create(

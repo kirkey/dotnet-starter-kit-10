@@ -5,6 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.GeneralLedger.GetListGeneralLedger;
 
+/// <summary>
+/// Query to retrieve a paginated list of General Ledger accounts with optional name search and active filter.
+/// </summary>
+/// <param name="Page">Page number for pagination (1-based)</param>
+/// <param name="PageSize">Items per page</param>
+/// <param name="SearchTerm">Optional substring search on GL Name</param>
+/// <param name="IsActive">Optional filter by active status</param>
 public record GetGeneralLedgerListQuery(
     int Page = 1,
     int PageSize = 10,
@@ -17,6 +24,18 @@ public record GeneralLedgerPagedResponse(
     int Page,
     int PageSize);
 
+/// <summary>
+/// Handler for listing General Ledger accounts with basic filtering and pagination.
+/// </summary>
+/// <remarks>
+/// Responsibility: Apply SearchTerm and IsActive filters, order by CreatedOnUtc DESC, and return paged summaries.
+/// 
+/// Returned Fields (GeneralLedgerSummaryDto): Id, Name, IsActive
+/// 
+/// Permissions: Requires GeneralLedger.Search/View
+/// 
+/// Exceptions: None; returns empty list if no matches
+/// </remarks>
 public class GetGeneralLedgerListHandler(AccountingDbContext context) 
     : IQueryHandler<GetGeneralLedgerListQuery, GeneralLedgerPagedResponse>
 {

@@ -196,8 +196,118 @@ using FSH.Module.Accounting.Features.v1.TaxCodes.GetTaxCode;
 using FSH.Module.Accounting.Features.v1.TaxCodes.GetListTaxCode;
 using FSH.Module.Accounting.Features.v1.TaxCodes.UpdateTaxCode;
 using FSH.Module.Accounting.Features.v1.TaxCodes.DeleteTaxCode;
-// TODO: Import remaining endpoint namespaces for all 50 entities
-// (Will be populated once all endpoints are reviewed and finalized)
+
+// Invoices endpoints
+using FSH.Module.Accounting.Features.v1.Invoices.CreateInvoice;
+using FSH.Module.Accounting.Features.v1.Invoices.GetInvoice;
+using FSH.Module.Accounting.Features.v1.Invoices.GetInvoices;
+using FSH.Module.Accounting.Features.v1.Invoices.UpdateInvoice;
+using FSH.Module.Accounting.Features.v1.Invoices.DeleteInvoice;
+using FSH.Module.Accounting.Features.v1.Invoices.ApproveInvoice;
+using FSH.Module.Accounting.Features.v1.Invoices.SendInvoice;
+
+// InvoiceLineItems endpoints
+using FSH.Module.Accounting.Features.v1.InvoiceLineItems.CreateInvoiceLineItem;
+using FSH.Module.Accounting.Features.v1.InvoiceLineItems.GetInvoiceLineItem;
+using FSH.Module.Accounting.Features.v1.InvoiceLineItems.GetInvoiceLineItems;
+using FSH.Module.Accounting.Features.v1.InvoiceLineItems.UpdateInvoiceLineItem;
+using FSH.Module.Accounting.Features.v1.InvoiceLineItems.DeleteInvoiceLineItem;
+
+// BillLineItems endpoints
+using FSH.Module.Accounting.Features.v1.BillLineItems.CreateBillLineItem;
+using FSH.Module.Accounting.Features.v1.BillLineItems.GetBillLineItem;
+using FSH.Module.Accounting.Features.v1.BillLineItems.GetBillLineItems;
+using FSH.Module.Accounting.Features.v1.BillLineItems.UpdateBillLineItem;
+using FSH.Module.Accounting.Features.v1.BillLineItems.DeleteBillLineItem;
+
+// CreditMemos endpoints
+using FSH.Module.Accounting.Features.v1.CreditMemos.CreateCreditMemo;
+using FSH.Module.Accounting.Features.v1.CreditMemos.GetCreditMemo;
+using FSH.Module.Accounting.Features.v1.CreditMemos.GetCreditMemos;
+using FSH.Module.Accounting.Features.v1.CreditMemos.UpdateCreditMemo;
+using FSH.Module.Accounting.Features.v1.CreditMemos.DeleteCreditMemo;
+using FSH.Module.Accounting.Features.v1.CreditMemos.ApproveCreditMemo;
+
+// DebitMemos endpoints
+using FSH.Module.Accounting.Features.v1.DebitMemos.CreateDebitMemo;
+using FSH.Module.Accounting.Features.v1.DebitMemos.GetDebitMemo;
+using FSH.Module.Accounting.Features.v1.DebitMemos.GetDebitMemos;
+using FSH.Module.Accounting.Features.v1.DebitMemos.UpdateDebitMemo;
+using FSH.Module.Accounting.Features.v1.DebitMemos.DeleteDebitMemo;
+using FSH.Module.Accounting.Features.v1.DebitMemos.ApproveDebitMemo;
+
+// AccountReconciliations endpoints
+using FSH.Module.Accounting.Features.v1.AccountReconciliations.CreateAccountReconciliation;
+using FSH.Module.Accounting.Features.v1.AccountReconciliations.GetAccountReconciliation;
+using FSH.Module.Accounting.Features.v1.AccountReconciliations.GetAccountReconciliations;
+using FSH.Module.Accounting.Features.v1.AccountReconciliations.ApproveAccountReconciliation;
+
+// Payees endpoints
+using FSH.Module.Accounting.Features.v1.Payees.CreatePayee;
+using FSH.Module.Accounting.Features.v1.Payees.GetPayee;
+using FSH.Module.Accounting.Features.v1.Payees.GetPayees;
+using FSH.Module.Accounting.Features.v1.Payees.UpdatePayee;
+using FSH.Module.Accounting.Features.v1.Payees.DeletePayee;
+
+// SecurityDeposits endpoints
+using FSH.Module.Accounting.Features.v1.SecurityDeposits.CreateSecurityDeposit;
+using FSH.Module.Accounting.Features.v1.SecurityDeposits.GetSecurityDeposit;
+using FSH.Module.Accounting.Features.v1.SecurityDeposits.GetSecurityDeposits;
+using FSH.Module.Accounting.Features.v1.SecurityDeposits.UpdateSecurityDeposit;
+using FSH.Module.Accounting.Features.v1.SecurityDeposits.DeleteSecurityDeposit;
+using FSH.Module.Accounting.Features.v1.SecurityDeposits.RefundSecurityDeposit;
+
+// WriteOffs endpoints
+using FSH.Module.Accounting.Features.v1.WriteOffs.CreateWriteOff;
+using FSH.Module.Accounting.Features.v1.WriteOffs.GetWriteOff;
+using FSH.Module.Accounting.Features.v1.WriteOffs.GetWriteOffs;
+using FSH.Module.Accounting.Features.v1.WriteOffs.ApproveWriteOff;
+using FSH.Module.Accounting.Features.v1.WriteOffs.ReverseWriteOff;
+
+// DepreciationMethods endpoints
+using FSH.Module.Accounting.Features.v1.DepreciationMethods.CreateDepreciationMethod;
+using FSH.Module.Accounting.Features.v1.DepreciationMethods.GetDepreciationMethod;
+using FSH.Module.Accounting.Features.v1.DepreciationMethods.GetDepreciationMethods;
+using FSH.Module.Accounting.Features.v1.DepreciationMethods.UpdateDepreciationMethod;
+using FSH.Module.Accounting.Features.v1.DepreciationMethods.DeleteDepreciationMethod;
+
+// PrepaidExpenses endpoints
+using FSH.Module.Accounting.Features.v1.PrepaidExpenses.CreatePrepaidExpense;
+using FSH.Module.Accounting.Features.v1.PrepaidExpenses.GetPrepaidExpense;
+using FSH.Module.Accounting.Features.v1.PrepaidExpenses.GetPrepaidExpenses;
+using FSH.Module.Accounting.Features.v1.PrepaidExpenses.UpdatePrepaidExpense;
+using FSH.Module.Accounting.Features.v1.PrepaidExpenses.DeletePrepaidExpense;
+using FSH.Module.Accounting.Features.v1.PrepaidExpenses.AmortizePrepaidExpense;
+
+// Accruals endpoints
+using FSH.Module.Accounting.Features.v1.Accruals.CreateAccrual;
+using FSH.Module.Accounting.Features.v1.Accruals.GetAccrual;
+using FSH.Module.Accounting.Features.v1.Accruals.GetAccruals;
+using FSH.Module.Accounting.Features.v1.Accruals.UpdateAccrual;
+using FSH.Module.Accounting.Features.v1.Accruals.DeleteAccrual;
+
+// DeferredRevenue endpoints
+using FSH.Module.Accounting.Features.v1.DeferredRevenue.CreateDeferredRevenue;
+using DeferredRevenueGetById = FSH.Module.Accounting.Features.v1.DeferredRevenue.GetDeferredRevenue;
+using DeferredRevenueGetList = FSH.Module.Accounting.Features.v1.DeferredRevenue.GetDeferredRevenue;
+using FSH.Module.Accounting.Features.v1.DeferredRevenue.UpdateDeferredRevenue;
+using FSH.Module.Accounting.Features.v1.DeferredRevenue.DeleteDeferredRevenue;
+using FSH.Module.Accounting.Features.v1.DeferredRevenue.RecognizeDeferredRevenue;
+
+// RegulatoryReports endpoints
+using FSH.Module.Accounting.Features.v1.RegulatoryReports.GetRegulatoryReport;
+using FSH.Module.Accounting.Features.v1.RegulatoryReports.GetRegulatoryReports;
+using FSH.Module.Accounting.Features.v1.RegulatoryReports.GenerateRegulatoryReport;
+using FSH.Module.Accounting.Features.v1.RegulatoryReports.SubmitRegulatoryReport;
+using FSH.Module.Accounting.Features.v1.RegulatoryReports.ExportRegulatoryReport;
+
+// InterCompanyTransactions endpoints
+using FSH.Module.Accounting.Features.v1.InterCompanyTransactions.CreateInterCompanyTransaction;
+using FSH.Module.Accounting.Features.v1.InterCompanyTransactions.GetInterCompanyTransaction;
+using FSH.Module.Accounting.Features.v1.InterCompanyTransactions.GetInterCompanyTransactions;
+using FSH.Module.Accounting.Features.v1.InterCompanyTransactions.UpdateInterCompanyTransaction;
+using FSH.Module.Accounting.Features.v1.InterCompanyTransactions.DeleteInterCompanyTransaction;
+using FSH.Module.Accounting.Features.v1.InterCompanyTransactions.ReconcileInterCompanyTransaction;
 
 namespace FSH.Module.Accounting;
 
@@ -410,12 +520,22 @@ public class AccountingModule : IModule
         arGroup.MapDeleteAccountsReceivableAccountEndpoint();
 
         // Invoices
-        // TODO: Map Invoice endpoints (Create, Get, GetList, Update, Delete, Approve, Send)
-        // RouteGroupBuilder invoiceGroup = group.MapGroup("/invoices");
+        RouteGroupBuilder invoiceGroup = group.MapGroup("/invoices");
+        invoiceGroup.MapCreateInvoiceEndpoint();
+        invoiceGroup.MapGetInvoiceEndpoint();
+        invoiceGroup.MapGetInvoicesEndpoint();
+        invoiceGroup.MapUpdateInvoiceEndpoint();
+        invoiceGroup.MapDeleteInvoiceEndpoint();
+        invoiceGroup.MapApproveInvoiceEndpoint();
+        invoiceGroup.MapSendInvoiceEndpoint();
 
         // Invoice Line Items
-        // TODO: Map InvoiceLineItem endpoints
-        // RouteGroupBuilder invoiceLinesGroup = group.MapGroup("/invoicelineitems");
+        RouteGroupBuilder invoiceLinesGroup = group.MapGroup("/invoicelineitems");
+        invoiceLinesGroup.MapCreateInvoiceLineItemEndpoint();
+        invoiceLinesGroup.MapGetInvoiceLineItemEndpoint();
+        invoiceLinesGroup.MapGetInvoiceLineItemsEndpoint();
+        invoiceLinesGroup.MapUpdateInvoiceLineItemEndpoint();
+        invoiceLinesGroup.MapDeleteInvoiceLineItemEndpoint();
 
         // Bills
         RouteGroupBuilder billGroup = group.MapGroup("/bills");
@@ -427,16 +547,30 @@ public class AccountingModule : IModule
         billGroup.MapApproveBillEndpoint();
 
         // Bill Line Items
-        // TODO: Map BillLineItem endpoints
-        // RouteGroupBuilder billLinesGroup = group.MapGroup("/billlineitems");
+        RouteGroupBuilder billLinesGroup = group.MapGroup("/billlineitems");
+        billLinesGroup.MapCreateBillLineItemEndpoint();
+        billLinesGroup.MapGetBillLineItemEndpoint();
+        billLinesGroup.MapGetBillLineItemsEndpoint();
+        billLinesGroup.MapUpdateBillLineItemEndpoint();
+        billLinesGroup.MapDeleteBillLineItemEndpoint();
 
         // Credit Memos
-        // TODO: Map CreditMemo endpoints (Create, Get, GetList, Update, Delete, Approve)
-        // RouteGroupBuilder creditMemoGroup = group.MapGroup("/creditmemos");
+        RouteGroupBuilder creditMemoGroup = group.MapGroup("/creditmemos");
+        creditMemoGroup.MapCreateCreditMemoEndpoint();
+        creditMemoGroup.MapGetCreditMemoEndpoint();
+        creditMemoGroup.MapGetCreditMemosEndpoint();
+        creditMemoGroup.MapUpdateCreditMemoEndpoint();
+        creditMemoGroup.MapDeleteCreditMemoEndpoint();
+        creditMemoGroup.MapApproveCreditMemoEndpoint();
 
         // Debit Memos
-        // TODO: Map DebitMemo endpoints (Create, Get, GetList, Update, Delete, Approve)
-        // RouteGroupBuilder debitMemoGroup = group.MapGroup("/debitmemos");
+        RouteGroupBuilder debitMemoGroup = group.MapGroup("/debitmemos");
+        debitMemoGroup.MapCreateDebitMemoEndpoint();
+        debitMemoGroup.MapGetDebitMemoEndpoint();
+        debitMemoGroup.MapGetDebitMemosEndpoint();
+        debitMemoGroup.MapUpdateDebitMemoEndpoint();
+        debitMemoGroup.MapDeleteDebitMemoEndpoint();
+        debitMemoGroup.MapApproveDebitMemoEndpoint();
 
         // ========================================
         // Banking & Payments Endpoints
@@ -489,20 +623,36 @@ public class AccountingModule : IModule
         paymentAllocationGroup.MapDeletePaymentAllocationEndpoint();
 
         // Account Reconciliations
-        // TODO: Map AccountReconciliation endpoints (Create, Get, GetList, Approve)
-        // RouteGroupBuilder acctReconGroup = group.MapGroup("/accountreconciliations");
+        RouteGroupBuilder acctReconGroup = group.MapGroup("/accountreconciliations");
+        acctReconGroup.MapCreateAccountReconciliationEndpoint();
+        acctReconGroup.MapGetAccountReconciliationEndpoint();
+        acctReconGroup.MapGetAccountReconciliationsEndpoint();
+        acctReconGroup.MapApproveAccountReconciliationEndpoint();
 
         // Payees
-        // TODO: Map Payee endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder payeeGroup = group.MapGroup("/payees");
+        RouteGroupBuilder payeeGroup = group.MapGroup("/payees");
+        payeeGroup.MapCreatePayeeEndpoint();
+        payeeGroup.MapGetPayeeEndpoint();
+        payeeGroup.MapGetPayeesEndpoint();
+        payeeGroup.MapUpdatePayeeEndpoint();
+        payeeGroup.MapDeletePayeeEndpoint();
 
         // Security Deposits
-        // TODO: Map SecurityDeposit endpoints (Create, Get, GetList, Update, Delete, Refund)
-        // RouteGroupBuilder securityDepositGroup = group.MapGroup("/securitydeposits");
+        RouteGroupBuilder securityDepositGroup = group.MapGroup("/securitydeposits");
+        securityDepositGroup.MapCreateSecurityDepositEndpoint();
+        securityDepositGroup.MapGetSecurityDepositEndpoint();
+        securityDepositGroup.MapGetSecurityDepositsEndpoint();
+        securityDepositGroup.MapUpdateSecurityDepositEndpoint();
+        securityDepositGroup.MapDeleteSecurityDepositEndpoint();
+        securityDepositGroup.MapRefundSecurityDepositEndpoint();
 
         // Write-Offs
-        // TODO: Map WriteOff endpoints (Create, Get, GetList, Approve, Reverse)
-        // RouteGroupBuilder writeOffGroup = group.MapGroup("/writeoffs");
+        RouteGroupBuilder writeOffGroup = group.MapGroup("/writeoffs");
+        writeOffGroup.MapCreateWriteOffEndpoint();
+        writeOffGroup.MapGetWriteOffEndpoint();
+        writeOffGroup.MapGetWriteOffsEndpoint();
+        writeOffGroup.MapApproveWriteOffEndpoint();
+        writeOffGroup.MapReverseWriteOffEndpoint();
 
         // ========================================
         // Assets & Expenses Endpoints
@@ -520,20 +670,38 @@ public class AccountingModule : IModule
         fixedAssetGroup.MapDisposeFixedAssetEndpoint();
 
         // Depreciation Methods
-        // TODO: Map DepreciationMethod endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder depreciationGroup = group.MapGroup("/depreciationmethods");
+        RouteGroupBuilder depreciationGroup = group.MapGroup("/depreciationmethods");
+        depreciationGroup.MapCreateDepreciationMethodEndpoint();
+        depreciationGroup.MapGetDepreciationMethodEndpoint();
+        depreciationGroup.MapGetDepreciationMethodsEndpoint();
+        depreciationGroup.MapUpdateDepreciationMethodEndpoint();
+        depreciationGroup.MapDeleteDepreciationMethodEndpoint();
 
         // Prepaid Expenses
-        // TODO: Map PrepaidExpense endpoints (Create, Get, GetList, Update, Delete, Amortize)
-        // RouteGroupBuilder prepaidGroup = group.MapGroup("/prepaidexpenses");
+        RouteGroupBuilder prepaidGroup = group.MapGroup("/prepaidexpenses");
+        prepaidGroup.MapCreatePrepaidExpenseEndpoint();
+        prepaidGroup.MapGetPrepaidExpenseEndpoint();
+        prepaidGroup.MapGetPrepaidExpensesEndpoint();
+        prepaidGroup.MapUpdatePrepaidExpenseEndpoint();
+        prepaidGroup.MapDeletePrepaidExpenseEndpoint();
+        prepaidGroup.MapAmortizePrepaidExpenseEndpoint();
 
         // Accruals
-        // TODO: Map Accrual endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder accrualGroup = group.MapGroup("/accruals");
+        RouteGroupBuilder accrualGroup = group.MapGroup("/accruals");
+        accrualGroup.MapCreateAccrualEndpoint();
+        accrualGroup.MapGetAccrualEndpoint();
+        accrualGroup.MapGetAccrualsEndpoint();
+        accrualGroup.MapUpdateAccrualEndpoint();
+        accrualGroup.MapDeleteAccrualEndpoint();
 
         // Deferred Revenue
-        // TODO: Map DeferredRevenue endpoints (Create, Get, GetList, Update, Delete, Recognize)
-        // RouteGroupBuilder deferredRevenueGroup = group.MapGroup("/deferredrevenue");
+        RouteGroupBuilder deferredRevenueGroup = group.MapGroup("/deferredrevenue");
+        deferredRevenueGroup.MapCreateDeferredRevenueEndpoint();
+        deferredRevenueGroup.MapGetDeferredRevenueEndpoint();
+        deferredRevenueGroup.MapGetDeferredRevenuesEndpoint();
+        deferredRevenueGroup.MapUpdateDeferredRevenueEndpoint();
+        deferredRevenueGroup.MapDeleteDeferredRevenueEndpoint();
+        deferredRevenueGroup.MapRecognizeDeferredRevenueEndpoint();
 
         // Inventory Items
         // Inventory Items
@@ -642,8 +810,12 @@ public class AccountingModule : IModule
         rateScheduleGroup.MapDeleteRateScheduleEndpoint();
 
         // Regulatory Reports
-        // TODO: Map RegulatoryReport endpoints (Get, GetList, Generate, Submit, Export)
-        // RouteGroupBuilder regulatoryGroup = group.MapGroup("/regulatoryreports");
+        RouteGroupBuilder regulatoryGroup = group.MapGroup("/regulatoryreports");
+        regulatoryGroup.MapGetRegulatoryReportEndpoint();
+        regulatoryGroup.MapGetRegulatoryReportsEndpoint();
+        regulatoryGroup.MapGenerateRegulatoryReportEndpoint();
+        regulatoryGroup.MapSubmitRegulatoryReportEndpoint();
+        regulatoryGroup.MapExportRegulatoryReportEndpoint();
 
         // ========================================
         // Projects & Tax Endpoints
@@ -667,8 +839,13 @@ public class AccountingModule : IModule
         projectCostGroup.MapDeleteProjectCostEndpoint();
 
         // InterCompany Transactions
-        // TODO: Map InterCompanyTransaction endpoints (Create, Get, GetList, Update, Delete, Reconcile)
-        // RouteGroupBuilder intercompanyGroup = group.MapGroup("/intercompanytransactions");
+        RouteGroupBuilder intercompanyGroup = group.MapGroup("/intercompanytransactions");
+        intercompanyGroup.MapCreateInterCompanyTransactionEndpoint();
+        intercompanyGroup.MapGetInterCompanyTransactionEndpoint();
+        intercompanyGroup.MapGetInterCompanyTransactionsEndpoint();
+        intercompanyGroup.MapUpdateInterCompanyTransactionEndpoint();
+        intercompanyGroup.MapDeleteInterCompanyTransactionEndpoint();
+        intercompanyGroup.MapReconcileInterCompanyTransactionEndpoint();
 
         // Tax Codes
         RouteGroupBuilder taxCodeGroup = group.MapGroup("/taxcodes");

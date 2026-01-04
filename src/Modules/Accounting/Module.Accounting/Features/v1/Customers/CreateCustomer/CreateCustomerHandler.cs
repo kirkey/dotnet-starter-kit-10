@@ -5,8 +5,35 @@ using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Customers.CreateCustomer;
 
+/// <summary>
+/// Command to create a new customer entity.
+/// </summary>
+/// <param name="Name">Customer business name or individual name (required, unique per tenant)</param>
+/// <param name="Description">Optional customer description, notes, or additional information</param>
 public record CreateCustomerCommand(string Name, string? Description) : ICommand<Guid>;
 
+/// <summary>
+/// Handler for creating a new customer using the Customer aggregate factory method.
+/// </summary>
+/// <remarks>
+/// Responsibility: Create a new customer entity with tenant and audit tracking.
+/// 
+/// Execution Flow:
+/// 1. Use Customer.Create() factory method with current user context (tenant, userId, userName)
+/// 2. Add entity to Customers DbSet
+/// 3. Persist changes to database via SaveChangesAsync
+/// 4. Return the created customer ID for result mapping
+/// 
+/// Multi-Tenancy: Tenant ID derived from ICurrentUser context (GetTenant() ?? "root")
+/// Audit Trail: CreatedBy and CreatedOnUtc tracked via factory method
+/// 
+/// Permissions: Requires authenticated user with customer creation permission
+/// 
+/// Exceptions:
+/// - NotFoundException: Not thrown; new entities cannot be missing
+/// - BadRequestException: Thrown by validation if Name is empty or invalid
+/// - DbException: Thrown if unique constraint violation occurs (duplicate customer name per tenant)
+/// </remarks>
 public class CreateCustomerHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateCustomerCommand, Guid>
 {

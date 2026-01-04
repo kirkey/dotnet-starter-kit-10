@@ -5,6 +5,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.ChartOfAccounts.GetChartOfAccounts;
 
+/// <summary>
+/// Get Chart of Accounts list query DTO.
+/// 
+/// **Purpose:**
+/// Encapsulates the request to retrieve a paginated list of Chart of Accounts with filtering and sorting.
+/// 
+/// **Parameters:**
+/// - Page: Page number for pagination (default: 1)
+/// - PageSize: Number of items per page (default: 10)
+/// - SearchTerm: Text search across AccountCode and AccountName
+/// - IsActive: Filter by active status (null = all)
+/// - AccountType: Filter by account type (Asset, Liability, Equity, Revenue, Expense, etc.)
+/// 
+/// **Multi-Tenancy:**
+/// Tenant context is automatically applied via query filters.
+/// 
+/// **Filtering:**
+/// Supports multiple filter combinations:
+/// - Text search on AccountCode and AccountName
+/// - Active/Inactive status filtering
+/// - Account type classification filtering
+/// </summary>
 public record GetChartOfAccountsQuery(
     int Page = 1,
     int PageSize = 10,
@@ -18,9 +40,56 @@ public record ChartOfAccountsPagedResponse(
     int Page,
     int PageSize);
 
+/// <summary>
+/// Handler for retrieving paginated list of Chart of Accounts.
+/// 
+/// **Responsibility:**
+/// Queries the database for Chart of Accounts with filtering, sorting, and pagination.
+/// Returns a summary DTO for each account (lighter than full entity).
+/// 
+/// **Execution Flow:**
+/// 1. Build base queryable from DbSet
+/// 2. Apply SearchTerm filter (AccountCode OR AccountName contains)
+/// 3. Apply IsActive filter (if specified)
+/// 4. Apply AccountType filter (if specified)
+/// 5. Count total matching records
+/// 6. Sort by AccountCode ascending
+/// 7. Skip and take for pagination
+/// 8. Project to summary DTOs
+/// 9. Return paged response with items and metadata
+/// 
+/// **Filtering Logic:**
+/// - SearchTerm: Case-sensitive substring match on AccountCode or AccountName
+/// - IsActive: Exact match on boolean flag
+/// - AccountType: Exact match on account type string
+/// - Multiple filters: All specified filters applied (AND logic)
+/// 
+/// **Sorting:**
+/// Primary: AccountCode (ascending)
+/// 
+/// **Pagination:**
+/// - Page: 1-indexed
+/// - PageSize: Records per page
+/// - Skip calculation: (Page - 1) * PageSize
+/// - TotalCount: Full count before pagination
+/// 
+/// **Returned Fields per Account:**
+/// - Id, AccountCode, AccountName
+/// - AccountType, Balance
+/// - IsActive
+/// 
+/// **Permissions:**
+/// Requires: Accounting.ChartOfAccount.View
+/// </summary>
 public class GetChartOfAccountsHandler(AccountingDbContext context) 
     : IQueryHandler<GetChartOfAccountsQuery, ChartOfAccountsPagedResponse>
 {
+    /// <summary>
+    /// Handles the GetChartOfAccountsQuery to retrieve a paginated list.
+    /// </summary>
+    /// <param name="query">The query containing pagination and filter parameters</param>
+    /// <param name="ct">Cancellation token for the operation</param>
+    /// <returns>Paged response with account summaries and total count</returns>
     public async ValueTask<ChartOfAccountsPagedResponse> Handle(GetChartOfAccountsQuery query, CancellationToken ct)
     {
         var queryable = context.ChartOfAccounts.AsQueryable();

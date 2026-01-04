@@ -6,8 +6,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Checks.GetCheck;
 
+/// <summary>
+/// Query to retrieve a single check by ID.
+/// </summary>
+/// <param name="Id">Check ID (Guid) to retrieve</param>
 public record GetCheckQuery(Guid Id) : IQuery<CheckDto>;
 
+/// <summary>
+/// Handler for retrieving a single check by ID with complete DTO projection.
+/// </summary>
+/// <remarks>
+/// Responsibility: Execute the check query and return a DTO with 18 returned fields.
+/// 
+/// Execution Flow:
+/// 1. Query Checks DbSet by Id using Where(x => x.Id == query.Id)
+/// 2. Project to CheckDto with 18 fields: Id, CheckNumber, CheckDate, CheckType, PayeeId, PayeeName, 
+///    BankAccountId, AccountNumber, Amount, Status, PrintedDate, ClearedDate, ClearedBy, JournalEntryId, 
+///    ReferenceNumber, Notes, IsActive, CreatedOnUtc
+/// 3. Execute FirstOrDefaultAsync() to retrieve single result
+/// 4. Throw NotFoundException if entity not found
+/// 
+/// Returned Fields (CheckDto): Id, CheckNumber, CheckDate, CheckType, PayeeId, PayeeName, 
+/// BankAccountId, AccountNumber, Amount, Status, PrintedDate, ClearedDate, ClearedBy, 
+/// JournalEntryId, ReferenceNumber, Notes, IsActive, CreatedOnUtc
+/// 
+/// Status Tracking: Check tracks lifecycle (Draft, Printed, Issued, Cleared, Voided)
+/// Reconciliation: ClearedDate and ClearedBy track bank reconciliation processing
+/// GL Link: JournalEntryId links check to corresponding GL posting
+/// 
+/// Permissions: Requires authenticated user (any authorized role)
+/// 
+/// Exceptions:
+/// - NotFoundException: Thrown if check with specified ID not found
+/// </remarks>
 public class GetCheckHandler(AccountingDbContext context) : IQueryHandler<GetCheckQuery, CheckDto>
 {
     public async ValueTask<CheckDto> Handle(GetCheckQuery query, CancellationToken ct)

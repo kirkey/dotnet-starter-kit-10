@@ -21,6 +21,18 @@ public record BankReconciliationsPagedResponse(
     int Page,
     int PageSize);
 
+/// <summary>
+/// Handler for retrieving a paginated, filtered list of bank reconciliations.
+/// </summary>
+/// <remarks>
+/// Responsibility: Apply filters (BankAccountId, Status, SearchTerm, Date range, IsActive), compute total count, and return paged summaries ordered by StatementDate DESC.
+/// 
+/// Returned Fields (BankReconciliationSummaryDto): Id, ReconciliationNumber, BankAccountId, StatementDate, StatementBalance, Difference, Status, IsActive
+/// 
+/// Use Cases: Reconciliation dashboard, outstanding reconciliations, period review
+/// 
+/// Exceptions: None; returns empty list when no matches
+/// </remarks>
 public class GetBankReconciliationsHandler(AccountingDbContext context) 
     : IQueryHandler<GetBankReconciliationsQuery, BankReconciliationsPagedResponse>
 {

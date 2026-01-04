@@ -5,10 +5,7 @@ namespace FSH.Module.Accounting.Domain;
 /// </summary>
 public class AccountReconciliation : AuditableEntity<Guid>, IMustHaveTenant
 {
-    public string Name { get; private set; } = default!;
-    public string? Description { get; private set; }
     public Guid? AccountingPeriodId { get; private set; }
-    public bool IsActive { get; private set; } = true;
     
     private AccountReconciliation() { }
     
