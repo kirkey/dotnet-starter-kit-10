@@ -11,8 +11,12 @@ public sealed class UpdateJournalEntryHandler(
         var entry = await repository.GetByIdAsync(request.Id, cancellationToken);
         if (entry == null) throw new JournalEntryNotFoundException(request.Id);
 
-        // Check if already posted
-        if (entry.IsPosted) throw new JournalEntryAlreadyPostedException(request.Id);
+        // Guard: cannot update posted/approved or reversed entries
+        if (entry.Status == "Posted" || entry.Status == "Approved")
+            throw new JournalEntryAlreadyPostedException(request.Id);
+
+        if (entry.IsReversed)
+            throw new JournalEntryCannotBeModifiedException(request.Id);
 
         // Check for duplicate reference number (excluding current entry)
         if (!string.IsNullOrEmpty(request.ReferenceNumber) && request.ReferenceNumber != entry.ReferenceNumber)

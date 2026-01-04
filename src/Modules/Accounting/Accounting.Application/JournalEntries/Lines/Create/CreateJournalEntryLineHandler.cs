@@ -19,8 +19,11 @@ public sealed class CreateJournalEntryLineHandler(
         if (journalEntry == null)
             throw new JournalEntryNotFoundException(request.JournalEntryId);
 
-        // Verify journal entry is not posted
-        if (journalEntry.IsPosted)
+        // Verify journal entry is not posted/approved or reversed
+        if (journalEntry.Status == "Posted" || journalEntry.Status == "Approved")
+            throw new JournalEntryCannotBeModifiedException(request.JournalEntryId);
+
+        if (journalEntry.IsReversed)
             throw new JournalEntryCannotBeModifiedException(request.JournalEntryId);
 
         var line = JournalEntryLine.Create(

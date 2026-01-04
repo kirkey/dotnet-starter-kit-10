@@ -22,7 +22,10 @@ public sealed class UpdateJournalEntryLineHandler(
         if (journalEntry == null)
             throw new JournalEntryNotFoundException(line.JournalEntryId);
 
-        if (journalEntry.IsPosted)
+        if (journalEntry.Status == "Posted" || journalEntry.Status == "Approved")
+            throw new JournalEntryCannotBeModifiedException(journalEntry.Id);
+
+        if (journalEntry.IsReversed)
             throw new JournalEntryCannotBeModifiedException(journalEntry.Id);
 
         line.Update(request.DebitAmount, request.CreditAmount, request.Memo, request.Reference);
