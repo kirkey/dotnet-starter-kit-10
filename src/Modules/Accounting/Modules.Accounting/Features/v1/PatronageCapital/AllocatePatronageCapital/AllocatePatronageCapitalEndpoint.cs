@@ -11,7 +11,7 @@ public static class AllocatePatronageCapitalEndpoint
 {
     public static RouteHandlerBuilder MapAllocatePatronageCapitalEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        return endpoints.MapPost("/{id:guid}/", async (
+        return endpoints.MapPost("/{id:guid}/allocate", async (
             Guid id,
             IMediator mediator,
             CancellationToken ct) =>

@@ -16,7 +16,7 @@ public static class CreateProjectCostEndpoint
             CancellationToken ct) =>
         {
             var id = await mediator.Send(command, ct);
-            return TypedResults.Created($"/api/v1/accounting//{id}", id);
+            return TypedResults.Created($"/api/v1/accounting/projectcosts/{id}", id);
         })
         .WithName(nameof(CreateProjectCostEndpoint))
         .WithSummary("Create ProjectCost")

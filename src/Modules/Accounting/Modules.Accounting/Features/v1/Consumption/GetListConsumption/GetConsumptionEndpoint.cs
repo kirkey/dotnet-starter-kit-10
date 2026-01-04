@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace FSH.Modules.Accounting.Features.v1.Consumption.GetConsumption;
+namespace FSH.Modules.Accounting.Features.v1.Consumption.GetListConsumption;
 
 public static class GetConsumptionEndpoint
 {

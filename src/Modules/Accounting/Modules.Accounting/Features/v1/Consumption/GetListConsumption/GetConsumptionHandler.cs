@@ -3,7 +3,7 @@ using FSH.Modules.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Modules.Accounting.Features.v1.Consumption.GetConsumption;
+namespace FSH.Modules.Accounting.Features.v1.Consumption.GetListConsumption;
 
 public record GetConsumptionQuery(
     int Page = 1,

@@ -11,8 +11,12 @@ public class DeletePatronageCapitalHandler(AccountingDbContext context) : IComma
     public async ValueTask<Unit> Handle(DeletePatronageCapitalCommand command, CancellationToken ct)
     {
         var entity = await context.PatronageCapital.FindAsync(command.Id, ct)
-            ?? throw new NotFoundException("PatronageCapital not found");
-        
+            ?? throw new FSH.Framework.Core.Exceptions.NotFoundException("PatronageCapital not found");
+
+        // Prevent deletion if any amount has been retired
+        if (entity.AmountRetired > 0)
+            throw new Accounting.Domain.Exceptions.CannotModifyRetiredPatronageCapitalException(entity.Id);
+
         context.PatronageCapital.Remove(entity);
         await context.SaveChangesAsync(ct);
         return Unit.Value;

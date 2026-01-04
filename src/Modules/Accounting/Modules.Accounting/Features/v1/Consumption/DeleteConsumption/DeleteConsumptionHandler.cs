@@ -1,6 +1,7 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Modules.Accounting.Data;
 using Mediator;
+using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Modules.Accounting.Features.v1.Consumption.DeleteConsumption;
 
@@ -12,6 +13,11 @@ public class DeleteConsumptionHandler(AccountingDbContext context) : ICommandHan
     {
         var entity = await context.Consumption.FindAsync(command.Id, ct)
             ?? throw new NotFoundException("Consumption not found");
+
+        // Business rule: Cannot delete consumption with associated invoices
+        var hasInvoices = await context.Invoices.AnyAsync(x => x.ConsumptionId == command.Id, ct).ConfigureAwait(false);
+        if (hasInvoices)
+            throw new BadRequestException("Cannot delete consumption with existing invoices. Please remove or reassign invoices first.");
         
         context.Consumption.Remove(entity);
         await context.SaveChangesAsync(ct);

@@ -18,6 +18,28 @@ using FSH.Modules.Accounting.Features.v1.ChartOfAccounts.GetChartOfAccounts;
 using FSH.Modules.Accounting.Features.v1.ChartOfAccounts.UpdateChartOfAccount;
 using FSH.Modules.Accounting.Features.v1.ChartOfAccounts.DeleteChartOfAccount;
 
+// Consumption endpoints
+using FSH.Modules.Accounting.Features.v1.Consumption.CreateConsumption;
+using FSH.Modules.Accounting.Features.v1.Consumption.GetConsumption;
+using FSH.Modules.Accounting.Features.v1.Consumption.GetListConsumption;
+using FSH.Modules.Accounting.Features.v1.Consumption.UpdateConsumption;
+using FSH.Modules.Accounting.Features.v1.Consumption.DeleteConsumption;
+
+// PatronageCapital endpoints
+using FSH.Modules.Accounting.Features.v1.PatronageCapital.CreatePatronageCapital;
+using FSH.Modules.Accounting.Features.v1.PatronageCapital.GetPatronageCapital;
+using FSH.Modules.Accounting.Features.v1.PatronageCapital.GetListPatronageCapital;
+using FSH.Modules.Accounting.Features.v1.PatronageCapital.UpdatePatronageCapital;
+using FSH.Modules.Accounting.Features.v1.PatronageCapital.DeletePatronageCapital;
+using FSH.Modules.Accounting.Features.v1.PatronageCapital.AllocatePatronageCapital;
+
+// FuelConsumption placeholders
+using FSH.Modules.Accounting.Features.v1.FuelConsumption.CreateFuelConsumption;
+using FSH.Modules.Accounting.Features.v1.FuelConsumption.GetFuelConsumption;
+using FSH.Modules.Accounting.Features.v1.FuelConsumption.GetListFuelConsumption;
+using FSH.Modules.Accounting.Features.v1.FuelConsumption.UpdateFuelConsumption;
+using FSH.Modules.Accounting.Features.v1.FuelConsumption.DeleteFuelConsumption;
+
 // JournalEntries endpoints
 using FSH.Modules.Accounting.Features.v1.JournalEntries.CreateJournalEntry;
 using FSH.Modules.Accounting.Features.v1.JournalEntries.GetJournalEntry;
@@ -404,8 +426,12 @@ public class AccountingModule : IModule
         // RouteGroupBuilder inventoryGroup = group.MapGroup("/inventoryitems");
 
         // Cost Centers
-        // TODO: Map CostCenter endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder costCenterGroup = group.MapGroup("/costcenters");
+        RouteGroupBuilder costCenterGroup = group.MapGroup("/costcenters");
+        costCenterGroup.MapCreateCostCenterEndpoint();
+        costCenterGroup.MapGetCostCenterEndpoint();
+        costCenterGroup.MapGetCostCentersEndpoint();
+        costCenterGroup.MapUpdateCostCenterEndpoint();
+        costCenterGroup.MapDeleteCostCenterEndpoint();
 
         // ========================================
         // Utility-Specific Endpoints
@@ -420,8 +446,12 @@ public class AccountingModule : IModule
         customerGroup.MapDeleteCustomerEndpoint();
 
         // Members
-        // TODO: Map Member endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder memberGroup = group.MapGroup("/members");
+        RouteGroupBuilder memberGroup = group.MapGroup("/members");
+        memberGroup.MapCreateMemberEndpoint();
+        memberGroup.MapGetMemberEndpoint();
+        memberGroup.MapGetMembersEndpoint();
+        memberGroup.MapUpdateMemberEndpoint();
+        memberGroup.MapDeleteMemberEndpoint();
 
         // Vendors
         RouteGroupBuilder vendorGroup = group.MapGroup("/vendors");
@@ -440,24 +470,54 @@ public class AccountingModule : IModule
         meterGroup.MapDeleteMeterEndpoint();
 
         // Consumption
-        // TODO: Map Consumption endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder consumptionGroup = group.MapGroup("/consumption");
+        RouteGroupBuilder consumptionGroup = group.MapGroup("/consumptions");
+        consumptionGroup.MapCreateConsumptionEndpoint();
+        consumptionGroup.MapGetConsumptionEndpoint();
+        consumptionGroup.MapGetConsumptionEndpoint();
+        consumptionGroup.MapUpdateConsumptionEndpoint();
+        consumptionGroup.MapDeleteConsumptionEndpoint();
 
         // Patronage Capital
-        // TODO: Map PatronageCapital endpoints (Create, Get, GetList, Update, Delete, Allocate)
-        // RouteGroupBuilder patronageGroup = group.MapGroup("/patronagecapital");
+        RouteGroupBuilder patronageGroup = group.MapGroup("/patronagecapital");
+        patronageGroup.MapCreatePatronageCapitalEndpoint();
+        patronageGroup.MapGetPatronageCapitalEndpoint();
+        patronageGroup.MapGetPatronageCapitalEndpoint();
+        patronageGroup.MapUpdatePatronageCapitalEndpoint();
+        patronageGroup.MapDeletePatronageCapitalEndpoint();
+        patronageGroup.MapAllocatePatronageCapitalEndpoint();
+
+        // Fuel Consumption (placeholder endpoints)
+        RouteGroupBuilder fuelConsumptionGroup = group.MapGroup("/fuelconsumptions");
+        fuelConsumptionGroup.MapCreateFuelConsumptionEndpoint();
+        fuelConsumptionGroup.MapGetFuelConsumptionEndpoint();
+        fuelConsumptionGroup.MapGetFuelConsumptionEndpoint();
+        fuelConsumptionGroup.MapUpdateFuelConsumptionEndpoint();
+        fuelConsumptionGroup.MapDeleteFuelConsumptionEndpoint();
 
         // Interconnection Agreements
-        // TODO: Map InterconnectionAgreement endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder interconnectionGroup = group.MapGroup("/interconnectionagreements");
+        RouteGroupBuilder interconnectionGroup = group.MapGroup("/interconnectionagreements");
+        interconnectionGroup.MapCreateInterconnectionAgreementEndpoint();
+        interconnectionGroup.MapGetInterconnectionAgreementEndpoint();
+        interconnectionGroup.MapGetInterconnectionAgreementsEndpoint();
+        interconnectionGroup.MapUpdateInterconnectionAgreementEndpoint();
+        interconnectionGroup.MapDeleteInterconnectionAgreementEndpoint();
 
         // Power Purchase Agreements
-        // TODO: Map PowerPurchaseAgreement endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder ppaGroup = group.MapGroup("/powerpurchaseagreements");
+        RouteGroupBuilder ppaGroup = group.MapGroup("/powerpurchaseagreements");
+        ppaGroup.MapCreatePowerPurchaseAgreementEndpoint();
+        ppaGroup.MapGetPowerPurchaseAgreementEndpoint();
+        ppaGroup.MapGetPowerPurchaseAgreementsEndpoint();
+        ppaGroup.MapUpdatePowerPurchaseAgreementEndpoint();
+        ppaGroup.MapDeletePowerPurchaseAgreementEndpoint();
 
         // Rate Schedules
-        // TODO: Map RateSchedule endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder rateScheduleGroup = group.MapGroup("/rateschedules");
+        // Rate Schedules
+        RouteGroupBuilder rateScheduleGroup = group.MapGroup("/rateschedules");
+        rateScheduleGroup.MapCreateRateScheduleEndpoint();
+        rateScheduleGroup.MapGetRateScheduleEndpoint();
+        rateScheduleGroup.MapGetRateSchedulesEndpoint();
+        rateScheduleGroup.MapUpdateRateScheduleEndpoint();
+        rateScheduleGroup.MapDeleteRateScheduleEndpoint();
 
         // Regulatory Reports
         // TODO: Map RegulatoryReport endpoints (Get, GetList, Generate, Submit, Export)
@@ -477,8 +537,12 @@ public class AccountingModule : IModule
         projectGroup.MapDeleteProjectEndpoint();
 
         // Project Costs
-        // TODO: Map ProjectCost endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder projectCostGroup = group.MapGroup("/projectcosts");
+        RouteGroupBuilder projectCostGroup = group.MapGroup("/projectcosts");
+        projectCostGroup.MapCreateProjectCostEndpoint();
+        projectCostGroup.MapGetProjectCostEndpoint();
+        projectCostGroup.MapGetProjectCostsEndpoint();
+        projectCostGroup.MapUpdateProjectCostEndpoint();
+        projectCostGroup.MapDeleteProjectCostEndpoint();
 
         // InterCompany Transactions
         // TODO: Map InterCompanyTransaction endpoints (Create, Get, GetList, Update, Delete, Reconcile)

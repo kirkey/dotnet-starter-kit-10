@@ -16,7 +16,7 @@ public static class CreatePowerPurchaseAgreementEndpoint
             CancellationToken ct) =>
         {
             var id = await mediator.Send(command, ct);
-            return TypedResults.Created($"/api/v1/accounting//{id}", id);
+            return TypedResults.Created($"/api/v1/accounting/powerpurchaseagreements/{id}", id);
         })
         .WithName(nameof(CreatePowerPurchaseAgreementEndpoint))
         .WithSummary("Create PowerPurchaseAgreement")

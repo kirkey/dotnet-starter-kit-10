@@ -16,7 +16,7 @@ public static class CreateRateScheduleEndpoint
             CancellationToken ct) =>
         {
             var id = await mediator.Send(command, ct);
-            return TypedResults.Created($"/api/v1/accounting//{id}", id);
+            return TypedResults.Created($"/api/v1/accounting/rateschedules/{id}", id);
         })
         .WithName(nameof(CreateRateScheduleEndpoint))
         .WithSummary("Create RateSchedule")

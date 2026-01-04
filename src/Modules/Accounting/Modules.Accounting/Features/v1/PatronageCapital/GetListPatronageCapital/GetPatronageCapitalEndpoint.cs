@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace FSH.Modules.Accounting.Features.v1.PatronageCapital.GetPatronageCapital;
+namespace FSH.Modules.Accounting.Features.v1.PatronageCapital.GetListPatronageCapital;
 
 public static class GetPatronageCapitalEndpoint
 {

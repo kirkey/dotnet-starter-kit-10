@@ -12,7 +12,11 @@ public class DeletePowerPurchaseAgreementHandler(AccountingDbContext context) : 
     {
         var entity = await context.PowerPurchaseAgreements.FindAsync(command.Id, ct)
             ?? throw new NotFoundException("PowerPurchaseAgreement not found");
-        
+
+        // Prevent deletion if contract has settlements/energy history or is active
+        if (entity.LifetimeEnergyKWh > 0 || entity.LifetimeCost > 0 || string.Equals(entity.Status, "Active", StringComparison.OrdinalIgnoreCase))
+            throw new BadRequestException("Cannot delete power purchase agreement with posted settlements, energy history, or active status");
+
         context.PowerPurchaseAgreements.Remove(entity);
         await context.SaveChangesAsync(ct);
         return Unit.Value;
