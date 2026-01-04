@@ -2,9 +2,9 @@
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.CloseAccountingPeriod;
+using FSH.Module.Accounting.Contracts.v1.AccountingPeriods.CloseAccountingPeriod;
 
-public record CloseAccountingPeriodCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.CloseAccountingPeriod;
 
 public class CloseAccountingPeriodHandler(AccountingDbContext context) 
     : ICommandHandler<CloseAccountingPeriodCommand>

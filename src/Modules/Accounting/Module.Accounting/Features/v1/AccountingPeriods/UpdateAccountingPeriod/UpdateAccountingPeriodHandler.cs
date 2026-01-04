@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.UpdateAccountingPeriod;
+using FSH.Module.Accounting.Contracts.v1.AccountingPeriods.UpdateAccountingPeriod;
 
-public record UpdateAccountingPeriodCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
+namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.UpdateAccountingPeriod;
 
 public class UpdateAccountingPeriodHandler(AccountingDbContext context) : ICommandHandler<UpdateAccountingPeriodCommand, Guid>
 {

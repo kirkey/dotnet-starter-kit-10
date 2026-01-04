@@ -3,9 +3,9 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.CreateAccountingPeriod;
+using FSH.Module.Accounting.Contracts.v1.AccountingPeriods.CreateAccountingPeriod;
 
-public record CreateAccountingPeriodCommand(string Name, string? Description) : ICommand<Guid>;
+namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.CreateAccountingPeriod;
 
 public class CreateAccountingPeriodHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateAccountingPeriodCommand, Guid>

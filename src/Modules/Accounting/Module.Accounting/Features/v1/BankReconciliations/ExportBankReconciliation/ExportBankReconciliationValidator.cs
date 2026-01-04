@@ -1,5 +1,7 @@
 using FluentValidation;
 
+using FSH.Module.Accounting.Contracts.v1.BankReconciliations.ExportBankReconciliation;
+
 namespace FSH.Module.Accounting.Features.v1.BankReconciliations.ExportBankReconciliation;
 
 public class ExportBankReconciliationValidator : AbstractValidator<ExportBankReconciliationQuery>

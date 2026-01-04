@@ -3,13 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.GetAccountingPeriods;
+using FSH.Module.Accounting.Contracts.v1.AccountingPeriods.GetListAccountingPeriod;
 
-public record GetAccountingPeriodsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<AccountingPeriodsPagedResponse>;
+namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.GetAccountingPeriods;
 
 public record AccountingPeriodsPagedResponse(
     List<AccountingPeriodSummaryDto> Items,

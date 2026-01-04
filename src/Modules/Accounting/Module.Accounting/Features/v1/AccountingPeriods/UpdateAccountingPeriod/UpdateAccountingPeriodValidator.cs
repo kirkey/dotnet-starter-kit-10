@@ -1,5 +1,7 @@
 using FluentValidation;
 
+using FSH.Module.Accounting.Contracts.v1.AccountingPeriods.UpdateAccountingPeriod;
+
 namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.UpdateAccountingPeriod;
 
 public class UpdateAccountingPeriodValidator : AbstractValidator<UpdateAccountingPeriodCommand>

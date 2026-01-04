@@ -5,13 +5,14 @@ using Accounting.Application.Reports.BankReconciliation.v1.Services;
 using Microsoft.EntityFrameworkCore;
 using FSH.Module.Accounting.Contracts.v1.BankReconciliations;
 
+using FSH.Module.Accounting.Contracts.v1.BankReconciliations.ExportBankReconciliation;
+
 namespace FSH.Module.Accounting.Features.v1.BankReconciliations.ExportBankReconciliation;
 
 /// <summary>
 /// Query to export a Bank Reconciliation report for a specific reconciliation instance.
 /// </summary>
 /// <param name="Id">BankReconciliation Id to export</param>
-public record ExportBankReconciliationQuery(Guid Id, string Format = "pdf") : IQuery<ExportBankReconciliationResult>;
 
 /// <summary>
 /// Handler for exporting bank reconciliation reports via IBankReconciliationReportService.

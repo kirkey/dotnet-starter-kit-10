@@ -4,9 +4,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.GetAccountingPeriod;
+using FSH.Module.Accounting.Contracts.v1.AccountingPeriods.GetAccountingPeriod;
 
-public record GetAccountingPeriodQuery(Guid Id) : IQuery<AccountingPeriodDto>;
+namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.GetAccountingPeriod;
 
 public class GetAccountingPeriodHandler(AccountingDbContext context) : IQueryHandler<GetAccountingPeriodQuery, AccountingPeriodDto>
 {
