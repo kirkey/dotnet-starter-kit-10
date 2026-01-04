@@ -17,6 +17,8 @@ public class Invoice : AuditableEntity<Guid>, IMustHaveTenant
     // Customer/Vendor Information
     public Guid? CustomerId { get; private set; }
     public Guid? VendorId { get; private set; }
+    public Guid? MemberId { get; private set; }
+    public Guid? ConsumptionId { get; private set; }
     public string BillToName { get; private set; } = default!;
     public string? BillToAddress { get; private set; }
     public string? ShipToName { get; private set; }
@@ -56,7 +58,6 @@ public class Invoice : AuditableEntity<Guid>, IMustHaveTenant
     
     // Audit & Status
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     // Navigation Properties
     public ICollection<InvoiceLineItem>? Lines { get; private set; }
@@ -74,6 +75,8 @@ public class Invoice : AuditableEntity<Guid>, IMustHaveTenant
         string createdByUserName,
         Guid? customerId = null,
         Guid? vendorId = null,
+        Guid? memberId = null,
+        Guid? consumptionId = null,
         string? billToAddress = null,
         string? shipToName = null,
         string? shipToAddress = null,
@@ -110,6 +113,8 @@ public class Invoice : AuditableEntity<Guid>, IMustHaveTenant
             DueDate = dueDate.Date,
             CustomerId = customerId,
             VendorId = vendorId,
+            MemberId = memberId,
+            ConsumptionId = consumptionId,
             BillToName = billToName.Trim(),
             BillToAddress = billToAddress?.Trim(),
             ShipToName = shipToName?.Trim(),
@@ -148,6 +153,8 @@ public class Invoice : AuditableEntity<Guid>, IMustHaveTenant
         string billToName,
         Guid? customerId = null,
         Guid? vendorId = null,
+        Guid? memberId = null,
+        Guid? consumptionId = null,
         string? billToAddress = null,
         string? shipToName = null,
         string? shipToAddress = null,
@@ -173,6 +180,8 @@ public class Invoice : AuditableEntity<Guid>, IMustHaveTenant
         DueDate = dueDate.Date;
         CustomerId = customerId;
         VendorId = vendorId;
+        MemberId = memberId;
+        ConsumptionId = consumptionId;
         BillToName = billToName.Trim();
         BillToAddress = billToAddress?.Trim();
         ShipToName = shipToName?.Trim();

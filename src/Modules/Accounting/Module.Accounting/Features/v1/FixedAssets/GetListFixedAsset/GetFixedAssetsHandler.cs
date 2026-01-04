@@ -40,7 +40,7 @@ public class GetFixedAssetsHandler(AccountingDbContext context)
             .OrderByDescending(x => x.CreatedOnUtc)
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize)
-            .Select(x => new FixedAssetSummaryDto(x.Id, x.Name, x.IsActive))
+            .Select(x => new FixedAssetSummaryDto(x.Id, x.Name, x.Cost, x.AccumulatedDepreciation, x.IsDisposed, x.IsActive))
             .ToListAsync(ct);
         
         return new FixedAssetsPagedResponse(items, totalCount, query.Page, query.PageSize);

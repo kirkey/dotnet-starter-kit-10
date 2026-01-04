@@ -7,8 +7,8 @@ public class CostCenter : AuditableEntity<Guid>, IMustHaveTenant
 {
     public string Name { get; private set; } = default!;
     public string? Description { get; private set; }
+    public Guid? ParentCostCenterId { get; private set; }
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     private CostCenter() { }
     
@@ -17,13 +17,15 @@ public class CostCenter : AuditableEntity<Guid>, IMustHaveTenant
         string tenantId,
         Guid createdBy,
         string createdByUserName,
-        string? description = null)
+        string? description = null,
+        Guid? parentCostCenterId = null)
     {
         return new CostCenter
         {
             Id = Guid.NewGuid(),
             Name = name,
             Description = description,
+            ParentCostCenterId = parentCostCenterId,
             IsActive = true,
             TenantId = tenantId,
             CreatedBy = createdBy,

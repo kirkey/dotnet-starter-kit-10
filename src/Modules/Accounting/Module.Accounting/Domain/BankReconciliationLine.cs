@@ -8,7 +8,6 @@ public class BankReconciliationLine : AuditableEntity<Guid>, IMustHaveTenant
     public decimal Amount { get; private set; }
     public string? Description { get; private set; }
     public bool IsCleared { get; private set; }
-    public string TenantId { get; private set; } = default!;
 
     private BankReconciliationLine() { }
 

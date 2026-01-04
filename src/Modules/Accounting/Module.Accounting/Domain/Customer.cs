@@ -7,8 +7,8 @@ public class Customer : AuditableEntity<Guid>, IMustHaveTenant
 {
     public string Name { get; private set; } = default!;
     public string? Description { get; private set; }
+    public Guid? DefaultRateScheduleId { get; private set; }
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     private Customer() { }
     
@@ -17,13 +17,15 @@ public class Customer : AuditableEntity<Guid>, IMustHaveTenant
         string tenantId,
         Guid createdBy,
         string createdByUserName,
-        string? description = null)
+        string? description = null,
+        Guid? defaultRateScheduleId = null)
     {
         return new Customer
         {
             Id = Guid.NewGuid(),
             Name = name,
             Description = description,
+            DefaultRateScheduleId = defaultRateScheduleId,
             IsActive = true,
             TenantId = tenantId,
             CreatedBy = createdBy,

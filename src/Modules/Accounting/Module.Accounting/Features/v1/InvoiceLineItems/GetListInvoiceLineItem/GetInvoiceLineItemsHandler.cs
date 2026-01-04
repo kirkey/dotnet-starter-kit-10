@@ -26,7 +26,7 @@ public class GetInvoiceLineItemsHandler(AccountingDbContext context)
         
         if (!string.IsNullOrWhiteSpace(query.SearchTerm))
         {
-            queryable = queryable.Where(x => x.Name.Contains(query.SearchTerm));
+            queryable = queryable.Where(x => x.ItemDescription.Contains(query.SearchTerm));
         }
         
         if (query.IsActive.HasValue)
@@ -40,7 +40,7 @@ public class GetInvoiceLineItemsHandler(AccountingDbContext context)
             .OrderByDescending(x => x.CreatedOnUtc)
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize)
-            .Select(x => new InvoiceLineItemSummaryDto(x.Id, x.Name, x.IsActive))
+            .Select(x => new InvoiceLineItemSummaryDto(x.Id, x.LineNumber, x.ItemDescription, x.AccountCode, x.Quantity, x.UnitPrice, x.LineTotal, x.IsActive))
             .ToListAsync(ct);
         
         return new InvoiceLineItemsPagedResponse(items, totalCount, query.Page, query.PageSize);

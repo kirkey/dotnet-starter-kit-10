@@ -8,7 +8,6 @@ public class PowerPurchaseAgreement : AuditableEntity<Guid>, IMustHaveTenant
     public string Name { get; private set; } = default!;
     public string? Description { get; private set; }
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     public decimal LifetimeEnergyKWh { get; private set; } = 0m;
     public decimal LifetimeCost { get; private set; } = 0m;
     public string Status { get; private set; } = "Draft";

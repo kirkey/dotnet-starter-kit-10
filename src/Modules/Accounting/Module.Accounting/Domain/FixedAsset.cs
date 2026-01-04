@@ -25,7 +25,6 @@ public class FixedAsset : AuditableEntity<Guid>, IMustHaveTenant
     public decimal? DisposalProceeds { get; private set; }
 
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     private FixedAsset() { }
     

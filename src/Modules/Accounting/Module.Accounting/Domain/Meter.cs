@@ -7,8 +7,8 @@ public class Meter : AuditableEntity<Guid>, IMustHaveTenant
 {
     public string Name { get; private set; } = default!;
     public string? Description { get; private set; }
+    public Guid? MemberId { get; private set; }
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     private Meter() { }
     
@@ -17,13 +17,15 @@ public class Meter : AuditableEntity<Guid>, IMustHaveTenant
         string tenantId,
         Guid createdBy,
         string createdByUserName,
-        string? description = null)
+        string? description = null,
+        Guid? memberId = null)
     {
         return new Meter
         {
             Id = Guid.NewGuid(),
             Name = name,
             Description = description,
+            MemberId = memberId,
             IsActive = true,
             TenantId = tenantId,
             CreatedBy = createdBy,

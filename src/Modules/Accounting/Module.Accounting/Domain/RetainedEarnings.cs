@@ -19,7 +19,6 @@ public class RetainedEarnings : AuditableEntity<Guid>, IMustHaveTenant
     public Guid? ClosedBy { get; private set; }
 
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     private RetainedEarnings() { }
     

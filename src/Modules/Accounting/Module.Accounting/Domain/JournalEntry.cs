@@ -39,7 +39,6 @@ public class JournalEntry : AuditableEntity<Guid>, IMustHaveTenant
     
     // Audit & Status
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     // Navigation Properties (not mapped by default)
     public ICollection<JournalEntryLine>? Lines { get; private set; }

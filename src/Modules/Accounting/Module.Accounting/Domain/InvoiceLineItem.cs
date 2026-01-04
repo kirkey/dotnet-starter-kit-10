@@ -38,7 +38,6 @@ public class InvoiceLineItem : AuditableEntity<Guid>, IMustHaveTenant
     
     // Audit & Status
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     // Navigation Properties
     public Invoice? Invoice { get; private set; }

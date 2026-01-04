@@ -37,7 +37,6 @@ public class Check : AuditableEntity<Guid>, IMustHaveTenant
 
     // Audit & Status
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
 
     private Check() { }
 

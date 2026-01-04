@@ -24,7 +24,6 @@ public class RecurringJournalEntry : AuditableEntity<Guid>, IMustHaveTenant
     public Guid? ApprovedBy { get; private set; }
     public DateTime? ApprovedOn { get; private set; }
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     private RecurringJournalEntry() { }
     

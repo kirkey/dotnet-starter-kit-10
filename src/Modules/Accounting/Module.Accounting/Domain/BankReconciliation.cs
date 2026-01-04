@@ -23,7 +23,6 @@ public class BankReconciliation : AuditableEntity<Guid>, IMustHaveTenant
 
     public string? Description { get; private set; }
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
 
     // Navigation
     public ICollection<BankReconciliationLine>? Lines { get; private set; }

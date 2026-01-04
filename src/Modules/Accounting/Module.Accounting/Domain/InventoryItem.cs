@@ -1,3 +1,5 @@
+using FSH.Framework.Core.Exceptions;
+
 namespace FSH.Module.Accounting.Domain;
 
 /// <summary>
@@ -7,8 +9,8 @@ public class InventoryItem : AuditableEntity<Guid>, IMustHaveTenant
 {
     public string Name { get; private set; } = default!;
     public string? Description { get; private set; }
+    public decimal Quantity { get; private set; }
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     private InventoryItem() { }
     
@@ -17,13 +19,15 @@ public class InventoryItem : AuditableEntity<Guid>, IMustHaveTenant
         string tenantId,
         Guid createdBy,
         string createdByUserName,
-        string? description = null)
+        string? description = null,
+        decimal quantity = 0m)
     {
         return new InventoryItem
         {
             Id = Guid.NewGuid(),
             Name = name,
             Description = description,
+            Quantity = quantity,
             IsActive = true,
             TenantId = tenantId,
             CreatedBy = createdBy,
@@ -36,6 +40,25 @@ public class InventoryItem : AuditableEntity<Guid>, IMustHaveTenant
     {
         if (!string.IsNullOrWhiteSpace(name)) Name = name;
         Description = description;
+    }
+    
+    public void AddStock(decimal quantity)
+    {
+        if (quantity <= 0)
+            throw new BadRequestException("Quantity to add must be positive");
+        
+        Quantity += quantity;
+    }
+    
+    public void ReduceStock(decimal quantity)
+    {
+        if (quantity <= 0)
+            throw new BadRequestException("Quantity to reduce must be positive");
+        
+        if (Quantity < quantity)
+            throw new BadRequestException("Insufficient stock available");
+        
+        Quantity -= quantity;
     }
     
     public void Activate() => IsActive = true;

@@ -1,6 +1,7 @@
 using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
+using DeferredRevenueEntity = FSH.Module.Accounting.Domain.DeferredRevenue;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.CreateDeferredRevenue;
@@ -12,7 +13,7 @@ public class CreateDeferredRevenueHandler(AccountingDbContext context, ICurrentU
 {
     public async ValueTask<Guid> Handle(CreateDeferredRevenueCommand command, CancellationToken ct)
     {
-        var entity = DeferredRevenue.Create(
+        var entity = DeferredRevenueEntity.Create(
             command.Name,
             currentUser.GetTenant() ?? "root",
             currentUser.GetUserId(),

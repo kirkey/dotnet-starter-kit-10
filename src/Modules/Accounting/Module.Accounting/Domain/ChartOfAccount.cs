@@ -117,7 +117,6 @@ public class ChartOfAccount : AuditableEntity<Guid>, IMustHaveTenant
     /// <summary>
     /// Tenant identifier for multi-tenancy isolation.
     /// </summary>
-    public string TenantId { get; private set; } = default!;
 
     // Parameterless constructor for EF Core
     private ChartOfAccount() { }

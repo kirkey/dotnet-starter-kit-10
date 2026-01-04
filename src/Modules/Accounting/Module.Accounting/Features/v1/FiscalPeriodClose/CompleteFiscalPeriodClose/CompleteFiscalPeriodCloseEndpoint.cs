@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Routing;
 
 namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.CompleteFiscalPeriodClose;
 
+public record CompleteFiscalPeriodCloseRequest(Guid ClosingJournalEntryId);
+
 public static class CompleteFiscalPeriodCloseEndpoint
 {
     public static RouteHandlerBuilder MapCompleteFiscalPeriodCloseEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapPost("/{id:guid}/", async (
             Guid id,
+            CompleteFiscalPeriodCloseRequest request,
             IMediator mediator,
             CancellationToken ct) =>
         {
-            await mediator.Send(new CompleteFiscalPeriodCloseCommand(id), ct);
+            await mediator.Send(new CompleteFiscalPeriodCloseCommand(id, request.ClosingJournalEntryId), ct);
             return TypedResults.Ok();
         })
         .WithName(nameof(CompleteFiscalPeriodCloseEndpoint))

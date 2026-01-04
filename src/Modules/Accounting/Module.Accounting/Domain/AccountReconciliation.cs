@@ -7,8 +7,8 @@ public class AccountReconciliation : AuditableEntity<Guid>, IMustHaveTenant
 {
     public string Name { get; private set; } = default!;
     public string? Description { get; private set; }
+    public Guid? AccountingPeriodId { get; private set; }
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
     
     private AccountReconciliation() { }
     
@@ -17,13 +17,15 @@ public class AccountReconciliation : AuditableEntity<Guid>, IMustHaveTenant
         string tenantId,
         Guid createdBy,
         string createdByUserName,
-        string? description = null)
+        string? description = null,
+        Guid? accountingPeriodId = null)
     {
         return new AccountReconciliation
         {
             Id = Guid.NewGuid(),
             Name = name,
             Description = description,
+            AccountingPeriodId = accountingPeriodId,
             IsActive = true,
             TenantId = tenantId,
             CreatedBy = createdBy,

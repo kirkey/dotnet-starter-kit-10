@@ -1,6 +1,7 @@
 using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
+using RetainedEarningsEntity = FSH.Module.Accounting.Domain.RetainedEarnings;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.CreateRetainedEarnings;
@@ -12,7 +13,7 @@ public class CreateRetainedEarningsHandler(AccountingDbContext context, ICurrent
 {
     public async ValueTask<Guid> Handle(CreateRetainedEarningsCommand command, CancellationToken ct)
     {
-        var entity = RetainedEarnings.Create(
+        var entity = RetainedEarningsEntity.Create(
             command.Name,
             currentUser.GetTenant() ?? "root",
             currentUser.GetUserId(),

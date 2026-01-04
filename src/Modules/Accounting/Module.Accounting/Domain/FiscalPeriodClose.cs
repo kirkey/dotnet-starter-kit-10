@@ -25,7 +25,6 @@ public class FiscalPeriodClose : AuditableEntity<Guid>, IMustHaveTenant
 
     public string? Description { get; private set; }
     public bool IsActive { get; private set; } = true;
-    public string TenantId { get; private set; } = default!;
 
     private FiscalPeriodClose() { }
 
