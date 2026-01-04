@@ -5,7 +5,8 @@
 ## 📋 Quick Checklist for New API Modules
 
 - [ ] Module structure follows the directory pattern (Contracts + Implementation)
-- [ ] String lengths use power-of-2 constants (4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048)
+- [ ] String lengths use property-specific constants (e.g., TodoNameMaxLength, TodoDescriptionMaxLength)
+- [ ] Constants are powers of 2 for database performance (128, 256, 512, 1024, 2048)
 - [ ] Centralized exception classes with proper inheritance
 - [ ] Entity factory methods for aggregate creation
 - [ ] Domain model methods for state transitions
@@ -14,7 +15,7 @@
 - [ ] Handlers use ICommandHandler/IQueryHandler from Mediator library
 - [ ] Endpoints are static extension methods on IEndpointRouteBuilder
 - [ ] Multi-tenancy integrated (TenantId, ICurrentUser)
-- [ ] Audit trail tracking (CreatedBy, ModifiedBy, timestamps)
+- [ ] Audit trail tracking (CreatedByUserName, LastModifiedByUserName, timestamps)
 - [ ] Module.cs implements IModule with ConfigureServices + MapEndpoints
 - [ ] Permission constants defined for all features
 - [ ] Global usings file (GlobalUsings.cs) configured
@@ -62,7 +63,7 @@ src/Modules/Todos/
 
 ## 📐 Complete Module Structure
 
-### 1. String Length Constants (Power of 2)
+### 1. String Length Constants (Property-Specific)
 
 **File**: `Modules.{Module}/{Module}StringLengths.cs`
 
@@ -72,43 +73,96 @@ namespace FSH.Modules.{Module};
 /// <summary>
 /// Centralized string length constants for the {Module} module.
 /// 
-/// All string lengths are powers of 2 for optimal database performance.
-/// These constants must be used in:
-/// - Domain entities (property configuration)
+/// **Design Principle:**
+/// All string lengths are powers of 2 (4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048)
+/// for optimal database performance, memory alignment, and scalability.
+/// 
+/// **Naming Convention:**
+/// {EntityName}{PropertyName}MaxLength
+/// Example: TodoNameMaxLength, TodoDescriptionMaxLength
+/// 
+/// **Usage:**
+/// - Domain entities (property definitions)
 /// - FluentValidation rules
 /// - Entity configurations (HasMaxLength)
+/// - Contracts/DTOs for consistency
+/// 
+/// **Why Property-Specific Constants?**
+/// - Clear intent: Name vs. Description vs. Notes
+/// - Single source of truth per field
+/// - Easy to audit and maintain
+/// - Supports different lengths for different entities
 /// </summary>
 public static class {Module}StringLengths
 {
-    /// <summary>Very short identifiers and codes.</summary>
-    public const int XSmall = 4;
+    // ========== {Entity} String Lengths ==========
     
-    /// <summary>Short names and tags.</summary>
-    public const int Small = 8;
+    /// <summary>
+    /// {Entity} name/title field maximum length.
+    /// 
+    /// **Usage:** {Entity}.Name property
+    /// **Rationale:** 128 chars allows for descriptive but concise titles
+    /// </summary>
+    public const int {Entity}NameMaxLength = 128;
     
-    /// <summary>Regular identifiers and short descriptions.</summary>
-    public const int Regular = 16;
+    /// <summary>
+    /// {Entity} description field maximum length.
+    /// 
+    /// **Usage:** {Entity}.Description property
+    /// **Rationale:** 512 chars provides room for detailed descriptions
+    /// </summary>
+    public const int {Entity}DescriptionMaxLength = 512;
     
-    /// <summary>Common field size (names, titles).</summary>
-    public const int Medium = 32;
+    /// <summary>
+    /// {Entity} notes field maximum length.
+    /// 
+    /// **Usage:** {Entity}.Notes property
+    /// **Rationale:** 2048 chars allows for extensive notes and references
+    /// </summary>
+    public const int {Entity}NotesMaxLength = 2048;
     
-    /// <summary>Larger text fields.</summary>
-    public const int Large = 64;
+    /// <summary>
+    /// {Entity} status field maximum length (when stored as string).
+    /// 
+    /// **Usage:** {Entity}.Status property (enum string conversion)
+    /// **Rationale:** 32 chars is sufficient for all status values
+    /// </summary>
+    public const int {Entity}StatusMaxLength = 32;
     
-    /// <summary>Names, titles, and common text.</summary>
-    public const int XLarge = 128;
+    /// <summary>
+    /// {Entity} tenant ID field maximum length.
+    /// 
+    /// **Usage:** {Entity}.TenantId property
+    /// **Rationale:** 64 chars supports various tenant ID formats
+    /// </summary>
+    public const int {Entity}TenantIdMaxLength = 64;
     
-    /// <summary>Descriptions and longer text.</summary>
-    public const int XXLarge = 256;
+    /// <summary>
+    /// {Entity} created by username field maximum length.
+    /// 
+    /// **Usage:** {Entity}.CreatedByUserName property
+    /// **Rationale:** 256 chars accommodates usernames and email addresses
+    /// </summary>
+    public const int {Entity}CreatedByUserNameMaxLength = 256;
     
-    /// <summary>Rich descriptions and notes.</summary>
-    public const int Huge = 512;
+    /// <summary>
+    /// {Entity} last modified by username field maximum length.
+    /// 
+    /// **Usage:** {Entity}.LastModifiedByUserName property
+    /// **Rationale:** 256 chars for consistency
+    /// </summary>
+    public const int {Entity}LastModifiedByUserNameMaxLength = 256;
     
-    /// <summary>Large text content.</summary>
-    public const int XHuge = 1024;
+    // ========== Common Constants (Shared) ==========
     
-    /// <summary>Very large text content.</summary>
-    public const int XXHuge = 2048;
+    /// <summary>Standard maximum length for status enum string representations.</summary>
+    public const int StandardStatusMaxLength = 32;
+    
+    /// <summary>Standard maximum length for tenant/organization identifiers.</summary>
+    public const int StandardTenantIdMaxLength = 64;
+    
+    /// <summary>Standard maximum length for email addresses and usernames.</summary>
+    public const int StandardUsernameMaxLength = 256;
 }
 ```
 
@@ -118,9 +172,9 @@ public static class {Module}StringLengths
 // In domain entity
 public class Todo : AuditableEntity<Guid>
 {
-    public string Name { get; private set; } = default!;          // XLarge (128)
-    public string? Description { get; private set; };            // XXLarge (256)
-    public string? Notes { get; private set; };                  // XXLarge (256)
+    public string Name { get; private set; } = default!;          // 128 chars
+    public string? Description { get; private set; };            // 512 chars
+    public string? Notes { get; private set; };                  // 2048 chars
 }
 
 // In FluentValidation
@@ -130,10 +184,10 @@ public class CreateTodoCommandValidator : AbstractValidator<CreateTodoCommand>
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(TodoStringLengths.XLarge);
+            .MaximumLength(TodoStringLengths.TodoNameMaxLength);
         
         RuleFor(x => x.Description)
-            .MaximumLength(TodoStringLengths.XXLarge)
+            .MaximumLength(TodoStringLengths.TodoDescriptionMaxLength)
             .When(x => !string.IsNullOrEmpty(x.Description));
     }
 }
@@ -145,7 +199,7 @@ public class TodoConfiguration : IEntityTypeConfiguration<Todo>
     {
         builder.Property(x => x.Name)
             .IsRequired()
-            .HasMaxLength(TodoStringLengths.XLarge);
+            .HasMaxLength(TodoStringLengths.TodoNameMaxLength);
     }
 }
 ```
@@ -703,20 +757,20 @@ public class TodoConfiguration : IEntityTypeConfiguration<Todo>
         // Primary key
         builder.HasKey(x => x.Id);
         
-        // Required properties with string length constraints
+        // Required properties with string length constraints using property-specific constants
         builder.Property(x => x.Name)
             .IsRequired()
-            .HasMaxLength(TodoStringLengths.XLarge);
+            .HasMaxLength(TodoStringLengths.TodoNameMaxLength);
         
         builder.Property(x => x.Description)
-            .HasMaxLength(TodoStringLengths.XXLarge);
+            .HasMaxLength(TodoStringLengths.TodoDescriptionMaxLength);
         
         builder.Property(x => x.Notes)
-            .HasMaxLength(TodoStringLengths.XXLarge);
+            .HasMaxLength(TodoStringLengths.TodoNotesMaxLength);
         
         builder.Property(x => x.Status)
             .IsRequired()
-            .HasMaxLength(TodoStringLengths.Regular);
+            .HasMaxLength(TodoStringLengths.TodoStatusMaxLength);
         
         // Enum properties
         builder.Property(x => x.Priority)
@@ -725,19 +779,13 @@ public class TodoConfiguration : IEntityTypeConfiguration<Todo>
         // Audit properties
         builder.Property(x => x.TenantId)
             .IsRequired()
-            .HasMaxLength(TodoStringLengths.Regular);
-        
-        builder.Property(x => x.CreatedBy)
-            .HasMaxLength(TodoStringLengths.XLarge);
+            .HasMaxLength(TodoStringLengths.TodoTenantIdMaxLength);
         
         builder.Property(x => x.CreatedByUserName)
-            .HasMaxLength(TodoStringLengths.Regular);
-        
-        builder.Property(x => x.LastModifiedBy)
-            .HasMaxLength(TodoStringLengths.XLarge);
+            .HasMaxLength(TodoStringLengths.TodoCreatedByUserNameMaxLength);
         
         builder.Property(x => x.LastModifiedByUserName)
-            .HasMaxLength(TodoStringLengths.Regular);
+            .HasMaxLength(TodoStringLengths.TodoLastModifiedByUserNameMaxLength);
         
         // Indexes for query performance
         builder.HasIndex(x => x.TenantId)
@@ -778,7 +826,7 @@ namespace FSH.Modules.Todos.Features.v1.Todos;
 /// 
 /// **Purpose:**
 /// Centralizes common validation rules to avoid duplication across multiple validators.
-/// All rules reference TodoStringLengths constants for consistency.
+/// All rules reference property-specific string length constants for consistency.
 /// 
 /// **Benefits:**
 /// - DRY principle: Define once, use everywhere
@@ -789,38 +837,38 @@ namespace FSH.Modules.Todos.Features.v1.Todos;
 public static class TodoValidationExtensions
 {
     /// <summary>
-    /// Validates todo name: Required, max length.
+    /// Validates todo name: Required, max length using TodoNameMaxLength.
     /// </summary>
     public static IRuleBuilderOptions<T, string> ValidateTodoName<T>(
         this IRuleBuilder<T, string> ruleBuilder)
     {
         return ruleBuilder
             .NotEmpty().WithMessage("Todo name is required")
-            .MaximumLength(TodoStringLengths.XLarge)
-            .WithMessage($"Todo name cannot exceed {TodoStringLengths.XLarge} characters");
+            .MaximumLength(TodoStringLengths.TodoNameMaxLength)
+            .WithMessage($"Todo name cannot exceed {TodoStringLengths.TodoNameMaxLength} characters");
     }
     
     /// <summary>
-    /// Validates todo description: Optional, max length.
+    /// Validates todo description: Optional, max length using TodoDescriptionMaxLength.
     /// </summary>
     public static IRuleBuilderOptions<T, string?> ValidateTodoDescription<T>(
         this IRuleBuilder<T, string?> ruleBuilder)
     {
         return ruleBuilder
-            .MaximumLength(TodoStringLengths.XXLarge)
-            .WithMessage($"Description cannot exceed {TodoStringLengths.XXLarge} characters")
+            .MaximumLength(TodoStringLengths.TodoDescriptionMaxLength)
+            .WithMessage($"Description cannot exceed {TodoStringLengths.TodoDescriptionMaxLength} characters")
             .When(x => !string.IsNullOrEmpty(x));
     }
     
     /// <summary>
-    /// Validates todo notes: Optional, max length.
+    /// Validates todo notes: Optional, max length using TodoNotesMaxLength.
     /// </summary>
     public static IRuleBuilderOptions<T, string?> ValidateTodoNotes<T>(
         this IRuleBuilder<T, string?> ruleBuilder)
     {
         return ruleBuilder
-            .MaximumLength(TodoStringLengths.XXLarge)
-            .WithMessage($"Notes cannot exceed {TodoStringLengths.XXLarge} characters")
+            .MaximumLength(TodoStringLengths.TodoNotesMaxLength)
+            .WithMessage($"Notes cannot exceed {TodoStringLengths.TodoNotesMaxLength} characters")
             .When(x => !string.IsNullOrEmpty(x));
     }
     
@@ -1552,5 +1600,5 @@ public async Task CreateTodoCommand_WithEmptyName_ThrowsValidationException()
 
 ---
 
-**Last Updated**: 2024-12
+**Last Updated**: 2026-01-04
 **Based on**: Todo Module v1.0 Reference Implementation

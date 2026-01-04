@@ -1,0 +1,29 @@
+namespace Accounting.Application.InventoryItems.Search.v1;
+
+public sealed class SearchInventoryItemsSpec : EntitiesByPaginationFilterSpec<InventoryItem, Responses.InventoryItemResponse>
+{
+    public SearchInventoryItemsSpec(SearchInventoryItemsRequest request)
+        : base(request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        if (!string.IsNullOrWhiteSpace(request.Sku))
+        {
+            Query.Where(i => i.Sku.Contains(request.Sku));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Name))
+        {
+            Query.Where(i => i.Name.Contains(request.Name));
+        }
+
+        if (request.IsActive.HasValue)
+        {
+            Query.Where(i => i.IsActive == request.IsActive.Value);
+        }
+
+
+        Query.OrderBy(i => i.Sku);
+    }
+}
+

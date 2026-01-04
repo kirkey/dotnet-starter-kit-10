@@ -1,0 +1,17 @@
+namespace Accounting.Application.PostingBatches.Reject.v1;
+
+public sealed class RejectPostingBatchCommandValidator : AbstractValidator<RejectPostingBatchCommand>
+{
+    public RejectPostingBatchCommandValidator()
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .WithMessage("Posting batch ID is required.");
+
+        RuleFor(x => x.Reason)
+            .MaximumLength(512)
+            .When(x => !string.IsNullOrWhiteSpace(x.Reason))
+            .WithMessage("Reason must not exceed 500 characters.");
+    }
+}
+

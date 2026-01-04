@@ -1,0 +1,37 @@
+using Accounting.Application.Bills.Void.v1;
+using Shared.Authorization;
+
+namespace Accounting.Infrastructure.Endpoints.Bills.v1;
+
+/// <summary>
+/// Endpoint for voiding bills.
+/// </summary>
+public static class VoidBillEndpoint
+{
+    /// <summary>
+    /// Maps the bill void endpoint to the route builder.
+    /// </summary>
+    internal static RouteHandlerBuilder MapVoidBillEndpoint(this IEndpointRouteBuilder endpoints)
+    {
+        return endpoints
+            .MapPut("/{id}/void", async (DefaultIdType id, VoidBillRequest request, ISender mediator) =>
+            {
+                var command = new VoidBillCommand(id, request.Reason);
+                var response = await mediator.Send(command).ConfigureAwait(false);
+                return Results.Ok(response);
+            })
+            .WithName(nameof(VoidBillEndpoint))
+            .WithSummary("Void a bill")
+            .WithDescription("Voids a bill with a reason.")
+            .Produces<VoidBillResponse>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .RequirePermission(FshPermission.NameFor(FshActions.Void, FshResources.Accounting))
+            .MapToApiVersion(new ApiVersion(1, 0));
+    }
+}
+
+/// <summary>
+/// Request to void a bill.
+/// </summary>
+public sealed record VoidBillRequest(string Reason);

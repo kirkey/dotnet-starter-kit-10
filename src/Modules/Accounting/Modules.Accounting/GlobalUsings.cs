@@ -1,3 +1,6 @@
 global using FSH.Framework.Core.Domain;
-global using FSH.Framework.Persistence;
-global using FSH.Framework.Shared.Notifications;
+global using FSH.Framework.Core.Caching;
+global using FSH.Framework.Core.Identity;
+global using FSH.Framework.Core.Persistence;
+global using Mediator;
+global using Microsoft.EntityFrameworkCore;

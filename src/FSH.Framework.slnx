@@ -16,8 +16,9 @@
   </Folder>
   <Folder Name="/Modules/" />
   <Folder Name="/Modules/Accounting/">
-    <Project Path="Modules/Accounting/Modules.Accounting.Contracts/Modules.Accounting.Contracts.csproj" />
-    <Project Path="Modules/Accounting/Modules.Accounting/Modules.Accounting.csproj" />
+    <Project Path="Modules/Accounting/Accounting.Application/Accounting.Application.csproj" />
+    <Project Path="Modules/Accounting/Accounting.Domain/Accounting.Domain.csproj" />
+    <Project Path="Modules/Accounting/Accounting.Infrastructure/Accounting.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/Modules/Auditing/">
     <Project Path="Modules/Auditing/Modules.Auditing.Contracts/Modules.Auditing.Contracts.csproj" />

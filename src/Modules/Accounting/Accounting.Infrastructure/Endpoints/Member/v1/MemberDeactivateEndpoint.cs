@@ -1,0 +1,28 @@
+using Accounting.Application.Members.Deactivate.v1;
+using Shared.Authorization;
+
+namespace Accounting.Infrastructure.Endpoints.Member.v1;
+
+/// <summary>
+/// Endpoint for deactivating a utility member.
+/// </summary>
+public static class MemberDeactivateEndpoint
+{
+    internal static RouteGroupBuilder MapMemberDeactivateEndpoint(this RouteGroupBuilder group)
+    {
+        group.MapPost("/{id}/deactivate", async (DefaultIdType id, ISender mediator) =>
+        {
+            var command = new DeactivateUtilityMemberCommand(id);
+            var result = await mediator.Send(command).ConfigureAwait(false);
+            return Results.Ok(result);
+        })
+        .WithName(nameof(MemberDeactivateEndpoint))
+        .WithSummary("Deactivate utility member")
+        .WithDescription("Deactivates a utility member account")
+        .RequirePermission(FshPermission.NameFor(FshActions.Update, FshResources.Accounting))
+        .MapToApiVersion(1);
+
+        return group;
+    }
+}
+

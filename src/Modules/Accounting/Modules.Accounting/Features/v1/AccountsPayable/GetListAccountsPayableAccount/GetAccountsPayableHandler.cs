@@ -1,0 +1,48 @@
+using FSH.Modules.Accounting.Contracts.v1.AccountsPayable;
+using FSH.Modules.Accounting.Data;
+using Mediator;
+using Microsoft.EntityFrameworkCore;
+
+namespace FSH.Modules.Accounting.Features.v1.AccountsPayable.GetAccountsPayable;
+
+public record GetAccountsPayableQuery(
+    int Page = 1,
+    int PageSize = 10,
+    string? SearchTerm = null,
+    bool? IsActive = null) : IQuery<AccountsPayablePagedResponse>;
+
+public record AccountsPayablePagedResponse(
+    List<AccountsPayableAccountSummaryDto> Items,
+    int TotalCount,
+    int Page,
+    int PageSize);
+
+public class GetAccountsPayableHandler(AccountingDbContext context) 
+    : IQueryHandler<GetAccountsPayableQuery, AccountsPayablePagedResponse>
+{
+    public async ValueTask<AccountsPayablePagedResponse> Handle(GetAccountsPayableQuery query, CancellationToken ct)
+    {
+        var queryable = context.AccountsPayable.AsQueryable();
+        
+        if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+        {
+            queryable = queryable.Where(x => x.Name.Contains(query.SearchTerm));
+        }
+        
+        if (query.IsActive.HasValue)
+        {
+            queryable = queryable.Where(x => x.IsActive == query.IsActive.Value);
+        }
+        
+        var totalCount = await queryable.CountAsync(ct);
+        
+        var items = await queryable
+            .OrderByDescending(x => x.CreatedOnUtc)
+            .Skip((query.Page - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .Select(x => new AccountsPayableAccountSummaryDto(x.Id, x.Name, x.IsActive))
+            .ToListAsync(ct);
+        
+        return new AccountsPayablePagedResponse(items, totalCount, query.Page, query.PageSize);
+    }
+}

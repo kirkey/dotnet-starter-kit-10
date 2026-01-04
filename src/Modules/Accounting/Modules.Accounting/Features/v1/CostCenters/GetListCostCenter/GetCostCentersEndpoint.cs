@@ -1,0 +1,32 @@
+using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Modules.Accounting.Contracts.v1.CostCenters;
+using Mediator;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+
+namespace FSH.Modules.Accounting.Features.v1.CostCenters.GetCostCenters;
+
+public static class GetCostCentersEndpoint
+{
+    public static RouteHandlerBuilder MapGetCostCentersEndpoint(this IEndpointRouteBuilder endpoints)
+    {
+        return endpoints.MapGet("/", async (
+            int page,
+            int pageSize,
+            string? searchTerm,
+            bool? isActive,
+            IMediator mediator,
+            CancellationToken ct) =>
+        {
+            var result = await mediator.Send(
+                new GetCostCentersQuery(page, pageSize, searchTerm, isActive), ct);
+            return TypedResults.Ok(result);
+        })
+        .WithName(nameof(GetCostCentersEndpoint))
+        .WithSummary("Get paginated list of CostCenters")
+        .Produces<CostCentersPagedResponse>(StatusCodes.Status200OK)
+        .ProducesValidationProblem()
+        .RequirePermission(AccountingPermissionConstants.CostCenters.Search);
+    }
+}
