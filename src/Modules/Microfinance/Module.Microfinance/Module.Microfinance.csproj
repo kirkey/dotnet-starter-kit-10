@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>FSH.Module.Microfinance</RootNamespace>
+		<AssemblyName>FSH.Module.Microfinance</AssemblyName>
+		<PackageId>FullStackHero.Module.Microfinance</PackageId>
+		<NoWarn>$(NoWarn);CA1031;CA1812;CA1859;S3267;S1135</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Persistence\Persistence.csproj" />
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Web\Web.csproj" />
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Eventing\Eventing.csproj" />
+	  <ProjectReference Include="..\Module.Microfinance.Contracts\Module.Microfinance.Contracts.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Exclude seeders temporarily - they require entity business methods -->
+		<Compile Remove="Data/Seeders/**/*.cs" />
+	</ItemGroup>
+
+</Project>

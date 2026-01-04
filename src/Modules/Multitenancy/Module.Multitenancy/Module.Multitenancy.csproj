@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>FSH.Module.Multitenancy</RootNamespace>
+		<AssemblyName>FSH.Module.Multitenancy</AssemblyName>
+		<PackageId>FullStackHero.Module.Multitenancy</PackageId>
+		<NoWarn>$(NoWarn);CA1031;CA1056;CA1008;CA1716;CA1812;S1135;S2139;S6667;S3267;S1172</NoWarn>
+	</PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Finbuckle.MultiTenant" />
+    <PackageReference Include="Finbuckle.MultiTenant.AspNetCore" />
+    <PackageReference Include="Finbuckle.MultiTenant.EntityFrameworkCore" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="Mapster" />
+	  <PackageReference Include="Mediator.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Persistence\Persistence.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Shared\Shared.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Storage\Storage.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Web\Web.csproj" />
+    <ProjectReference Include="..\Module.Multitenancy.Contracts\Module.Multitenancy.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

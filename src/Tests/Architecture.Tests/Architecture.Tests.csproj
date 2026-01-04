@@ -23,12 +23,12 @@
     <ProjectReference Include="..\..\BuildingBlocks\Persistence\Persistence.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\Shared\Shared.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\Web\Web.csproj" />
-    <ProjectReference Include="..\..\Modules\Auditing\Modules.Auditing\Modules.Auditing.csproj" />
-    <ProjectReference Include="..\..\Modules\Auditing\Modules.Auditing.Contracts\Modules.Auditing.Contracts.csproj" />
-    <ProjectReference Include="..\..\Modules\Identity\Modules.Identity\Modules.Identity.csproj" />
-    <ProjectReference Include="..\..\Modules\Identity\Modules.Identity.Contracts\Modules.Identity.Contracts.csproj" />
-    <ProjectReference Include="..\..\Modules\Multitenancy\Modules.Multitenancy\Modules.Multitenancy.csproj" />
-    <ProjectReference Include="..\..\Modules\Multitenancy\Modules.Multitenancy.Contracts\Modules.Multitenancy.Contracts.csproj" />
+    <ProjectReference Include="..\..\Modules\Auditing\Module.Auditing\Module.Auditing.csproj" />
+    <ProjectReference Include="..\..\Modules\Auditing\Module.Auditing.Contracts\Module.Auditing.Contracts.csproj" />
+    <ProjectReference Include="..\..\Modules\Identity\Module.Identity\Module.Identity.csproj" />
+    <ProjectReference Include="..\..\Modules\Identity\Module.Identity.Contracts\Module.Identity.Contracts.csproj" />
+    <ProjectReference Include="..\..\Modules\Multitenancy\Module.Multitenancy\Module.Multitenancy.csproj" />
+    <ProjectReference Include="..\..\Modules\Multitenancy\Module.Multitenancy.Contracts\Module.Multitenancy.Contracts.csproj" />
     <ProjectReference Include="..\..\Apps\Basic\Basic.Api\Basic.Api.csproj" />
     <ProjectReference Include="..\..\Apps\Basic\Migrations.PostgreSQL\Basic.Migrations.PostgreSQL.csproj" />
   </ItemGroup>

@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FSH.Basic.Migrations.PostgreSQL.MultiTenancy
 {
-    [DbContext(typeof(FSH.Modules.Multitenancy.Data.TenantDbContext))]
+    [DbContext(typeof(FSH.Module.Multitenancy.Data.TenantDbContext))]
     [Migration("20251230051930_AddAuditFieldsToTenantTheme")]
     partial class AddAuditFieldsToTenantTheme
     {
@@ -26,7 +26,7 @@ namespace FSH.Basic.Migrations.PostgreSQL.MultiTenancy
 
             modelBuilder.HasDefaultSchema("tenant");
 
-            modelBuilder.Entity("FSH.Modules.Multitenancy.Domain.AppTenant", b =>
+            modelBuilder.Entity("FSH.Module.Multitenancy.Domain.AppTenant", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -59,7 +59,7 @@ namespace FSH.Basic.Migrations.PostgreSQL.MultiTenancy
                     b.ToTable("Tenants", "tenant");
                 });
 
-            modelBuilder.Entity("FSH.Modules.Multitenancy.Domain.TenantTheme", b =>
+            modelBuilder.Entity("FSH.Module.Multitenancy.Domain.TenantTheme", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

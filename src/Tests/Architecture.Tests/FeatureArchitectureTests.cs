@@ -1,6 +1,6 @@
-using FSH.Modules.Auditing;
-using FSH.Modules.Identity;
-using FSH.Modules.Multitenancy;
+using FSH.Module.Auditing;
+using FSH.Module.Identity;
+using FSH.Module.Multitenancy;
 using NetArchTest.Rules;
 using Shouldly;
 using System.Reflection;

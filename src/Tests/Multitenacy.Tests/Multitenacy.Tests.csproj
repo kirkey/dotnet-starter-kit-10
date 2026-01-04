@@ -19,6 +19,6 @@
 		<PackageReference Include="AutoFixture" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Modules\Multitenancy\Modules.Multitenancy.Contracts\Modules.Multitenancy.Contracts.csproj" />
+	  <ProjectReference Include="..\..\Modules\Multitenancy\Module.Multitenancy.Contracts\Module.Multitenancy.Contracts.csproj" />
 	</ItemGroup>
 </Project>

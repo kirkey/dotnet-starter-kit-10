@@ -131,7 +131,7 @@ public static class Extensions
         app.UseAuthentication();
 
         // If Auditing module is referenced, wire its HTTP middleware (request/response logging)
-        Type? auditMiddlewareType = Type.GetType("FSH.Modules.Auditing.AuditHttpMiddleware, FSH.Modules.Auditing");
+        Type? auditMiddlewareType = Type.GetType("FSH.Module.Auditing.AuditHttpMiddleware, FSH.Module.Auditing");
         if (auditMiddlewareType is not null)
         {
             app.UseMiddleware(auditMiddlewareType);

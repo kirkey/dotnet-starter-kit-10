@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>FSH.Module.Todos.Contracts</RootNamespace>
+		<AssemblyName>FSH.Module.Todos.Contracts</AssemblyName>
+		<PackageId>FullStackHero.Module.Todos.Contracts</PackageId>
+		<NoWarn>$(NoWarn);CA1002;S1135</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Core\Core.csproj" />
+	</ItemGroup>
+
+</Project>

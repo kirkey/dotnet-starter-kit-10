@@ -1,0 +1,17 @@
+using FSH.Module.Identity.Contracts.Services;
+using FSH.Module.Identity.Contracts.v1.Roles.DeleteRole;
+using Mediator;
+
+namespace FSH.Module.Identity.Features.v1.Roles.DeleteRole;
+
+public sealed class DeleteRoleCommandHandler(IRoleService roleService) : ICommandHandler<DeleteRoleCommand, Unit>
+{
+    public async ValueTask<Unit> Handle(DeleteRoleCommand command, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(command);
+
+        await roleService.DeleteRoleAsync(command.Id).ConfigureAwait(false);
+
+        return Unit.Value;
+    }
+}

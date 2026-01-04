@@ -1,0 +1,4 @@
+namespace FSH.Module.Microfinance.Contracts.v1.InvestmentAccounts;
+
+public record CreateInvestmentAccountCommand(string Name);
+public record UpdateInvestmentAccountCommand(string Name);

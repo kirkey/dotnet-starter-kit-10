@@ -1,0 +1,191 @@
+﻿using Asp.Versioning;
+using Asp.Versioning.Builder;
+using FSH.Framework.Core.Context;
+using FSH.Framework.Eventing;
+using FSH.Framework.Eventing.Outbox;
+using FSH.Framework.Persistence;
+using FSH.Framework.Storage;
+using FSH.Framework.Storage.Local;
+using FSH.Framework.Storage.Services;
+using FSH.Framework.Web.Modules;
+using FSH.Module.Identity.Authorization;
+using FSH.Module.Identity.Authorization.Jwt;
+using FSH.Module.Identity.Contracts.Services;
+using FSH.Module.Identity.Data;
+using FSH.Module.Identity.Features.v1.Roles;
+using FSH.Module.Identity.Features.v1.Roles.DeleteRole;
+using FSH.Module.Identity.Features.v1.Roles.GetRoleById;
+using FSH.Module.Identity.Features.v1.Roles.GetRoles;
+using FSH.Module.Identity.Features.v1.Roles.GetRoleWithPermissions;
+using FSH.Module.Identity.Features.v1.Roles.UpdateRolePermissions;
+using FSH.Module.Identity.Features.v1.Roles.UpsertRole;
+using FSH.Module.Identity.Features.v1.Sessions.AdminRevokeAllSessions;
+using FSH.Module.Identity.Features.v1.Sessions.AdminRevokeSession;
+using FSH.Module.Identity.Features.v1.Sessions.GetMySessions;
+using FSH.Module.Identity.Features.v1.Sessions.GetUserSessions;
+using FSH.Module.Identity.Features.v1.Sessions.RevokeAllSessions;
+using FSH.Module.Identity.Features.v1.Sessions.RevokeSession;
+using FSH.Module.Identity.Features.v1.Tokens.RefreshToken;
+using FSH.Module.Identity.Features.v1.Tokens.TokenGeneration;
+using FSH.Module.Identity.Features.v1.Users;
+using FSH.Module.Identity.Features.v1.Users.AssignUserRoles;
+using FSH.Module.Identity.Features.v1.Users.ChangePassword;
+using FSH.Module.Identity.Features.v1.Users.ConfirmEmail;
+using FSH.Module.Identity.Features.v1.Users.DeleteUser;
+using FSH.Module.Identity.Features.v1.Users.GetUserById;
+using FSH.Module.Identity.Features.v1.Users.GetUserPermissions;
+using FSH.Module.Identity.Features.v1.Users.GetUserProfile;
+using FSH.Module.Identity.Features.v1.Users.GetUserRoles;
+using FSH.Module.Identity.Features.v1.Users.GetUsers;
+using FSH.Module.Identity.Features.v1.Users.RegisterUser;
+using FSH.Module.Identity.Features.v1.Users.ResetPassword;
+using FSH.Module.Identity.Features.v1.Users.SearchUsers;
+using FSH.Module.Identity.Features.v1.Users.SelfRegistration;
+using FSH.Module.Identity.Features.v1.Users.ToggleUserStatus;
+using FSH.Module.Identity.Features.v1.Users.UpdateUser;
+using FSH.Module.Identity.Services;
+using Hangfire;
+using Hangfire.Common;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
+
+namespace FSH.Module.Identity;
+
+public class IdentityModule : IModule
+{
+    public void ConfigureServices(IHostApplicationBuilder builder)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+        IServiceCollection services = builder.Services;
+        services.AddSingleton<IAuthorizationMiddlewareResultHandler, PathAwareAuthorizationHandler>();
+        services.AddScoped<ICurrentUser, CurrentUserService>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped(sp => (ICurrentUserInitializer)sp.GetRequiredService<ICurrentUser>());
+        services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IRoleService, RoleService>();
+        services.AddHeroStorage(builder.Configuration);
+        services.AddScoped<IIdentityService, IdentityService>();
+        services.AddHeroDbContext<IdentityDbContext>();
+        services.AddEventingCore(builder.Configuration);
+        services.AddEventingForDbContext<IdentityDbContext>();
+        services.AddIntegrationEventHandlers(typeof(IdentityModule).Assembly);
+        builder.Services.AddHealthChecks()
+            .AddDbContextCheck<IdentityDbContext>(
+                name: "db:identity",
+                failureStatus: HealthStatus.Unhealthy);
+        services.AddScoped<IDbInitializer, IdentityDbInitializer>();
+        services.AddScoped<IDbInitializer, PermissionUpdater>();
+
+        // Configure password policy options
+        services.Configure<PasswordPolicyOptions>(builder.Configuration.GetSection("PasswordPolicy"));
+
+        // Register password history service
+        services.AddScoped<IPasswordHistoryService, PasswordHistoryService>();
+
+        // Register password expiry service
+        services.AddScoped<IPasswordExpiryService, PasswordExpiryService>();
+
+        // Register session service
+        services.AddScoped<ISessionService, SessionService>();
+
+        services.AddIdentity<FshUser, FshRole>(options =>
+        {
+            // Password requirements - can be overridden in appsettings.json
+            options.Password.RequiredLength = IdentityModuleConstants.PasswordLength;
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireNonAlphanumeric = false; // Special chars optional for better UX
+            options.Password.RequireUppercase = true;
+            
+            // User requirements
+            options.User.RequireUniqueEmail = true;
+            
+            // Lockout settings for brute force protection
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.AllowedForNewUsers = true;
+            
+            // Sign-in requirements
+            options.SignIn.RequireConfirmedEmail = false; // Set to true in production if using email verification
+        })
+           .AddEntityFrameworkStores<IdentityDbContext>()
+           .AddDefaultTokenProviders();
+
+        //metrics
+        services.AddSingleton<IdentityMetrics>();
+
+        services.ConfigureJwtAuth();
+    }
+
+    public void MapEndpoints(IEndpointRouteBuilder endpoints)
+    {
+        ArgumentNullException.ThrowIfNull(endpoints);
+
+        ApiVersionSet apiVersionSet = endpoints.NewApiVersionSet()
+            .HasApiVersion(new ApiVersion(1))
+            .ReportApiVersions()
+            .Build();
+
+        RouteGroupBuilder group = endpoints
+            .MapGroup("api/v{version:apiVersion}/identity")
+            .WithTags("Identity")
+            .WithApiVersionSet(apiVersionSet);
+
+        // tokens
+        group.MapGenerateTokenEndpoint().AllowAnonymous().RequireRateLimiting("auth");
+        group.MapRefreshTokenEndpoint().AllowAnonymous().RequireRateLimiting("auth");
+
+        // example Hangfire setup for Identity outbox dispatcher
+        IRecurringJobManager? jobManager = endpoints.ServiceProvider.GetService<IRecurringJobManager>();
+        if (jobManager is not null)
+        {
+            jobManager.AddOrUpdate(
+                "identity-outbox-dispatcher",
+                Job.FromExpression<OutboxDispatcher>(d => d.DispatchAsync(CancellationToken.None)),
+                Cron.Minutely(),
+                new RecurringJobOptions());
+        }
+
+        // roles
+        group.MapGetRolesEndpoint();
+        group.MapGetRoleByIdEndpoint();
+        group.MapDeleteRoleEndpoint();
+        group.MapGetRolePermissionsEndpoint();
+        group.MapUpdateRolePermissionsEndpoint();
+        group.MapCreateOrUpdateRoleEndpoint();
+
+        // users
+        group.MapAssignUserRolesEndpoint();
+        group.MapChangePasswordEndpoint();
+        group.MapConfirmEmailEndpoint().RequireRateLimiting("auth");
+        group.MapDeleteUserEndpoint();
+        group.MapGetUserByIdEndpoint();
+        group.MapGetCurrentUserPermissionsEndpoint();
+        group.MapGetMeEndpoint();
+        group.MapGetUserRolesEndpoint();
+        group.MapGetUsersListEndpoint();
+        group.MapSearchUsersEndpoint();
+        group.MapRegisterUserEndpoint();
+        group.MapResetPasswordEndpoint();
+        group.MapSelfRegisterUserEndpoint();
+        group.ToggleUserStatusEndpointEndpoint();
+        group.MapUpdateUserEndpoint();
+
+        // sessions - user endpoints
+        group.MapGetMySessionsEndpoint();
+        group.MapRevokeSessionEndpoint();
+        group.MapRevokeAllSessionsEndpoint();
+
+        // sessions - admin endpoints
+        group.MapGetUserSessionsEndpoint();
+        group.MapAdminRevokeSessionEndpoint();
+        group.MapAdminRevokeAllSessionsEndpoint();
+    }
+}

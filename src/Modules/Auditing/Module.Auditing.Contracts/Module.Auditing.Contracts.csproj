@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>FSH.Module.Auditing.Contracts</RootNamespace>
+		<AssemblyName>FSH.Module.Auditing.Contracts</AssemblyName>
+		<PackageId>FullStackHero.Module.Auditing.Contracts</PackageId>
+		<NoWarn>$(NoWarn);S2094</NoWarn>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Mediator.Abstractions" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Web\Web.csproj" />
+	</ItemGroup>
+</Project>

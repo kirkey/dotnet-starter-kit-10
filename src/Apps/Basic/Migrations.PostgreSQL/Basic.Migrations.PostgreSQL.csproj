@@ -16,11 +16,11 @@
 
   <ItemGroup>
 	  <ProjectReference Include="..\..\..\BuildingBlocks\Persistence\Persistence.csproj" />
-	  <ProjectReference Include="..\..\..\Modules\Auditing\Modules.Auditing\Modules.Auditing.csproj" />
-	  <ProjectReference Include="..\..\..\Modules\Identity\Modules.Identity\Modules.Identity.csproj" />
-	  <ProjectReference Include="..\..\..\Modules\Multitenancy\Modules.Multitenancy\Modules.Multitenancy.csproj" />
-	  <ProjectReference Include="..\..\..\Modules\Todos\Modules.Todos.Contracts\Modules.Todos.Contracts.csproj" />
-	  <ProjectReference Include="..\..\..\Modules\Todos\Modules.Todos\Modules.Todos.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\Auditing\Module.Auditing\Module.Auditing.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\Identity\Module.Identity\Module.Identity.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\Multitenancy\Module.Multitenancy\Module.Multitenancy.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\Todos\Module.Todos.Contracts\Module.Todos.Contracts.csproj" />
+	  <ProjectReference Include="..\..\..\Modules\Todos\Module.Todos\Module.Todos.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

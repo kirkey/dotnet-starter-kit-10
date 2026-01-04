@@ -94,12 +94,12 @@ internal static class TemplateEngine
                 <PackageReference Include="FullStackHero.Framework.Caching" />
                 <PackageReference Include="FullStackHero.Framework.Web" />
                 <!-- FullStackHero Modules -->
-                <PackageReference Include="FullStackHero.Modules.Identity" />
-                <PackageReference Include="FullStackHero.Modules.Identity.Contracts" />
-                <PackageReference Include="FullStackHero.Modules.Multitenancy" />
-                <PackageReference Include="FullStackHero.Modules.Multitenancy.Contracts" />
-                <PackageReference Include="FullStackHero.Modules.Auditing" />
-                <PackageReference Include="FullStackHero.Modules.Auditing.Contracts" />
+                <PackageReference Include="FullStackHero.Module.Identity" />
+                <PackageReference Include="FullStackHero.Module.Identity.Contracts" />
+                <PackageReference Include="FullStackHero.Module.Multitenancy" />
+                <PackageReference Include="FullStackHero.Module.Multitenancy.Contracts" />
+                <PackageReference Include="FullStackHero.Module.Auditing" />
+                <PackageReference Include="FullStackHero.Module.Auditing.Contracts" />
                 <!-- Mediator -->
                 <PackageReference Include="Mediator.Abstractions" />
                 <PackageReference Include="Mediator.SourceGenerator">
@@ -181,13 +181,13 @@ internal static class TemplateEngine
         return $$"""
             {{sampleModuleUsing}}using FSH.Framework.Web;
             using FSH.Framework.Web.Modules;
-            using FSH.Modules.Auditing;
-            using FSH.Modules.Identity;
-            using FSH.Modules.Identity.Contracts.v1.Tokens.TokenGeneration;
-            using FSH.Modules.Identity.Features.v1.Tokens.TokenGeneration;
-            using FSH.Modules.Multitenancy;
-            using FSH.Modules.Multitenancy.Contracts.v1.GetTenantStatus;
-            using FSH.Modules.Multitenancy.Features.v1.GetTenantStatus;
+            using FSH.Module.Auditing;
+            using FSH.Module.Identity;
+            using FSH.Module.Identity.Contracts.v1.Tokens.TokenGeneration;
+            using FSH.Module.Identity.Features.v1.Tokens.TokenGeneration;
+            using FSH.Module.Multitenancy;
+            using FSH.Module.Multitenancy.Contracts.v1.GetTenantStatus;
+            using FSH.Module.Multitenancy.Features.v1.GetTenantStatus;
             using System.Reflection;
 
             var builder = WebApplication.CreateBuilder(args);
@@ -201,8 +201,8 @@ internal static class TemplateEngine
                     typeof(GenerateTokenCommandHandler),
                     typeof(GetTenantStatusQuery),
                     typeof(GetTenantStatusQueryHandler),
-                    typeof(FSH.Modules.Auditing.Contracts.AuditEnvelope),
-                    typeof(FSH.Modules.Auditing.Persistence.AuditDbContext)];
+                    typeof(FSH.Module.Auditing.Contracts.AuditEnvelope),
+                    typeof(FSH.Module.Auditing.Persistence.AuditDbContext)];
             });
 
             // FSH Module assemblies
@@ -1315,12 +1315,12 @@ jobs:
               </ItemGroup>
 
               <ItemGroup Label="FullStackHero Modules">
-                <PackageVersion Include="FullStackHero.Modules.Identity" Version="{{version}}" />
-                <PackageVersion Include="FullStackHero.Modules.Identity.Contracts" Version="{{version}}" />
-                <PackageVersion Include="FullStackHero.Modules.Multitenancy" Version="{{version}}" />
-                <PackageVersion Include="FullStackHero.Modules.Multitenancy.Contracts" Version="{{version}}" />
-                <PackageVersion Include="FullStackHero.Modules.Auditing" Version="{{version}}" />
-                <PackageVersion Include="FullStackHero.Modules.Auditing.Contracts" Version="{{version}}" />
+                <PackageVersion Include="FullStackHero.Module.Identity" Version="{{version}}" />
+                <PackageVersion Include="FullStackHero.Module.Identity.Contracts" Version="{{version}}" />
+                <PackageVersion Include="FullStackHero.Module.Multitenancy" Version="{{version}}" />
+                <PackageVersion Include="FullStackHero.Module.Multitenancy.Contracts" Version="{{version}}" />
+                <PackageVersion Include="FullStackHero.Module.Auditing" Version="{{version}}" />
+                <PackageVersion Include="FullStackHero.Module.Auditing.Contracts" Version="{{version}}" />
               </ItemGroup>
 
               <ItemGroup Label="Aspire">

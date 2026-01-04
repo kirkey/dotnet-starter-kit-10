@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>FSH.Module.Identity.Contracts</RootNamespace>
+		<AssemblyName>FSH.Module.Identity.Contracts</AssemblyName>
+		<PackageId>FullStackHero.Module.Identity.Contracts</PackageId>
+		<NoWarn>$(NoWarn);CA1002;CA1056;CS1572;S2094</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Mediator.Abstractions" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Eventing\Eventing.csproj" />
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Storage\Storage.csproj" />
+	</ItemGroup>
+
+</Project>

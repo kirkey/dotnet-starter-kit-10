@@ -38,12 +38,12 @@ public class AppsArchitectureTests
         // but should not directly reference feature or data-layer namespaces.
         string[] forbiddenNamespaces =
         {
-            "FSH.Modules.Auditing.Features",
-            "FSH.Modules.Auditing.Data",
-            "FSH.Modules.Identity.Features",
-            "FSH.Modules.Identity.Data",
-            "FSH.Modules.Multitenancy.Features",
-            "FSH.Modules.Multitenancy.Data"
+            "FSH.Module.Auditing.Features",
+            "FSH.Module.Auditing.Data",
+            "FSH.Module.Identity.Features",
+            "FSH.Module.Identity.Data",
+            "FSH.Module.Multitenancy.Features",
+            "FSH.Module.Multitenancy.Data"
         };
 
         TestResult? hostResult = Types

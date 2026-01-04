@@ -16,25 +16,24 @@
   </Folder>
   <Folder Name="/Modules/" />
   <Folder Name="/Modules/Accounting/">
-    <Project Path="Modules/Accounting/Accounting.Application/Accounting.Application.csproj" />
-    <Project Path="Modules/Accounting/Accounting.Domain/Accounting.Domain.csproj" />
-    <Project Path="Modules/Accounting/Accounting.Infrastructure/Accounting.Infrastructure.csproj" />
+    <Project Path="Modules/Accounting/Module.Accounting.Contracts/Module.Accounting.Contracts.csproj" />
+    <Project Path="Modules/Accounting/Module.Accounting/Module.Accounting.csproj" />
   </Folder>
   <Folder Name="/Modules/Auditing/">
-    <Project Path="Modules/Auditing/Modules.Auditing.Contracts/Modules.Auditing.Contracts.csproj" />
-    <Project Path="Modules/Auditing/Modules.Auditing/Modules.Auditing.csproj" Id="2764205b-8725-43a7-b499-67b98959ad50" />
+    <Project Path="Modules/Auditing/Module.Auditing.Contracts/Module.Auditing.Contracts.csproj" />
+    <Project Path="Modules/Auditing/Module.Auditing/Module.Auditing.csproj" Id="2764205b-8725-43a7-b499-67b98959ad50" />
   </Folder>
   <Folder Name="/Modules/Identity/">
-    <Project Path="Modules/Identity/Modules.Identity.Contracts/Modules.Identity.Contracts.csproj" />
-    <Project Path="Modules/Identity/Modules.Identity/Modules.Identity.csproj" Id="ebeb33cd-9cce-41b0-9bbc-43988dae9a46" />
+    <Project Path="Modules/Identity/Module.Identity.Contracts/Module.Identity.Contracts.csproj" />
+    <Project Path="Modules/Identity/Module.Identity/Module.Identity.csproj" Id="ebeb33cd-9cce-41b0-9bbc-43988dae9a46" />
   </Folder>
   <Folder Name="/Modules/Microfinance/">
-    <Project Path="Modules/Microfinance/Modules.Microfinance.Contracts/Modules.Microfinance.Contracts.csproj" />
-    <Project Path="Modules/Microfinance/Modules.Microfinance/Modules.Microfinance.csproj" />
+    <Project Path="Modules/Microfinance/Module.Microfinance.Contracts/Module.Microfinance.Contracts.csproj" />
+    <Project Path="Modules/Microfinance/Module.Microfinance/Module.Microfinance.csproj" />
   </Folder>
   <Folder Name="/Modules/Multitenancy/">
-    <Project Path="Modules/Multitenancy/Modules.Multitenancy.Contracts/Modules.Multitenancy.Contracts.csproj" Id="61165a24-94b0-402c-9d9f-345898ce79c4" />
-    <Project Path="Modules/Multitenancy/Modules.Multitenancy/Modules.Multitenancy.csproj" Id="69bca64d-0cf5-4236-8da6-1d775aa2a1cc" />
+    <Project Path="Modules/Multitenancy/Module.Multitenancy.Contracts/Module.Multitenancy.Contracts.csproj" Id="61165a24-94b0-402c-9d9f-345898ce79c4" />
+    <Project Path="Modules/Multitenancy/Module.Multitenancy/Module.Multitenancy.csproj" Id="69bca64d-0cf5-4236-8da6-1d775aa2a1cc" />
   </Folder>
   <Folder Name="/Apps/" />
   <Folder Name="/Apps/Accounting/">
@@ -62,8 +61,8 @@
     <Project Path="Tools/CLI/FSH.CLI.csproj" />
   </Folder>
   <Folder Name="/Modules/Todos/">
-    <Project Path="Modules/Todos/Modules.Todos.Contracts/Modules.Todos.Contracts.csproj" />
-    <Project Path="Modules/Todos/Modules.Todos/Modules.Todos.csproj" />
+    <Project Path="Modules/Todos/Module.Todos.Contracts/Module.Todos.Contracts.csproj" />
+    <Project Path="Modules/Todos/Module.Todos/Module.Todos.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.gitignore" />

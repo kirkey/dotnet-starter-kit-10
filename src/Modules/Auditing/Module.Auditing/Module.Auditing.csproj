@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>FSH.Module.Auditing</RootNamespace>
+		<AssemblyName>FSH.Module.Auditing</AssemblyName>
+		<PackageId>FullStackHero.Module.Auditing</PackageId>
+		<NoWarn>$(NoWarn);CA1031;CA1812;CA1859;S3267</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Persistence\Persistence.csproj" />
+	  <ProjectReference Include="..\Module.Auditing.Contracts\Module.Auditing.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>FSH.Module.Microfinance.Contracts</RootNamespace>
+		<AssemblyName>FSH.Module.Microfinance.Contracts</AssemblyName>
+		<PackageId>FullStackHero.Module.Microfinance.Contracts</PackageId>
+		<NoWarn>$(NoWarn);CA1711</NoWarn>
+	</PropertyGroup>
+
+</Project>

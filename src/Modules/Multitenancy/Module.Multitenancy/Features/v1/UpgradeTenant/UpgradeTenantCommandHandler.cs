@@ -1,0 +1,16 @@
+﻿using FSH.Module.Multitenancy.Contracts;
+using FSH.Module.Multitenancy.Contracts.v1.UpgradeTenant;
+using Mediator;
+
+namespace FSH.Module.Multitenancy.Features.v1.UpgradeTenant;
+
+public sealed class UpgradeTenantCommandHandler(ITenantService service)
+    : ICommandHandler<UpgradeTenantCommand, UpgradeTenantCommandResponse>
+{
+    public async ValueTask<UpgradeTenantCommandResponse> Handle(UpgradeTenantCommand command, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(command);
+        DateTime validUpto = await service.UpgradeSubscription(command.Tenant, command.ExtendedExpiryDate);
+        return new UpgradeTenantCommandResponse(validUpto, command.Tenant);
+    }
+}

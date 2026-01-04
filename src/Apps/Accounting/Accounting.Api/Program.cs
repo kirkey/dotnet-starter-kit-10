@@ -1,9 +1,9 @@
 ﻿using FSH.Framework.Web;
 using FSH.Framework.Web.Modules;
-using FSH.Modules.Auditing;
-using FSH.Modules.Identity;
-using FSH.Modules.Multitenancy;
-using FSH.Modules.Todos;
+using FSH.Module.Auditing;
+using FSH.Module.Identity;
+using FSH.Module.Multitenancy;
+using FSH.Module.Todos;
 using System.Reflection;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -44,10 +44,10 @@ builder.Services.AddMediator(o =>
         typeof(MultitenancyModule),
         typeof(AuditingModule),
         typeof(TodoModule),
-        typeof(FSH.Modules.Identity.Contracts.Services.IUserService),
-        typeof(FSH.Modules.Multitenancy.Contracts.ITenantService),
-        typeof(FSH.Modules.Auditing.Contracts.AuditEnvelope),
-        typeof(FSH.Modules.Todos.Contracts.v1.Todos.GetTodosQuery)
+        typeof(FSH.Module.Identity.Contracts.Services.IUserService),
+        typeof(FSH.Module.Multitenancy.Contracts.ITenantService),
+        typeof(FSH.Module.Auditing.Contracts.AuditEnvelope),
+        typeof(FSH.Module.Todos.Contracts.v1.Todos.GetTodosQuery)
     ];
 });
 
