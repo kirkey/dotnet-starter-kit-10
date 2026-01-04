@@ -428,8 +428,12 @@ public class AccountingModule : IModule
         vendorGroup.MapDeleteVendorEndpoint();
 
         // Meters
-        // TODO: Map Meter endpoints (Create, Get, GetList, Update, Delete)
-        // RouteGroupBuilder meterGroup = group.MapGroup("/meters");
+        RouteGroupBuilder meterGroup = group.MapGroup("/meters");
+        meterGroup.MapCreateMeterEndpoint();
+        meterGroup.MapGetMeterEndpoint();
+        meterGroup.MapGetMetersEndpoint();
+        meterGroup.MapUpdateMeterEndpoint();
+        meterGroup.MapDeleteMeterEndpoint();
 
         // Consumption
         // TODO: Map Consumption endpoints (Create, Get, GetList, Update, Delete)
