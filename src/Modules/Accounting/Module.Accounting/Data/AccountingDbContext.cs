@@ -68,6 +68,7 @@ public class AccountingDbContext : DbContext
     // Banking & Payments
     public DbSet<Bank> Banks => Set<Bank>();
     public DbSet<BankReconciliation> BankReconciliations => Set<BankReconciliation>();
+    public DbSet<BankReconciliationLine> BankReconciliationLines => Set<BankReconciliationLine>();
     public DbSet<Check> Checks => Set<Check>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<PaymentAllocation> PaymentAllocations => Set<PaymentAllocation>();

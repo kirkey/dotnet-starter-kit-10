@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.CreditMemos.UpdateCreditMemo;
 
 namespace FSH.Module.Accounting.Features.v1.CreditMemos.UpdateCreditMemo;
-
-public record UpdateCreditMemoCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdateCreditMemoHandler(AccountingDbContext context) : ICommandHandler<UpdateCreditMemoCommand, Guid>
 {

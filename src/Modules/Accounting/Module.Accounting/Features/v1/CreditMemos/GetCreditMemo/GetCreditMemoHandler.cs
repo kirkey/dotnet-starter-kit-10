@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.CreditMemos.GetCreditMemo;
 using FSH.Module.Accounting.Contracts.v1.CreditMemos;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.CreditMemos.GetCreditMemo;
-
-public record GetCreditMemoQuery(Guid Id) : IQuery<CreditMemoDto>;
 
 public class GetCreditMemoHandler(AccountingDbContext context) : IQueryHandler<GetCreditMemoQuery, CreditMemoDto>
 {

@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.CreditMemos.DeleteCreditMemo;
 
 namespace FSH.Module.Accounting.Features.v1.CreditMemos.DeleteCreditMemo;
-
-public record DeleteCreditMemoCommand(Guid Id) : ICommand;
 
 public class DeleteCreditMemoHandler(AccountingDbContext context) : ICommandHandler<DeleteCreditMemoCommand>
 {

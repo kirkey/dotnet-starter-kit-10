@@ -119,6 +119,65 @@ using FSH.Module.Accounting.Features.v1.BankReconciliations.AddBankReconciliatio
 using FSH.Module.Accounting.Features.v1.BankReconciliations.RemoveBankReconciliationLine;
 using FSH.Module.Accounting.Features.v1.Checks.IssueCheck;
 
+// Budget Details
+using FSH.Module.Accounting.Features.v1.BudgetDetails.CreateBudgetDetail;
+using FSH.Module.Accounting.Features.v1.BudgetDetails.GetBudgetDetails;
+using FSH.Module.Accounting.Features.v1.BudgetDetails.GetListBudgetDetail;
+using FSH.Module.Accounting.Features.v1.BudgetDetails.UpdateBudgetDetail;
+using FSH.Module.Accounting.Features.v1.BudgetDetails.DeleteBudgetDetail;
+
+// Deferred Revenue
+using FSH.Module.Accounting.Features.v1.DeferredRevenue.CreateDeferredRevenue;
+using FSH.Module.Accounting.Features.v1.DeferredRevenue.GetDeferredRevenue;
+using FSH.Module.Accounting.Features.v1.DeferredRevenue.GetDeferredRevenue; // list endpoint namespace
+using FSH.Module.Accounting.Features.v1.DeferredRevenue.UpdateDeferredRevenue;
+using FSH.Module.Accounting.Features.v1.DeferredRevenue.DeleteDeferredRevenue;
+using FSH.Module.Accounting.Features.v1.DeferredRevenue.RecognizeDeferredRevenue;
+
+// Inventory Items
+using FSH.Module.Accounting.Features.v1.InventoryItems.CreateInventoryItem;
+using FSH.Module.Accounting.Features.v1.InventoryItems.GetInventoryItem;
+using FSH.Module.Accounting.Features.v1.InventoryItems.GetInventoryItems;
+using FSH.Module.Accounting.Features.v1.InventoryItems.UpdateInventoryItem;
+using FSH.Module.Accounting.Features.v1.InventoryItems.DeleteInventoryItem;
+using FSH.Module.Accounting.Features.v1.InventoryItems.AddStockInventoryItem;
+using FSH.Module.Accounting.Features.v1.InventoryItems.ReduceStockInventoryItem;
+
+// Cost Centers
+using FSH.Module.Accounting.Features.v1.CostCenters.CreateCostCenter;
+using FSH.Module.Accounting.Features.v1.CostCenters.GetCostCenter;
+using FSH.Module.Accounting.Features.v1.CostCenters.GetCostCenters;
+using FSH.Module.Accounting.Features.v1.CostCenters.UpdateCostCenter;
+using FSH.Module.Accounting.Features.v1.CostCenters.DeleteCostCenter;
+
+// Customers
+using FSH.Module.Accounting.Features.v1.Customers.CreateCustomer;
+using FSH.Module.Accounting.Features.v1.Customers.GetCustomer;
+using FSH.Module.Accounting.Features.v1.Customers.GetCustomers;
+using FSH.Module.Accounting.Features.v1.Customers.UpdateCustomer;
+using FSH.Module.Accounting.Features.v1.Customers.DeleteCustomer;
+
+// Members
+using FSH.Module.Accounting.Features.v1.Members.CreateMember;
+using FSH.Module.Accounting.Features.v1.Members.GetMember;
+using FSH.Module.Accounting.Features.v1.Members.GetMembers;
+using FSH.Module.Accounting.Features.v1.Members.UpdateMember;
+using FSH.Module.Accounting.Features.v1.Members.DeleteMember;
+
+// Vendors
+using FSH.Module.Accounting.Features.v1.Vendors.CreateVendor;
+using FSH.Module.Accounting.Features.v1.Vendors.GetVendor;
+using FSH.Module.Accounting.Features.v1.Vendors.GetVendors;
+using FSH.Module.Accounting.Features.v1.Vendors.UpdateVendor;
+using FSH.Module.Accounting.Features.v1.Vendors.DeleteVendor;
+
+// Meters
+using FSH.Module.Accounting.Features.v1.Meters.CreateMeter;
+using FSH.Module.Accounting.Features.v1.Meters.GetMeter;
+using FSH.Module.Accounting.Features.v1.Meters.GetMeters;
+using FSH.Module.Accounting.Features.v1.Meters.UpdateMeter;
+using FSH.Module.Accounting.Features.v1.Meters.DeleteMeter;
+
 // Checks
 using FSH.Module.Accounting.Features.v1.Checks.CreateCheck;
 using FSH.Module.Accounting.Features.v1.Checks.GetCheck;
@@ -744,7 +803,7 @@ public class AccountingModule : IModule
         RouteGroupBuilder deferredRevenueGroup = group.MapGroup("/deferredrevenue");
         deferredRevenueGroup.MapCreateDeferredRevenueEndpoint();
         deferredRevenueGroup.MapGetDeferredRevenueEndpoint();
-        deferredRevenueGroup.MapGetDeferredRevenuesEndpoint();
+        // deferredRevenueGroup.MapGetDeferredRevenuesEndpoint(); // duplicate/list naming mismatch; single paged list endpoint is MapGetDeferredRevenueEndpoint
         deferredRevenueGroup.MapUpdateDeferredRevenueEndpoint();
         deferredRevenueGroup.MapDeleteDeferredRevenueEndpoint();
         deferredRevenueGroup.MapRecognizeDeferredRevenueEndpoint();
