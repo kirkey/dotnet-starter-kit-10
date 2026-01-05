@@ -3,37 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
+using FSH.Module.Accounting.Contracts.v1.Banks.GetListBank;
+
 namespace FSH.Module.Accounting.Features.v1.Banks.GetBanks;
-
-/// <summary>
-/// Query to retrieve a paginated list of banks with optional filtering by multiple criteria.
-/// </summary>
-/// <param name="Page">Page number for pagination (1-based, default=1)</param>
-/// <param name="PageSize">Number of items per page (default=10)</param>
-/// <param name="SearchTerm">Optional filter by BankName (contains search)</param>
-/// <param name="IsActive">Optional filter by active status (null = all)</param>
-/// <param name="CurrencyCode">Optional filter by currency code (e.g., "USD", "EUR")</param>
-/// <param name="IsDefault">Optional filter by default bank flag (null = all)</param>
-public record GetBanksQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null,
-    string? CurrencyCode = null,
-    bool? IsDefault = null) : IQuery<BanksPagedResponse>;
-
-/// <summary>
-/// Response object for paginated bank list with summary data.
-/// </summary>
-/// <param name="Items">List of BankSummaryDto with 5 returned fields</param>
-/// <param name="TotalCount">Total count of banks matching filters (excluding pagination)</param>
-/// <param name="Page">Requested page number</param>
-/// <param name="PageSize">Items per page</param>
-public record BanksPagedResponse(
-    List<BankSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 /// <summary>
 /// Handler for retrieving a paginated, filtered list of bank accounts.

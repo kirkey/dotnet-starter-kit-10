@@ -1,5 +1,6 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.Banks;
+using FSH.Module.Accounting.Contracts.v1.Banks.GetBank;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,6 @@ namespace FSH.Module.Accounting.Features.v1.Banks.GetBank;
 /// Query to retrieve a single bank account by ID.
 /// </summary>
 /// <param name="Id">Bank ID (Guid) to retrieve</param>
-public record GetBankQuery(Guid Id) : IQuery<BankDto>;
 
 /// <summary>
 /// Handler for retrieving a single bank account by ID with complete DTO projection.

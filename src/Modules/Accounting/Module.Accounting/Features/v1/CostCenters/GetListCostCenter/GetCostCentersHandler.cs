@@ -1,21 +1,9 @@
-using FSH.Module.Accounting.Contracts.v1.CostCenters;
+using FSH.Module.Accounting.Contracts.v1.CostCenters.GetListCostCenter;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.CostCenters.GetCostCenters;
-
-public record GetCostCentersQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<CostCentersPagedResponse>;
-
-public record CostCentersPagedResponse(
-    List<CostCenterSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetCostCentersHandler(AccountingDbContext context) 
     : IQueryHandler<GetCostCentersQuery, CostCentersPagedResponse>

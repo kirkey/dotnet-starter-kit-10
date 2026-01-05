@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.CostCenters;
+using FSH.Module.Accounting.Contracts.v1.CostCenters.GetCostCenter;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.CostCenters.GetCostCenter;
-
-public record GetCostCenterQuery(Guid Id) : IQuery<CostCenterDto>;
 
 public class GetCostCenterHandler(AccountingDbContext context) : IQueryHandler<GetCostCenterQuery, CostCenterDto>
 {

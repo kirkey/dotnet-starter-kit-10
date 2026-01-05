@@ -2,10 +2,9 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.CostCenters.CreateCostCenter;
 
 namespace FSH.Module.Accounting.Features.v1.CostCenters.CreateCostCenter;
-
-public record CreateCostCenterCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreateCostCenterHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateCostCenterCommand, Guid>

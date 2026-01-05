@@ -1,5 +1,5 @@
 using FSH.Framework.Shared.Identity.Authorization;
-using FSH.Module.Accounting.Contracts.v1.CostCenters;
+using FSH.Module.Accounting.Contracts.v1.CostCenters.GetListCostCenter;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

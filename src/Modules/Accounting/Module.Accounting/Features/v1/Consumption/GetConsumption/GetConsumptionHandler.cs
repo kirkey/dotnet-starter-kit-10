@@ -3,10 +3,9 @@ using FSH.Module.Accounting.Contracts.v1.Consumption;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.Consumption.GetConsumption;
 
 namespace FSH.Module.Accounting.Features.v1.Consumption.GetConsumption;
-
-public record GetConsumptionQuery(Guid Id) : IQuery<ConsumptionDto>;
 
 public class GetConsumptionHandler(AccountingDbContext context) : IQueryHandler<GetConsumptionQuery, ConsumptionDto>
 {

@@ -2,6 +2,7 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.Banks.CreateBank;
 
 namespace FSH.Module.Accounting.Features.v1.Banks.CreateBank;
 
@@ -19,18 +20,6 @@ namespace FSH.Module.Accounting.Features.v1.Banks.CreateBank;
 /// <param name="OpeningBalance">Initial account balance (default=0)</param>
 /// <param name="IsDefault">Mark as default bank for automatic account reconciliation (default=false)</param>
 /// <param name="Description">Optional bank account description or notes</param>
-public record CreateBankCommand(
-    string BankName,
-    string? BankCode = null,
-    string? Address = null,
-    string? ContactName = null,
-    string? ContactPhone = null,
-    string? RoutingNumber = null,
-    string? SwiftCode = null,
-    string? CurrencyCode = null,
-    decimal OpeningBalance = 0,
-    bool IsDefault = false,
-    string? Description = null) : ICommand<Guid>;
 
 /// <summary>
 /// Handler for creating a new bank account using the Bank aggregate factory method.

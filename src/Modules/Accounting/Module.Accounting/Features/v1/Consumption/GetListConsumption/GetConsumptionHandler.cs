@@ -1,21 +1,9 @@
-using FSH.Module.Accounting.Contracts.v1.Consumption;
+using FSH.Module.Accounting.Contracts.v1.Consumption.GetListConsumption;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Consumption.GetListConsumption;
-
-public record GetConsumptionQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<ConsumptionPagedResponse>;
-
-public record ConsumptionPagedResponse(
-    List<ConsumptionSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetConsumptionHandler(AccountingDbContext context) 
     : IQueryHandler<GetConsumptionQuery, ConsumptionPagedResponse>
