@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.ProjectCosts.UpdateProjectCost;
 
 namespace FSH.Module.Accounting.Features.v1.ProjectCosts.UpdateProjectCost;
-
-public record UpdateProjectCostCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdateProjectCostHandler(AccountingDbContext context) : ICommandHandler<UpdateProjectCostCommand, Guid>
 {

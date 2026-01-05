@@ -3,10 +3,9 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using PatronageCapitalEntity = FSH.Module.Accounting.Domain.PatronageCapital;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.PatronageCapital.CreatePatronageCapital;
 
 namespace FSH.Module.Accounting.Features.v1.PatronageCapital.CreatePatronageCapital;
-
-public record CreatePatronageCapitalCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreatePatronageCapitalHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreatePatronageCapitalCommand, Guid>

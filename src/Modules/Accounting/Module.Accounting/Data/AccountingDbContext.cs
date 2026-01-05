@@ -164,7 +164,7 @@ public class AccountingDbContext : DbContext
     {
         if (!optionsBuilder.IsConfigured && !string.IsNullOrWhiteSpace(TenantInfo?.ConnectionString))
         {
-            optionsBuilder.UseDatabase(_settings.Provider, TenantInfo.ConnectionString!);
+            optionsBuilder.ConfigureHeroDatabase(_settings.Provider, TenantInfo.ConnectionString!, _settings.MigrationsAssembly, _environment.IsDevelopment());
 
             if (_environment.IsDevelopment())
             {

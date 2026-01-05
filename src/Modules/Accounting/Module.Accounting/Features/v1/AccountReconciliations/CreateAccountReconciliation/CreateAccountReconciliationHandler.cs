@@ -2,10 +2,9 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.AccountReconciliations.CreateAccountReconciliation;
 
 namespace FSH.Module.Accounting.Features.v1.AccountReconciliations.CreateAccountReconciliation;
-
-public record CreateAccountReconciliationCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreateAccountReconciliationHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateAccountReconciliationCommand, Guid>

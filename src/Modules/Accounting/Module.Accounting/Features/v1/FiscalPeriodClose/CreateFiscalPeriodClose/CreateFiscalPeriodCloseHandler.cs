@@ -43,7 +43,7 @@ public class CreateFiscalPeriodCloseHandler(AccountingDbContext context, ICurren
 {
     public async ValueTask<Guid> Handle(CreateFiscalPeriodCloseCommand command, CancellationToken ct)
     {
-        var entity = FiscalPeriodClose.Create(
+        var entity = FSH.Module.Accounting.Domain.FiscalPeriodClose.Create(
             command.FiscalPeriodId,
             command.FiscalYear,
             command.PeriodName,

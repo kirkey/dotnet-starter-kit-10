@@ -2,10 +2,9 @@
 using FSH.Module.Accounting.Data;
 using Mediator;
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.PatronageCapital.AllocatePatronageCapital;
 
 namespace FSH.Module.Accounting.Features.v1.PatronageCapital.AllocatePatronageCapital;
-
-public record AllocatePatronageCapitalCommand(Guid Id) : ICommand;
 
 public class AllocatePatronageCapitalHandler(AccountingDbContext context) 
     : ICommandHandler<AllocatePatronageCapitalCommand>

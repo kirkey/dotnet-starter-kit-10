@@ -1,21 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.CreditMemos;
+using FSH.Module.Accounting.Contracts.v1.CreditMemos.GetListCreditMemo;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.CreditMemos.GetCreditMemos;
-
-public record GetCreditMemosQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<CreditMemosPagedResponse>;
-
-public record CreditMemosPagedResponse(
-    List<CreditMemoSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetCreditMemosHandler(AccountingDbContext context) 
     : IQueryHandler<GetCreditMemosQuery, CreditMemosPagedResponse>

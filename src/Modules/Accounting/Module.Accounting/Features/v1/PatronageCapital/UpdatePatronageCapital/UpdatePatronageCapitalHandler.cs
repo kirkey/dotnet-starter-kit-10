@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.PatronageCapital.UpdatePatronageCapital;
 
 namespace FSH.Module.Accounting.Features.v1.PatronageCapital.UpdatePatronageCapital;
-
-public record UpdatePatronageCapitalCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdatePatronageCapitalHandler(AccountingDbContext context) : ICommandHandler<UpdatePatronageCapitalCommand, Guid>
 {

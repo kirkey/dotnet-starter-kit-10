@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.PatronageCapital.DeletePatronageCapital;
 
 namespace FSH.Module.Accounting.Features.v1.PatronageCapital.DeletePatronageCapital;
-
-public record DeletePatronageCapitalCommand(Guid Id) : ICommand;
 
 public class DeletePatronageCapitalHandler(AccountingDbContext context) : ICommandHandler<DeletePatronageCapitalCommand>
 {
