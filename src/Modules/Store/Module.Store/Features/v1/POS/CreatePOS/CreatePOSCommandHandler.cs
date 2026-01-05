@@ -13,7 +13,7 @@ public sealed class CreatePOSCommandHandler(
 {
     public async ValueTask<Guid> Handle(CreatePOSCommand command, CancellationToken cancellationToken)
     {
-        var pos = PointOfSale.Create(
+        var pos = POSEntity.Create(
             command.Name,
             command.Identifier,
             command.StoreId,

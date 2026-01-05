@@ -4,8 +4,9 @@ global using FSH.Framework.Core.Domain;
 global using FSH.Framework.Persistence;
 global using FSH.Framework.Shared.Identity.Authorization;
 global using FSH.Framework.Shared.Multitenancy;
-global using FSH.Module.Store.Domain;
 global using FSH.Module.Store.Exceptions;
+global using StoreEntity = FSH.Module.Store.Domain.Store;
+global using POSEntity = FSH.Module.Store.Domain.PointOfSale;
 
 // Mediator
 global using Mediator;

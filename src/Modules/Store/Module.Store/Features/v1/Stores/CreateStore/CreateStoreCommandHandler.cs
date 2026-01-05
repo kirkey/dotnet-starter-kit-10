@@ -12,7 +12,7 @@ public sealed class CreateStoreCommandHandler(
 {
     public async ValueTask<Guid> Handle(CreateStoreCommand command, CancellationToken cancellationToken)
     {
-        var store = Domain.Store.Create(
+        var store = StoreEntity.Create(
             command.Name,
             command.Address,
             command.City,

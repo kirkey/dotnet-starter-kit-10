@@ -32,12 +32,12 @@ public static class StoreExceptionExtensions
     /// <summary>
     /// Throws StoreNotFoundException if entity is null.
     /// </summary>
-    public static Store ThrowIfNotFound(this Store? store, Guid id)
+    public static StoreEntity ThrowIfNotFound(this StoreEntity? store, Guid id)
         => store ?? throw new StoreNotFoundException(id);
     
     /// <summary>
     /// Throws POSNotFoundException if entity is null.
     /// </summary>
-    public static PointOfSale ThrowIfNotFound(this PointOfSale? pos, Guid id)
+    public static POSEntity ThrowIfNotFound(this POSEntity? pos, Guid id)
         => pos ?? throw new POSNotFoundException(id);
 }

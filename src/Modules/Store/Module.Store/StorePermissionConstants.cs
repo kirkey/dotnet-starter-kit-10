@@ -1,3 +1,5 @@
+using FSH.Framework.Shared.Identity;
+
 namespace FSH.Module.Store;
 
 /// <summary>
@@ -6,6 +8,21 @@ namespace FSH.Module.Store;
 public static class StorePermissionConstants
 {
     private const string Prefix = "store";
+    
+    public static class ActionConstants
+    {
+        public const string View = "View";
+        public const string Search = "Search";
+        public const string Create = "Create";
+        public const string Update = "Update";
+        public const string Delete = "Delete";
+    }
+    
+    public static class ResourceConstants
+    {
+        public const string Stores = "Stores";
+        public const string POS = "POS";
+    }
     
     /// <summary>Permissions for store management.</summary>
     public static class Stores
@@ -30,20 +47,17 @@ public static class StorePermissionConstants
     /// <summary>
     /// Returns all permissions for the Store module.
     /// </summary>
-    public static IReadOnlyList<string> GetPermissions()
+    public static IReadOnlyList<FshPermission> GetPermissions() => new List<FshPermission>
     {
-        return new List<string>
-        {
-            Stores.View,
-            Stores.Search,
-            Stores.Create,
-            Stores.Update,
-            Stores.Delete,
-            POS.View,
-            POS.Search,
-            POS.Create,
-            POS.Update,
-            POS.Delete
-        };
-    }
+        new("View Stores", ActionConstants.View, ResourceConstants.Stores, IsBasic: true),
+        new("Search Stores", ActionConstants.Search, ResourceConstants.Stores, IsBasic: true),
+        new("Create Stores", ActionConstants.Create, ResourceConstants.Stores),
+        new("Update Stores", ActionConstants.Update, ResourceConstants.Stores),
+        new("Delete Stores", ActionConstants.Delete, ResourceConstants.Stores),
+        new("View POS", ActionConstants.View, ResourceConstants.POS, IsBasic: true),
+        new("Search POS", ActionConstants.Search, ResourceConstants.POS, IsBasic: true),
+        new("Create POS", ActionConstants.Create, ResourceConstants.POS),
+        new("Update POS", ActionConstants.Update, ResourceConstants.POS),
+        new("Delete POS", ActionConstants.Delete, ResourceConstants.POS)
+    };
 }

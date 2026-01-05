@@ -5,8 +5,6 @@ using FSH.Framework.Shared.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using StoreEntity = FSH.Module.Store.Domain.Store;
-using POSEntity = FSH.Module.Store.Domain.PointOfSale;
 
 namespace FSH.Module.Store.Data;
 

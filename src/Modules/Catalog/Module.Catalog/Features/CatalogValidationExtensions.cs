@@ -51,8 +51,7 @@ public static class CatalogValidationExtensions
     {
         return ruleBuilder
             .MaximumLength(CatalogStringLengths.CategoryDescriptionMaxLength)
-            .WithMessage($"Description cannot exceed {CatalogStringLengths.CategoryDescriptionMaxLength} characters")
-            .When(x => !string.IsNullOrEmpty(x));
+            .WithMessage($"Description cannot exceed {CatalogStringLengths.CategoryDescriptionMaxLength} characters");
     }
     
     // ===== Brand Validations =====
@@ -77,8 +76,7 @@ public static class CatalogValidationExtensions
     {
         return ruleBuilder
             .MaximumLength(CatalogStringLengths.BrandDescriptionMaxLength)
-            .WithMessage($"Description cannot exceed {CatalogStringLengths.BrandDescriptionMaxLength} characters")
-            .When(x => !string.IsNullOrEmpty(x));
+            .WithMessage($"Description cannot exceed {CatalogStringLengths.BrandDescriptionMaxLength} characters");
     }
     
     /// <summary>
@@ -89,8 +87,7 @@ public static class CatalogValidationExtensions
     {
         return ruleBuilder
             .MaximumLength(CatalogStringLengths.BrandWebsiteUrlMaxLength)
-            .WithMessage($"Website URL cannot exceed {CatalogStringLengths.BrandWebsiteUrlMaxLength} characters")
-            .When(x => !string.IsNullOrEmpty(x));
+            .WithMessage($"Website URL cannot exceed {CatalogStringLengths.BrandWebsiteUrlMaxLength} characters");
     }
     
     // ===== Product Validations =====
@@ -127,8 +124,7 @@ public static class CatalogValidationExtensions
     {
         return ruleBuilder
             .MaximumLength(CatalogStringLengths.ProductDescriptionMaxLength)
-            .WithMessage($"Description cannot exceed {CatalogStringLengths.ProductDescriptionMaxLength} characters")
-            .When(x => !string.IsNullOrEmpty(x));
+            .WithMessage($"Description cannot exceed {CatalogStringLengths.ProductDescriptionMaxLength} characters");
     }
     
     /// <summary>
@@ -139,8 +135,7 @@ public static class CatalogValidationExtensions
     {
         return ruleBuilder
             .MaximumLength(CatalogStringLengths.ProductBarcodeMaxLength)
-            .WithMessage($"Barcode cannot exceed {CatalogStringLengths.ProductBarcodeMaxLength} characters")
-            .When(x => !string.IsNullOrEmpty(x));
+            .WithMessage($"Barcode cannot exceed {CatalogStringLengths.ProductBarcodeMaxLength} characters");
     }
     
     /// <summary>
@@ -151,8 +146,7 @@ public static class CatalogValidationExtensions
     {
         return ruleBuilder
             .MaximumLength(CatalogStringLengths.ProductSpecificationsMaxLength)
-            .WithMessage($"Specifications cannot exceed {CatalogStringLengths.ProductSpecificationsMaxLength} characters")
-            .When(x => !string.IsNullOrEmpty(x));
+            .WithMessage($"Specifications cannot exceed {CatalogStringLengths.ProductSpecificationsMaxLength} characters");
     }
     
     /// <summary>
@@ -172,8 +166,7 @@ public static class CatalogValidationExtensions
         this IRuleBuilder<T, decimal?> ruleBuilder)
     {
         return ruleBuilder
-            .GreaterThanOrEqualTo(0).WithMessage("Cost cannot be negative")
-            .When(x => x.HasValue);
+            .GreaterThanOrEqualTo(0).WithMessage("Cost cannot be negative");
     }
     
     /// <summary>

@@ -1,12 +1,11 @@
-using FSH.Module.Store.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FSH.Module.Store.Data.Configurations;
 
-public class StoreConfiguration : IEntityTypeConfiguration<Store>
+public class StoreConfiguration : IEntityTypeConfiguration<StoreEntity>
 {
-    public void Configure(EntityTypeBuilder<Store> builder)
+    public void Configure(EntityTypeBuilder<StoreEntity> builder)
     {
         builder.ToTable("Stores", "store");
         builder.HasKey(s => s.Id);
