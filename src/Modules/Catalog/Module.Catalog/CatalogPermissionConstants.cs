@@ -1,74 +1,46 @@
+using FSH.Framework.Shared.Identity;
+
 namespace FSH.Module.Catalog;
 
 /// <summary>
 /// Centralized permission constants for the Catalog module.
 /// 
-/// **Pattern**: {module}:{feature}:{action}
-/// Example: catalog:categories:create
+/// **Pattern**: Permissions.{Resource}.{Action}
+/// Example: Permissions.Catalog.Categories.Create
 /// 
 /// Permissions are registered in CatalogModule.ConfigureServices()
 /// and enforced on endpoints using RequirePermission()
 /// </summary>
 public static class CatalogPermissionConstants
 {
-    /// <summary>Permission prefix for all catalog module permissions.</summary>
-    private const string Prefix = "catalog";
-    
     /// <summary>Permissions for category management.</summary>
     public static class Categories
     {
-        /// <summary>Permission to view categories: catalog:categories:view</summary>
-        public const string View = $"{Prefix}:categories:view";
-        
-        /// <summary>Permission to search categories: catalog:categories:search</summary>
-        public const string Search = $"{Prefix}:categories:search";
-        
-        /// <summary>Permission to create new categories: catalog:categories:create</summary>
-        public const string Create = $"{Prefix}:categories:create";
-        
-        /// <summary>Permission to update existing categories: catalog:categories:update</summary>
-        public const string Update = $"{Prefix}:categories:update";
-        
-        /// <summary>Permission to delete categories: catalog:categories:delete</summary>
-        public const string Delete = $"{Prefix}:categories:delete";
+        public const string View = "Permissions.Catalog.Categories.View";
+        public const string Search = "Permissions.Catalog.Categories.Search";
+        public const string Create = "Permissions.Catalog.Categories.Create";
+        public const string Update = "Permissions.Catalog.Categories.Update";
+        public const string Delete = "Permissions.Catalog.Categories.Delete";
     }
     
     /// <summary>Permissions for brand management.</summary>
     public static class Brands
     {
-        /// <summary>Permission to view brands: catalog:brands:view</summary>
-        public const string View = $"{Prefix}:brands:view";
-        
-        /// <summary>Permission to search brands: catalog:brands:search</summary>
-        public const string Search = $"{Prefix}:brands:search";
-        
-        /// <summary>Permission to create new brands: catalog:brands:create</summary>
-        public const string Create = $"{Prefix}:brands:create";
-        
-        /// <summary>Permission to update existing brands: catalog:brands:update</summary>
-        public const string Update = $"{Prefix}:brands:update";
-        
-        /// <summary>Permission to delete brands: catalog:brands:delete</summary>
-        public const string Delete = $"{Prefix}:brands:delete";
+        public const string View = "Permissions.Catalog.Brands.View";
+        public const string Search = "Permissions.Catalog.Brands.Search";
+        public const string Create = "Permissions.Catalog.Brands.Create";
+        public const string Update = "Permissions.Catalog.Brands.Update";
+        public const string Delete = "Permissions.Catalog.Brands.Delete";
     }
     
     /// <summary>Permissions for product management.</summary>
     public static class Products
     {
-        /// <summary>Permission to view products: catalog:products:view</summary>
-        public const string View = $"{Prefix}:products:view";
-        
-        /// <summary>Permission to search products: catalog:products:search</summary>
-        public const string Search = $"{Prefix}:products:search";
-        
-        /// <summary>Permission to create new products: catalog:products:create</summary>
-        public const string Create = $"{Prefix}:products:create";
-        
-        /// <summary>Permission to update existing products: catalog:products:update</summary>
-        public const string Update = $"{Prefix}:products:update";
-        
-        /// <summary>Permission to delete products: catalog:products:delete</summary>
-        public const string Delete = $"{Prefix}:products:delete";
+        public const string View = "Permissions.Catalog.Products.View";
+        public const string Search = "Permissions.Catalog.Products.Search";
+        public const string Create = "Permissions.Catalog.Products.Create";
+        public const string Update = "Permissions.Catalog.Products.Update";
+        public const string Delete = "Permissions.Catalog.Products.Delete";
     }
     
     /// <summary>
@@ -76,25 +48,22 @@ public static class CatalogPermissionConstants
     /// 
     /// Called in CatalogModule.ConfigureServices() to register all permissions.
     /// </summary>
-    public static IReadOnlyList<string> GetPermissions()
+    public static IReadOnlyList<FshPermission> GetPermissions() => new List<FshPermission>
     {
-        return new List<string>
-        {
-            Categories.View,
-            Categories.Search,
-            Categories.Create,
-            Categories.Update,
-            Categories.Delete,
-            Brands.View,
-            Brands.Search,
-            Brands.Create,
-            Brands.Update,
-            Brands.Delete,
-            Products.View,
-            Products.Search,
-            Products.Create,
-            Products.Update,
-            Products.Delete
-        };
-    }
+        new("View Categories", ActionConstants.View, "Catalog.Categories", IsBasic: true),
+        new("Search Categories", ActionConstants.Search, "Catalog.Categories", IsBasic: true),
+        new("Create Categories", ActionConstants.Create, "Catalog.Categories", IsBasic: true),
+        new("Update Categories", ActionConstants.Update, "Catalog.Categories", IsBasic: true),
+        new("Delete Categories", ActionConstants.Delete, "Catalog.Categories", IsBasic: true),
+        new("View Brands", ActionConstants.View, "Catalog.Brands", IsBasic: true),
+        new("Search Brands", ActionConstants.Search, "Catalog.Brands", IsBasic: true),
+        new("Create Brands", ActionConstants.Create, "Catalog.Brands", IsBasic: true),
+        new("Update Brands", ActionConstants.Update, "Catalog.Brands", IsBasic: true),
+        new("Delete Brands", ActionConstants.Delete, "Catalog.Brands", IsBasic: true),
+        new("View Products", ActionConstants.View, "Catalog.Products", IsBasic: true),
+        new("Search Products", ActionConstants.Search, "Catalog.Products", IsBasic: true),
+        new("Create Products", ActionConstants.Create, "Catalog.Products", IsBasic: true),
+        new("Update Products", ActionConstants.Update, "Catalog.Products", IsBasic: true),
+        new("Delete Products", ActionConstants.Delete, "Catalog.Products", IsBasic: true)
+    };
 }
