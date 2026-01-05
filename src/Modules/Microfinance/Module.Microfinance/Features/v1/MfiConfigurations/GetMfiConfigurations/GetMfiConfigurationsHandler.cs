@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.GetMfiConfigurations;
+using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations.GetMfiConfigurations;
 
-public record GetMfiConfigurationsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<MfiConfigurationsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.GetMfiConfigurations;
 
 public class GetMfiConfigurationsHandler(MicrofinanceDbContext context) : IQueryHandler<GetMfiConfigurationsQuery, MfiConfigurationsPagedResponse>
 {

@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.UpdatePromiseToPay;
+using FSH.Module.Microfinance.Contracts.v1.PromiseToPays.UpdatePromiseToPay;
 
-public record UpdatePromiseToPayCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.UpdatePromiseToPay;
 
 public class UpdatePromiseToPayHandler(MicrofinanceDbContext context) : ICommandHandler<UpdatePromiseToPayCommand, Guid>
 {

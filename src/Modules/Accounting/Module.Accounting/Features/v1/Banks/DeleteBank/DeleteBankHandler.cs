@@ -2,13 +2,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.Banks.DeleteBank;
-
-/// <summary>
-/// Command to delete an existing bank account from the system.
-/// </summary>
-/// <param name="Id">Bank ID to delete (must exist)</param>
-public record DeleteBankCommand(Guid Id) : ICommand;
+using FSH.Module.Accounting.Contracts.v1.Banks.DeleteBank;namespace FSH.Module.Accounting.Features.v1.Banks.DeleteBank;
 
 /// <summary>
 /// Handler for deleting a bank account from the system.

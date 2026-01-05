@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.ReportDefinitions.CreateReportDefinition;
+using FSH.Module.Microfinance.Contracts.v1.ReportDefinitions.CreateReportDefinition;
 
-public record CreateReportDefinitionCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.ReportDefinitions.CreateReportDefinition;
 
 public class CreateReportDefinitionHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateReportDefinitionCommand, Guid>

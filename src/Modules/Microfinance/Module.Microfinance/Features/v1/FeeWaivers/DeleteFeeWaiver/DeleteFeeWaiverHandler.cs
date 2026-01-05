@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.DeleteFeeWaiver;
+using FSH.Module.Microfinance.Contracts.v1.FeeWaivers.DeleteFeeWaiver;
 
-public record DeleteFeeWaiverCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.DeleteFeeWaiver;
 
 public class DeleteFeeWaiverHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteFeeWaiverCommand>
 {

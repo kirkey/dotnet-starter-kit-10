@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.PaymentGateways;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.PaymentGateways.GetPaymentGateway;
+using FSH.Module.Microfinance.Contracts.v1.PaymentGateways.GetPaymentGateway;
 
-public record GetPaymentGatewayQuery(Guid Id) : IQuery<PaymentGatewayDto>;
+namespace FSH.Module.Microfinance.Features.v1.PaymentGateways.GetPaymentGateway;
 
 public class GetPaymentGatewayHandler(MicrofinanceDbContext context) : IQueryHandler<GetPaymentGatewayQuery, PaymentGatewayDto>
 {

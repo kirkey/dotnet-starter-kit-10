@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.SavingsTransactions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.SavingsTransactions.GetSavingsTransaction;
+using FSH.Module.Microfinance.Contracts.v1.SavingsTransactions.GetSavingsTransaction;
 
-public record GetSavingsTransactionQuery(Guid Id) : IQuery<SavingsTransactionDto>;
+namespace FSH.Module.Microfinance.Features.v1.SavingsTransactions.GetSavingsTransaction;
 
 public class GetSavingsTransactionHandler(MicrofinanceDbContext context) : IQueryHandler<GetSavingsTransactionQuery, SavingsTransactionDto>
 {

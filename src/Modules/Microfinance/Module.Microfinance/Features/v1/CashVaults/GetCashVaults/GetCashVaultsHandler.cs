@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.CashVaults;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CashVaults.GetCashVaults;
+using FSH.Module.Microfinance.Contracts.v1.CashVaults.GetCashVaults;
 
-public record GetCashVaultsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<CashVaultsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.CashVaults.GetCashVaults;
 
 public class GetCashVaultsHandler(MicrofinanceDbContext context) : IQueryHandler<GetCashVaultsQuery, CashVaultsPagedResponse>
 {

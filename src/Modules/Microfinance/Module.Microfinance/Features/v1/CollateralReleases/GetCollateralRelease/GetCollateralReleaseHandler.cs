@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.CollateralReleases;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CollateralReleases.GetCollateralRelease;
+using FSH.Module.Microfinance.Contracts.v1.CollateralReleases.GetCollateralRelease;
 
-public record GetCollateralReleaseQuery(Guid Id) : IQuery<CollateralReleaseDto>;
+namespace FSH.Module.Microfinance.Features.v1.CollateralReleases.GetCollateralRelease;
 
 public class GetCollateralReleaseHandler(MicrofinanceDbContext context) : IQueryHandler<GetCollateralReleaseQuery, CollateralReleaseDto>
 {

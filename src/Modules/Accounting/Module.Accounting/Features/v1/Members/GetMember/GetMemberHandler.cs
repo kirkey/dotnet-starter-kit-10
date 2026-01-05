@@ -4,9 +4,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.Members.GetMember;
+using FSH.Module.Accounting.Contracts.v1.Members.GetMember;
 
-public record GetMemberQuery(Guid Id) : IQuery<MemberDto>;
+namespace FSH.Module.Accounting.Features.v1.Members.GetMember;
 
 public class GetMemberHandler(AccountingDbContext context) : IQueryHandler<GetMemberQuery, MemberDto>
 {

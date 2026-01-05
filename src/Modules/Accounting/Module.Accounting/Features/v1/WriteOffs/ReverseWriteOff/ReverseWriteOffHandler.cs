@@ -2,9 +2,7 @@
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.WriteOffs.ReverseWriteOff;
-
-public record ReverseWriteOffCommand(Guid Id) : ICommand;
+using FSH.Module.Accounting.Contracts.v1.WriteOffs.ReverseWriteOff;namespace FSH.Module.Accounting.Features.v1.WriteOffs.ReverseWriteOff;
 
 public class ReverseWriteOffHandler(AccountingDbContext context) 
     : ICommandHandler<ReverseWriteOffCommand>

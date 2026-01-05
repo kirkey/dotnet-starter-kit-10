@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FeeDefinitions.DeleteFeeDefinition;
+using FSH.Module.Microfinance.Contracts.v1.FeeDefinitions.DeleteFeeDefinition;
 
-public record DeleteFeeDefinitionCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.FeeDefinitions.DeleteFeeDefinition;
 
 public class DeleteFeeDefinitionHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteFeeDefinitionCommand>
 {

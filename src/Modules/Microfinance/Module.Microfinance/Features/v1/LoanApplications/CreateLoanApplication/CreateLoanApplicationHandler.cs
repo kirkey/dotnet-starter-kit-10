@@ -3,9 +3,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanApplications.CreateLoanApplication;
-
-public record CreateLoanApplicationCommand(string Name) : ICommand<Guid>;
+using FSH.Module.Microfinance.Contracts.v1.LoanApplications;namespace FSH.Module.Microfinance.Features.v1.LoanApplications.CreateLoanApplication;
 
 public class CreateLoanApplicationHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateLoanApplicationCommand, Guid>

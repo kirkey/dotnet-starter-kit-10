@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.UpdateFeeWaiver;
+using FSH.Module.Microfinance.Contracts.v1.FeeWaivers.UpdateFeeWaiver;
 
-public record UpdateFeeWaiverCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.UpdateFeeWaiver;
 
 public class UpdateFeeWaiverHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateFeeWaiverCommand, Guid>
 {

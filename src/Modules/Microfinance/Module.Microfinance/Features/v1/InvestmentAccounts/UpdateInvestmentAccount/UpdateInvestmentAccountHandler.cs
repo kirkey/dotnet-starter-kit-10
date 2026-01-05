@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.InvestmentAccounts.UpdateInvestmentAccount;
+using FSH.Module.Microfinance.Contracts.v1.InvestmentAccounts.UpdateInvestmentAccount;
 
-public record UpdateInvestmentAccountCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.InvestmentAccounts.UpdateInvestmentAccount;
 
 public class UpdateInvestmentAccountHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateInvestmentAccountCommand, Guid>
 {

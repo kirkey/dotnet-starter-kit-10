@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.QrPayments;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.QrPayments.GetQrPayments;
+using FSH.Module.Microfinance.Contracts.v1.QrPayments.GetQrPayments;
 
-public record GetQrPaymentsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<QrPaymentsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.QrPayments.GetQrPayments;
 
 public class GetQrPaymentsHandler(MicrofinanceDbContext context) : IQueryHandler<GetQrPaymentsQuery, QrPaymentsPagedResponse>
 {

@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.Branches;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Branches.GetBranchs;
+using FSH.Module.Microfinance.Contracts.v1.Branches.GetBranchs;
 
-public record GetBranchsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<BranchsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.Branches.GetBranchs;
 
 public class GetBranchsHandler(MicrofinanceDbContext context) : IQueryHandler<GetBranchsQuery, BranchsPagedResponse>
 {

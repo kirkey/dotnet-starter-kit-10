@@ -4,22 +4,9 @@ using FSH.Module.Accounting.Domain;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.JournalEntryLines.CreateJournalEntryLine;
+using FSH.Module.Accounting.Contracts.v1.JournalEntryLines.CreateJournalEntryLine;
 
-public record CreateJournalEntryLineCommand(
-    Guid JournalEntryId,
-    int LineNumber,
-    Guid AccountId,
-    string AccountCode,
-    string AccountName,
-    decimal Amount,
-    string TransactionType,
-    string? ReferenceNumber = null,
-    string? Description = null,
-    string? Notes = null,
-    Guid? CostCenterId = null,
-    Guid? DepartmentId = null,
-    Guid? ProjectId = null) : ICommand<Guid>;
+namespace FSH.Module.Accounting.Features.v1.JournalEntryLines.CreateJournalEntryLine;
 
 public class CreateJournalEntryLineHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateJournalEntryLineCommand, Guid>

@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanSchedules.DeleteLoanSchedule;
+using FSH.Module.Microfinance.Contracts.v1.LoanSchedules.DeleteLoanSchedule;
 
-public record DeleteLoanScheduleCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.LoanSchedules.DeleteLoanSchedule;
 
 public class DeleteLoanScheduleHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteLoanScheduleCommand>
 {

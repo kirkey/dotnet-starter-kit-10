@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.ShareTransactions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ShareTransactions.GetShareTransactions;
+using FSH.Module.Microfinance.Contracts.v1.ShareTransactions.GetShareTransactions;
 
-public record GetShareTransactionsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<ShareTransactionsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.ShareTransactions.GetShareTransactions;
 
 public class GetShareTransactionsHandler(MicrofinanceDbContext context) : IQueryHandler<GetShareTransactionsQuery, ShareTransactionsPagedResponse>
 {

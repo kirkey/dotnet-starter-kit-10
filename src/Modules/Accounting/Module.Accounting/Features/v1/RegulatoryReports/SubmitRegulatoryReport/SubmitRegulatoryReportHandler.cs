@@ -2,9 +2,9 @@
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.RegulatoryReports.SubmitRegulatoryReport;
+using FSH.Module.Accounting.Contracts.v1.RegulatoryReports.SubmitRegulatoryReport;
 
-public record SubmitRegulatoryReportCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.RegulatoryReports.SubmitRegulatoryReport;
 
 public class SubmitRegulatoryReportHandler(AccountingDbContext context) 
     : ICommandHandler<SubmitRegulatoryReportCommand>

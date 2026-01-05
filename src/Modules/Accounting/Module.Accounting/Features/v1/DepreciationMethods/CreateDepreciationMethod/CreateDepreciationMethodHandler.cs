@@ -3,9 +3,9 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.DepreciationMethods.CreateDepreciationMethod;
+using FSH.Module.Accounting.Contracts.v1.DepreciationMethods.CreateDepreciationMethod;
 
-public record CreateDepreciationMethodCommand(string Name, string? Description) : ICommand<Guid>;
+namespace FSH.Module.Accounting.Features.v1.DepreciationMethods.CreateDepreciationMethod;
 
 public class CreateDepreciationMethodHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateDepreciationMethodCommand, Guid>

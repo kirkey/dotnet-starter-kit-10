@@ -1,20 +1,7 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Members.UpdateMember;
-public record UpdateMemberCommand(
-    Guid MemberId,
-    string? FirstName,
-    string? LastName,
-    string? MiddleName,
-    string? Email,
-    string? PhoneNumber,
-    DateTimeOffset? DateOfBirth,
-    string? Gender,
-    string? Address,
-    string? NationalId,
-    string? Occupation,
-    decimal? MonthlyIncome) : ICommand<Guid>;
+using FSH.Module.Microfinance.Contracts.v1.Members;namespace FSH.Module.Microfinance.Features.v1.Members.UpdateMember;
 public class UpdateMemberHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateMemberCommand, Guid>
 {
     public async ValueTask<Guid> Handle(UpdateMemberCommand command, CancellationToken ct)

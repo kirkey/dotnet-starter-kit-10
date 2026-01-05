@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.QrPayments.DeleteQrPayment;
+using FSH.Module.Microfinance.Contracts.v1.QrPayments.DeleteQrPayment;
 
-public record DeleteQrPaymentCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.QrPayments.DeleteQrPayment;
 
 public class DeleteQrPaymentHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteQrPaymentCommand>
 {

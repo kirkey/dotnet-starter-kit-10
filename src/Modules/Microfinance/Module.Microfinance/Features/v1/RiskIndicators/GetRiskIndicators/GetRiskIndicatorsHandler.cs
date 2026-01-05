@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.RiskIndicators;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.RiskIndicators.GetRiskIndicators;
+using FSH.Module.Microfinance.Contracts.v1.RiskIndicators.GetRiskIndicators;
 
-public record GetRiskIndicatorsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<RiskIndicatorsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.RiskIndicators.GetRiskIndicators;
 
 public class GetRiskIndicatorsHandler(MicrofinanceDbContext context) : IQueryHandler<GetRiskIndicatorsQuery, RiskIndicatorsPagedResponse>
 {

@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.InterconnectionAgreements.DeleteInterconnectionAgreement;
+using FSH.Module.Accounting.Contracts.v1.InterconnectionAgreements.DeleteInterconnectionAgreement;
 
-public record DeleteInterconnectionAgreementCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.InterconnectionAgreements.DeleteInterconnectionAgreement;
 
 public class DeleteInterconnectionAgreementHandler(AccountingDbContext context) : ICommandHandler<DeleteInterconnectionAgreementCommand>
 {

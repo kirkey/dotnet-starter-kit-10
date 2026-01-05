@@ -3,9 +3,9 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.InterconnectionAgreements.CreateInterconnectionAgreement;
+using FSH.Module.Accounting.Contracts.v1.InterconnectionAgreements.CreateInterconnectionAgreement;
 
-public record CreateInterconnectionAgreementCommand(string Name, string? Description) : ICommand<Guid>;
+namespace FSH.Module.Accounting.Features.v1.InterconnectionAgreements.CreateInterconnectionAgreement;
 
 public class CreateInterconnectionAgreementHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateInterconnectionAgreementCommand, Guid>

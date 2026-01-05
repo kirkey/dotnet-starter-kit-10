@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.ShareTransactions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ShareTransactions.GetShareTransaction;
+using FSH.Module.Microfinance.Contracts.v1.ShareTransactions.GetShareTransaction;
 
-public record GetShareTransactionQuery(Guid Id) : IQuery<ShareTransactionDto>;
+namespace FSH.Module.Microfinance.Features.v1.ShareTransactions.GetShareTransaction;
 
 public class GetShareTransactionHandler(MicrofinanceDbContext context) : IQueryHandler<GetShareTransactionQuery, ShareTransactionDto>
 {

@@ -2,9 +2,9 @@
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.AccountReconciliations.ApproveAccountReconciliation;
+using FSH.Module.Accounting.Contracts.v1.AccountReconciliations.ApproveAccountReconciliation;
 
-public record ApproveAccountReconciliationCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.AccountReconciliations.ApproveAccountReconciliation;
 
 public class ApproveAccountReconciliationHandler(AccountingDbContext context) 
     : ICommandHandler<ApproveAccountReconciliationCommand>

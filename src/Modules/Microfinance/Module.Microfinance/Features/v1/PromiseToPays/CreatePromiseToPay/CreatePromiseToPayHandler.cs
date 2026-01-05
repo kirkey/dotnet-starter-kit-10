@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.CreatePromiseToPay;
+using FSH.Module.Microfinance.Contracts.v1.PromiseToPays.CreatePromiseToPay;
 
-public record CreatePromiseToPayCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.CreatePromiseToPay;
 
 public class CreatePromiseToPayHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreatePromiseToPayCommand, Guid>

@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.GroupMemberships;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.GroupMemberships.GetGroupMembership;
+using FSH.Module.Microfinance.Contracts.v1.GroupMemberships.GetGroupMembership;
 
-public record GetGroupMembershipQuery(Guid Id) : IQuery<GroupMembershipDto>;
+namespace FSH.Module.Microfinance.Features.v1.GroupMemberships.GetGroupMembership;
 
 public class GetGroupMembershipHandler(MicrofinanceDbContext context) : IQueryHandler<GetGroupMembershipQuery, GroupMembershipDto>
 {

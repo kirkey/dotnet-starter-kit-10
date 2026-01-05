@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanWriteOffs.DeleteLoanWriteOff;
+using FSH.Module.Microfinance.Contracts.v1.LoanWriteOffs.DeleteLoanWriteOff;
 
-public record DeleteLoanWriteOffCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.LoanWriteOffs.DeleteLoanWriteOff;
 
 public class DeleteLoanWriteOffHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteLoanWriteOffCommand>
 {

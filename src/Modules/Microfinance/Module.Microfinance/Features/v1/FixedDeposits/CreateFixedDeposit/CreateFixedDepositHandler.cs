@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.FixedDeposits.CreateFixedDeposit;
+using FSH.Module.Microfinance.Contracts.v1.FixedDeposits.CreateFixedDeposit;
 
-public record CreateFixedDepositCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.FixedDeposits.CreateFixedDeposit;
 
 public class CreateFixedDepositHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateFixedDepositCommand, Guid>

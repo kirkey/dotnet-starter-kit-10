@@ -4,24 +4,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.Payments.GetPayment;
-
-/// <summary>
-/// Get Payment query DTO.
-/// 
-/// **Purpose:**
-/// Encapsulates the request to retrieve a specific Payment by its ID.
-/// 
-/// **Parameters:**
-/// - Id: The unique identifier of the Payment to retrieve
-/// 
-/// **Multi-Tenancy:**
-/// Tenant context is automatically applied via query filters.
-/// 
-/// **Returned Data:**
-/// Payment with all metadata (name, description, creation info)
-/// </summary>
-public record GetPaymentQuery(Guid Id) : IQuery<PaymentDto>;
+using FSH.Module.Accounting.Contracts.v1.Payments.GetPayment;namespace FSH.Module.Accounting.Features.v1.Payments.GetPayment;
 
 /// <summary>
 /// Handler for retrieving a single Payment by ID.

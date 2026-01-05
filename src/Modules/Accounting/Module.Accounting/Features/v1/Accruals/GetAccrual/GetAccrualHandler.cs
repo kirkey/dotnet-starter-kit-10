@@ -4,9 +4,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.Accruals.GetAccrual;
-
-public record GetAccrualQuery(Guid Id) : IQuery<AccrualDto>;
+using FSH.Module.Accounting.Contracts.v1.Accruals.GetAccrual;namespace FSH.Module.Accounting.Features.v1.Accruals.GetAccrual;
 
 public class GetAccrualHandler(AccountingDbContext context) : IQueryHandler<GetAccrualQuery, AccrualDto>
 {

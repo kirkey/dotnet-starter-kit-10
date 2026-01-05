@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanGuarantors.DeleteLoanGuarantor;
+using FSH.Module.Microfinance.Contracts.v1.LoanGuarantors.DeleteLoanGuarantor;
 
-public record DeleteLoanGuarantorCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.LoanGuarantors.DeleteLoanGuarantor;
 
 public class DeleteLoanGuarantorHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteLoanGuarantorCommand>
 {

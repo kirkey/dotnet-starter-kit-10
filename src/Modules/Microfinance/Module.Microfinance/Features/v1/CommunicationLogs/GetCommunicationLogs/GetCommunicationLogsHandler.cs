@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.CommunicationLogs;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CommunicationLogs.GetCommunicationLogs;
+using FSH.Module.Microfinance.Contracts.v1.CommunicationLogs.GetCommunicationLogs;
 
-public record GetCommunicationLogsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<CommunicationLogsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.CommunicationLogs.GetCommunicationLogs;
 
 public class GetCommunicationLogsHandler(MicrofinanceDbContext context) : IQueryHandler<GetCommunicationLogsQuery, CommunicationLogsPagedResponse>
 {

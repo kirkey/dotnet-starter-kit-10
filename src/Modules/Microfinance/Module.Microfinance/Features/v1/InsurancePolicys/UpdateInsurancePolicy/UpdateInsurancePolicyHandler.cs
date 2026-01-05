@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.InsurancePolicys.UpdateInsurancePolicy;
+using FSH.Module.Microfinance.Contracts.v1.InsurancePolicys.UpdateInsurancePolicy;
 
-public record UpdateInsurancePolicyCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.InsurancePolicys.UpdateInsurancePolicy;
 
 public class UpdateInsurancePolicyHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateInsurancePolicyCommand, Guid>
 {

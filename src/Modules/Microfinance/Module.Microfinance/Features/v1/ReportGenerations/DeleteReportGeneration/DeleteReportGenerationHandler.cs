@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.DeleteReportGeneration;
+using FSH.Module.Microfinance.Contracts.v1.ReportGenerations.DeleteReportGeneration;
 
-public record DeleteReportGenerationCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.DeleteReportGeneration;
 
 public class DeleteReportGenerationHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteReportGenerationCommand>
 {

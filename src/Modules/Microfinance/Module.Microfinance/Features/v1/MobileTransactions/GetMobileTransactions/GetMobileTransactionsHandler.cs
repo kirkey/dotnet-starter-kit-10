@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.MobileTransactions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MobileTransactions.GetMobileTransactions;
+using FSH.Module.Microfinance.Contracts.v1.MobileTransactions.GetMobileTransactions;
 
-public record GetMobileTransactionsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<MobileTransactionsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.MobileTransactions.GetMobileTransactions;
 
 public class GetMobileTransactionsHandler(MicrofinanceDbContext context) : IQueryHandler<GetMobileTransactionsQuery, MobileTransactionsPagedResponse>
 {

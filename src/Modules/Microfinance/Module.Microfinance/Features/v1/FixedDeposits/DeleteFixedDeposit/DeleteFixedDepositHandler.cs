@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FixedDeposits.DeleteFixedDeposit;
+using FSH.Module.Microfinance.Contracts.v1.FixedDeposits.DeleteFixedDeposit;
 
-public record DeleteFixedDepositCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.FixedDeposits.DeleteFixedDeposit;
 
 public class DeleteFixedDepositHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteFixedDepositCommand>
 {

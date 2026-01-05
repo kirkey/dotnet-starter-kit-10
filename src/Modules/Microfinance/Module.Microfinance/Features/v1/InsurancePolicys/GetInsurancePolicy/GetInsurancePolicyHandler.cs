@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.InsurancePolicys;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.InsurancePolicys.GetInsurancePolicy;
+using FSH.Module.Microfinance.Contracts.v1.InsurancePolicys.GetInsurancePolicy;
 
-public record GetInsurancePolicyQuery(Guid Id) : IQuery<InsurancePolicyDto>;
+namespace FSH.Module.Microfinance.Features.v1.InsurancePolicys.GetInsurancePolicy;
 
 public class GetInsurancePolicyHandler(MicrofinanceDbContext context) : IQueryHandler<GetInsurancePolicyQuery, InsurancePolicyDto>
 {

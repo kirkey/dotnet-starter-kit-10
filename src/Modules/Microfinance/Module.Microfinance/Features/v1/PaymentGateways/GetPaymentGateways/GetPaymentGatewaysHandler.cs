@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.PaymentGateways;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.PaymentGateways.GetPaymentGateways;
+using FSH.Module.Microfinance.Contracts.v1.PaymentGateways.GetPaymentGateways;
 
-public record GetPaymentGatewaysQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<PaymentGatewaysPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.PaymentGateways.GetPaymentGateways;
 
 public class GetPaymentGatewaysHandler(MicrofinanceDbContext context) : IQueryHandler<GetPaymentGatewaysQuery, PaymentGatewaysPagedResponse>
 {

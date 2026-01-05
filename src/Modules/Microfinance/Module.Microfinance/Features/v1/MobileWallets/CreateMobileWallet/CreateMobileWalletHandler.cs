@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.MobileWallets.CreateMobileWallet;
+using FSH.Module.Microfinance.Contracts.v1.MobileWallets.CreateMobileWallet;
 
-public record CreateMobileWalletCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.MobileWallets.CreateMobileWallet;
 
 public class CreateMobileWalletHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateMobileWalletCommand, Guid>

@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.PaymentGateways.CreatePaymentGateway;
+using FSH.Module.Microfinance.Contracts.v1.PaymentGateways.CreatePaymentGateway;
 
-public record CreatePaymentGatewayCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.PaymentGateways.CreatePaymentGateway;
 
 public class CreatePaymentGatewayHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreatePaymentGatewayCommand, Guid>

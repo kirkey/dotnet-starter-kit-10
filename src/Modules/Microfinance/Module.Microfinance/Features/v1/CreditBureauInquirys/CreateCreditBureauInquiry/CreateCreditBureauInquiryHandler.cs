@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.CreditBureauInquirys.CreateCreditBureauInquiry;
+using FSH.Module.Microfinance.Contracts.v1.CreditBureauInquirys.CreateCreditBureauInquiry;
 
-public record CreateCreditBureauInquiryCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CreditBureauInquirys.CreateCreditBureauInquiry;
 
 public class CreateCreditBureauInquiryHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateCreditBureauInquiryCommand, Guid>

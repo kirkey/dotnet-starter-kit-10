@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FeeDefinitions.UpdateFeeDefinition;
+using FSH.Module.Microfinance.Contracts.v1.FeeDefinitions.UpdateFeeDefinition;
 
-public record UpdateFeeDefinitionCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.FeeDefinitions.UpdateFeeDefinition;
 
 public class UpdateFeeDefinitionHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateFeeDefinitionCommand, Guid>
 {

@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.CreditBureauReports;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CreditBureauReports.GetCreditBureauReport;
+using FSH.Module.Microfinance.Contracts.v1.CreditBureauReports.GetCreditBureauReport;
 
-public record GetCreditBureauReportQuery(Guid Id) : IQuery<CreditBureauReportDto>;
+namespace FSH.Module.Microfinance.Features.v1.CreditBureauReports.GetCreditBureauReport;
 
 public class GetCreditBureauReportHandler(MicrofinanceDbContext context) : IQueryHandler<GetCreditBureauReportQuery, CreditBureauReportDto>
 {

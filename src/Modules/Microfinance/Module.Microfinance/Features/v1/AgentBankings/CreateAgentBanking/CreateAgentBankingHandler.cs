@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.AgentBankings.CreateAgentBanking;
+using FSH.Module.Microfinance.Contracts.v1.AgentBankings.CreateAgentBanking;
 
-public record CreateAgentBankingCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.AgentBankings.CreateAgentBanking;
 
 public class CreateAgentBankingHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateAgentBankingCommand, Guid>

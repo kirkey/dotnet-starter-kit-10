@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.CreateAmlAlert;
+using FSH.Module.Microfinance.Contracts.v1.AmlAlerts.CreateAmlAlert;
 
-public record CreateAmlAlertCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.CreateAmlAlert;
 
 public class CreateAmlAlertHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateAmlAlertCommand, Guid>

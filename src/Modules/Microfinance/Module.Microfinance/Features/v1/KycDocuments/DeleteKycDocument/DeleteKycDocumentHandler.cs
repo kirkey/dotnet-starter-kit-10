@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.KycDocuments.DeleteKycDocument;
+using FSH.Module.Microfinance.Contracts.v1.KycDocuments.DeleteKycDocument;
 
-public record DeleteKycDocumentCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.KycDocuments.DeleteKycDocument;
 
 public class DeleteKycDocumentHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteKycDocumentCommand>
 {

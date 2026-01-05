@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.DepreciationMethods.DeleteDepreciationMethod;
+using FSH.Module.Accounting.Contracts.v1.DepreciationMethods.DeleteDepreciationMethod;
 
-public record DeleteDepreciationMethodCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.DepreciationMethods.DeleteDepreciationMethod;
 
 public class DeleteDepreciationMethodHandler(AccountingDbContext context) : ICommandHandler<DeleteDepreciationMethodCommand>
 {

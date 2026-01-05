@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.DebtSettlements;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.DebtSettlements.GetDebtSettlements;
+using FSH.Module.Microfinance.Contracts.v1.DebtSettlements.GetDebtSettlements;
 
-public record GetDebtSettlementsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<DebtSettlementsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.DebtSettlements.GetDebtSettlements;
 
 public class GetDebtSettlementsHandler(MicrofinanceDbContext context) : IQueryHandler<GetDebtSettlementsQuery, DebtSettlementsPagedResponse>
 {

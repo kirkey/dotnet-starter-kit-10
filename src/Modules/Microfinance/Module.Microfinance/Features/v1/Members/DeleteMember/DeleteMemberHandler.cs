@@ -1,8 +1,7 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Members.DeleteMember;
-public record DeleteMemberCommand(Guid MemberId) : ICommand;
+using FSH.Module.Microfinance.Contracts.v1.Members;namespace FSH.Module.Microfinance.Features.v1.Members.DeleteMember;
 public class DeleteMemberHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteMemberCommand>
 {
     public async ValueTask<Unit> Handle(DeleteMemberCommand command, CancellationToken ct)

@@ -3,19 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
+using FSH.Module.Accounting.Contracts.v1.PrepaidExpenses.GetListPrepaidExpense;
+
 namespace FSH.Module.Accounting.Features.v1.PrepaidExpenses.GetPrepaidExpenses;
-
-public record GetPrepaidExpensesQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<PrepaidExpensesPagedResponse>;
-
-public record PrepaidExpensesPagedResponse(
-    List<PrepaidExpenseSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetPrepaidExpensesHandler(AccountingDbContext context) 
     : IQueryHandler<GetPrepaidExpensesQuery, PrepaidExpensesPagedResponse>

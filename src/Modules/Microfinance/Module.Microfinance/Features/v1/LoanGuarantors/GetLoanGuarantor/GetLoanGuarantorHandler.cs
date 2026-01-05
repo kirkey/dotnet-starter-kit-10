@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.LoanGuarantors;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanGuarantors.GetLoanGuarantor;
+using FSH.Module.Microfinance.Contracts.v1.LoanGuarantors.GetLoanGuarantor;
 
-public record GetLoanGuarantorQuery(Guid Id) : IQuery<LoanGuarantorDto>;
+namespace FSH.Module.Microfinance.Features.v1.LoanGuarantors.GetLoanGuarantor;
 
 public class GetLoanGuarantorHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanGuarantorQuery, LoanGuarantorDto>
 {

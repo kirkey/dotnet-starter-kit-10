@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.LoanWriteOffs;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanWriteOffs.GetLoanWriteOff;
+using FSH.Module.Microfinance.Contracts.v1.LoanWriteOffs.GetLoanWriteOff;
 
-public record GetLoanWriteOffQuery(Guid Id) : IQuery<LoanWriteOffDto>;
+namespace FSH.Module.Microfinance.Features.v1.LoanWriteOffs.GetLoanWriteOff;
 
 public class GetLoanWriteOffHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanWriteOffQuery, LoanWriteOffDto>
 {

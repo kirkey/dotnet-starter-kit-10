@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.StaffTrainings;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.StaffTrainings.GetStaffTraining;
+using FSH.Module.Microfinance.Contracts.v1.StaffTrainings.GetStaffTraining;
 
-public record GetStaffTrainingQuery(Guid Id) : IQuery<StaffTrainingDto>;
+namespace FSH.Module.Microfinance.Features.v1.StaffTrainings.GetStaffTraining;
 
 public class GetStaffTrainingHandler(MicrofinanceDbContext context) : IQueryHandler<GetStaffTrainingQuery, StaffTrainingDto>
 {

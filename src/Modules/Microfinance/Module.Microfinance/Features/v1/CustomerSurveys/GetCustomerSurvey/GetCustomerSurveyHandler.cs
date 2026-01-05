@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.CustomerSurveys;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CustomerSurveys.GetCustomerSurvey;
+using FSH.Module.Microfinance.Contracts.v1.CustomerSurveys.GetCustomerSurvey;
 
-public record GetCustomerSurveyQuery(Guid Id) : IQuery<CustomerSurveyDto>;
+namespace FSH.Module.Microfinance.Features.v1.CustomerSurveys.GetCustomerSurvey;
 
 public class GetCustomerSurveyHandler(MicrofinanceDbContext context) : IQueryHandler<GetCustomerSurveyQuery, CustomerSurveyDto>
 {

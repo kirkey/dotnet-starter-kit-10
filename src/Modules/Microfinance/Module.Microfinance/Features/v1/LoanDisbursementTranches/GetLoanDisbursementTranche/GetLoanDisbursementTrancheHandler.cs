@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.LoanDisbursementTranches;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanDisbursementTranches.GetLoanDisbursementTranche;
+using FSH.Module.Microfinance.Contracts.v1.LoanDisbursementTranches.GetLoanDisbursementTranche;
 
-public record GetLoanDisbursementTrancheQuery(Guid Id) : IQuery<LoanDisbursementTrancheDto>;
+namespace FSH.Module.Microfinance.Features.v1.LoanDisbursementTranches.GetLoanDisbursementTranche;
 
 public class GetLoanDisbursementTrancheHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanDisbursementTrancheQuery, LoanDisbursementTrancheDto>
 {

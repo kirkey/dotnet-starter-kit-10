@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanOfficerAssignments.UpdateLoanOfficerAssignment;
+using FSH.Module.Microfinance.Contracts.v1.LoanOfficerAssignments.UpdateLoanOfficerAssignment;
 
-public record UpdateLoanOfficerAssignmentCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.LoanOfficerAssignments.UpdateLoanOfficerAssignment;
 
 public class UpdateLoanOfficerAssignmentHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateLoanOfficerAssignmentCommand, Guid>
 {

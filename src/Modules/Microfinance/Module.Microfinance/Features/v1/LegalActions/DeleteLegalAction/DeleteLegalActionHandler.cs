@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LegalActions.DeleteLegalAction;
+using FSH.Module.Microfinance.Contracts.v1.LegalActions.DeleteLegalAction;
 
-public record DeleteLegalActionCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.LegalActions.DeleteLegalAction;
 
 public class DeleteLegalActionHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteLegalActionCommand>
 {

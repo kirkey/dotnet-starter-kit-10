@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.DeletePromiseToPay;
+using FSH.Module.Microfinance.Contracts.v1.PromiseToPays.DeletePromiseToPay;
 
-public record DeletePromiseToPayCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.DeletePromiseToPay;
 
 public class DeletePromiseToPayHandler(MicrofinanceDbContext context) : ICommandHandler<DeletePromiseToPayCommand>
 {

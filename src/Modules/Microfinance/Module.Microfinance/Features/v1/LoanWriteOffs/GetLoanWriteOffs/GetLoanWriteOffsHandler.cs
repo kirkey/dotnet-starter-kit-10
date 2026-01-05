@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.LoanWriteOffs;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanWriteOffs.GetLoanWriteOffs;
+using FSH.Module.Microfinance.Contracts.v1.LoanWriteOffs.GetLoanWriteOffs;
 
-public record GetLoanWriteOffsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<LoanWriteOffsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.LoanWriteOffs.GetLoanWriteOffs;
 
 public class GetLoanWriteOffsHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanWriteOffsQuery, LoanWriteOffsPagedResponse>
 {

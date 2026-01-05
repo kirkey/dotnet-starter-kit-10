@@ -3,9 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.Members.DeleteMember;
-
-public record DeleteMemberCommand(Guid Id) : ICommand;
+using FSH.Module.Accounting.Contracts.v1.Members.DeleteMember;namespace FSH.Module.Accounting.Features.v1.Members.DeleteMember;
 
 public class DeleteMemberHandler(AccountingDbContext context) : ICommandHandler<DeleteMemberCommand>
 {

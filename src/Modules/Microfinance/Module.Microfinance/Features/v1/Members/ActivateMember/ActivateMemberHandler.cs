@@ -1,8 +1,7 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Members.ActivateMember;
-public record ActivateMemberCommand(Guid MemberId) : ICommand;
+using FSH.Module.Microfinance.Contracts.v1.Members;namespace FSH.Module.Microfinance.Features.v1.Members.ActivateMember;
 public class ActivateMemberHandler(MicrofinanceDbContext context) : ICommandHandler<ActivateMemberCommand>
 {
     public async ValueTask<Unit> Handle(ActivateMemberCommand command, CancellationToken ct)

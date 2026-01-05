@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ApprovalWorkflows.UpdateApprovalWorkflow;
+using FSH.Module.Microfinance.Contracts.v1.ApprovalWorkflows.UpdateApprovalWorkflow;
 
-public record UpdateApprovalWorkflowCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.ApprovalWorkflows.UpdateApprovalWorkflow;
 
 public class UpdateApprovalWorkflowHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateApprovalWorkflowCommand, Guid>
 {

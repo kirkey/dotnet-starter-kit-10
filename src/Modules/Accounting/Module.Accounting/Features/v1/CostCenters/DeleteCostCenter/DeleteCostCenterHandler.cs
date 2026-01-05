@@ -3,9 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.CostCenters.DeleteCostCenter;
-
-public record DeleteCostCenterCommand(Guid Id) : ICommand;
+using FSH.Module.Accounting.Contracts.v1.CostCenters.DeleteCostCenter;namespace FSH.Module.Accounting.Features.v1.CostCenters.DeleteCostCenter;
 
 public class DeleteCostCenterHandler(AccountingDbContext context) : ICommandHandler<DeleteCostCenterCommand>
 {

@@ -4,13 +4,9 @@ using Mediator;
 using Accounting.Application.Reports.TrialBalance.v1.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.TrialBalance.GenerateTrialBalance;
+using FSH.Module.Accounting.Contracts.v1.TrialBalance.GenerateTrialBalance;
 
-/// <summary>
-/// Command to generate or refresh a Trial Balance report for a specified TrialBalance entity.
-/// </summary>
-/// <param name="Id">TrialBalance entity Id</param>
-public record GenerateTrialBalanceCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.TrialBalance.GenerateTrialBalance;
 
 /// <summary>
 /// Handler for generating a Trial Balance report using the trial balance report service.

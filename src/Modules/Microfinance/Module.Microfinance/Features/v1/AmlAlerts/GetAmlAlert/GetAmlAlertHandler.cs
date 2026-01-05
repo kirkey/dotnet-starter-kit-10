@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.AmlAlerts;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.GetAmlAlert;
+using FSH.Module.Microfinance.Contracts.v1.AmlAlerts.GetAmlAlert;
 
-public record GetAmlAlertQuery(Guid Id) : IQuery<AmlAlertDto>;
+namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.GetAmlAlert;
 
 public class GetAmlAlertHandler(MicrofinanceDbContext context) : IQueryHandler<GetAmlAlertQuery, AmlAlertDto>
 {

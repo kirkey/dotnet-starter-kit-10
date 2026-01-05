@@ -3,19 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
+using FSH.Module.Accounting.Contracts.v1.DepreciationMethods.GetListDepreciationMethod;
+
 namespace FSH.Module.Accounting.Features.v1.DepreciationMethods.GetDepreciationMethods;
-
-public record GetDepreciationMethodsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<DepreciationMethodsPagedResponse>;
-
-public record DepreciationMethodsPagedResponse(
-    List<DepreciationMethodSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetDepreciationMethodsHandler(AccountingDbContext context) 
     : IQueryHandler<GetDepreciationMethodsQuery, DepreciationMethodsPagedResponse>

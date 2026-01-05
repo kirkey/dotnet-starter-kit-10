@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.CustomerSegments;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CustomerSegments.GetCustomerSegments;
+using FSH.Module.Microfinance.Contracts.v1.CustomerSegments.GetCustomerSegments;
 
-public record GetCustomerSegmentsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<CustomerSegmentsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.CustomerSegments.GetCustomerSegments;
 
 public class GetCustomerSegmentsHandler(MicrofinanceDbContext context) : IQueryHandler<GetCustomerSegmentsQuery, CustomerSegmentsPagedResponse>
 {

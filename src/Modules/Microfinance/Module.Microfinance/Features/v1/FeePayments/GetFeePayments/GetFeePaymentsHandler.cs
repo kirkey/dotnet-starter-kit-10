@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.FeePayments;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FeePayments.GetFeePayments;
+using FSH.Module.Microfinance.Contracts.v1.FeePayments.GetFeePayments;
 
-public record GetFeePaymentsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<FeePaymentsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.FeePayments.GetFeePayments;
 
 public class GetFeePaymentsHandler(MicrofinanceDbContext context) : IQueryHandler<GetFeePaymentsQuery, FeePaymentsPagedResponse>
 {

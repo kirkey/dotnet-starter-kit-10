@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Branches.DeleteBranch;
+using FSH.Module.Microfinance.Contracts.v1.Branches.DeleteBranch;
 
-public record DeleteBranchCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.Branches.DeleteBranch;
 
 public class DeleteBranchHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteBranchCommand>
 {

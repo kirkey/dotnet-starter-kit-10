@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.TellerSessions.DeleteTellerSession;
+using FSH.Module.Microfinance.Contracts.v1.TellerSessions.DeleteTellerSession;
 
-public record DeleteTellerSessionCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.TellerSessions.DeleteTellerSession;
 
 public class DeleteTellerSessionHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteTellerSessionCommand>
 {

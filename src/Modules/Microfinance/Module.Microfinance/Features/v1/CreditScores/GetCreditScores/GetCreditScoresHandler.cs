@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.CreditScores;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CreditScores.GetCreditScores;
+using FSH.Module.Microfinance.Contracts.v1.CreditScores.GetCreditScores;
 
-public record GetCreditScoresQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<CreditScoresPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.CreditScores.GetCreditScores;
 
 public class GetCreditScoresHandler(MicrofinanceDbContext context) : IQueryHandler<GetCreditScoresQuery, CreditScoresPagedResponse>
 {

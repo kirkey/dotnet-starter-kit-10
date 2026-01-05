@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.InsuranceClaims;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.InsuranceClaims.GetInsuranceClaims;
+using FSH.Module.Microfinance.Contracts.v1.InsuranceClaims.GetInsuranceClaims;
 
-public record GetInsuranceClaimsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<InsuranceClaimsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.InsuranceClaims.GetInsuranceClaims;
 
 public class GetInsuranceClaimsHandler(MicrofinanceDbContext context) : IQueryHandler<GetInsuranceClaimsQuery, InsuranceClaimsPagedResponse>
 {

@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.RiskCategorys.CreateRiskCategory;
+using FSH.Module.Microfinance.Contracts.v1.RiskCategorys.CreateRiskCategory;
 
-public record CreateRiskCategoryCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.RiskCategorys.CreateRiskCategory;
 
 public class CreateRiskCategoryHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateRiskCategoryCommand, Guid>

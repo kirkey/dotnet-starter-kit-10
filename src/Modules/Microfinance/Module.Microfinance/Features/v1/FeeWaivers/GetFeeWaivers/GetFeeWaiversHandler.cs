@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.FeeWaivers;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.GetFeeWaivers;
+using FSH.Module.Microfinance.Contracts.v1.FeeWaivers.GetFeeWaivers;
 
-public record GetFeeWaiversQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<FeeWaiversPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.GetFeeWaivers;
 
 public class GetFeeWaiversHandler(MicrofinanceDbContext context) : IQueryHandler<GetFeeWaiversQuery, FeeWaiversPagedResponse>
 {

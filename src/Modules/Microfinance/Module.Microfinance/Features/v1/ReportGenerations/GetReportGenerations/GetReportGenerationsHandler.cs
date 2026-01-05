@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.ReportGenerations;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.GetReportGenerations;
+using FSH.Module.Microfinance.Contracts.v1.ReportGenerations.GetReportGenerations;
 
-public record GetReportGenerationsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<ReportGenerationsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.GetReportGenerations;
 
 public class GetReportGenerationsHandler(MicrofinanceDbContext context) : IQueryHandler<GetReportGenerationsQuery, ReportGenerationsPagedResponse>
 {

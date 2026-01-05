@@ -3,19 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
+using FSH.Module.Accounting.Contracts.v1.RegulatoryReports.GetListRegulatoryReport;
+
 namespace FSH.Module.Accounting.Features.v1.RegulatoryReports.GetRegulatoryReports;
-
-public record GetRegulatoryReportsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<RegulatoryReportsPagedResponse>;
-
-public record RegulatoryReportsPagedResponse(
-    List<RegulatoryReportSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetRegulatoryReportsHandler(AccountingDbContext context) 
     : IQueryHandler<GetRegulatoryReportsQuery, RegulatoryReportsPagedResponse>

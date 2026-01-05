@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.ShareAccounts;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ShareAccounts.GetShareAccount;
+using FSH.Module.Microfinance.Contracts.v1.ShareAccounts.GetShareAccount;
 
-public record GetShareAccountQuery(Guid Id) : IQuery<ShareAccountDto>;
+namespace FSH.Module.Microfinance.Features.v1.ShareAccounts.GetShareAccount;
 
 public class GetShareAccountHandler(MicrofinanceDbContext context) : IQueryHandler<GetShareAccountQuery, ShareAccountDto>
 {

@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.CreditBureauReports;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CreditBureauReports.GetCreditBureauReports;
+using FSH.Module.Microfinance.Contracts.v1.CreditBureauReports.GetCreditBureauReports;
 
-public record GetCreditBureauReportsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<CreditBureauReportsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.CreditBureauReports.GetCreditBureauReports;
 
 public class GetCreditBureauReportsHandler(MicrofinanceDbContext context) : IQueryHandler<GetCreditBureauReportsQuery, CreditBureauReportsPagedResponse>
 {

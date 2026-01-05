@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.ApprovalRequests;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ApprovalRequests.GetApprovalRequest;
+using FSH.Module.Microfinance.Contracts.v1.ApprovalRequests.GetApprovalRequest;
 
-public record GetApprovalRequestQuery(Guid Id) : IQuery<ApprovalRequestDto>;
+namespace FSH.Module.Microfinance.Features.v1.ApprovalRequests.GetApprovalRequest;
 
 public class GetApprovalRequestHandler(MicrofinanceDbContext context) : IQueryHandler<GetApprovalRequestQuery, ApprovalRequestDto>
 {

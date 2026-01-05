@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.CollectionActions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CollectionActions.GetCollectionActions;
+using FSH.Module.Microfinance.Contracts.v1.CollectionActions.GetCollectionActions;
 
-public record GetCollectionActionsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<CollectionActionsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.CollectionActions.GetCollectionActions;
 
 public class GetCollectionActionsHandler(MicrofinanceDbContext context) : IQueryHandler<GetCollectionActionsQuery, CollectionActionsPagedResponse>
 {

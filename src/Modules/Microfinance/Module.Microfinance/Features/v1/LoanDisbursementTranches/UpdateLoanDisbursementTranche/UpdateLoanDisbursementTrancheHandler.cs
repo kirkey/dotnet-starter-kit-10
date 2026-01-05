@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanDisbursementTranches.UpdateLoanDisbursementTranche;
+using FSH.Module.Microfinance.Contracts.v1.LoanDisbursementTranches.UpdateLoanDisbursementTranche;
 
-public record UpdateLoanDisbursementTrancheCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.LoanDisbursementTranches.UpdateLoanDisbursementTranche;
 
 public class UpdateLoanDisbursementTrancheHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateLoanDisbursementTrancheCommand, Guid>
 {

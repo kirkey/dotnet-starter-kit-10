@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.CollateralInsurances;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CollateralInsurances.GetCollateralInsurance;
+using FSH.Module.Microfinance.Contracts.v1.CollateralInsurances.GetCollateralInsurance;
 
-public record GetCollateralInsuranceQuery(Guid Id) : IQuery<CollateralInsuranceDto>;
+namespace FSH.Module.Microfinance.Features.v1.CollateralInsurances.GetCollateralInsurance;
 
 public class GetCollateralInsuranceHandler(MicrofinanceDbContext context) : IQueryHandler<GetCollateralInsuranceQuery, CollateralInsuranceDto>
 {

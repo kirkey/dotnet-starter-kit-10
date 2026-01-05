@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.CreditScores.CreateCreditScore;
+using FSH.Module.Microfinance.Contracts.v1.CreditScores.CreateCreditScore;
 
-public record CreateCreditScoreCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CreditScores.CreateCreditScore;
 
 public class CreateCreditScoreHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateCreditScoreCommand, Guid>

@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanRestructures.DeleteLoanRestructure;
+using FSH.Module.Microfinance.Contracts.v1.LoanRestructures.DeleteLoanRestructure;
 
-public record DeleteLoanRestructureCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.LoanRestructures.DeleteLoanRestructure;
 
 public class DeleteLoanRestructureHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteLoanRestructureCommand>
 {

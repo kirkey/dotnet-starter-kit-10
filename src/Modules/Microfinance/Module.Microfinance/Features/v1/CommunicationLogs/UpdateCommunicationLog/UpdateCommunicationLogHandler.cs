@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CommunicationLogs.UpdateCommunicationLog;
+using FSH.Module.Microfinance.Contracts.v1.CommunicationLogs.UpdateCommunicationLog;
 
-public record UpdateCommunicationLogCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CommunicationLogs.UpdateCommunicationLog;
 
 public class UpdateCommunicationLogHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateCommunicationLogCommand, Guid>
 {

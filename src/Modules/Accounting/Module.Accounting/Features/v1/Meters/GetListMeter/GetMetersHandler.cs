@@ -3,19 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
+using FSH.Module.Accounting.Contracts.v1.Meters.GetListMeter;
+
 namespace FSH.Module.Accounting.Features.v1.Meters.GetMeters;
-
-public record GetMetersQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<MetersPagedResponse>;
-
-public record MetersPagedResponse(
-    List<MeterSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetMetersHandler(AccountingDbContext context) 
     : IQueryHandler<GetMetersQuery, MetersPagedResponse>

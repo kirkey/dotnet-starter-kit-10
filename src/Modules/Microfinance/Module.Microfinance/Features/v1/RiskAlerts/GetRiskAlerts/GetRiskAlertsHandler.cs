@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.RiskAlerts;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.RiskAlerts.GetRiskAlerts;
+using FSH.Module.Microfinance.Contracts.v1.RiskAlerts.GetRiskAlerts;
 
-public record GetRiskAlertsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<RiskAlertsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.RiskAlerts.GetRiskAlerts;
 
 public class GetRiskAlertsHandler(MicrofinanceDbContext context) : IQueryHandler<GetRiskAlertsQuery, RiskAlertsPagedResponse>
 {

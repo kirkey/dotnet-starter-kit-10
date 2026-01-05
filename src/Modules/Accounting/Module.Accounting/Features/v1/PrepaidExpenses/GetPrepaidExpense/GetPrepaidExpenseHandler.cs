@@ -4,9 +4,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.PrepaidExpenses.GetPrepaidExpense;
+using FSH.Module.Accounting.Contracts.v1.PrepaidExpenses.GetPrepaidExpense;
 
-public record GetPrepaidExpenseQuery(Guid Id) : IQuery<PrepaidExpenseDto>;
+namespace FSH.Module.Accounting.Features.v1.PrepaidExpenses.GetPrepaidExpense;
 
 public class GetPrepaidExpenseHandler(AccountingDbContext context) : IQueryHandler<GetPrepaidExpenseQuery, PrepaidExpenseDto>
 {

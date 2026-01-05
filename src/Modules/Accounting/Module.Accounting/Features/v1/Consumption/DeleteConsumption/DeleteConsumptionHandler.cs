@@ -3,9 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.Consumption.DeleteConsumption;
-
-public record DeleteConsumptionCommand(Guid Id) : ICommand;
+using FSH.Module.Accounting.Contracts.v1.Consumption.DeleteConsumption;namespace FSH.Module.Accounting.Features.v1.Consumption.DeleteConsumption;
 
 public class DeleteConsumptionHandler(AccountingDbContext context) : ICommandHandler<DeleteConsumptionCommand>
 {

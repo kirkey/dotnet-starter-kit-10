@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.MarketingCampaigns.CreateMarketingCampaign;
+using FSH.Module.Microfinance.Contracts.v1.MarketingCampaigns.CreateMarketingCampaign;
 
-public record CreateMarketingCampaignCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.MarketingCampaigns.CreateMarketingCampaign;
 
 public class CreateMarketingCampaignHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateMarketingCampaignCommand, Guid>

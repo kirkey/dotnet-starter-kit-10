@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.CollateralTypes;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CollateralTypes.GetCollateralTypes;
+using FSH.Module.Microfinance.Contracts.v1.CollateralTypes.GetCollateralTypes;
 
-public record GetCollateralTypesQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<CollateralTypesPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.CollateralTypes.GetCollateralTypes;
 
 public class GetCollateralTypesHandler(MicrofinanceDbContext context) : IQueryHandler<GetCollateralTypesQuery, CollateralTypesPagedResponse>
 {

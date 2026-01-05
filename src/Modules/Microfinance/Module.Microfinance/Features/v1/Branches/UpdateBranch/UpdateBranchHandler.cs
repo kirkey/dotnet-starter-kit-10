@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Branches.UpdateBranch;
+using FSH.Module.Microfinance.Contracts.v1.Branches.UpdateBranch;
 
-public record UpdateBranchCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.Branches.UpdateBranch;
 
 public class UpdateBranchHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateBranchCommand, Guid>
 {

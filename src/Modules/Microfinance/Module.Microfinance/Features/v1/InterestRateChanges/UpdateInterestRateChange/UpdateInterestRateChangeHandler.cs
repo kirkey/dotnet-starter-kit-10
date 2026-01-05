@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.InterestRateChanges.UpdateInterestRateChange;
+using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges.UpdateInterestRateChange;
 
-public record UpdateInterestRateChangeCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.InterestRateChanges.UpdateInterestRateChange;
 
 public class UpdateInterestRateChangeHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateInterestRateChangeCommand, Guid>
 {

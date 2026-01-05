@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.Documents;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Documents.GetDocuments;
+using FSH.Module.Microfinance.Contracts.v1.Documents.GetDocuments;
 
-public record GetDocumentsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<DocumentsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.Documents.GetDocuments;
 
 public class GetDocumentsHandler(MicrofinanceDbContext context) : IQueryHandler<GetDocumentsQuery, DocumentsPagedResponse>
 {

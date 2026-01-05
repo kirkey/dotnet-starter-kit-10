@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.MobileWallets;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MobileWallets.GetMobileWallet;
+using FSH.Module.Microfinance.Contracts.v1.MobileWallets.GetMobileWallet;
 
-public record GetMobileWalletQuery(Guid Id) : IQuery<MobileWalletDto>;
+namespace FSH.Module.Microfinance.Features.v1.MobileWallets.GetMobileWallet;
 
 public class GetMobileWalletHandler(MicrofinanceDbContext context) : IQueryHandler<GetMobileWalletQuery, MobileWalletDto>
 {

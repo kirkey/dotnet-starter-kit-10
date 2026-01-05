@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.Documents;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Documents.GetDocument;
+using FSH.Module.Microfinance.Contracts.v1.Documents.GetDocument;
 
-public record GetDocumentQuery(Guid Id) : IQuery<DocumentDto>;
+namespace FSH.Module.Microfinance.Features.v1.Documents.GetDocument;
 
 public class GetDocumentHandler(MicrofinanceDbContext context) : IQueryHandler<GetDocumentQuery, DocumentDto>
 {

@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.UssdSessions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.UssdSessions.GetUssdSession;
+using FSH.Module.Microfinance.Contracts.v1.UssdSessions.GetUssdSession;
 
-public record GetUssdSessionQuery(Guid Id) : IQuery<UssdSessionDto>;
+namespace FSH.Module.Microfinance.Features.v1.UssdSessions.GetUssdSession;
 
 public class GetUssdSessionHandler(MicrofinanceDbContext context) : IQueryHandler<GetUssdSessionQuery, UssdSessionDto>
 {

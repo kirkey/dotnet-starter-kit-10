@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CreditScores.DeleteCreditScore;
+using FSH.Module.Microfinance.Contracts.v1.CreditScores.DeleteCreditScore;
 
-public record DeleteCreditScoreCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.CreditScores.DeleteCreditScore;
 
 public class DeleteCreditScoreHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteCreditScoreCommand>
 {

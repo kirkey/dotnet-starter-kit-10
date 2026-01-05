@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.LoanRestructures;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanRestructures.GetLoanRestructure;
+using FSH.Module.Microfinance.Contracts.v1.LoanRestructures.GetLoanRestructure;
 
-public record GetLoanRestructureQuery(Guid Id) : IQuery<LoanRestructureDto>;
+namespace FSH.Module.Microfinance.Features.v1.LoanRestructures.GetLoanRestructure;
 
 public class GetLoanRestructureHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanRestructureQuery, LoanRestructureDto>
 {

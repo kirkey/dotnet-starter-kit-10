@@ -2,8 +2,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.Members;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Members.GetMember;
-public record GetMemberQuery(Guid MemberId) : IQuery<MemberDto>;
+using FSH.Module.Microfinance.Contracts.v1.Members;namespace FSH.Module.Microfinance.Features.v1.Members.GetMember;
 public class GetMemberHandler(MicrofinanceDbContext context) : IQueryHandler<GetMemberQuery, MemberDto>
 {
     public async ValueTask<MemberDto> Handle(GetMemberQuery query, CancellationToken ct)

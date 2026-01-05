@@ -2,9 +2,9 @@
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.SecurityDeposits.RefundSecurityDeposit;
+using FSH.Module.Accounting.Contracts.v1.SecurityDeposits.RefundSecurityDeposit;
 
-public record RefundSecurityDepositCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.SecurityDeposits.RefundSecurityDeposit;
 
 public class RefundSecurityDepositHandler(AccountingDbContext context) 
     : ICommandHandler<RefundSecurityDepositCommand>

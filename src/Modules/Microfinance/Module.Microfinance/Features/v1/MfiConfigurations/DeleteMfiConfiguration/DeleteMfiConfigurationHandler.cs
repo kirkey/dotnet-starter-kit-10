@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.DeleteMfiConfiguration;
+using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations.DeleteMfiConfiguration;
 
-public record DeleteMfiConfigurationCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.DeleteMfiConfiguration;
 
 public class DeleteMfiConfigurationHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteMfiConfigurationCommand>
 {

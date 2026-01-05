@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.RiskCategorys.UpdateRiskCategory;
+using FSH.Module.Microfinance.Contracts.v1.RiskCategorys.UpdateRiskCategory;
 
-public record UpdateRiskCategoryCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.RiskCategorys.UpdateRiskCategory;
 
 public class UpdateRiskCategoryHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateRiskCategoryCommand, Guid>
 {

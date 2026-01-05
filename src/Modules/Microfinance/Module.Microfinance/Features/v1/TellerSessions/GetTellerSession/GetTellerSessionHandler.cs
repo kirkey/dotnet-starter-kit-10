@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.TellerSessions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.TellerSessions.GetTellerSession;
+using FSH.Module.Microfinance.Contracts.v1.TellerSessions.GetTellerSession;
 
-public record GetTellerSessionQuery(Guid Id) : IQuery<TellerSessionDto>;
+namespace FSH.Module.Microfinance.Features.v1.TellerSessions.GetTellerSession;
 
 public class GetTellerSessionHandler(MicrofinanceDbContext context) : IQueryHandler<GetTellerSessionQuery, TellerSessionDto>
 {

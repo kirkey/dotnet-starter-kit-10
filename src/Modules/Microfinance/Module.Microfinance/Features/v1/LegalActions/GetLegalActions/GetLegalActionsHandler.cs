@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.LegalActions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LegalActions.GetLegalActions;
+using FSH.Module.Microfinance.Contracts.v1.LegalActions.GetLegalActions;
 
-public record GetLegalActionsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<LegalActionsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.LegalActions.GetLegalActions;
 
 public class GetLegalActionsHandler(MicrofinanceDbContext context) : IQueryHandler<GetLegalActionsQuery, LegalActionsPagedResponse>
 {

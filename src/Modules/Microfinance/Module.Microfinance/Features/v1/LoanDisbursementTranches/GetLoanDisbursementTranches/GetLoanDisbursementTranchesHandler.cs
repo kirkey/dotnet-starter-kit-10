@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.LoanDisbursementTranches;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanDisbursementTranches.GetLoanDisbursementTranches;
+using FSH.Module.Microfinance.Contracts.v1.LoanDisbursementTranches.GetLoanDisbursementTranches;
 
-public record GetLoanDisbursementTranchesQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<LoanDisbursementTranchesPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.LoanDisbursementTranches.GetLoanDisbursementTranches;
 
 public class GetLoanDisbursementTranchesHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanDisbursementTranchesQuery, LoanDisbursementTranchesPagedResponse>
 {

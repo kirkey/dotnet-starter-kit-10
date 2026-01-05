@@ -4,9 +4,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.AccountReconciliations.GetAccountReconciliation;
-
-public record GetAccountReconciliationQuery(Guid Id) : IQuery<AccountReconciliationDto>;
+using FSH.Module.Accounting.Contracts.v1.AccountReconciliations.GetAccountReconciliation;namespace FSH.Module.Accounting.Features.v1.AccountReconciliations.GetAccountReconciliation;
 
 public class GetAccountReconciliationHandler(AccountingDbContext context) : IQueryHandler<GetAccountReconciliationQuery, AccountReconciliationDto>
 {

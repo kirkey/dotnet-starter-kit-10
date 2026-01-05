@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.InterestRateChanges.GetInterestRateChanges;
+using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges.GetInterestRateChanges;
 
-public record GetInterestRateChangesQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<InterestRateChangesPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.InterestRateChanges.GetInterestRateChanges;
 
 public class GetInterestRateChangesHandler(MicrofinanceDbContext context) : IQueryHandler<GetInterestRateChangesQuery, InterestRateChangesPagedResponse>
 {

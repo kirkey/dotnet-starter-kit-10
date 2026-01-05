@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.MemberGroups.CreateMemberGroup;
+using FSH.Module.Microfinance.Contracts.v1.MemberGroups.CreateMemberGroup;
 
-public record CreateMemberGroupCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.MemberGroups.CreateMemberGroup;
 
 public class CreateMemberGroupHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateMemberGroupCommand, Guid>

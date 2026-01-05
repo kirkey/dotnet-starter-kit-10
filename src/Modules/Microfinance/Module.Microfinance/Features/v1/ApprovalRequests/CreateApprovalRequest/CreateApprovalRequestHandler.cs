@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.ApprovalRequests.CreateApprovalRequest;
+using FSH.Module.Microfinance.Contracts.v1.ApprovalRequests.CreateApprovalRequest;
 
-public record CreateApprovalRequestCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.ApprovalRequests.CreateApprovalRequest;
 
 public class CreateApprovalRequestHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateApprovalRequestCommand, Guid>

@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.CashVaults;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CashVaults.GetCashVault;
+using FSH.Module.Microfinance.Contracts.v1.CashVaults.GetCashVault;
 
-public record GetCashVaultQuery(Guid Id) : IQuery<CashVaultDto>;
+namespace FSH.Module.Microfinance.Features.v1.CashVaults.GetCashVault;
 
 public class GetCashVaultHandler(MicrofinanceDbContext context) : IQueryHandler<GetCashVaultQuery, CashVaultDto>
 {

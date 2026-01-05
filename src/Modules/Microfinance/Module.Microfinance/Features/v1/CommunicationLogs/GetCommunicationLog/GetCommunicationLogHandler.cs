@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.CommunicationLogs;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CommunicationLogs.GetCommunicationLog;
+using FSH.Module.Microfinance.Contracts.v1.CommunicationLogs.GetCommunicationLog;
 
-public record GetCommunicationLogQuery(Guid Id) : IQuery<CommunicationLogDto>;
+namespace FSH.Module.Microfinance.Features.v1.CommunicationLogs.GetCommunicationLog;
 
 public class GetCommunicationLogHandler(MicrofinanceDbContext context) : IQueryHandler<GetCommunicationLogQuery, CommunicationLogDto>
 {

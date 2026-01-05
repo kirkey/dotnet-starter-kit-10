@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Documents.DeleteDocument;
+using FSH.Module.Microfinance.Contracts.v1.Documents.DeleteDocument;
 
-public record DeleteDocumentCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.Documents.DeleteDocument;
 
 public class DeleteDocumentHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteDocumentCommand>
 {

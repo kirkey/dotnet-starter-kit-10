@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.UssdSessions.DeleteUssdSession;
+using FSH.Module.Microfinance.Contracts.v1.UssdSessions.DeleteUssdSession;
 
-public record DeleteUssdSessionCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.UssdSessions.DeleteUssdSession;
 
 public class DeleteUssdSessionHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteUssdSessionCommand>
 {

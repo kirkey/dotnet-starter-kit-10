@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ReportDefinitions.UpdateReportDefinition;
+using FSH.Module.Microfinance.Contracts.v1.ReportDefinitions.UpdateReportDefinition;
 
-public record UpdateReportDefinitionCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.ReportDefinitions.UpdateReportDefinition;
 
 public class UpdateReportDefinitionHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateReportDefinitionCommand, Guid>
 {

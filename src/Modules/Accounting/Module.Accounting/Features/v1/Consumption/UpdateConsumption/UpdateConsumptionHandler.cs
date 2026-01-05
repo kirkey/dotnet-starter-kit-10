@@ -2,9 +2,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.Consumption.UpdateConsumption;
-
-public record UpdateConsumptionCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
+using FSH.Module.Accounting.Contracts.v1.Consumption.UpdateConsumption;namespace FSH.Module.Accounting.Features.v1.Consumption.UpdateConsumption;
 
 public class UpdateConsumptionHandler(AccountingDbContext context) : ICommandHandler<UpdateConsumptionCommand, Guid>
 {

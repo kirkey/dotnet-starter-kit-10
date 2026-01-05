@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.PrepaidExpenses.DeletePrepaidExpense;
+using FSH.Module.Accounting.Contracts.v1.PrepaidExpenses.DeletePrepaidExpense;
 
-public record DeletePrepaidExpenseCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.PrepaidExpenses.DeletePrepaidExpense;
 
 public class DeletePrepaidExpenseHandler(AccountingDbContext context) : ICommandHandler<DeletePrepaidExpenseCommand>
 {

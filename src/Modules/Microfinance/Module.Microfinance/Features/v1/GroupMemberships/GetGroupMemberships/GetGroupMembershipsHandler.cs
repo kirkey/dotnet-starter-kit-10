@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.GroupMemberships;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.GroupMemberships.GetGroupMemberships;
+using FSH.Module.Microfinance.Contracts.v1.GroupMemberships.GetGroupMemberships;
 
-public record GetGroupMembershipsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<GroupMembershipsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.GroupMemberships.GetGroupMemberships;
 
 public class GetGroupMembershipsHandler(MicrofinanceDbContext context) : IQueryHandler<GetGroupMembershipsQuery, GroupMembershipsPagedResponse>
 {

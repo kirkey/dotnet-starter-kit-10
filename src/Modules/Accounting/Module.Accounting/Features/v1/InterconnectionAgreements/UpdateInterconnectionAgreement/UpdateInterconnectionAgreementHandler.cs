@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.InterconnectionAgreements.UpdateInterconnectionAgreement;
+using FSH.Module.Accounting.Contracts.v1.InterconnectionAgreements.UpdateInterconnectionAgreement;
 
-public record UpdateInterconnectionAgreementCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
+namespace FSH.Module.Accounting.Features.v1.InterconnectionAgreements.UpdateInterconnectionAgreement;
 
 public class UpdateInterconnectionAgreementHandler(AccountingDbContext context) : ICommandHandler<UpdateInterconnectionAgreementCommand, Guid>
 {

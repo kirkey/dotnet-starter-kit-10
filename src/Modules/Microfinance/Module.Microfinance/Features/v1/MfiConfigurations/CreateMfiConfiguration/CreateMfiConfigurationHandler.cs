@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.CreateMfiConfiguration;
+using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations.CreateMfiConfiguration;
 
-public record CreateMfiConfigurationCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.CreateMfiConfiguration;
 
 public class CreateMfiConfigurationHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateMfiConfigurationCommand, Guid>

@@ -2,9 +2,9 @@
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.PrepaidExpenses.AmortizePrepaidExpense;
+using FSH.Module.Accounting.Contracts.v1.PrepaidExpenses.AmortizePrepaidExpense;
 
-public record AmortizePrepaidExpenseCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.PrepaidExpenses.AmortizePrepaidExpense;
 
 public class AmortizePrepaidExpenseHandler(AccountingDbContext context) 
     : ICommandHandler<AmortizePrepaidExpenseCommand>

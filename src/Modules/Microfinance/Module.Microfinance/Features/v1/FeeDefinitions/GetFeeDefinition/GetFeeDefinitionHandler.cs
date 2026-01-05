@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.FeeDefinitions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FeeDefinitions.GetFeeDefinition;
+using FSH.Module.Microfinance.Contracts.v1.FeeDefinitions.GetFeeDefinition;
 
-public record GetFeeDefinitionQuery(Guid Id) : IQuery<FeeDefinitionDto>;
+namespace FSH.Module.Microfinance.Features.v1.FeeDefinitions.GetFeeDefinition;
 
 public class GetFeeDefinitionHandler(MicrofinanceDbContext context) : IQueryHandler<GetFeeDefinitionQuery, FeeDefinitionDto>
 {

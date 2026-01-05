@@ -4,9 +4,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.ProjectCosts.GetProjectCost;
-
-public record GetProjectCostQuery(Guid Id) : IQuery<ProjectCostDto>;
+using FSH.Module.Accounting.Contracts.v1.ProjectCosts.GetProjectCost;namespace FSH.Module.Accounting.Features.v1.ProjectCosts.GetProjectCost;
 
 public class GetProjectCostHandler(AccountingDbContext context) : IQueryHandler<GetProjectCostQuery, ProjectCostDto>
 {

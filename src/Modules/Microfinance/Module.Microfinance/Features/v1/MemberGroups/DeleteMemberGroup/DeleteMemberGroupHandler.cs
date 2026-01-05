@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MemberGroups.DeleteMemberGroup;
+using FSH.Module.Microfinance.Contracts.v1.MemberGroups.DeleteMemberGroup;
 
-public record DeleteMemberGroupCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.MemberGroups.DeleteMemberGroup;
 
 public class DeleteMemberGroupHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteMemberGroupCommand>
 {

@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.CollectionActions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CollectionActions.GetCollectionAction;
+using FSH.Module.Microfinance.Contracts.v1.CollectionActions.GetCollectionAction;
 
-public record GetCollectionActionQuery(Guid Id) : IQuery<CollectionActionDto>;
+namespace FSH.Module.Microfinance.Features.v1.CollectionActions.GetCollectionAction;
 
 public class GetCollectionActionHandler(MicrofinanceDbContext context) : IQueryHandler<GetCollectionActionQuery, CollectionActionDto>
 {

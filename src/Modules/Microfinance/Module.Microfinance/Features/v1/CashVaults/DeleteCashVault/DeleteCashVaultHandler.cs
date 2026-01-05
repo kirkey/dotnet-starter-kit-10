@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CashVaults.DeleteCashVault;
+using FSH.Module.Microfinance.Contracts.v1.CashVaults.DeleteCashVault;
 
-public record DeleteCashVaultCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.CashVaults.DeleteCashVault;
 
 public class DeleteCashVaultHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteCashVaultCommand>
 {

@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.CreateReportGeneration;
+using FSH.Module.Microfinance.Contracts.v1.ReportGenerations.CreateReportGeneration;
 
-public record CreateReportGenerationCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.CreateReportGeneration;
 
 public class CreateReportGenerationHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateReportGenerationCommand, Guid>

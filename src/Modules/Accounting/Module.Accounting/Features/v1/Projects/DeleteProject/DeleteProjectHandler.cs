@@ -3,9 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.Projects.DeleteProject;
-
-public record DeleteProjectCommand(Guid Id) : ICommand;
+using FSH.Module.Accounting.Contracts.v1.Projects.DeleteProject;namespace FSH.Module.Accounting.Features.v1.Projects.DeleteProject;
 
 public class DeleteProjectHandler(AccountingDbContext context) : ICommandHandler<DeleteProjectCommand>
 {

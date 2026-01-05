@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MobileTransactions.DeleteMobileTransaction;
+using FSH.Module.Microfinance.Contracts.v1.MobileTransactions.DeleteMobileTransaction;
 
-public record DeleteMobileTransactionCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.MobileTransactions.DeleteMobileTransaction;
 
 public class DeleteMobileTransactionHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteMobileTransactionCommand>
 {

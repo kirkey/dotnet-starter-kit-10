@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.PromiseToPays;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.GetPromiseToPay;
+using FSH.Module.Microfinance.Contracts.v1.PromiseToPays.GetPromiseToPay;
 
-public record GetPromiseToPayQuery(Guid Id) : IQuery<PromiseToPayDto>;
+namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.GetPromiseToPay;
 
 public class GetPromiseToPayHandler(MicrofinanceDbContext context) : IQueryHandler<GetPromiseToPayQuery, PromiseToPayDto>
 {

@@ -3,19 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
+using FSH.Module.Accounting.Contracts.v1.SecurityDeposits.GetListSecurityDeposit;
+
 namespace FSH.Module.Accounting.Features.v1.SecurityDeposits.GetSecurityDeposits;
-
-public record GetSecurityDepositsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<SecurityDepositsPagedResponse>;
-
-public record SecurityDepositsPagedResponse(
-    List<SecurityDepositSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetSecurityDepositsHandler(AccountingDbContext context) 
     : IQueryHandler<GetSecurityDepositsQuery, SecurityDepositsPagedResponse>

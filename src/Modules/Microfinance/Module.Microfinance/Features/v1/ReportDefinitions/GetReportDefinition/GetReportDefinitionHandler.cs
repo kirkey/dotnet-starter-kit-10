@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.ReportDefinitions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ReportDefinitions.GetReportDefinition;
+using FSH.Module.Microfinance.Contracts.v1.ReportDefinitions.GetReportDefinition;
 
-public record GetReportDefinitionQuery(Guid Id) : IQuery<ReportDefinitionDto>;
+namespace FSH.Module.Microfinance.Features.v1.ReportDefinitions.GetReportDefinition;
 
 public class GetReportDefinitionHandler(MicrofinanceDbContext context) : IQueryHandler<GetReportDefinitionQuery, ReportDefinitionDto>
 {

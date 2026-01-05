@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.FixedDeposits;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FixedDeposits.GetFixedDeposits;
+using FSH.Module.Microfinance.Contracts.v1.FixedDeposits.GetFixedDeposits;
 
-public record GetFixedDepositsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<FixedDepositsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.FixedDeposits.GetFixedDeposits;
 
 public class GetFixedDepositsHandler(MicrofinanceDbContext context) : IQueryHandler<GetFixedDepositsQuery, FixedDepositsPagedResponse>
 {

@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.CreditBureauInquirys;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CreditBureauInquirys.GetCreditBureauInquirys;
+using FSH.Module.Microfinance.Contracts.v1.CreditBureauInquirys.GetCreditBureauInquirys;
 
-public record GetCreditBureauInquirysQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<CreditBureauInquirysPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.CreditBureauInquirys.GetCreditBureauInquirys;
 
 public class GetCreditBureauInquirysHandler(MicrofinanceDbContext context) : IQueryHandler<GetCreditBureauInquirysQuery, CreditBureauInquirysPagedResponse>
 {

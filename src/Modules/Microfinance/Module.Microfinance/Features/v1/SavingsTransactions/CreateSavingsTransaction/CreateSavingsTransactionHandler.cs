@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.SavingsTransactions.CreateSavingsTransaction;
+using FSH.Module.Microfinance.Contracts.v1.SavingsTransactions.CreateSavingsTransaction;
 
-public record CreateSavingsTransactionCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.SavingsTransactions.CreateSavingsTransaction;
 
 public class CreateSavingsTransactionHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateSavingsTransactionCommand, Guid>

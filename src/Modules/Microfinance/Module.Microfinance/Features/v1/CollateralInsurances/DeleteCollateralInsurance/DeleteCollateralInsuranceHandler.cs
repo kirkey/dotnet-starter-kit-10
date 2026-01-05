@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CollateralInsurances.DeleteCollateralInsurance;
+using FSH.Module.Microfinance.Contracts.v1.CollateralInsurances.DeleteCollateralInsurance;
 
-public record DeleteCollateralInsuranceCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.CollateralInsurances.DeleteCollateralInsurance;
 
 public class DeleteCollateralInsuranceHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteCollateralInsuranceCommand>
 {

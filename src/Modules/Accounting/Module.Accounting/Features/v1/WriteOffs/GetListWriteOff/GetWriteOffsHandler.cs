@@ -3,19 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
+using FSH.Module.Accounting.Contracts.v1.WriteOffs.GetListWriteOff;
+
 namespace FSH.Module.Accounting.Features.v1.WriteOffs.GetWriteOffs;
-
-public record GetWriteOffsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<WriteOffsPagedResponse>;
-
-public record WriteOffsPagedResponse(
-    List<WriteOffSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetWriteOffsHandler(AccountingDbContext context) 
     : IQueryHandler<FSH.Module.Accounting.Contracts.v1.WriteOffs.GetListWriteOff.GetListWriteOffQuery, FSH.Module.Accounting.Contracts.v1.WriteOffs.GetListWriteOff.WriteOffsPagedResponse>

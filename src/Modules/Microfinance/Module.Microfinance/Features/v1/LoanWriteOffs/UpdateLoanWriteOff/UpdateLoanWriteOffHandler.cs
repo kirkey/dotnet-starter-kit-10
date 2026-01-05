@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanWriteOffs.UpdateLoanWriteOff;
+using FSH.Module.Microfinance.Contracts.v1.LoanWriteOffs.UpdateLoanWriteOff;
 
-public record UpdateLoanWriteOffCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.LoanWriteOffs.UpdateLoanWriteOff;
 
 public class UpdateLoanWriteOffHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateLoanWriteOffCommand, Guid>
 {

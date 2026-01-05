@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.AmlAlerts;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.GetAmlAlerts;
+using FSH.Module.Microfinance.Contracts.v1.AmlAlerts.GetAmlAlerts;
 
-public record GetAmlAlertsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<AmlAlertsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.GetAmlAlerts;
 
 public class GetAmlAlertsHandler(MicrofinanceDbContext context) : IQueryHandler<GetAmlAlertsQuery, AmlAlertsPagedResponse>
 {

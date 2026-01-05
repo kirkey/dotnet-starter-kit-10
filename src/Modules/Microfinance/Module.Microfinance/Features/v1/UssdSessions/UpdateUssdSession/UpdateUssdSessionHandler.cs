@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.UssdSessions.UpdateUssdSession;
+using FSH.Module.Microfinance.Contracts.v1.UssdSessions.UpdateUssdSession;
 
-public record UpdateUssdSessionCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.UssdSessions.UpdateUssdSession;
 
 public class UpdateUssdSessionHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateUssdSessionCommand, Guid>
 {

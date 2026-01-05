@@ -3,9 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.JournalEntryLines.DeleteJournalEntryLine;
+using FSH.Module.Accounting.Contracts.v1.JournalEntryLines.DeleteJournalEntryLine;
 
-public record DeleteJournalEntryLineCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.JournalEntryLines.DeleteJournalEntryLine;
 
 public class DeleteJournalEntryLineHandler(AccountingDbContext context) : ICommandHandler<DeleteJournalEntryLineCommand>
 {

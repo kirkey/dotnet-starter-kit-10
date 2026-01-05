@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.MobileWallets;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MobileWallets.GetMobileWallets;
+using FSH.Module.Microfinance.Contracts.v1.MobileWallets.GetMobileWallets;
 
-public record GetMobileWalletsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<MobileWalletsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.MobileWallets.GetMobileWallets;
 
 public class GetMobileWalletsHandler(MicrofinanceDbContext context) : IQueryHandler<GetMobileWalletsQuery, MobileWalletsPagedResponse>
 {

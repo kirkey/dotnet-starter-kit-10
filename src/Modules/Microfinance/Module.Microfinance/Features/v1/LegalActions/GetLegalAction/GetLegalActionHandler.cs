@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.LegalActions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LegalActions.GetLegalAction;
+using FSH.Module.Microfinance.Contracts.v1.LegalActions.GetLegalAction;
 
-public record GetLegalActionQuery(Guid Id) : IQuery<LegalActionDto>;
+namespace FSH.Module.Microfinance.Features.v1.LegalActions.GetLegalAction;
 
 public class GetLegalActionHandler(MicrofinanceDbContext context) : IQueryHandler<GetLegalActionQuery, LegalActionDto>
 {

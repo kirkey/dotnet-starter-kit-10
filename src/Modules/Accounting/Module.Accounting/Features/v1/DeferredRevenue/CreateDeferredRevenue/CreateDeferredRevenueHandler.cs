@@ -4,9 +4,7 @@ using FSH.Module.Accounting.Domain;
 using DeferredRevenueEntity = FSH.Module.Accounting.Domain.DeferredRevenue;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.CreateDeferredRevenue;
-
-public record CreateDeferredRevenueCommand(string Name, string? Description) : ICommand<Guid>;
+using FSH.Module.Accounting.Contracts.v1.DeferredRevenue.CreateDeferredRevenue;namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.CreateDeferredRevenue;
 
 public class CreateDeferredRevenueHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateDeferredRevenueCommand, Guid>

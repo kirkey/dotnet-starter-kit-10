@@ -3,9 +3,9 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.SecurityDeposits.CreateSecurityDeposit;
+using FSH.Module.Accounting.Contracts.v1.SecurityDeposits.CreateSecurityDeposit;
 
-public record CreateSecurityDepositCommand(string Name, string? Description) : ICommand<Guid>;
+namespace FSH.Module.Accounting.Features.v1.SecurityDeposits.CreateSecurityDeposit;
 
 public class CreateSecurityDepositHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateSecurityDepositCommand, Guid>

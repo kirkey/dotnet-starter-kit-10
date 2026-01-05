@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.KycDocuments;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.KycDocuments.GetKycDocument;
+using FSH.Module.Microfinance.Contracts.v1.KycDocuments.GetKycDocument;
 
-public record GetKycDocumentQuery(Guid Id) : IQuery<KycDocumentDto>;
+namespace FSH.Module.Microfinance.Features.v1.KycDocuments.GetKycDocument;
 
 public class GetKycDocumentHandler(MicrofinanceDbContext context) : IQueryHandler<GetKycDocumentQuery, KycDocumentDto>
 {

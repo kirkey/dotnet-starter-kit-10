@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.InsuranceClaims.CreateInsuranceClaim;
+using FSH.Module.Microfinance.Contracts.v1.InsuranceClaims.CreateInsuranceClaim;
 
-public record CreateInsuranceClaimCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.InsuranceClaims.CreateInsuranceClaim;
 
 public class CreateInsuranceClaimHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateInsuranceClaimCommand, Guid>

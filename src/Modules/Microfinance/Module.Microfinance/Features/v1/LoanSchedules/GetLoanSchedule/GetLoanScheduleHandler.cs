@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.LoanSchedules;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanSchedules.GetLoanSchedule;
+using FSH.Module.Microfinance.Contracts.v1.LoanSchedules.GetLoanSchedule;
 
-public record GetLoanScheduleQuery(Guid Id) : IQuery<LoanScheduleDto>;
+namespace FSH.Module.Microfinance.Features.v1.LoanSchedules.GetLoanSchedule;
 
 public class GetLoanScheduleHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanScheduleQuery, LoanScheduleDto>
 {

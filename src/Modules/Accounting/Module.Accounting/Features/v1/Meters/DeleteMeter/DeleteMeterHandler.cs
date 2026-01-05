@@ -2,9 +2,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.Meters.DeleteMeter;
-
-public record DeleteMeterCommand(Guid Id) : ICommand;
+using FSH.Module.Accounting.Contracts.v1.Meters.DeleteMeter;namespace FSH.Module.Accounting.Features.v1.Meters.DeleteMeter;
 
 public class DeleteMeterHandler(AccountingDbContext context) : ICommandHandler<DeleteMeterCommand>
 {

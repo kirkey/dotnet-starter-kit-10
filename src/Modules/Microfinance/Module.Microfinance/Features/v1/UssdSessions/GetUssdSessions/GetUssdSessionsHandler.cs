@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.UssdSessions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.UssdSessions.GetUssdSessions;
+using FSH.Module.Microfinance.Contracts.v1.UssdSessions.GetUssdSessions;
 
-public record GetUssdSessionsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<UssdSessionsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.UssdSessions.GetUssdSessions;
 
 public class GetUssdSessionsHandler(MicrofinanceDbContext context) : IQueryHandler<GetUssdSessionsQuery, UssdSessionsPagedResponse>
 {

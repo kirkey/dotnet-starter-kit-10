@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.ShareTransactions.CreateShareTransaction;
+using FSH.Module.Microfinance.Contracts.v1.ShareTransactions.CreateShareTransaction;
 
-public record CreateShareTransactionCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.ShareTransactions.CreateShareTransaction;
 
 public class CreateShareTransactionHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateShareTransactionCommand, Guid>

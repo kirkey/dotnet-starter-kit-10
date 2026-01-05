@@ -3,19 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.GetDeferredRevenue;
-
-public record GetDeferredRevenueQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<DeferredRevenuePagedResponse>;
-
-public record DeferredRevenuePagedResponse(
-    List<DeferredRevenueSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
+using FSH.Module.Accounting.Contracts.v1.DeferredRevenue.GetDeferredRevenue;namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.GetDeferredRevenue;
 
 public class GetDeferredRevenueHandler(AccountingDbContext context) 
     : IQueryHandler<GetDeferredRevenueQuery, DeferredRevenuePagedResponse>

@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.MarketingCampaigns;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MarketingCampaigns.GetMarketingCampaigns;
+using FSH.Module.Microfinance.Contracts.v1.MarketingCampaigns.GetMarketingCampaigns;
 
-public record GetMarketingCampaignsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<MarketingCampaignsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.MarketingCampaigns.GetMarketingCampaigns;
 
 public class GetMarketingCampaignsHandler(MicrofinanceDbContext context) : IQueryHandler<GetMarketingCampaignsQuery, MarketingCampaignsPagedResponse>
 {

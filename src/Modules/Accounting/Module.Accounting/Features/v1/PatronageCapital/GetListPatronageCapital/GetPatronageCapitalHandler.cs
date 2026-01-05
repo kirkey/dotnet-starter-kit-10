@@ -3,19 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.PatronageCapital.GetListPatronageCapital;
-
-public record GetPatronageCapitalQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<PatronageCapitalPagedResponse>;
-
-public record PatronageCapitalPagedResponse(
-    List<PatronageCapitalSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
+using FSH.Module.Accounting.Contracts.v1.PatronageCapital.GetListPatronageCapital;namespace FSH.Module.Accounting.Features.v1.PatronageCapital.GetListPatronageCapital;
 
 public class GetPatronageCapitalHandler(AccountingDbContext context) 
     : IQueryHandler<GetPatronageCapitalQuery, PatronageCapitalPagedResponse>

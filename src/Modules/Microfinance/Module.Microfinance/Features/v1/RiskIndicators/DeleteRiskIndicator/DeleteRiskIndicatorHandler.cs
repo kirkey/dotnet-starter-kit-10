@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.RiskIndicators.DeleteRiskIndicator;
+using FSH.Module.Microfinance.Contracts.v1.RiskIndicators.DeleteRiskIndicator;
 
-public record DeleteRiskIndicatorCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.RiskIndicators.DeleteRiskIndicator;
 
 public class DeleteRiskIndicatorHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteRiskIndicatorCommand>
 {

@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ShareAccounts.DeleteShareAccount;
+using FSH.Module.Microfinance.Contracts.v1.ShareAccounts.DeleteShareAccount;
 
-public record DeleteShareAccountCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.ShareAccounts.DeleteShareAccount;
 
 public class DeleteShareAccountHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteShareAccountCommand>
 {

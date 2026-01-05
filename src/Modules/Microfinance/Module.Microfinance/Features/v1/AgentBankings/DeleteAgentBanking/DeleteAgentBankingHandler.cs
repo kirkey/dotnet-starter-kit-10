@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.AgentBankings.DeleteAgentBanking;
+using FSH.Module.Microfinance.Contracts.v1.AgentBankings.DeleteAgentBanking;
 
-public record DeleteAgentBankingCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.AgentBankings.DeleteAgentBanking;
 
 public class DeleteAgentBankingHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteAgentBankingCommand>
 {

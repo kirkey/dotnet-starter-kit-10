@@ -3,9 +3,9 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.PrepaidExpenses.CreatePrepaidExpense;
+using FSH.Module.Accounting.Contracts.v1.PrepaidExpenses.CreatePrepaidExpense;
 
-public record CreatePrepaidExpenseCommand(string Name, string? Description) : ICommand<Guid>;
+namespace FSH.Module.Accounting.Features.v1.PrepaidExpenses.CreatePrepaidExpense;
 
 public class CreatePrepaidExpenseHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreatePrepaidExpenseCommand, Guid>

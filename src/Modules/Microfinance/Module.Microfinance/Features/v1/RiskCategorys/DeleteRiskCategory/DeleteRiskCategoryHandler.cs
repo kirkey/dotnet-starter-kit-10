@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.RiskCategorys.DeleteRiskCategory;
+using FSH.Module.Microfinance.Contracts.v1.RiskCategorys.DeleteRiskCategory;
 
-public record DeleteRiskCategoryCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.RiskCategorys.DeleteRiskCategory;
 
 public class DeleteRiskCategoryHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteRiskCategoryCommand>
 {

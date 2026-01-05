@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.InvestmentProducts.DeleteInvestmentProduct;
+using FSH.Module.Microfinance.Contracts.v1.InvestmentProducts.DeleteInvestmentProduct;
 
-public record DeleteInvestmentProductCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.InvestmentProducts.DeleteInvestmentProduct;
 
 public class DeleteInvestmentProductHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteInvestmentProductCommand>
 {

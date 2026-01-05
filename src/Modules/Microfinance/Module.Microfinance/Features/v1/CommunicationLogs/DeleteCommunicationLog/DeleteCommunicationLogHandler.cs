@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CommunicationLogs.DeleteCommunicationLog;
+using FSH.Module.Microfinance.Contracts.v1.CommunicationLogs.DeleteCommunicationLog;
 
-public record DeleteCommunicationLogCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.CommunicationLogs.DeleteCommunicationLog;
 
 public class DeleteCommunicationLogHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteCommunicationLogCommand>
 {

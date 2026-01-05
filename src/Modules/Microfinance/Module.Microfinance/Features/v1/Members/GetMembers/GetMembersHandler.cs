@@ -1,12 +1,7 @@
 using FSH.Module.Microfinance.Contracts.v1.Members;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Members.GetMembers;
-public record GetMembersQuery(
-    int Page,
-    int PageSize,
-    string? SearchTerm,
-    bool? IsActive) : IQuery<MembersPagedResponse>;
+using FSH.Module.Microfinance.Contracts.v1.Members;namespace FSH.Module.Microfinance.Features.v1.Members.GetMembers;
 public class GetMembersHandler(MicrofinanceDbContext context) : IQueryHandler<GetMembersQuery, MembersPagedResponse>
 {
     public async ValueTask<MembersPagedResponse> Handle(GetMembersQuery query, CancellationToken ct)

@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.PromiseToPays;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.GetPromiseToPays;
+using FSH.Module.Microfinance.Contracts.v1.PromiseToPays.GetPromiseToPays;
 
-public record GetPromiseToPaysQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<PromiseToPaysPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.GetPromiseToPays;
 
 public class GetPromiseToPaysHandler(MicrofinanceDbContext context) : IQueryHandler<GetPromiseToPaysQuery, PromiseToPaysPagedResponse>
 {

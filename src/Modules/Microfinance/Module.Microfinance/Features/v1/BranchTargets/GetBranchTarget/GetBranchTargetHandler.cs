@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.BranchTargets;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.BranchTargets.GetBranchTarget;
+using FSH.Module.Microfinance.Contracts.v1.BranchTargets.GetBranchTarget;
 
-public record GetBranchTargetQuery(Guid Id) : IQuery<BranchTargetDto>;
+namespace FSH.Module.Microfinance.Features.v1.BranchTargets.GetBranchTarget;
 
 public class GetBranchTargetHandler(MicrofinanceDbContext context) : IQueryHandler<GetBranchTargetQuery, BranchTargetDto>
 {

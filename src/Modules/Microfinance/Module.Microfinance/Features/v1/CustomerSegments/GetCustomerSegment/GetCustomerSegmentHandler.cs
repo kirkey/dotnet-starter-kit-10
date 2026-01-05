@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.CustomerSegments;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CustomerSegments.GetCustomerSegment;
+using FSH.Module.Microfinance.Contracts.v1.CustomerSegments.GetCustomerSegment;
 
-public record GetCustomerSegmentQuery(Guid Id) : IQuery<CustomerSegmentDto>;
+namespace FSH.Module.Microfinance.Features.v1.CustomerSegments.GetCustomerSegment;
 
 public class GetCustomerSegmentHandler(MicrofinanceDbContext context) : IQueryHandler<GetCustomerSegmentQuery, CustomerSegmentDto>
 {

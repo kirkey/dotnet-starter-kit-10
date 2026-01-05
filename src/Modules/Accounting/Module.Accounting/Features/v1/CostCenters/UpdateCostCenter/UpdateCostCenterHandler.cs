@@ -2,9 +2,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.CostCenters.UpdateCostCenter;
-
-public record UpdateCostCenterCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
+using FSH.Module.Accounting.Contracts.v1.CostCenters.UpdateCostCenter;namespace FSH.Module.Accounting.Features.v1.CostCenters.UpdateCostCenter;
 
 public class UpdateCostCenterHandler(AccountingDbContext context) : ICommandHandler<UpdateCostCenterCommand, Guid>
 {

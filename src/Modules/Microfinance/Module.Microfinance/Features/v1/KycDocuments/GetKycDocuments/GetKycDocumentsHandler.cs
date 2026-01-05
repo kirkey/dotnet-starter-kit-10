@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.KycDocuments;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.KycDocuments.GetKycDocuments;
+using FSH.Module.Microfinance.Contracts.v1.KycDocuments.GetKycDocuments;
 
-public record GetKycDocumentsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<KycDocumentsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.KycDocuments.GetKycDocuments;
 
 public class GetKycDocumentsHandler(MicrofinanceDbContext context) : IQueryHandler<GetKycDocumentsQuery, KycDocumentsPagedResponse>
 {

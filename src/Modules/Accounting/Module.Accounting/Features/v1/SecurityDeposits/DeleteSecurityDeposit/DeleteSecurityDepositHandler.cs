@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.SecurityDeposits.DeleteSecurityDeposit;
+using FSH.Module.Accounting.Contracts.v1.SecurityDeposits.DeleteSecurityDeposit;
 
-public record DeleteSecurityDepositCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.SecurityDeposits.DeleteSecurityDeposit;
 
 public class DeleteSecurityDepositHandler(AccountingDbContext context) : ICommandHandler<DeleteSecurityDepositCommand>
 {

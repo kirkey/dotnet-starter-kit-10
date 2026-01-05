@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.MarketingCampaigns;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MarketingCampaigns.GetMarketingCampaign;
+using FSH.Module.Microfinance.Contracts.v1.MarketingCampaigns.GetMarketingCampaign;
 
-public record GetMarketingCampaignQuery(Guid Id) : IQuery<MarketingCampaignDto>;
+namespace FSH.Module.Microfinance.Features.v1.MarketingCampaigns.GetMarketingCampaign;
 
 public class GetMarketingCampaignHandler(MicrofinanceDbContext context) : IQueryHandler<GetMarketingCampaignQuery, MarketingCampaignDto>
 {

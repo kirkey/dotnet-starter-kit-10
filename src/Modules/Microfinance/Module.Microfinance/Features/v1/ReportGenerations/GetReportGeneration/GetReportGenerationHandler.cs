@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.ReportGenerations;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.GetReportGeneration;
+using FSH.Module.Microfinance.Contracts.v1.ReportGenerations.GetReportGeneration;
 
-public record GetReportGenerationQuery(Guid Id) : IQuery<ReportGenerationDto>;
+namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.GetReportGeneration;
 
 public class GetReportGenerationHandler(MicrofinanceDbContext context) : IQueryHandler<GetReportGenerationQuery, ReportGenerationDto>
 {

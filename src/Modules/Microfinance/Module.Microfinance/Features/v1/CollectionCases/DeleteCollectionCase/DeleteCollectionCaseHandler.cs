@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CollectionCases.DeleteCollectionCase;
+using FSH.Module.Microfinance.Contracts.v1.CollectionCases.DeleteCollectionCase;
 
-public record DeleteCollectionCaseCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.CollectionCases.DeleteCollectionCase;
 
 public class DeleteCollectionCaseHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteCollectionCaseCommand>
 {

@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.MobileTransactions.CreateMobileTransaction;
+using FSH.Module.Microfinance.Contracts.v1.MobileTransactions.CreateMobileTransaction;
 
-public record CreateMobileTransactionCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.MobileTransactions.CreateMobileTransaction;
 
 public class CreateMobileTransactionHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateMobileTransactionCommand, Guid>

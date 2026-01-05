@@ -4,9 +4,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.DepreciationMethods.GetDepreciationMethod;
+using FSH.Module.Accounting.Contracts.v1.DepreciationMethods.GetDepreciationMethod;
 
-public record GetDepreciationMethodQuery(Guid Id) : IQuery<DepreciationMethodDto>;
+namespace FSH.Module.Accounting.Features.v1.DepreciationMethods.GetDepreciationMethod;
 
 public class GetDepreciationMethodHandler(AccountingDbContext context) : IQueryHandler<GetDepreciationMethodQuery, DepreciationMethodDto>
 {

@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.LegalActions.CreateLegalAction;
+using FSH.Module.Microfinance.Contracts.v1.LegalActions.CreateLegalAction;
 
-public record CreateLegalActionCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.LegalActions.CreateLegalAction;
 
 public class CreateLegalActionHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateLegalActionCommand, Guid>

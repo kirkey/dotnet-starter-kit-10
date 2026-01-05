@@ -4,9 +4,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.InterconnectionAgreements.GetInterconnectionAgreement;
+using FSH.Module.Accounting.Contracts.v1.InterconnectionAgreements.GetInterconnectionAgreement;
 
-public record GetInterconnectionAgreementQuery(Guid Id) : IQuery<InterconnectionAgreementDto>;
+namespace FSH.Module.Accounting.Features.v1.InterconnectionAgreements.GetInterconnectionAgreement;
 
 public class GetInterconnectionAgreementHandler(AccountingDbContext context) : IQueryHandler<GetInterconnectionAgreementQuery, InterconnectionAgreementDto>
 {

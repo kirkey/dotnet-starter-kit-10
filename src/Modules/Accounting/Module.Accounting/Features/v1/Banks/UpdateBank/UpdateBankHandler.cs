@@ -2,36 +2,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.Banks.UpdateBank;
-
-/// <summary>
-/// Command to update an existing bank account's metadata and banking details.
-/// </summary>
-/// <param name="Id">Bank ID to update (must exist)</param>
-/// <param name="BankName">Updated bank institution name (required)</param>
-/// <param name="BankCode">Updated bank code or null</param>
-/// <param name="Address">Updated address or null</param>
-/// <param name="ContactName">Updated contact name or null</param>
-/// <param name="ContactPhone">Updated contact phone or null</param>
-/// <param name="RoutingNumber">Updated routing number or null</param>
-/// <param name="SwiftCode">Updated SWIFT code or null</param>
-/// <param name="CurrencyCode">Updated currency code or null</param>
-/// <param name="OpeningBalance">Updated opening balance or null</param>
-/// <param name="IsDefault">Updated default bank flag or null</param>
-/// <param name="Description">Updated description or null</param>
-public record UpdateBankCommand(
-    Guid Id,
-    string BankName,
-    string? BankCode = null,
-    string? Address = null,
-    string? ContactName = null,
-    string? ContactPhone = null,
-    string? RoutingNumber = null,
-    string? SwiftCode = null,
-    string? CurrencyCode = null,
-    decimal? OpeningBalance = null,
-    bool? IsDefault = null,
-    string? Description = null) : ICommand<Guid>;
+using FSH.Module.Accounting.Contracts.v1.Banks.UpdateBank;namespace FSH.Module.Accounting.Features.v1.Banks.UpdateBank;
 
 /// <summary>
 /// Handler for updating bank account metadata and banking details.

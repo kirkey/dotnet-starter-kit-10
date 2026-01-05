@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.ReportDefinitions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ReportDefinitions.GetReportDefinitions;
+using FSH.Module.Microfinance.Contracts.v1.ReportDefinitions.GetReportDefinitions;
 
-public record GetReportDefinitionsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<ReportDefinitionsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.ReportDefinitions.GetReportDefinitions;
 
 public class GetReportDefinitionsHandler(MicrofinanceDbContext context) : IQueryHandler<GetReportDefinitionsQuery, ReportDefinitionsPagedResponse>
 {

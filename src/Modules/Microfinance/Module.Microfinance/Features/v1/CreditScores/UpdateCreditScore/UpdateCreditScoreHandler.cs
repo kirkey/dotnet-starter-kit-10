@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CreditScores.UpdateCreditScore;
+using FSH.Module.Microfinance.Contracts.v1.CreditScores.UpdateCreditScore;
 
-public record UpdateCreditScoreCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CreditScores.UpdateCreditScore;
 
 public class UpdateCreditScoreHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateCreditScoreCommand, Guid>
 {

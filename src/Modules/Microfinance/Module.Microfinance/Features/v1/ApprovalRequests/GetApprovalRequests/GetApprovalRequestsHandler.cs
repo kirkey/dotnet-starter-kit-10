@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.ApprovalRequests;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ApprovalRequests.GetApprovalRequests;
+using FSH.Module.Microfinance.Contracts.v1.ApprovalRequests.GetApprovalRequests;
 
-public record GetApprovalRequestsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<ApprovalRequestsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.ApprovalRequests.GetApprovalRequests;
 
 public class GetApprovalRequestsHandler(MicrofinanceDbContext context) : IQueryHandler<GetApprovalRequestsQuery, ApprovalRequestsPagedResponse>
 {

@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.AgentBankings;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.AgentBankings.GetAgentBankings;
+using FSH.Module.Microfinance.Contracts.v1.AgentBankings.GetAgentBankings;
 
-public record GetAgentBankingsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<AgentBankingsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.AgentBankings.GetAgentBankings;
 
 public class GetAgentBankingsHandler(MicrofinanceDbContext context) : IQueryHandler<GetAgentBankingsQuery, AgentBankingsPagedResponse>
 {

@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.RiskAlerts.DeleteRiskAlert;
+using FSH.Module.Microfinance.Contracts.v1.RiskAlerts.DeleteRiskAlert;
 
-public record DeleteRiskAlertCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.RiskAlerts.DeleteRiskAlert;
 
 public class DeleteRiskAlertHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteRiskAlertCommand>
 {

@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.CollectionActions.CreateCollectionAction;
+using FSH.Module.Microfinance.Contracts.v1.CollectionActions.CreateCollectionAction;
 
-public record CreateCollectionActionCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CollectionActions.CreateCollectionAction;
 
 public class CreateCollectionActionHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateCollectionActionCommand, Guid>

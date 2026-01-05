@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.UpdateReportGeneration;
+using FSH.Module.Microfinance.Contracts.v1.ReportGenerations.UpdateReportGeneration;
 
-public record UpdateReportGenerationCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.UpdateReportGeneration;
 
 public class UpdateReportGenerationHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateReportGenerationCommand, Guid>
 {

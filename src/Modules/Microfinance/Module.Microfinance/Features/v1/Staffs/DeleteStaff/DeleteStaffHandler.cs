@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.Staffs.DeleteStaff;
+using FSH.Module.Microfinance.Contracts.v1.Staffs.DeleteStaff;
 
-public record DeleteStaffCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.Staffs.DeleteStaff;
 
 public class DeleteStaffHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteStaffCommand>
 {

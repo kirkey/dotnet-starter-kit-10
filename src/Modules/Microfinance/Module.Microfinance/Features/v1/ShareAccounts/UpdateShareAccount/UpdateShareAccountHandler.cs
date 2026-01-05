@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ShareAccounts.UpdateShareAccount;
+using FSH.Module.Microfinance.Contracts.v1.ShareAccounts.UpdateShareAccount;
 
-public record UpdateShareAccountCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.ShareAccounts.UpdateShareAccount;
 
 public class UpdateShareAccountHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateShareAccountCommand, Guid>
 {

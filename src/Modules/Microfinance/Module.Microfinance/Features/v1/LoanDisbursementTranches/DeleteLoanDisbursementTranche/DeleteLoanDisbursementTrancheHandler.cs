@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanDisbursementTranches.DeleteLoanDisbursementTranche;
+using FSH.Module.Microfinance.Contracts.v1.LoanDisbursementTranches.DeleteLoanDisbursementTranche;
 
-public record DeleteLoanDisbursementTrancheCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.LoanDisbursementTranches.DeleteLoanDisbursementTranche;
 
 public class DeleteLoanDisbursementTrancheHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteLoanDisbursementTrancheCommand>
 {

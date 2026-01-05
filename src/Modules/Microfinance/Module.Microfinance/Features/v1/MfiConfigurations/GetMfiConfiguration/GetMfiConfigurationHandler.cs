@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.GetMfiConfiguration;
+using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations.GetMfiConfiguration;
 
-public record GetMfiConfigurationQuery(Guid Id) : IQuery<MfiConfigurationDto>;
+namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.GetMfiConfiguration;
 
 public class GetMfiConfigurationHandler(MicrofinanceDbContext context) : IQueryHandler<GetMfiConfigurationQuery, MfiConfigurationDto>
 {

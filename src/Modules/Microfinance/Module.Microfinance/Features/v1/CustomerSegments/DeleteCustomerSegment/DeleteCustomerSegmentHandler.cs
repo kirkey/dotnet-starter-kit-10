@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CustomerSegments.DeleteCustomerSegment;
+using FSH.Module.Microfinance.Contracts.v1.CustomerSegments.DeleteCustomerSegment;
 
-public record DeleteCustomerSegmentCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.CustomerSegments.DeleteCustomerSegment;
 
 public class DeleteCustomerSegmentHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteCustomerSegmentCommand>
 {

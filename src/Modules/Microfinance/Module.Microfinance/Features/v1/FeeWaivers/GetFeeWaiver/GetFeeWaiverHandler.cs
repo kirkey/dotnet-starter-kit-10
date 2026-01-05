@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.FeeWaivers;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.GetFeeWaiver;
+using FSH.Module.Microfinance.Contracts.v1.FeeWaivers.GetFeeWaiver;
 
-public record GetFeeWaiverQuery(Guid Id) : IQuery<FeeWaiverDto>;
+namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.GetFeeWaiver;
 
 public class GetFeeWaiverHandler(MicrofinanceDbContext context) : IQueryHandler<GetFeeWaiverQuery, FeeWaiverDto>
 {

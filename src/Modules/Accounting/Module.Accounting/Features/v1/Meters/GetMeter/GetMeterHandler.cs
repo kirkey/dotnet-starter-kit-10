@@ -4,9 +4,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.Meters.GetMeter;
+using FSH.Module.Accounting.Contracts.v1.Meters.GetMeter;
 
-public record GetMeterQuery(Guid Id) : IQuery<MeterDto>;
+namespace FSH.Module.Accounting.Features.v1.Meters.GetMeter;
 
 public class GetMeterHandler(AccountingDbContext context) : IQueryHandler<GetMeterQuery, MeterDto>
 {

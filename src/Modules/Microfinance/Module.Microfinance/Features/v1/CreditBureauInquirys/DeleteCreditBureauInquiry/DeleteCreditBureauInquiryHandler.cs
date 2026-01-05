@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CreditBureauInquirys.DeleteCreditBureauInquiry;
+using FSH.Module.Microfinance.Contracts.v1.CreditBureauInquirys.DeleteCreditBureauInquiry;
 
-public record DeleteCreditBureauInquiryCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.CreditBureauInquirys.DeleteCreditBureauInquiry;
 
 public class DeleteCreditBureauInquiryHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteCreditBureauInquiryCommand>
 {

@@ -2,9 +2,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.UpdateDeferredRevenue;
-
-public record UpdateDeferredRevenueCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
+using FSH.Module.Accounting.Contracts.v1.DeferredRevenue.UpdateDeferredRevenue;namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.UpdateDeferredRevenue;
 
 public class UpdateDeferredRevenueHandler(AccountingDbContext context) : ICommandHandler<UpdateDeferredRevenueCommand, Guid>
 {

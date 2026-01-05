@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.RiskAlerts;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.RiskAlerts.GetRiskAlert;
+using FSH.Module.Microfinance.Contracts.v1.RiskAlerts.GetRiskAlert;
 
-public record GetRiskAlertQuery(Guid Id) : IQuery<RiskAlertDto>;
+namespace FSH.Module.Microfinance.Features.v1.RiskAlerts.GetRiskAlert;
 
 public class GetRiskAlertHandler(MicrofinanceDbContext context) : IQueryHandler<GetRiskAlertQuery, RiskAlertDto>
 {

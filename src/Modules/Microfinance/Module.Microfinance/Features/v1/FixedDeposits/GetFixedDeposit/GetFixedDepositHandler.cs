@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.FixedDeposits;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.FixedDeposits.GetFixedDeposit;
+using FSH.Module.Microfinance.Contracts.v1.FixedDeposits.GetFixedDeposit;
 
-public record GetFixedDepositQuery(Guid Id) : IQuery<FixedDepositDto>;
+namespace FSH.Module.Microfinance.Features.v1.FixedDeposits.GetFixedDeposit;
 
 public class GetFixedDepositHandler(MicrofinanceDbContext context) : IQueryHandler<GetFixedDepositQuery, FixedDepositDto>
 {

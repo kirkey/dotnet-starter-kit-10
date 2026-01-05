@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.LoanRepayments;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanRepayments.GetLoanRepayment;
+using FSH.Module.Microfinance.Contracts.v1.LoanRepayments.GetLoanRepayment;
 
-public record GetLoanRepaymentQuery(Guid Id) : IQuery<LoanRepaymentDto>;
+namespace FSH.Module.Microfinance.Features.v1.LoanRepayments.GetLoanRepayment;
 
 public class GetLoanRepaymentHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanRepaymentQuery, LoanRepaymentDto>
 {

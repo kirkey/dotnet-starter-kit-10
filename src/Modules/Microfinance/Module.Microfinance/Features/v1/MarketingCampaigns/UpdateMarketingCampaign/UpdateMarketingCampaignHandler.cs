@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MarketingCampaigns.UpdateMarketingCampaign;
+using FSH.Module.Microfinance.Contracts.v1.MarketingCampaigns.UpdateMarketingCampaign;
 
-public record UpdateMarketingCampaignCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.MarketingCampaigns.UpdateMarketingCampaign;
 
 public class UpdateMarketingCampaignHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateMarketingCampaignCommand, Guid>
 {

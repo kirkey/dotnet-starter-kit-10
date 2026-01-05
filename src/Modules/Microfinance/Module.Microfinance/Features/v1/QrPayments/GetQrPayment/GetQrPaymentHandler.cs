@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.QrPayments;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.QrPayments.GetQrPayment;
+using FSH.Module.Microfinance.Contracts.v1.QrPayments.GetQrPayment;
 
-public record GetQrPaymentQuery(Guid Id) : IQuery<QrPaymentDto>;
+namespace FSH.Module.Microfinance.Features.v1.QrPayments.GetQrPayment;
 
 public class GetQrPaymentHandler(MicrofinanceDbContext context) : IQueryHandler<GetQrPaymentQuery, QrPaymentDto>
 {

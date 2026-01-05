@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.FeeDefinitions.CreateFeeDefinition;
+using FSH.Module.Microfinance.Contracts.v1.FeeDefinitions.CreateFeeDefinition;
 
-public record CreateFeeDefinitionCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.FeeDefinitions.CreateFeeDefinition;
 
 public class CreateFeeDefinitionHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateFeeDefinitionCommand, Guid>

@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.CollectionCases.CreateCollectionCase;
+using FSH.Module.Microfinance.Contracts.v1.CollectionCases.CreateCollectionCase;
 
-public record CreateCollectionCaseCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CollectionCases.CreateCollectionCase;
 
 public class CreateCollectionCaseHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateCollectionCaseCommand, Guid>

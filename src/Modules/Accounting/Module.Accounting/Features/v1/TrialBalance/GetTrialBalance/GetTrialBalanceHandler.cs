@@ -4,9 +4,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.TrialBalance.GetTrialBalance;
+using FSH.Module.Accounting.Contracts.v1.TrialBalance.GetTrialBalance;
 
-public record GetTrialBalanceQuery(Guid Id) : IQuery<TrialBalanceDto>;
+namespace FSH.Module.Accounting.Features.v1.TrialBalance.GetTrialBalance;
 
 public class GetTrialBalanceHandler(AccountingDbContext context) : IQueryHandler<GetTrialBalanceQuery, TrialBalanceDto>
 {

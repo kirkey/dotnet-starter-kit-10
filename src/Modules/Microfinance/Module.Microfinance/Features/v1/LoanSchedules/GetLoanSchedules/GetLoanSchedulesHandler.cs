@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.LoanSchedules;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanSchedules.GetLoanSchedules;
+using FSH.Module.Microfinance.Contracts.v1.LoanSchedules.GetLoanSchedules;
 
-public record GetLoanSchedulesQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<LoanSchedulesPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.LoanSchedules.GetLoanSchedules;
 
 public class GetLoanSchedulesHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanSchedulesQuery, LoanSchedulesPagedResponse>
 {

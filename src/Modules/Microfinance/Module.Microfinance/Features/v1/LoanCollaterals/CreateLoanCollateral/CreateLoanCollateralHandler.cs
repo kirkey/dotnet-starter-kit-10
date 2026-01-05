@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanCollaterals.CreateLoanCollateral;
+using FSH.Module.Microfinance.Contracts.v1.LoanCollaterals.CreateLoanCollateral;
 
-public record CreateLoanCollateralCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.LoanCollaterals.CreateLoanCollateral;
 
 public class CreateLoanCollateralHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateLoanCollateralCommand, Guid>

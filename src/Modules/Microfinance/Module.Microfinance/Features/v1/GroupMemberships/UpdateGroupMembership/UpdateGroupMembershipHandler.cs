@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.GroupMemberships.UpdateGroupMembership;
+using FSH.Module.Microfinance.Contracts.v1.GroupMemberships.UpdateGroupMembership;
 
-public record UpdateGroupMembershipCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.GroupMemberships.UpdateGroupMembership;
 
 public class UpdateGroupMembershipHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateGroupMembershipCommand, Guid>
 {

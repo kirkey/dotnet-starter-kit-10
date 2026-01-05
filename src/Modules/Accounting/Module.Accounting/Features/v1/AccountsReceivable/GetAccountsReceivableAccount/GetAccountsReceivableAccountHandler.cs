@@ -4,9 +4,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.AccountsReceivable.GetAccountsReceivableAccount;
-
-public record GetAccountsReceivableAccountQuery(Guid Id) : IQuery<AccountsReceivableAccountDto>;
+using FSH.Module.Accounting.Contracts.v1.AccountsReceivable.GetAccountsReceivableAccount;namespace FSH.Module.Accounting.Features.v1.AccountsReceivable.GetAccountsReceivableAccount;
 
 public class GetAccountsReceivableAccountHandler(AccountingDbContext context) : IQueryHandler<GetAccountsReceivableAccountQuery, AccountsReceivableAccountDto>
 {

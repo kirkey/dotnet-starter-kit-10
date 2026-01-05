@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.InsuranceClaims.DeleteInsuranceClaim;
+using FSH.Module.Microfinance.Contracts.v1.InsuranceClaims.DeleteInsuranceClaim;
 
-public record DeleteInsuranceClaimCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.InsuranceClaims.DeleteInsuranceClaim;
 
 public class DeleteInsuranceClaimHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteInsuranceClaimCommand>
 {

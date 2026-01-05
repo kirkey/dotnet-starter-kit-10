@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.StaffTrainings;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.StaffTrainings.GetStaffTrainings;
+using FSH.Module.Microfinance.Contracts.v1.StaffTrainings.GetStaffTrainings;
 
-public record GetStaffTrainingsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<StaffTrainingsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.StaffTrainings.GetStaffTrainings;
 
 public class GetStaffTrainingsHandler(MicrofinanceDbContext context) : IQueryHandler<GetStaffTrainingsQuery, StaffTrainingsPagedResponse>
 {

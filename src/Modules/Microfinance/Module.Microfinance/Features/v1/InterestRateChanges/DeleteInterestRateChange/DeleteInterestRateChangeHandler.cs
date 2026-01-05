@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.InterestRateChanges.DeleteInterestRateChange;
+using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges.DeleteInterestRateChange;
 
-public record DeleteInterestRateChangeCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.InterestRateChanges.DeleteInterestRateChange;
 
 public class DeleteInterestRateChangeHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteInterestRateChangeCommand>
 {

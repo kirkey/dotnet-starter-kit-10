@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CollectionStrategys.UpdateCollectionStrategy;
+using FSH.Module.Microfinance.Contracts.v1.CollectionStrategys.UpdateCollectionStrategy;
 
-public record UpdateCollectionStrategyCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CollectionStrategys.UpdateCollectionStrategy;
 
 public class UpdateCollectionStrategyHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateCollectionStrategyCommand, Guid>
 {

@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.LoanOfficerAssignments;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanOfficerAssignments.GetLoanOfficerAssignment;
+using FSH.Module.Microfinance.Contracts.v1.LoanOfficerAssignments.GetLoanOfficerAssignment;
 
-public record GetLoanOfficerAssignmentQuery(Guid Id) : IQuery<LoanOfficerAssignmentDto>;
+namespace FSH.Module.Microfinance.Features.v1.LoanOfficerAssignments.GetLoanOfficerAssignment;
 
 public class GetLoanOfficerAssignmentHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanOfficerAssignmentQuery, LoanOfficerAssignmentDto>
 {

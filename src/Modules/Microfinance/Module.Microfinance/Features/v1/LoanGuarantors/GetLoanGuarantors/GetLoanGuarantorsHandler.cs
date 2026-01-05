@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.LoanGuarantors;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanGuarantors.GetLoanGuarantors;
+using FSH.Module.Microfinance.Contracts.v1.LoanGuarantors.GetLoanGuarantors;
 
-public record GetLoanGuarantorsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<LoanGuarantorsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.LoanGuarantors.GetLoanGuarantors;
 
 public class GetLoanGuarantorsHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanGuarantorsQuery, LoanGuarantorsPagedResponse>
 {

@@ -3,19 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
+using FSH.Module.Accounting.Contracts.v1.Members.GetListMember;
+
 namespace FSH.Module.Accounting.Features.v1.Members.GetMembers;
-
-public record GetMembersQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<MembersPagedResponse>;
-
-public record MembersPagedResponse(
-    List<MemberSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetMembersHandler(AccountingDbContext context) 
     : IQueryHandler<GetMembersQuery, MembersPagedResponse>

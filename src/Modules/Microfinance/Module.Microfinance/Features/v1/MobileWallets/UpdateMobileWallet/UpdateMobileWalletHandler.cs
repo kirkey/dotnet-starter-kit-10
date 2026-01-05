@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MobileWallets.UpdateMobileWallet;
+using FSH.Module.Microfinance.Contracts.v1.MobileWallets.UpdateMobileWallet;
 
-public record UpdateMobileWalletCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.MobileWallets.UpdateMobileWallet;
 
 public class UpdateMobileWalletHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateMobileWalletCommand, Guid>
 {

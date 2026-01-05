@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.CreateFeeWaiver;
+using FSH.Module.Microfinance.Contracts.v1.FeeWaivers.CreateFeeWaiver;
 
-public record CreateFeeWaiverCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.CreateFeeWaiver;
 
 public class CreateFeeWaiverHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateFeeWaiverCommand, Guid>

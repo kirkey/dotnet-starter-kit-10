@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.DebtSettlements;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.DebtSettlements.GetDebtSettlement;
+using FSH.Module.Microfinance.Contracts.v1.DebtSettlements.GetDebtSettlement;
 
-public record GetDebtSettlementQuery(Guid Id) : IQuery<DebtSettlementDto>;
+namespace FSH.Module.Microfinance.Features.v1.DebtSettlements.GetDebtSettlement;
 
 public class GetDebtSettlementHandler(MicrofinanceDbContext context) : IQueryHandler<GetDebtSettlementQuery, DebtSettlementDto>
 {

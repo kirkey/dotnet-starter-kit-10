@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanGuarantors.CreateLoanGuarantor;
+using FSH.Module.Microfinance.Contracts.v1.LoanGuarantors.CreateLoanGuarantor;
 
-public record CreateLoanGuarantorCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.LoanGuarantors.CreateLoanGuarantor;
 
 public class CreateLoanGuarantorHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateLoanGuarantorCommand, Guid>

@@ -2,9 +2,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.InterCompanyTransactions.DeleteInterCompanyTransaction;
-
-public record DeleteInterCompanyTransactionCommand(Guid Id) : ICommand;
+using FSH.Module.Accounting.Contracts.v1.InterCompanyTransactions.DeleteInterCompanyTransaction;namespace FSH.Module.Accounting.Features.v1.InterCompanyTransactions.DeleteInterCompanyTransaction;
 
 public class DeleteInterCompanyTransactionHandler(AccountingDbContext context) : ICommandHandler<DeleteInterCompanyTransactionCommand>
 {

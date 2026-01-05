@@ -4,9 +4,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.RegulatoryReports.GetRegulatoryReport;
+using FSH.Module.Accounting.Contracts.v1.RegulatoryReports.GetRegulatoryReport;
 
-public record GetRegulatoryReportQuery(Guid Id) : IQuery<RegulatoryReportDto>;
+namespace FSH.Module.Accounting.Features.v1.RegulatoryReports.GetRegulatoryReport;
 
 public class GetRegulatoryReportHandler(AccountingDbContext context) : IQueryHandler<GetRegulatoryReportQuery, RegulatoryReportDto>
 {

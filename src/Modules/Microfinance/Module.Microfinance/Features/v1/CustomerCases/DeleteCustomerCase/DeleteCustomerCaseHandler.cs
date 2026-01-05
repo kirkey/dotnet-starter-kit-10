@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CustomerCases.DeleteCustomerCase;
+using FSH.Module.Microfinance.Contracts.v1.CustomerCases.DeleteCustomerCase;
 
-public record DeleteCustomerCaseCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.CustomerCases.DeleteCustomerCase;
 
 public class DeleteCustomerCaseHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteCustomerCaseCommand>
 {

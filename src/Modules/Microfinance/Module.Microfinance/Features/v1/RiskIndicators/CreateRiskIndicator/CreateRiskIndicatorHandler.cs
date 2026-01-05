@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.RiskIndicators.CreateRiskIndicator;
+using FSH.Module.Microfinance.Contracts.v1.RiskIndicators.CreateRiskIndicator;
 
-public record CreateRiskIndicatorCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.RiskIndicators.CreateRiskIndicator;
 
 public class CreateRiskIndicatorHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateRiskIndicatorCommand, Guid>

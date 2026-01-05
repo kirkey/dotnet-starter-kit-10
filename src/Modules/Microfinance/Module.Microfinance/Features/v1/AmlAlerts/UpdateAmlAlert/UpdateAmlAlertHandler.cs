@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.UpdateAmlAlert;
+using FSH.Module.Microfinance.Contracts.v1.AmlAlerts.UpdateAmlAlert;
 
-public record UpdateAmlAlertCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.UpdateAmlAlert;
 
 public class UpdateAmlAlertHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateAmlAlertCommand, Guid>
 {

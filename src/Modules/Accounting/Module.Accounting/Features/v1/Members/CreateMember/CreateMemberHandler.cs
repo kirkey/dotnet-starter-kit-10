@@ -3,9 +3,7 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.Members.CreateMember;
-
-public record CreateMemberCommand(string Name, string? Description) : ICommand<Guid>;
+using FSH.Module.Accounting.Contracts.v1.Members.CreateMember;namespace FSH.Module.Accounting.Features.v1.Members.CreateMember;
 
 public class CreateMemberHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateMemberCommand, Guid>

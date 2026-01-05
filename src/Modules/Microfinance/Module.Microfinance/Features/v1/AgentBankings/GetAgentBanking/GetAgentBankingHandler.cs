@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.AgentBankings;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.AgentBankings.GetAgentBanking;
+using FSH.Module.Microfinance.Contracts.v1.AgentBankings.GetAgentBanking;
 
-public record GetAgentBankingQuery(Guid Id) : IQuery<AgentBankingDto>;
+namespace FSH.Module.Microfinance.Features.v1.AgentBankings.GetAgentBanking;
 
 public class GetAgentBankingHandler(MicrofinanceDbContext context) : IQueryHandler<GetAgentBankingQuery, AgentBankingDto>
 {

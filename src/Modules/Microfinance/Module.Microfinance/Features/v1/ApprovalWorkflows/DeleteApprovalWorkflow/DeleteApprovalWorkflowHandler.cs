@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.ApprovalWorkflows.DeleteApprovalWorkflow;
+using FSH.Module.Microfinance.Contracts.v1.ApprovalWorkflows.DeleteApprovalWorkflow;
 
-public record DeleteApprovalWorkflowCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.ApprovalWorkflows.DeleteApprovalWorkflow;
 
 public class DeleteApprovalWorkflowHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteApprovalWorkflowCommand>
 {

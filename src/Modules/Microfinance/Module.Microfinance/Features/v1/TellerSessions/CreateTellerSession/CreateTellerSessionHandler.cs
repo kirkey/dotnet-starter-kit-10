@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.TellerSessions.CreateTellerSession;
+using FSH.Module.Microfinance.Contracts.v1.TellerSessions.CreateTellerSession;
 
-public record CreateTellerSessionCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.TellerSessions.CreateTellerSession;
 
 public class CreateTellerSessionHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateTellerSessionCommand, Guid>

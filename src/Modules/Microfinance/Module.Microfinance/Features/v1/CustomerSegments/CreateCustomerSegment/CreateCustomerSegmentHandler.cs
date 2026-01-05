@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.CustomerSegments.CreateCustomerSegment;
+using FSH.Module.Microfinance.Contracts.v1.CustomerSegments.CreateCustomerSegment;
 
-public record CreateCustomerSegmentCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CustomerSegments.CreateCustomerSegment;
 
 public class CreateCustomerSegmentHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateCustomerSegmentCommand, Guid>

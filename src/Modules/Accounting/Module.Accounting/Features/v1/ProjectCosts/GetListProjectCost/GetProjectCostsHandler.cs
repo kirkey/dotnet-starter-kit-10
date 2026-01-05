@@ -3,19 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.ProjectCosts.GetProjectCosts;
-
-public record GetProjectCostsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<ProjectCostsPagedResponse>;
-
-public record ProjectCostsPagedResponse(
-    List<ProjectCostSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
+using FSH.Module.Accounting.Contracts.v1.ProjectCosts.GetListProjectCost;namespace FSH.Module.Accounting.Features.v1.ProjectCosts.GetProjectCosts;
 
 public class GetProjectCostsHandler(AccountingDbContext context) 
     : IQueryHandler<GetProjectCostsQuery, ProjectCostsPagedResponse>

@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.InterestRateChanges.GetInterestRateChange;
+using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges.GetInterestRateChange;
 
-public record GetInterestRateChangeQuery(Guid Id) : IQuery<InterestRateChangeDto>;
+namespace FSH.Module.Microfinance.Features.v1.InterestRateChanges.GetInterestRateChange;
 
 public class GetInterestRateChangeHandler(MicrofinanceDbContext context) : IQueryHandler<GetInterestRateChangeQuery, InterestRateChangeDto>
 {

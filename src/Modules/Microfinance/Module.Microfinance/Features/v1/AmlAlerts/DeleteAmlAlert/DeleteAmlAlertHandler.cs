@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.DeleteAmlAlert;
+using FSH.Module.Microfinance.Contracts.v1.AmlAlerts.DeleteAmlAlert;
 
-public record DeleteAmlAlertCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.DeleteAmlAlert;
 
 public class DeleteAmlAlertHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteAmlAlertCommand>
 {

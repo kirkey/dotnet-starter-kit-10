@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.DebtSettlements.DeleteDebtSettlement;
+using FSH.Module.Microfinance.Contracts.v1.DebtSettlements.DeleteDebtSettlement;
 
-public record DeleteDebtSettlementCommand(Guid Id) : ICommand;
+namespace FSH.Module.Microfinance.Features.v1.DebtSettlements.DeleteDebtSettlement;
 
 public class DeleteDebtSettlementHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteDebtSettlementCommand>
 {

@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.CommunicationTemplates;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CommunicationTemplates.GetCommunicationTemplates;
+using FSH.Module.Microfinance.Contracts.v1.CommunicationTemplates.GetCommunicationTemplates;
 
-public record GetCommunicationTemplatesQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<CommunicationTemplatesPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.CommunicationTemplates.GetCommunicationTemplates;
 
 public class GetCommunicationTemplatesHandler(MicrofinanceDbContext context) : IQueryHandler<GetCommunicationTemplatesQuery, CommunicationTemplatesPagedResponse>
 {

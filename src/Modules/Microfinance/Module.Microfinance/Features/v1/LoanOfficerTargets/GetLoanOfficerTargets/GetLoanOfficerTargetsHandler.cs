@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.LoanOfficerTargets;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanOfficerTargets.GetLoanOfficerTargets;
+using FSH.Module.Microfinance.Contracts.v1.LoanOfficerTargets.GetLoanOfficerTargets;
 
-public record GetLoanOfficerTargetsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<LoanOfficerTargetsPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.LoanOfficerTargets.GetLoanOfficerTargets;
 
 public class GetLoanOfficerTargetsHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanOfficerTargetsQuery, LoanOfficerTargetsPagedResponse>
 {

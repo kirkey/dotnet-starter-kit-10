@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.CommunicationTemplates;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CommunicationTemplates.GetCommunicationTemplate;
+using FSH.Module.Microfinance.Contracts.v1.CommunicationTemplates.GetCommunicationTemplate;
 
-public record GetCommunicationTemplateQuery(Guid Id) : IQuery<CommunicationTemplateDto>;
+namespace FSH.Module.Microfinance.Features.v1.CommunicationTemplates.GetCommunicationTemplate;
 
 public class GetCommunicationTemplateHandler(MicrofinanceDbContext context) : IQueryHandler<GetCommunicationTemplateQuery, CommunicationTemplateDto>
 {

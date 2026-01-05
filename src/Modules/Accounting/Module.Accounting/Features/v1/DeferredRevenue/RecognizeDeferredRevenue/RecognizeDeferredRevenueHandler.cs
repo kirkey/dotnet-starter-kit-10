@@ -2,9 +2,7 @@
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.RecognizeDeferredRevenue;
-
-public record RecognizeDeferredRevenueCommand(Guid Id) : ICommand;
+using FSH.Module.Accounting.Contracts.v1.DeferredRevenue.RecognizeDeferredRevenue;namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.RecognizeDeferredRevenue;
 
 public class RecognizeDeferredRevenueHandler(AccountingDbContext context) 
     : ICommandHandler<RecognizeDeferredRevenueCommand>

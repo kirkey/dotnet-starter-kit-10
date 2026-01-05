@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.UpdateMfiConfiguration;
+using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations.UpdateMfiConfiguration;
 
-public record UpdateMfiConfigurationCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.UpdateMfiConfiguration;
 
 public class UpdateMfiConfigurationHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateMfiConfigurationCommand, Guid>
 {

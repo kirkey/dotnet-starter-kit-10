@@ -4,9 +4,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.SecurityDeposits.GetSecurityDeposit;
+using FSH.Module.Accounting.Contracts.v1.SecurityDeposits.GetSecurityDeposit;
 
-public record GetSecurityDepositQuery(Guid Id) : IQuery<SecurityDepositDto>;
+namespace FSH.Module.Accounting.Features.v1.SecurityDeposits.GetSecurityDeposit;
 
 public class GetSecurityDepositHandler(AccountingDbContext context) : IQueryHandler<GetSecurityDepositQuery, SecurityDepositDto>
 {

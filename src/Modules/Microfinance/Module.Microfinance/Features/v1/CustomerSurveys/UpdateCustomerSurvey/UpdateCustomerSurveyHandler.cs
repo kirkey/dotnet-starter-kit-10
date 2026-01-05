@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CustomerSurveys.UpdateCustomerSurvey;
+using FSH.Module.Microfinance.Contracts.v1.CustomerSurveys.UpdateCustomerSurvey;
 
-public record UpdateCustomerSurveyCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CustomerSurveys.UpdateCustomerSurvey;
 
 public class UpdateCustomerSurveyHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateCustomerSurveyCommand, Guid>
 {

@@ -2,9 +2,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.Members.UpdateMember;
-
-public record UpdateMemberCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
+using FSH.Module.Accounting.Contracts.v1.Members.UpdateMember;namespace FSH.Module.Accounting.Features.v1.Members.UpdateMember;
 
 public class UpdateMemberHandler(AccountingDbContext context) : ICommandHandler<UpdateMemberCommand, Guid>
 {

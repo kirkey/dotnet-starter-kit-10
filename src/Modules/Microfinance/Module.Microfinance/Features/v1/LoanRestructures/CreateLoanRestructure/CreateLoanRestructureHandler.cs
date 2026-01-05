@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanRestructures.CreateLoanRestructure;
+using FSH.Module.Microfinance.Contracts.v1.LoanRestructures.CreateLoanRestructure;
 
-public record CreateLoanRestructureCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.LoanRestructures.CreateLoanRestructure;
 
 public class CreateLoanRestructureHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateLoanRestructureCommand, Guid>

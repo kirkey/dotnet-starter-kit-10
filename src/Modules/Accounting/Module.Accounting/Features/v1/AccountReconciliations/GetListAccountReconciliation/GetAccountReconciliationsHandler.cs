@@ -3,19 +3,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.AccountReconciliations.GetAccountReconciliations;
-
-public record GetAccountReconciliationsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<AccountReconciliationsPagedResponse>;
-
-public record AccountReconciliationsPagedResponse(
-    List<AccountReconciliationSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
+using FSH.Module.Accounting.Contracts.v1.AccountReconciliations.GetListAccountReconciliation;namespace FSH.Module.Accounting.Features.v1.AccountReconciliations.GetAccountReconciliations;
 
 public class GetAccountReconciliationsHandler(AccountingDbContext context) 
     : IQueryHandler<GetAccountReconciliationsQuery, AccountReconciliationsPagedResponse>

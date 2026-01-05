@@ -3,9 +3,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
-namespace FSH.Module.Microfinance.Features.v1.DebtSettlements.CreateDebtSettlement;
+using FSH.Module.Microfinance.Contracts.v1.DebtSettlements.CreateDebtSettlement;
 
-public record CreateDebtSettlementCommand(string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.DebtSettlements.CreateDebtSettlement;
 
 public class CreateDebtSettlementHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateDebtSettlementCommand, Guid>

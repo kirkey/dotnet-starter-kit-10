@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CollateralInsurances.UpdateCollateralInsurance;
+using FSH.Module.Microfinance.Contracts.v1.CollateralInsurances.UpdateCollateralInsurance;
 
-public record UpdateCollateralInsuranceCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CollateralInsurances.UpdateCollateralInsurance;
 
 public class UpdateCollateralInsuranceHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateCollateralInsuranceCommand, Guid>
 {

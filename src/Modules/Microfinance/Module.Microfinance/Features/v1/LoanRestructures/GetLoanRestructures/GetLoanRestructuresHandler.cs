@@ -1,9 +1,9 @@
 using FSH.Module.Microfinance.Contracts.v1.LoanRestructures;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.LoanRestructures.GetLoanRestructures;
+using FSH.Module.Microfinance.Contracts.v1.LoanRestructures.GetLoanRestructures;
 
-public record GetLoanRestructuresQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<LoanRestructuresPagedResponse>;
+namespace FSH.Module.Microfinance.Features.v1.LoanRestructures.GetLoanRestructures;
 
 public class GetLoanRestructuresHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoanRestructuresQuery, LoanRestructuresPagedResponse>
 {

@@ -2,9 +2,9 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Contracts.v1.MobileTransactions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.MobileTransactions.GetMobileTransaction;
+using FSH.Module.Microfinance.Contracts.v1.MobileTransactions.GetMobileTransaction;
 
-public record GetMobileTransactionQuery(Guid Id) : IQuery<MobileTransactionDto>;
+namespace FSH.Module.Microfinance.Features.v1.MobileTransactions.GetMobileTransaction;
 
 public class GetMobileTransactionHandler(MicrofinanceDbContext context) : IQueryHandler<GetMobileTransactionQuery, MobileTransactionDto>
 {

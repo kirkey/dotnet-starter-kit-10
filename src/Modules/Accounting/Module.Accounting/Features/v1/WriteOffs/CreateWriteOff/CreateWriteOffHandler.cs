@@ -3,9 +3,7 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.WriteOffs.CreateWriteOff;
-
-public record CreateWriteOffCommand(string Name, string? Description) : ICommand<Guid>;
+using FSH.Module.Accounting.Contracts.v1.WriteOffs.CreateWriteOff;namespace FSH.Module.Accounting.Features.v1.WriteOffs.CreateWriteOff;
 
 public class CreateWriteOffHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateWriteOffCommand, Guid>

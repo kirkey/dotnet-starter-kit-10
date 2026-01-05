@@ -4,9 +4,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.GetDeferredRevenue;
+using FSH.Module.Accounting.Contracts.v1.DeferredRevenue.GetDeferredRevenue;
 
-public record GetDeferredRevenueByIdQuery(Guid Id) : IQuery<DeferredRevenueDto>;
+namespace FSH.Module.Accounting.Features.v1.DeferredRevenue.GetDeferredRevenue;
 
 public class GetDeferredRevenueByIdHandler(AccountingDbContext context) : IQueryHandler<GetDeferredRevenueByIdQuery, DeferredRevenueDto>
 {

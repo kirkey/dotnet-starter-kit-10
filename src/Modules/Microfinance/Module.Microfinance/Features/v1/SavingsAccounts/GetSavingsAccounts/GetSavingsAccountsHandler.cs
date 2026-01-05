@@ -1,9 +1,7 @@
 using FSH.Module.Microfinance.Contracts.v1.SavingsAccounts;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.SavingsAccounts.GetSavingsAccounts;
-
-public record GetSavingsAccountsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<SavingsAccountsPagedResponse>;
+using FSH.Module.Microfinance.Contracts.v1.SavingsAccounts;namespace FSH.Module.Microfinance.Features.v1.SavingsAccounts.GetSavingsAccounts;
 
 public class GetSavingsAccountsHandler(MicrofinanceDbContext context) : IQueryHandler<GetSavingsAccountsQuery, SavingsAccountsPagedResponse>
 {

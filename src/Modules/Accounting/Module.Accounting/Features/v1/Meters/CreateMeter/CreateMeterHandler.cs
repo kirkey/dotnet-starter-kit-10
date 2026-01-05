@@ -3,9 +3,7 @@ using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.Meters.CreateMeter;
-
-public record CreateMeterCommand(string Name, string? Description) : ICommand<Guid>;
+using FSH.Module.Accounting.Contracts.v1.Meters.CreateMeter;namespace FSH.Module.Accounting.Features.v1.Meters.CreateMeter;
 
 public class CreateMeterHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateMeterCommand, Guid>

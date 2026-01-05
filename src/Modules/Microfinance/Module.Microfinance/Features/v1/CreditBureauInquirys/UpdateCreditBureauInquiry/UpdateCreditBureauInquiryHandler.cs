@@ -1,9 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Microfinance.Data;
 
-namespace FSH.Module.Microfinance.Features.v1.CreditBureauInquirys.UpdateCreditBureauInquiry;
+using FSH.Module.Microfinance.Contracts.v1.CreditBureauInquirys.UpdateCreditBureauInquiry;
 
-public record UpdateCreditBureauInquiryCommand(Guid Id, string Name) : ICommand<Guid>;
+namespace FSH.Module.Microfinance.Features.v1.CreditBureauInquirys.UpdateCreditBureauInquiry;
 
 public class UpdateCreditBureauInquiryHandler(MicrofinanceDbContext context) : ICommandHandler<UpdateCreditBureauInquiryCommand, Guid>
 {
