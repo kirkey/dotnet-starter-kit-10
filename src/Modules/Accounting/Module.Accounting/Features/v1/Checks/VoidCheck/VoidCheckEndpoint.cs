@@ -1,5 +1,6 @@
 // TODO: Implement Void endpoint for Check
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Module.Accounting.Contracts.v1.Checks.VoidCheck;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

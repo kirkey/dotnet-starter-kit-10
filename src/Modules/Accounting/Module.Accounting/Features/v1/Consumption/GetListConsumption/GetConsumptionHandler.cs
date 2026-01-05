@@ -1,3 +1,4 @@
+using FSH.Module.Accounting.Contracts.v1.Consumption;
 using FSH.Module.Accounting.Contracts.v1.Consumption.GetListConsumption;
 using FSH.Module.Accounting.Data;
 using Mediator;

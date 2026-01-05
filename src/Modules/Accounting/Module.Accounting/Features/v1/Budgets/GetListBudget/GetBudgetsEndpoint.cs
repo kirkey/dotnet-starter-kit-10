@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace FSH.Module.Accounting.Features.v1.Budgets.GetBudgets;
+namespace FSH.Module.Accounting.Features.v1.Budgets.GetListBudget;
 
 public static class GetBudgetsEndpoint
 {

@@ -1,4 +1,5 @@
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.FixedAssets;
 
 namespace FSH.Module.Accounting.Contracts.v1.FixedAssets.GetListFixedAsset;
 
@@ -27,20 +28,3 @@ public record FixedAssetsPagedResponse(
     int TotalCount,
     int Page,
     int PageSize);
-
-/// <summary>
-/// Summary DTO for fixed asset list responses.
-/// </summary>
-/// <param name="Id">Fixed asset ID</param>
-/// <param name="Name">Asset name</param>
-/// <param name="Cost">Asset cost</param>
-/// <param name="AccumulatedDepreciation">Total accumulated depreciation</param>
-/// <param name="IsDisposed">Whether asset has been disposed</param>
-/// <param name="IsActive">Active flag</param>
-public record FixedAssetSummaryDto(
-    Guid Id,
-    string Name,
-    decimal Cost,
-    decimal AccumulatedDepreciation,
-    bool IsDisposed,
-    bool IsActive);

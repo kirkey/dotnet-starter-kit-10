@@ -4,7 +4,7 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.Budgets.GetBudgets;
+namespace FSH.Module.Accounting.Features.v1.Budgets.GetListBudget;
 
 /// <summary>
 /// Handler for listing budgets with pagination and filtering.

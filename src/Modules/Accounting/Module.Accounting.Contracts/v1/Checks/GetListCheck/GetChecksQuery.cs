@@ -1,4 +1,5 @@
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.Checks;
 
 namespace FSH.Module.Accounting.Contracts.v1.Checks.GetListCheck;
 
@@ -33,22 +34,3 @@ public record ChecksPagedResponse(
     int TotalCount,
     int Page,
     int PageSize);
-
-/// <summary>
-/// Summary DTO for check list responses with essential check information.
-/// </summary>
-/// <param name="Id">Check ID</param>
-/// <param name="CheckNumber">Check number</param>
-/// <param name="CheckDate">Check date</param>
-/// <param name="PayeeName">Payee name</param>
-/// <param name="Amount">Check amount</param>
-/// <param name="Status">Check status</param>
-/// <param name="IsActive">Active flag</param>
-public record CheckSummaryDto(
-    Guid Id,
-    string CheckNumber,
-    DateTime CheckDate,
-    string PayeeName,
-    decimal Amount,
-    string Status,
-    bool IsActive);
