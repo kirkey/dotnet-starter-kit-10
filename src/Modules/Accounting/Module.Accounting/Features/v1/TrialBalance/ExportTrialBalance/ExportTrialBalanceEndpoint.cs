@@ -1,5 +1,6 @@
 // TODO: Implement Export endpoint for TrialBalance
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Module.Accounting.Contracts.v1.TrialBalance.ExportTrialBalance;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

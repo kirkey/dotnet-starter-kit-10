@@ -1,4 +1,5 @@
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.RecurringJournalEntries;
 
 namespace FSH.Module.Accounting.Contracts.v1.RecurringJournalEntries.GetListRecurringJournalEntry;
 
@@ -29,18 +30,3 @@ public record RecurringJournalEntriesPagedResponse(
     int TotalCount,
     int Page,
     int PageSize);
-
-/// <summary>
-/// Summary DTO for recurring journal entry list responses.
-/// </summary>
-/// <param name="Id">Recurring journal entry ID</param>
-/// <param name="Name">Name/description</param>
-/// <param name="Frequency">Recurrence frequency</param>
-/// <param name="NextRunDate">Next scheduled run date</param>
-/// <param name="IsActive">Active flag</param>
-public record RecurringJournalEntrySummaryDto(
-    Guid Id,
-    string Name,
-    string Frequency,
-    DateTime? NextRunDate,
-    bool IsActive);

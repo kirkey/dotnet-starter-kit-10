@@ -1,5 +1,6 @@
 using FSH.Framework.Shared.Identity.Authorization;
 using FSH.Module.Accounting.Contracts.v1.Invoices;
+using FSH.Module.Accounting.Contracts.v1.Invoices.GetListInvoice;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

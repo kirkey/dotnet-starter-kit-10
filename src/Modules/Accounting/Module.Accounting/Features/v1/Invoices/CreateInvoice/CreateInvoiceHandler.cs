@@ -62,6 +62,8 @@ public class CreateInvoiceHandler(AccountingDbContext context, ICurrentUser curr
             currentUser.Name ?? "System",
             command.CustomerId,
             command.VendorId,
+            null, // memberId
+            null, // consumptionId
             command.BillToAddress,
             command.ShipToName,
             command.ShipToAddress,
