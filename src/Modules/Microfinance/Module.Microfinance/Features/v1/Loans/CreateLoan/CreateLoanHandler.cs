@@ -1,13 +1,25 @@
 using FSH.Framework.Core.Context;
-using FSH.Framework.Core.Exceptions;
+using FSH.Module.Microfinance.Contracts.v1.Loans;
 using FSH.Module.Microfinance.Data;
 using FSH.Module.Microfinance.Domain;
 
 namespace FSH.Module.Microfinance.Features.v1.Loans.CreateLoan;
 
-public record CreateLoanCommand(string Name) : ICommand<Guid>;
-
-public class CreateLoanHandler(ICurrentUser currentUser,
+/// <summary>
+/// Handles the creation of a new loan.
+/// 
+/// **Purpose:**
+/// Creates a new loan in the current tenant's context using the provided details.
+/// 
+/// **Business Rules:**
+/// - Loan name is required (validated in CreateLoanValidator)
+/// - Name must be 256 characters or less
+/// 
+/// **Dependencies:**
+/// - MicrofinanceDbContext: For database persistence
+/// - ICurrentUser: For tenant isolation and audit tracking
+/// </summary>
+public sealed class CreateLoanHandler(ICurrentUser currentUser,
     MicrofinanceDbContext context) : ICommandHandler<CreateLoanCommand, Guid>
 {
     public async ValueTask<Guid> Handle(CreateLoanCommand command, CancellationToken ct)

@@ -3,9 +3,22 @@ using FSH.Module.Microfinance.Data;
 
 namespace FSH.Module.Microfinance.Features.v1.Loans.GetLoans;
 
-public record GetLoansQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive) : IQuery<LoansPagedResponse>;
-
-public class GetLoansHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoansQuery, LoansPagedResponse>
+/// <summary>
+/// Handles retrieval of paginated list of loans.
+/// 
+/// **Purpose:**
+/// Retrieves a filtered and paginated list of loans for the current tenant.
+/// 
+/// **Business Rules:**
+/// - Returns only loans for current tenant
+/// - Supports filtering by search term (name)
+/// - Supports filtering by active status
+/// - Results are ordered by creation date (newest first)
+/// 
+/// **Dependencies:**
+/// - MicrofinanceDbContext: For database queries
+/// </summary>
+public sealed class GetLoansHandler(MicrofinanceDbContext context) : IQueryHandler<GetLoansQuery, LoansPagedResponse>
 {
     public async ValueTask<LoansPagedResponse> Handle(GetLoansQuery query, CancellationToken ct)
     {

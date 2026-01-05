@@ -1,53 +1,61 @@
-using FSH.Module.Microfinance.Domain;
+using FSH.Module.Microfinance.Contracts.v1.Members;
 
 namespace FSH.Module.Microfinance.Features.v1.Members.CreateMember;
 
+/// <summary>
+/// Validator for CreateMemberCommand.
+/// 
+/// **Purpose:**
+/// Validates all member creation requests to ensure data quality and business rules compliance.
+/// 
+/// **Validation Rules:**
+/// - Member number: Required, max 64 chars, alphanumeric with hyphens
+/// - First name: Required, 2-128 chars, letters/spaces/hyphens/apostrophes only
+/// - Last name: Required, 2-128 chars, letters/spaces/hyphens/apostrophes only
+/// - Middle name: Optional, max 128 chars
+/// - Email: Optional, valid email format, max 256 chars
+/// - Phone number: Optional, max 32 chars, digits/spaces/parentheses/plus/hyphens
+/// - Gender: Optional, max 32 chars
+/// - Address: Optional, max 512 chars
+/// - National ID: Optional, max 64 chars, alphanumeric with hyphens
+/// - Occupation: Optional, max 256 chars
+/// </summary>
 public class CreateMemberValidator : AbstractValidator<CreateMemberCommand>
 {
     public CreateMemberValidator()
     {
         RuleFor(x => x.MemberNumber)
-            .NotEmpty()
-            .MaximumLength(Member.MemberNumberMaxLength);
+            .ValidateMemberNumber();
 
         RuleFor(x => x.FirstName)
-            .NotEmpty()
-            .MinimumLength(Member.FirstNameMinLength)
-            .MaximumLength(Member.FirstNameMaxLength);
+            .ValidateMemberName();
 
         RuleFor(x => x.LastName)
-            .NotEmpty()
-            .MinimumLength(Member.LastNameMinLength)
-            .MaximumLength(Member.LastNameMaxLength);
+            .ValidateMemberName();
 
         RuleFor(x => x.MiddleName)
-            .MaximumLength(Member.MiddleNameMaxLength)
-            .When(x => !string.IsNullOrEmpty(x.MiddleName));
+            .ValidateOptionalMemberName();
 
         RuleFor(x => x.Email)
-            .EmailAddress()
-            .MaximumLength(Member.EmailMaxLength)
-            .When(x => !string.IsNullOrEmpty(x.Email));
+            .ValidateEmail();
 
         RuleFor(x => x.PhoneNumber)
-            .MaximumLength(Member.PhoneNumberMaxLength)
-            .When(x => !string.IsNullOrEmpty(x.PhoneNumber));
+            .ValidatePhoneNumber();
 
         RuleFor(x => x.Gender)
-            .MaximumLength(Member.GenderMaxLength)
-            .When(x => !string.IsNullOrEmpty(x.Gender));
+            .MaximumLength(MicrofinanceStringLengths.MemberGender)
+            .When(x => !string.IsNullOrWhiteSpace(x.Gender));
 
         RuleFor(x => x.Address)
-            .MaximumLength(Member.AddressMaxLength)
-            .When(x => !string.IsNullOrEmpty(x.Address));
+            .MaximumLength(MicrofinanceStringLengths.MemberAddress)
+            .When(x => !string.IsNullOrWhiteSpace(x.Address));
 
         RuleFor(x => x.NationalId)
-            .MaximumLength(Member.NationalIdMaxLength)
-            .When(x => !string.IsNullOrEmpty(x.NationalId));
+            .ValidateNationalId();
 
         RuleFor(x => x.Occupation)
-            .MaximumLength(Member.OccupationMaxLength)
-            .When(x => !string.IsNullOrEmpty(x.Occupation));
+            .MaximumLength(MicrofinanceStringLengths.MemberOccupation)
+            .When(x => !string.IsNullOrWhiteSpace(x.Occupation));
 
         RuleFor(x => x.MonthlyIncome)
             .GreaterThanOrEqualTo(0)
