@@ -172,6 +172,14 @@ using FSH.Module.Accounting.Features.v1.PostingBatches.ApprovePostingBatch;
 using FSH.Module.Accounting.Features.v1.PostingBatches.RejectPostingBatch;
 using FSH.Module.Accounting.Features.v1.PostingBatches.PostPostingBatch;
 
+// Budgets endpoints
+using FSH.Module.Accounting.Features.v1.Budgets.CreateBudget;
+using FSH.Module.Accounting.Features.v1.Budgets.GetBudget;
+using FSH.Module.Accounting.Features.v1.Budgets.GetListBudget;
+using FSH.Module.Accounting.Features.v1.Budgets.UpdateBudget;
+using FSH.Module.Accounting.Features.v1.Budgets.DeleteBudget;
+using FSH.Module.Accounting.Features.v1.Budgets.ApproveBudget;
+
 // RecurringJournalEntries endpoints
 using FSH.Module.Accounting.Features.v1.RecurringJournalEntries.CreateRecurringJournalEntry;
 using FSH.Module.Accounting.Features.v1.RecurringJournalEntries.GetRecurringJournalEntry;

@@ -15,13 +15,17 @@ public static class GetBankReconciliationsEndpoint
         return endpoints.MapGet("/", async (
             int page,
             int pageSize,
+            Guid? bankAccountId,
+            string? status,
+            DateTime? fromDate,
+            DateTime? toDate,
             string? searchTerm,
             bool? isActive,
             IMediator mediator,
             CancellationToken ct) =>
         {
             var result = await mediator.Send(
-                new GetBankReconciliationsQuery(page, pageSize, searchTerm, isActive), ct);
+                new GetBankReconciliationsQuery(page, pageSize, bankAccountId, status, fromDate, toDate, searchTerm, isActive), ct);
             return TypedResults.Ok(result);
         })
         .WithName(nameof(GetBankReconciliationsEndpoint))

@@ -1,6 +1,7 @@
 // TODO: Implement Approve endpoint for Bill
 using FSH.Framework.Shared.Identity.Authorization;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.Bills.ApproveBill;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
