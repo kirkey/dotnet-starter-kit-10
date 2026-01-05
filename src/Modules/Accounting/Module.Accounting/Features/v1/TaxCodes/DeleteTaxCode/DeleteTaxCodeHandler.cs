@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.TaxCodes.DeleteTaxCode;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.TaxCodes.DeleteTaxCode;
-
-public record DeleteTaxCodeCommand(Guid Id) : ICommand;
 
 public class DeleteTaxCodeHandler(AccountingDbContext context) : ICommandHandler<DeleteTaxCodeCommand>
 {

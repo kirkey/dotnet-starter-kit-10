@@ -1,21 +1,9 @@
-using FSH.Module.Accounting.Contracts.v1.PaymentAllocations;
+using FSH.Module.Accounting.Contracts.v1.PaymentAllocations.GetListPaymentAllocation;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.PaymentAllocations.GetPaymentAllocations;
-
-public record GetPaymentAllocationsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<PaymentAllocationsPagedResponse>;
-
-public record PaymentAllocationsPagedResponse(
-    List<PaymentAllocationSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetPaymentAllocationsHandler(AccountingDbContext context) 
     : IQueryHandler<GetPaymentAllocationsQuery, PaymentAllocationsPagedResponse>

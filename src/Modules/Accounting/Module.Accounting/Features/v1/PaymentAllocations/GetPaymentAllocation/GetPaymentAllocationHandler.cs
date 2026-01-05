@@ -3,10 +3,9 @@ using FSH.Module.Accounting.Contracts.v1.PaymentAllocations;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.PaymentAllocations.GetPaymentAllocation;
 
 namespace FSH.Module.Accounting.Features.v1.PaymentAllocations.GetPaymentAllocation;
-
-public record GetPaymentAllocationQuery(Guid Id) : IQuery<PaymentAllocationDto>;
 
 public class GetPaymentAllocationHandler(AccountingDbContext context) : IQueryHandler<GetPaymentAllocationQuery, PaymentAllocationDto>
 {

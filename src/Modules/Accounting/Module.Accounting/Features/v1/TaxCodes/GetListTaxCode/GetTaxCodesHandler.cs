@@ -1,21 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.TaxCodes;
+using FSH.Module.Accounting.Contracts.v1.TaxCodes.GetListTaxCode;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.TaxCodes.GetListTaxCode;
-
-public record GetTaxCodesQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<TaxCodesPagedResponse>;
-
-public record TaxCodesPagedResponse(
-    List<TaxCodeSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetTaxCodesHandler(AccountingDbContext context) 
     : IQueryHandler<GetTaxCodesQuery, TaxCodesPagedResponse>

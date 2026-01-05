@@ -2,10 +2,9 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.TaxCodes.CreateTaxCode;
 
 namespace FSH.Module.Accounting.Features.v1.TaxCodes.CreateTaxCode;
-
-public record CreateTaxCodeCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreateTaxCodeHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateTaxCodeCommand, Guid>
