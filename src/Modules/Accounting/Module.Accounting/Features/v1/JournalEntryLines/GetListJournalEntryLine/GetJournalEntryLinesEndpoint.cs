@@ -1,5 +1,6 @@
 using FSH.Framework.Shared.Identity.Authorization;
 using FSH.Module.Accounting.Contracts.v1.JournalEntryLines;
+using FSH.Module.Accounting.Contracts.v1.JournalEntryLines.GetListJournalEntryLine;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

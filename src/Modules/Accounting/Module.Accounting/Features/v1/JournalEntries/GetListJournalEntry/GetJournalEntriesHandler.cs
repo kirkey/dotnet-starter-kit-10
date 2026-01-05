@@ -109,7 +109,14 @@ public class GetJournalEntriesHandler(AccountingDbContext context)
         
         if (query.IsPosted.HasValue)
         {
-            queryable = queryable.Where(x => x.IsPosted == query.IsPosted.Value);
+            if (query.IsPosted.Value)
+            {
+                queryable = queryable.Where(x => x.Status == "Posted");
+            }
+            else
+            {
+                queryable = queryable.Where(x => x.Status != "Posted");
+            }
         }
         
         var totalCount = await queryable.CountAsync(ct);

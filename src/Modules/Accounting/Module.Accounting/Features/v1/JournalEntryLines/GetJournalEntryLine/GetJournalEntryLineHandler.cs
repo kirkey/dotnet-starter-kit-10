@@ -1,5 +1,6 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.JournalEntryLines;
+using FSH.Module.Accounting.Contracts.v1.JournalEntryLines.GetJournalEntryLine;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;

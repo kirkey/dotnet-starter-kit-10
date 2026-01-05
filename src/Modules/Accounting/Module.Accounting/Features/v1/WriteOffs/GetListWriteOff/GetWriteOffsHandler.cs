@@ -18,9 +18,9 @@ public record WriteOffsPagedResponse(
     int PageSize);
 
 public class GetWriteOffsHandler(AccountingDbContext context) 
-    : IQueryHandler<GetWriteOffsQuery, WriteOffsPagedResponse>
+    : IQueryHandler<FSH.Module.Accounting.Contracts.v1.WriteOffs.GetListWriteOff.GetListWriteOffQuery, FSH.Module.Accounting.Contracts.v1.WriteOffs.GetListWriteOff.WriteOffsPagedResponse>
 {
-    public async ValueTask<WriteOffsPagedResponse> Handle(GetWriteOffsQuery query, CancellationToken ct)
+    public async ValueTask<FSH.Module.Accounting.Contracts.v1.WriteOffs.GetListWriteOff.WriteOffsPagedResponse> Handle(FSH.Module.Accounting.Contracts.v1.WriteOffs.GetListWriteOff.GetListWriteOffQuery query, CancellationToken ct)
     {
         var queryable = context.WriteOffs.AsQueryable();
         
@@ -43,6 +43,6 @@ public class GetWriteOffsHandler(AccountingDbContext context)
             .Select(x => new WriteOffSummaryDto(x.Id, x.Name, x.IsActive))
             .ToListAsync(ct);
         
-        return new WriteOffsPagedResponse(items, totalCount, query.Page, query.PageSize);
+        return new FSH.Module.Accounting.Contracts.v1.WriteOffs.GetListWriteOff.WriteOffsPagedResponse(items, totalCount, query.Page, query.PageSize);
     }
 }

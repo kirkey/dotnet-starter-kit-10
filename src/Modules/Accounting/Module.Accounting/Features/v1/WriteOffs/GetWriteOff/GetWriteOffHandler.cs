@@ -6,11 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.WriteOffs.GetWriteOff;
 
-public record GetWriteOffQuery(Guid Id) : IQuery<WriteOffDto>;
-
-public class GetWriteOffHandler(AccountingDbContext context) : IQueryHandler<GetWriteOffQuery, WriteOffDto>
+public class GetWriteOffHandler(AccountingDbContext context) : IQueryHandler<FSH.Module.Accounting.Contracts.v1.WriteOffs.GetWriteOff.GetWriteOffQuery, FSH.Module.Accounting.Contracts.v1.WriteOffs.WriteOffDto>
 {
-    public async ValueTask<WriteOffDto> Handle(GetWriteOffQuery query, CancellationToken ct)
+    public async ValueTask<FSH.Module.Accounting.Contracts.v1.WriteOffs.WriteOffDto> Handle(FSH.Module.Accounting.Contracts.v1.WriteOffs.GetWriteOff.GetWriteOffQuery query, CancellationToken ct)
     {
         var entity = await context.WriteOffs
             .Where(x => x.Id == query.Id)
