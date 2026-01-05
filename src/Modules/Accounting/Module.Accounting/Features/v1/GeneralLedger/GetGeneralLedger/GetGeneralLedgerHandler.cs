@@ -10,7 +10,6 @@ namespace FSH.Module.Accounting.Features.v1.GeneralLedger.GetGeneralLedger;
 /// Query to retrieve a single General Ledger account definition by ID.
 /// </summary>
 /// <param name="Id">General Ledger account ID to retrieve</param>
-public record GetGeneralLedgerQuery(Guid Id) : IQuery<GeneralLedgerDto>;
 
 /// <summary>
 /// Handler for retrieving a single GeneralLedger DTO with core metadata.

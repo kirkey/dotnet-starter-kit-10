@@ -5,23 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.JournalEntryLines.GetListJournalEntryLine;
 
-public record GetJournalEntryLinesQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null,
-    Guid? JournalEntryId = null) : IQuery<JournalEntryLinesPagedResponse>;
-
-public record JournalEntryLinesPagedResponse(
-    List<JournalEntryLineSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
-
 public class GetJournalEntryLinesHandler(AccountingDbContext context) 
-    : IQueryHandler<GetJournalEntryLinesQuery, JournalEntryLinesPagedResponse>
+    : IQueryHandler<FSH.Module.Accounting.Contracts.v1.JournalEntryLines.GetListJournalEntryLine.GetListJournalEntryLineQuery, FSH.Module.Accounting.Contracts.v1.JournalEntryLines.GetListJournalEntryLine.JournalEntryLinesPagedResponse>
 {
-    public async ValueTask<JournalEntryLinesPagedResponse> Handle(GetJournalEntryLinesQuery query, CancellationToken ct)
+    public async ValueTask<FSH.Module.Accounting.Contracts.v1.JournalEntryLines.GetListJournalEntryLine.JournalEntryLinesPagedResponse> Handle(FSH.Module.Accounting.Contracts.v1.JournalEntryLines.GetListJournalEntryLine.GetListJournalEntryLineQuery query, CancellationToken ct)
     {
         var queryable = context.JournalEntryLines.AsQueryable();
         
@@ -58,6 +45,6 @@ public class GetJournalEntryLinesHandler(AccountingDbContext context)
                 x.IsActive))
             .ToListAsync(ct);
         
-        return new JournalEntryLinesPagedResponse(items, totalCount, query.Page, query.PageSize);
+        return new FSH.Module.Accounting.Contracts.v1.JournalEntryLines.GetListJournalEntryLine.JournalEntryLinesPagedResponse(items, totalCount, query.Page, query.PageSize);
     }
 }

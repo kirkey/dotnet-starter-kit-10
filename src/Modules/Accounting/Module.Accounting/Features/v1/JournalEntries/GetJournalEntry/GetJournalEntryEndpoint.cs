@@ -16,7 +16,7 @@ public static class GetJournalEntryEndpoint
             IMediator mediator,
             CancellationToken ct) =>
         {
-            var result = await mediator.Send(new GetJournalEntryQuery(id), ct);
+            var result = await mediator.Send(new FSH.Module.Accounting.Contracts.v1.JournalEntries.GetJournalEntry.GetJournalEntryQuery(id), ct);
             return TypedResults.Ok(result);
         })
         .WithName(nameof(GetJournalEntryEndpoint))

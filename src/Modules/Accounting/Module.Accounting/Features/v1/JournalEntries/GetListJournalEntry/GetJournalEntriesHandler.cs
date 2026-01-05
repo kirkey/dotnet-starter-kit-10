@@ -1,4 +1,5 @@
 using FSH.Module.Accounting.Contracts.v1.JournalEntries;
+using FSH.Module.Accounting.Contracts.v1.JournalEntries.GetListJournalEntry;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
@@ -32,21 +33,7 @@ namespace FSH.Module.Accounting.Features.v1.JournalEntries.GetListJournalEntry;
 /// - Date range filtering (inclusive)
 /// - Active/Inactive status filtering
 /// </summary>
-public record GetJournalEntriesQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null,
-    string? Status = null,
-    string? EntryType = null,
-    DateTime? FromDate = null,
-    DateTime? ToDate = null) : IQuery<JournalEntriesPagedResponse>;
 
-public record JournalEntriesPagedResponse(
-    List<JournalEntrySummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 /// <summary>
 /// Handler for retrieving paginated list of Journal Entries.
@@ -101,7 +88,7 @@ public record JournalEntriesPagedResponse(
 /// - EntryType filter helps categorize entries by source (Manual vs Automatic adjustments)
 /// </summary>
 public class GetJournalEntriesHandler(AccountingDbContext context) 
-    : IQueryHandler<GetJournalEntriesQuery, JournalEntriesPagedResponse>
+    : IQueryHandler<FSH.Module.Accounting.Contracts.v1.JournalEntries.GetListJournalEntry.GetListJournalEntryQuery, FSH.Module.Accounting.Contracts.v1.JournalEntries.GetListJournalEntry.JournalEntriesPagedResponse>
 {
     /// <summary>
     /// Handles the GetJournalEntriesQuery to retrieve a paginated, filtered list.
@@ -109,7 +96,7 @@ public class GetJournalEntriesHandler(AccountingDbContext context)
     /// <param name="query">The query containing pagination and multi-filter parameters</param>
     /// <param name="ct">Cancellation token for the operation</param>
     /// <returns>Paged response with journal entry summaries and total count</returns>
-    public async ValueTask<JournalEntriesPagedResponse> Handle(GetJournalEntriesQuery query, CancellationToken ct)
+    public async ValueTask<JournalEntriesPagedResponse> Handle(GetListJournalEntryQuery query, CancellationToken ct)
     {
         var queryable = context.JournalEntries.AsQueryable();
         
@@ -120,29 +107,9 @@ public class GetJournalEntriesHandler(AccountingDbContext context)
                 x.ReferenceNumber.Contains(query.SearchTerm));
         }
         
-        if (query.IsActive.HasValue)
+        if (query.IsPosted.HasValue)
         {
-            queryable = queryable.Where(x => x.IsActive == query.IsActive.Value);
-        }
-        
-        if (!string.IsNullOrWhiteSpace(query.Status))
-        {
-            queryable = queryable.Where(x => x.Status == query.Status);
-        }
-        
-        if (!string.IsNullOrWhiteSpace(query.EntryType))
-        {
-            queryable = queryable.Where(x => x.EntryType == query.EntryType);
-        }
-        
-        if (query.FromDate.HasValue)
-        {
-            queryable = queryable.Where(x => x.EntryDate >= query.FromDate.Value);
-        }
-        
-        if (query.ToDate.HasValue)
-        {
-            queryable = queryable.Where(x => x.EntryDate <= query.ToDate.Value);
+            queryable = queryable.Where(x => x.IsPosted == query.IsPosted.Value);
         }
         
         var totalCount = await queryable.CountAsync(ct);

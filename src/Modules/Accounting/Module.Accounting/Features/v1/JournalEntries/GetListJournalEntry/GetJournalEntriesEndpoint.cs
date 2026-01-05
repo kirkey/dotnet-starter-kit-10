@@ -15,12 +15,12 @@ public static class GetJournalEntriesEndpoint
             int page,
             int pageSize,
             string? searchTerm,
-            bool? isActive,
+            bool? isPosted,
             IMediator mediator,
             CancellationToken ct) =>
         {
             var result = await mediator.Send(
-                new GetJournalEntriesQuery(page, pageSize, searchTerm, isActive), ct);
+                new FSH.Module.Accounting.Contracts.v1.JournalEntries.GetListJournalEntry.GetListJournalEntryQuery(page, pageSize, searchTerm, isPosted), ct);
             return TypedResults.Ok(result);
         })
         .WithName(nameof(GetJournalEntriesEndpoint))

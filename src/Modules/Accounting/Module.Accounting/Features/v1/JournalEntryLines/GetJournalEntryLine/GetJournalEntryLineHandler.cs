@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.JournalEntryLines.GetJournalEntryLine;
 
-public record GetJournalEntryLineQuery(Guid Id) : IQuery<JournalEntryLineDto>;
 
 public class GetJournalEntryLineHandler(AccountingDbContext context) : IQueryHandler<GetJournalEntryLineQuery, JournalEntryLineDto>
 {

@@ -16,7 +16,7 @@ public static class GetGeneralLedgerEndpoint
             IMediator mediator,
             CancellationToken ct) =>
         {
-            var result = await mediator.Send(new GetGeneralLedgerQuery(id), ct);
+            var result = await mediator.Send(new FSH.Module.Accounting.Contracts.v1.GeneralLedger.GetGeneralLedger.GetGeneralLedgerQuery(id), ct);
             return TypedResults.Ok(result);
         })
         .WithName(nameof(GetGeneralLedgerEndpoint))

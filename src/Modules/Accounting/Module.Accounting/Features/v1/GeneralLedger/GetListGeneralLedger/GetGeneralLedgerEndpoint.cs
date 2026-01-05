@@ -20,7 +20,7 @@ public static class GetGeneralLedgersEndpoint
             CancellationToken ct) =>
         {
             var result = await mediator.Send(
-                new GetGeneralLedgerListQuery(page, pageSize, searchTerm, isActive), ct);
+                new FSH.Module.Accounting.Contracts.v1.GeneralLedger.GetListGeneralLedger.GetListGeneralLedgerQuery(page, pageSize, searchTerm, isActive), ct);
             return TypedResults.Ok(result);
         })
         .WithName(nameof(GetGeneralLedgersEndpoint))

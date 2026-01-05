@@ -12,18 +12,6 @@ namespace FSH.Module.Accounting.Features.v1.GeneralLedger.GetListGeneralLedger;
 /// <param name="PageSize">Items per page</param>
 /// <param name="SearchTerm">Optional substring search on GL Name</param>
 /// <param name="IsActive">Optional filter by active status</param>
-public record GetGeneralLedgerListQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<GeneralLedgerPagedResponse>;
-
-public record GeneralLedgerPagedResponse(
-    List<GeneralLedgerSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
-
 /// <summary>
 /// Handler for listing General Ledger accounts with basic filtering and pagination.
 /// </summary>
@@ -37,9 +25,9 @@ public record GeneralLedgerPagedResponse(
 /// Exceptions: None; returns empty list if no matches
 /// </remarks>
 public class GetGeneralLedgerListHandler(AccountingDbContext context) 
-    : IQueryHandler<GetGeneralLedgerListQuery, GeneralLedgerPagedResponse>
+    : IQueryHandler<FSH.Module.Accounting.Contracts.v1.GeneralLedger.GetListGeneralLedger.GetListGeneralLedgerQuery, FSH.Module.Accounting.Contracts.v1.GeneralLedger.GetListGeneralLedger.GeneralLedgerPagedResponse>
 {
-    public async ValueTask<GeneralLedgerPagedResponse> Handle(GetGeneralLedgerListQuery query, CancellationToken ct)
+    public async ValueTask<FSH.Module.Accounting.Contracts.v1.GeneralLedger.GetListGeneralLedger.GeneralLedgerPagedResponse> Handle(FSH.Module.Accounting.Contracts.v1.GeneralLedger.GetListGeneralLedger.GetListGeneralLedgerQuery query, CancellationToken ct)
     {
         var queryable = context.GeneralLedger.AsQueryable();
         
@@ -62,6 +50,6 @@ public class GetGeneralLedgerListHandler(AccountingDbContext context)
             .Select(x => new GeneralLedgerSummaryDto(x.Id, x.Name, x.IsActive))
             .ToListAsync(ct);
         
-        return new GeneralLedgerPagedResponse(items, totalCount, query.Page, query.PageSize);
+        return new FSH.Module.Accounting.Contracts.v1.GeneralLedger.GetListGeneralLedger.GeneralLedgerPagedResponse(items, totalCount, query.Page, query.PageSize);
     }
 }
