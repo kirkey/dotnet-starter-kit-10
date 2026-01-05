@@ -29,6 +29,77 @@ public static class AccountingValidationExtensions
     // ========== Common Property Validations ==========
 
     /// <summary>
+    /// Applies validation rules for generic name property.
+    /// 
+    /// Rules:
+    /// - Must not be empty
+    /// - Must not exceed AccountingStringLengths.XLarge (128 chars)
+    /// 
+    /// Usage:
+    /// RuleFor(x => x.Name).ValidateName();
+    /// 
+    /// Use for: Banks, Budgets, Payees, and other entities with a Name property.
+    /// </summary>
+    /// <typeparam name="T">The command/DTO type being validated.</typeparam>
+    /// <param name="ruleBuilder">The rule builder for the property.</param>
+    /// <returns>The configured rule builder for method chaining.</returns>
+    public static IRuleBuilderOptions<T, string> ValidateName<T>(
+        this IRuleBuilder<T, string> ruleBuilder)
+    {
+        return ruleBuilder
+            .NotEmpty()
+            .WithMessage("Name is required")
+            .MaximumLength(AccountingStringLengths.XLarge)
+            .WithMessage($"Name must not exceed {AccountingStringLengths.XLarge} characters");
+    }
+
+    /// <summary>
+    /// Applies validation rules for bank name property.
+    /// 
+    /// Rules:
+    /// - Must not be empty
+    /// - Must not exceed AccountingStringLengths.XLarge (128 chars)
+    /// 
+    /// Usage:
+    /// RuleFor(x => x.Name).ValidateBankName();
+    /// </summary>
+    /// <typeparam name="T">The command/DTO type being validated.</typeparam>
+    /// <param name="ruleBuilder">The rule builder for the property.</param>
+    /// <returns>The configured rule builder for method chaining.</returns>
+    public static IRuleBuilderOptions<T, string> ValidateBankName<T>(
+        this IRuleBuilder<T, string> ruleBuilder)
+    {
+        return ruleBuilder
+            .NotEmpty()
+            .WithMessage("Bank name is required")
+            .MaximumLength(AccountingStringLengths.XLarge)
+            .WithMessage($"Bank name must not exceed {AccountingStringLengths.XLarge} characters");
+    }
+
+    /// <summary>
+    /// Applies validation rules for member name property.
+    /// 
+    /// Rules:
+    /// - Must not be empty
+    /// - Must not exceed AccountingStringLengths.XLarge (128 chars)
+    /// 
+    /// Usage:
+    /// RuleFor(x => x.Name).ValidateMemberName();
+    /// </summary>
+    /// <typeparam name="T">The command/DTO type being validated.</typeparam>
+    /// <param name="ruleBuilder">The rule builder for the property.</param>
+    /// <returns>The configured rule builder for method chaining.</returns>
+    public static IRuleBuilderOptions<T, string> ValidateMemberName<T>(
+        this IRuleBuilder<T, string> ruleBuilder)
+    {
+        return ruleBuilder
+            .NotEmpty()
+            .WithMessage("Member name is required")
+            .MaximumLength(AccountingStringLengths.XLarge)
+            .WithMessage($"Member name must not exceed {AccountingStringLengths.XLarge} characters");
+    }
+
+    /// <summary>
     /// Applies validation rules for account code property.
     /// 
     /// Rules:

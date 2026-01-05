@@ -1,5 +1,6 @@
 using FluentValidation;
 using FSH.Module.Accounting.Contracts.v1.Vendors.CreateVendor;
+using FSH.Module.Accounting.Features;
 
 namespace FSH.Module.Accounting.Features.v1.Vendors.CreateVendor;
 
@@ -8,13 +9,9 @@ public class CreateVendorValidator : AbstractValidator<CreateVendorCommand>
     public CreateVendorValidator()
     {
         RuleFor(x => x.Name)
-            .NotEmpty()
-            .MaximumLength(AccountingStringLengths.Name);
+            .ValidateVendorName();
             
-        When(x => !string.IsNullOrEmpty(x.Description), () =>
-        {
-            RuleFor(x => x.Description)
-                .MaximumLength(AccountingStringLengths.Description);
-        });
+        RuleFor(x => x.Description)
+            .ValidateDescription();
     }
 }

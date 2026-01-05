@@ -1,5 +1,6 @@
 using FluentValidation;
 using FSH.Module.Accounting.Contracts.v1.Banks.CreateBank;
+using FSH.Module.Accounting.Features;
 
 namespace FSH.Module.Accounting.Features.v1.Banks.CreateBank;
 
@@ -7,7 +8,7 @@ public class CreateBankValidator : AbstractValidator<CreateBankCommand>
 {
     public CreateBankValidator()
     {
-        RuleFor(x => x.BankName).NotEmpty().MaximumLength(AccountingStringLengths.BankName);
+        RuleFor(x => x.BankName).ValidateBankName();
         When(x => !string.IsNullOrEmpty(x.BankCode), () => { RuleFor(x => x.BankCode).MaximumLength(AccountingStringLengths.Medium); });
         When(x => !string.IsNullOrEmpty(x.Address), () => { RuleFor(x => x.Address).MaximumLength(AccountingStringLengths.XHuge); });
         When(x => !string.IsNullOrEmpty(x.ContactName), () => { RuleFor(x => x.ContactName).MaximumLength(AccountingStringLengths.Name); });

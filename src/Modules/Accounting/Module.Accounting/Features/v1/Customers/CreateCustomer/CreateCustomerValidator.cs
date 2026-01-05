@@ -1,5 +1,6 @@
 using FluentValidation;
 using FSH.Module.Accounting.Contracts.v1.Customers.CreateCustomer;
+using FSH.Module.Accounting.Features;
 
 namespace FSH.Module.Accounting.Features.v1.Customers.CreateCustomer;
 
@@ -8,13 +9,9 @@ public class CreateCustomerValidator : AbstractValidator<CreateCustomerCommand>
     public CreateCustomerValidator()
     {
         RuleFor(x => x.Name)
-            .NotEmpty()
-            .MaximumLength(AccountingStringLengths.Name);
+            .ValidateCustomerName();
             
-        When(x => !string.IsNullOrEmpty(x.Description), () =>
-        {
-            RuleFor(x => x.Description)
-                .MaximumLength(AccountingStringLengths.Description);
-        });
+        RuleFor(x => x.Description)
+            .ValidateDescription();
     }
 }

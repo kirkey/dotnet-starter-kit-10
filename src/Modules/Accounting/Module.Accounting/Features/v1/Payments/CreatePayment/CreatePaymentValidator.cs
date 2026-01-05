@@ -1,5 +1,6 @@
 using FluentValidation;
 using FSH.Module.Accounting.Contracts.v1.Payments.CreatePayment;
+using FSH.Module.Accounting.Features;
 
 namespace FSH.Module.Accounting.Features.v1.Payments.CreatePayment;
 
@@ -8,13 +9,9 @@ public class CreatePaymentValidator : AbstractValidator<CreatePaymentCommand>
     public CreatePaymentValidator()
     {
         RuleFor(x => x.Name)
-            .NotEmpty()
-            .MaximumLength(AccountingStringLengths.Name);
+            .ValidateName();
             
-        When(x => !string.IsNullOrEmpty(x.Description), () =>
-        {
-            RuleFor(x => x.Description)
-                .MaximumLength(AccountingStringLengths.Description);
-        });
+        RuleFor(x => x.Description)
+            .ValidateDescription();
     }
 }
