@@ -2,6 +2,7 @@
 global using FSH.Framework.Core.Context;
 global using FSH.Framework.Core.Domain;
 global using FSH.Framework.Persistence;
+global using FSH.Framework.Shared.Identity.Authorization;
 global using FSH.Framework.Shared.Multitenancy;
 global using FSH.Module.Catalog.Domain;
 global using FSH.Module.Catalog.Exceptions;
