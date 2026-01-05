@@ -1,5 +1,6 @@
 using FluentValidation;
 using FSH.Module.Accounting.Contracts.v1.ChartOfAccounts.CreateChartOfAccount;
+using FSH.Module.Accounting.Features;
 
 namespace FSH.Module.Accounting.Features.v1.ChartOfAccounts.CreateChartOfAccount;
 
@@ -8,14 +9,10 @@ public class CreateChartOfAccountValidator : AbstractValidator<CreateChartOfAcco
     public CreateChartOfAccountValidator()
     {
         RuleFor(x => x.AccountCode)
-            .NotEmpty()
-            .MaximumLength(AccountingStringLengths.AccountCode)
-            .WithMessage("Account code is required and must not exceed {MaxLength} characters.");
+            .ValidateAccountCode();
             
         RuleFor(x => x.AccountName)
-            .NotEmpty()
-            .MaximumLength(AccountingStringLengths.AccountName)
-            .WithMessage("Account name is required and must not exceed {MaxLength} characters.");
+            .ValidateAccountName();
             
         RuleFor(x => x.AccountType)
             .NotEmpty()
@@ -44,17 +41,11 @@ public class CreateChartOfAccountValidator : AbstractValidator<CreateChartOfAcco
                 .MaximumLength(AccountingStringLengths.RegulatoryClassification);
         });
             
-        When(x => !string.IsNullOrEmpty(x.Description), () =>
-        {
-            RuleFor(x => x.Description)
-                .MaximumLength(AccountingStringLengths.Description);
-        });
+        RuleFor(x => x.Description)
+            .ValidateDescription();
             
-        When(x => !string.IsNullOrEmpty(x.Notes), () =>
-        {
-            RuleFor(x => x.Notes)
-                .MaximumLength(AccountingStringLengths.Notes);
-        });
+        RuleFor(x => x.Notes)
+            .ValidateNotes();
     }
     
     private static bool BeValidAccountType(string accountType)
