@@ -1,4 +1,5 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.RateSchedules.GetRateSchedule;
 using FSH.Module.Accounting.Contracts.v1.RateSchedules;
 using FSH.Module.Accounting.Data;
 using Mediator;
@@ -6,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.RateSchedules.GetRateSchedule;
 
-public record GetRateScheduleQuery(Guid Id) : IQuery<RateScheduleDto>;
 
 public class GetRateScheduleHandler(AccountingDbContext context) : IQueryHandler<GetRateScheduleQuery, RateScheduleDto>
 {

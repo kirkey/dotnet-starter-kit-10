@@ -2,10 +2,9 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.BudgetDetails.CreateBudgetDetail;
 
-namespace FSH.Module.Accounting.Features.v1.BudgetDetails.CreateBudgetDetail;
-
-public record CreateBudgetDetailCommand(string Name, string? Description) : ICommand<Guid>;
+namespace FSH.Module.Accounting.Features.v1.BudgetDetails.CreateBudgetDetail; 
 
 public class CreateBudgetDetailHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateBudgetDetailCommand, Guid>

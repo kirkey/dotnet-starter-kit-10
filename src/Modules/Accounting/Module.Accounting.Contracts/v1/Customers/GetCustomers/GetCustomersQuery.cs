@@ -35,4 +35,3 @@ public record CustomersPagedResponse(
 /// <param name="Id">Customer unique identifier</param>
 /// <param name="Name">Customer business or individual name</param>
 /// <param name="IsActive">Whether customer is currently active</param>
-public record CustomerSummaryDto(Guid Id, string Name, bool IsActive);

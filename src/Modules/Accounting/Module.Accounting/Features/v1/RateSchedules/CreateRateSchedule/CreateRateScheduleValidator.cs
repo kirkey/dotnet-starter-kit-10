@@ -1,4 +1,5 @@
 using FluentValidation;
+using FSH.Module.Accounting.Contracts.v1.RateSchedules.CreateRateSchedule;
 
 namespace FSH.Module.Accounting.Features.v1.RateSchedules.CreateRateSchedule;
 

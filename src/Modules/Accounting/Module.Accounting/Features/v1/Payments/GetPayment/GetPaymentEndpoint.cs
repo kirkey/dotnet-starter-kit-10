@@ -1,5 +1,6 @@
 using FSH.Framework.Shared.Identity.Authorization;
 using FSH.Module.Accounting.Contracts.v1.Payments;
+using FSH.Module.Accounting.Contracts.v1.Payments.GetPayment;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

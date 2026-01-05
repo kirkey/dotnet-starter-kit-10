@@ -2,6 +2,7 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.FiscalPeriodClose.CreateFiscalPeriodClose;
 
 namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.CreateFiscalPeriodClose;
 
@@ -14,15 +15,7 @@ namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.CreateFiscalPeriod
 /// <param name="StartDate">Period start date</param>
 /// <param name="EndDate">Period end date</param>
 /// <param name="RetainedEarnings">Optional retained earnings adjustment</param>
-/// <param name="Description">Optional descriptive notes</param>
-public record CreateFiscalPeriodCloseCommand(
-    Guid FiscalPeriodId,
-    int FiscalYear,
-    string PeriodName,
-    DateTime StartDate,
-    DateTime EndDate,
-    decimal RetainedEarnings = 0,
-    string? Description = null) : ICommand<Guid>;
+/// <param name="Description">Optional descriptive notes</param> 
 
 /// <summary>
 /// Handler for creating a FiscalPeriodClose aggregate that will be used to manage period close workflows.

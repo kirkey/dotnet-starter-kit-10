@@ -2,11 +2,10 @@ using FSH.Framework.Core.Context;
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.RetainedEarnings.CloseRetainedEarnings;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.CloseRetainedEarnings;
-
-public record CloseRetainedEarningsCommand(Guid Id, int FiscalYear, decimal ClosingBalance) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.CloseRetainedEarnings; 
 
 public class CloseRetainedEarningsHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CloseRetainedEarningsCommand>

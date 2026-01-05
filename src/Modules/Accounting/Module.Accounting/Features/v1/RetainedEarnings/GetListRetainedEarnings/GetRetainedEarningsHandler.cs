@@ -1,3 +1,4 @@
+using FSH.Module.Accounting.Contracts.v1.RetainedEarnings.GetListRetainedEarnings;
 using FSH.Module.Accounting.Contracts.v1.RetainedEarnings;
 using FSH.Module.Accounting.Data;
 using Mediator;
@@ -5,17 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.GetRetainedEarnings;
 
-public record GetRetainedEarningsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<RetainedEarningsPagedResponse>;
 
-public record RetainedEarningsPagedResponse(
-    List<RetainedEarningsSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetRetainedEarningsHandler(AccountingDbContext context) 
     : IQueryHandler<GetRetainedEarningsQuery, RetainedEarningsPagedResponse>

@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.BudgetDetails.DeleteBudgetDetail;
 
-namespace FSH.Module.Accounting.Features.v1.BudgetDetails.DeleteBudgetDetail;
-
-public record DeleteBudgetDetailCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.BudgetDetails.DeleteBudgetDetail; 
 
 public class DeleteBudgetDetailHandler(AccountingDbContext context) : ICommandHandler<DeleteBudgetDetailCommand>
 {

@@ -1,21 +1,12 @@
+using FSH.Module.Accounting.Contracts.v1.RateSchedules.GetListRateSchedule;
 using FSH.Module.Accounting.Contracts.v1.RateSchedules;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.RateSchedules.GetRateSchedules;
+namespace FSH.Module.Accounting.Features.v1.RateSchedules.GetListRateSchedule;
 
-public record GetRateSchedulesQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<RateSchedulesPagedResponse>;
 
-public record RateSchedulesPagedResponse(
-    List<RateScheduleSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetRateSchedulesHandler(AccountingDbContext context) 
     : IQueryHandler<GetRateSchedulesQuery, RateSchedulesPagedResponse>

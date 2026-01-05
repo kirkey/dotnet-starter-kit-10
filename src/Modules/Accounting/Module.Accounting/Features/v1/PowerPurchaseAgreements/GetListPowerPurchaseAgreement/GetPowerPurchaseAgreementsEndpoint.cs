@@ -1,5 +1,6 @@
 using FSH.Framework.Shared.Identity.Authorization;
 using FSH.Module.Accounting.Contracts.v1.PowerPurchaseAgreements;
+using FSH.Module.Accounting.Contracts.v1.PowerPurchaseAgreements.GetListPowerPurchaseAgreement;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

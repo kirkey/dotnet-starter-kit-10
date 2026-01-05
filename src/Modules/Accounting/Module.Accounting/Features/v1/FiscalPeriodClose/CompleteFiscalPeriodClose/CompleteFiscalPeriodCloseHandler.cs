@@ -2,6 +2,7 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.FiscalPeriodClose.CompleteFiscalPeriodClose;
 
 namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.CompleteFiscalPeriodClose;
 
@@ -9,8 +10,7 @@ namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.CompleteFiscalPeri
 /// Command to complete a fiscal period close and record the closing journal entry reference.
 /// </summary>
 /// <param name="Id">FiscalPeriodClose ID to complete</param>
-/// <param name="ClosingJournalEntryId">Journal entry Id for the closing/retained earnings entry</param>
-public record CompleteFiscalPeriodCloseCommand(Guid Id, Guid ClosingJournalEntryId) : ICommand;
+/// <param name="ClosingJournalEntryId">Journal entry Id for the closing/retained earnings entry</param> 
 
 /// <summary>
 /// Handler for completing the fiscal period close. The operation finalizes the period and links the closing journal entry.

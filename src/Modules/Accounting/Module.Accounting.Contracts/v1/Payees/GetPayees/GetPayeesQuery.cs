@@ -25,7 +25,3 @@ public record PayeesPagedResponse(
     int Page,
     int PageSize);
 
-/// <summary>
-/// Summary projection of a payee.
-/// </summary>
-public record PayeeSummaryDto(Guid Id, string Name, bool IsActive);

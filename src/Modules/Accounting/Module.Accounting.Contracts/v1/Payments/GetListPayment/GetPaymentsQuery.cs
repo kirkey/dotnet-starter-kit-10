@@ -24,4 +24,3 @@ public record PaymentsPagedResponse(
 /// <summary>
 /// Summary DTO for payment list items.
 /// </summary>
-public record PaymentSummaryDto(Guid Id, string Name, bool IsActive);

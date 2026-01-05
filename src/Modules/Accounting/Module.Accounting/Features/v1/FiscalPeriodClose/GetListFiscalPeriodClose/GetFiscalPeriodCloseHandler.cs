@@ -1,3 +1,4 @@
+using FSH.Module.Accounting.Contracts.v1.FiscalPeriodClose.GetListFiscalPeriodClose;
 using FSH.Module.Accounting.Contracts.v1.FiscalPeriodClose;
 using FSH.Module.Accounting.Data;
 using Mediator;
@@ -16,26 +17,7 @@ namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.GetFiscalPeriodClo
 /// <param name="FiscalPeriodId">Optional filter by fiscal period identifier</param>
 /// <param name="Status">Optional filter by period close status (Draft, Initiated, Completed)</param>
 /// <param name="FromDate">Inclusive StartDate filter</param>
-/// <param name="ToDate">Inclusive EndDate filter</param>
-public record GetFiscalPeriodCloseQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null,
-    int? FiscalYear = null,
-    Guid? FiscalPeriodId = null,
-    string? Status = null,
-    DateTime? FromDate = null,
-    DateTime? ToDate = null) : IQuery<FiscalPeriodClosePagedResponse>;
-
-/// <summary>
-/// Response for paginated FiscalPeriodClose summaries.
-/// </summary>
-public record FiscalPeriodClosePagedResponse(
-    List<FiscalPeriodCloseSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
+/// <param name="ToDate">Inclusive EndDate filter</param> 
 
 /// <summary>
 /// Handler for listing FiscalPeriodClose entries with basic filtering and pagination.

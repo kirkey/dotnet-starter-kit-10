@@ -1,21 +1,10 @@
+using FSH.Module.Accounting.Contracts.v1.PowerPurchaseAgreements.GetListPowerPurchaseAgreement;
 using FSH.Module.Accounting.Contracts.v1.PowerPurchaseAgreements;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.PowerPurchaseAgreements.GetPowerPurchaseAgreements;
-
-public record GetPowerPurchaseAgreementsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<PowerPurchaseAgreementsPagedResponse>;
-
-public record PowerPurchaseAgreementsPagedResponse(
-    List<PowerPurchaseAgreementSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetPowerPurchaseAgreementsHandler(AccountingDbContext context) 
     : IQueryHandler<GetPowerPurchaseAgreementsQuery, PowerPurchaseAgreementsPagedResponse>

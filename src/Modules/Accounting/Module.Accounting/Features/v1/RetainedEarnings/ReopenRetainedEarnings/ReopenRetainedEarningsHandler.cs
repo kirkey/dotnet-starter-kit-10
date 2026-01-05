@@ -1,11 +1,10 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.RetainedEarnings.ReopenRetainedEarnings;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.ReopenRetainedEarnings;
-
-public record ReopenRetainedEarningsCommand(Guid Id, string? Reason = null) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.ReopenRetainedEarnings; 
 
 public class ReopenRetainedEarningsHandler(AccountingDbContext context) 
     : ICommandHandler<ReopenRetainedEarningsCommand>

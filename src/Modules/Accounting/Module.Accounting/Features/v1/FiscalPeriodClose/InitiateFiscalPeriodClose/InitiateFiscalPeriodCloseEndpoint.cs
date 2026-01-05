@@ -1,9 +1,10 @@
 // TODO: Implement Initiate endpoint for FiscalPeriodClose
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Module.Accounting.Contracts.v1.FiscalPeriodClose.InitiateFiscalPeriodClose;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing; 
 
 namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.InitiateFiscalPeriodClose;
 

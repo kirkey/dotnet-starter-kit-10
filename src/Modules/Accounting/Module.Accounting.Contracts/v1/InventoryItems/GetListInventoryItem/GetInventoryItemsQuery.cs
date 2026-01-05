@@ -28,13 +28,3 @@ public record InventoryItemsPagedResponse(
     int Page,
     int PageSize);
 
-/// <summary>
-/// Summary DTO for inventory item list responses.
-/// </summary>
-/// <param name="Id">Inventory item ID</param>
-/// <param name="Name">Item name</param>
-/// <param name="IsActive">Active flag</param>
-public record InventoryItemSummaryDto(
-    Guid Id,
-    string Name,
-    bool IsActive);

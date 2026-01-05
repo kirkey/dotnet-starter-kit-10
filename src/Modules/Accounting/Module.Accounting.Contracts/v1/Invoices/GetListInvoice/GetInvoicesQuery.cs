@@ -37,4 +37,3 @@ public record InvoicesPagedResponse(
 /// <summary>
 /// Summary DTO for invoice list items.
 /// </summary>
-public record InvoiceSummaryDto(Guid Id, string InvoiceNumber, string InvoiceType, DateTime InvoiceDate, string BillToName, decimal Amount, bool IsPosted);

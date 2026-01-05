@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.InterCompanyTransactions.UpdateInterCompanyTransaction;
 
 namespace FSH.Module.Accounting.Features.v1.InterCompanyTransactions.UpdateInterCompanyTransaction;
-
-public record UpdateInterCompanyTransactionCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdateInterCompanyTransactionHandler(AccountingDbContext context) : ICommandHandler<UpdateInterCompanyTransactionCommand, Guid>
 {

@@ -24,7 +24,3 @@ public record PostingBatchesPagedResponse(
     int Page,
     int PageSize);
 
-/// <summary>
-/// Summary DTO for posting batch list items.
-/// </summary>
-public record PostingBatchSummaryDto(Guid Id, string Name, string? Status, bool IsActive);

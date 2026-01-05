@@ -1,5 +1,6 @@
 // TODO: Implement StopPayment endpoint for Check
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Module.Accounting.Contracts.v1.Checks.StopPaymentCheck;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

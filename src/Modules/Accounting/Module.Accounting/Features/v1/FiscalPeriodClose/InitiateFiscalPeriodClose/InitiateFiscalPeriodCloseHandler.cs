@@ -1,14 +1,14 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.FiscalPeriodClose.InitiateFiscalPeriodClose;
 
 namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.InitiateFiscalPeriodClose;
 
 /// <summary>
 /// Command to initiate the fiscal period close workflow for a given FiscalPeriodClose record.
 /// </summary>
-/// <param name="Id">FiscalPeriodClose ID to initiate</param>
-public record InitiateFiscalPeriodCloseCommand(Guid Id) : ICommand;
+/// <param name="Id">FiscalPeriodClose ID to initiate</param> 
 
 /// <summary>
 /// Handler for initiating a fiscal period close (BeginClose) which locks transactional operations and prepares the period for final close.

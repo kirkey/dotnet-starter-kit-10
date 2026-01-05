@@ -1,4 +1,5 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.RetainedEarnings.GetRetainedEarnings;
 using FSH.Module.Accounting.Contracts.v1.RetainedEarnings;
 using FSH.Module.Accounting.Data;
 using Mediator;
@@ -6,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.GetRetainedEarnings;
 
-public record GetRetainedEarningsByIdQuery(Guid Id) : IQuery<RetainedEarningsDto>;
 
 public class GetRetainedEarningsByIdHandler(AccountingDbContext context) : IQueryHandler<GetRetainedEarningsByIdQuery, RetainedEarningsDto>
 {

@@ -2,10 +2,9 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.PowerPurchaseAgreements.CreatePowerPurchaseAgreement;
 
 namespace FSH.Module.Accounting.Features.v1.PowerPurchaseAgreements.CreatePowerPurchaseAgreement;
-
-public record CreatePowerPurchaseAgreementCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreatePowerPurchaseAgreementHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreatePowerPurchaseAgreementCommand, Guid>

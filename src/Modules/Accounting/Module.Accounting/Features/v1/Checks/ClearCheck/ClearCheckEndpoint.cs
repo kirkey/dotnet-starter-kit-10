@@ -1,5 +1,6 @@
 // TODO: Implement Clear endpoint for Check
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Module.Accounting.Contracts.v1.Checks.ClearCheck;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

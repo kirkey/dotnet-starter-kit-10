@@ -1,4 +1,5 @@
 using FluentValidation;
+using FSH.Module.Accounting.Contracts.v1.RetainedEarnings.ReopenRetainedEarnings;
 
 namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.ReopenRetainedEarnings;
 

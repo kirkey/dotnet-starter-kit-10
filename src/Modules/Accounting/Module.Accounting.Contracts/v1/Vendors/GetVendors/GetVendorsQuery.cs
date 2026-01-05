@@ -35,4 +35,3 @@ public record VendorsPagedResponse(
 /// <param name="Id">Vendor unique identifier</param>
 /// <param name="Name">Vendor business name</param>
 /// <param name="IsActive">Whether vendor is currently active</param>
-public record VendorSummaryDto(Guid Id, string Name, bool IsActive);

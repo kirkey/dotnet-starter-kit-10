@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.InterCompanyTransactions.GetInterCompanyTransaction;
 using FSH.Module.Accounting.Contracts.v1.InterCompanyTransactions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.InterCompanyTransactions.GetInterCompanyTransaction;
-
-public record GetInterCompanyTransactionQuery(Guid Id) : IQuery<InterCompanyTransactionDto>;
 
 public class GetInterCompanyTransactionHandler(AccountingDbContext context) : IQueryHandler<GetInterCompanyTransactionQuery, InterCompanyTransactionDto>
 {

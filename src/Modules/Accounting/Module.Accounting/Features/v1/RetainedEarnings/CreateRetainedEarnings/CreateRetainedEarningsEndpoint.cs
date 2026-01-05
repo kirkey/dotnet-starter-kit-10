@@ -1,8 +1,9 @@
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Module.Accounting.Contracts.v1.RetainedEarnings.CreateRetainedEarnings;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing; 
 
 namespace FSH.Module.Accounting.Features.v1.RetainedEarnings.CreateRetainedEarnings;
 

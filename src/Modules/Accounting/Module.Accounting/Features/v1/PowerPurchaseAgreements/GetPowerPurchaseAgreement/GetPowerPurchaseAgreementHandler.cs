@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.PowerPurchaseAgreements.GetPowerPurchaseAgreement;
 using FSH.Module.Accounting.Contracts.v1.PowerPurchaseAgreements;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.PowerPurchaseAgreements.GetPowerPurchaseAgreement;
-
-public record GetPowerPurchaseAgreementQuery(Guid Id) : IQuery<PowerPurchaseAgreementDto>;
 
 public class GetPowerPurchaseAgreementHandler(AccountingDbContext context) : IQueryHandler<GetPowerPurchaseAgreementQuery, PowerPurchaseAgreementDto>
 {

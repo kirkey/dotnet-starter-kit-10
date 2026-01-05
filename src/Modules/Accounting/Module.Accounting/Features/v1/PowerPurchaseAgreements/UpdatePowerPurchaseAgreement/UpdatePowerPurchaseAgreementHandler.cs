@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.PowerPurchaseAgreements.UpdatePowerPurchaseAgreement;
 
 namespace FSH.Module.Accounting.Features.v1.PowerPurchaseAgreements.UpdatePowerPurchaseAgreement;
-
-public record UpdatePowerPurchaseAgreementCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdatePowerPurchaseAgreementHandler(AccountingDbContext context) : ICommandHandler<UpdatePowerPurchaseAgreementCommand, Guid>
 {

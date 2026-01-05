@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.RateSchedules.UpdateRateSchedule;
 
-namespace FSH.Module.Accounting.Features.v1.RateSchedules.UpdateRateSchedule;
-
-public record UpdateRateScheduleCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
+namespace FSH.Module.Accounting.Features.v1.RateSchedules.UpdateRateSchedule; 
 
 public class UpdateRateScheduleHandler(AccountingDbContext context) : ICommandHandler<UpdateRateScheduleCommand, Guid>
 {

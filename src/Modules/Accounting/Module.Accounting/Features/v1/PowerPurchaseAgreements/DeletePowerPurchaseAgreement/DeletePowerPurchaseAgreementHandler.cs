@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.PowerPurchaseAgreements.DeletePowerPurchaseAgreement;
 
 namespace FSH.Module.Accounting.Features.v1.PowerPurchaseAgreements.DeletePowerPurchaseAgreement;
-
-public record DeletePowerPurchaseAgreementCommand(Guid Id) : ICommand;
 
 public class DeletePowerPurchaseAgreementHandler(AccountingDbContext context) : ICommandHandler<DeletePowerPurchaseAgreementCommand>
 {

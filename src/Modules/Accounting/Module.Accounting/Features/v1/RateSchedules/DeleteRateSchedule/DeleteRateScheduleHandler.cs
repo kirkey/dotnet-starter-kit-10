@@ -1,11 +1,10 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.RateSchedules.DeleteRateSchedule;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.RateSchedules.DeleteRateSchedule;
-
-public record DeleteRateScheduleCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.RateSchedules.DeleteRateSchedule; 
 
 public class DeleteRateScheduleHandler(AccountingDbContext context) : ICommandHandler<DeleteRateScheduleCommand>
 {

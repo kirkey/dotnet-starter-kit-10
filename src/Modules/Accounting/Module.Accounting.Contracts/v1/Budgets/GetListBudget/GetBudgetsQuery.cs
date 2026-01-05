@@ -24,4 +24,3 @@ public record BudgetsPagedResponse(
 /// <summary>
 /// Summary DTO for budget list items.
 /// </summary>
-public record BudgetSummaryDto(Guid Id, string Name, bool IsActive);

@@ -1,4 +1,5 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.BudgetDetails.GetBudgetDetail;
 using FSH.Module.Accounting.Contracts.v1.BudgetDetails;
 using FSH.Module.Accounting.Data;
 using Mediator;
@@ -6,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.BudgetDetails.GetBudgetDetail;
 
-public record GetBudgetDetailQuery(Guid Id) : IQuery<BudgetDetailDto>;
 
 public class GetBudgetDetailHandler(AccountingDbContext context) : IQueryHandler<GetBudgetDetailQuery, BudgetDetailDto>
 {

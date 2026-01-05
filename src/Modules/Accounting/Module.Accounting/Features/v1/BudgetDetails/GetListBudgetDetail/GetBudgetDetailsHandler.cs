@@ -1,21 +1,12 @@
+using FSH.Module.Accounting.Contracts.v1.BudgetDetails.GetListBudgetDetail;
 using FSH.Module.Accounting.Contracts.v1.BudgetDetails;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace FSH.Module.Accounting.Features.v1.BudgetDetails.GetBudgetDetails;
+namespace FSH.Module.Accounting.Features.v1.BudgetDetails.GetListBudgetDetail;
 
-public record GetBudgetDetailsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<BudgetDetailsPagedResponse>;
 
-public record BudgetDetailsPagedResponse(
-    List<BudgetDetailSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetBudgetDetailsHandler(AccountingDbContext context) 
     : IQueryHandler<GetBudgetDetailsQuery, BudgetDetailsPagedResponse>

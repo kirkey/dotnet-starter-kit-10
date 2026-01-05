@@ -23,4 +23,3 @@ public record BillsPagedResponse(
 /// <summary>
 /// Summary DTO for bill list items.
 /// </summary>
-public record BillSummaryDto(Guid Id, string Name, bool IsActive);

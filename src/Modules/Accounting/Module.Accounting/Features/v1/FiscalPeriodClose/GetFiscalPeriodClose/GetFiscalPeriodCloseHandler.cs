@@ -1,4 +1,5 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.FiscalPeriodClose.GetFiscalPeriodClose;
 using FSH.Module.Accounting.Contracts.v1.FiscalPeriodClose;
 using FSH.Module.Accounting.Data;
 using Mediator;
@@ -10,7 +11,6 @@ namespace FSH.Module.Accounting.Features.v1.FiscalPeriodClose.GetFiscalPeriodClo
 /// Query to retrieve a single FiscalPeriodClose by Id.
 /// </summary>
 /// <param name="Id">FiscalPeriodClose ID to retrieve</param>
-public record GetFiscalPeriodCloseByIdQuery(Guid Id) : IQuery<FiscalPeriodCloseDto>;
 
 /// <summary>
 /// Handler for retrieving a FiscalPeriodClose with essential metadata for review prior to completion.

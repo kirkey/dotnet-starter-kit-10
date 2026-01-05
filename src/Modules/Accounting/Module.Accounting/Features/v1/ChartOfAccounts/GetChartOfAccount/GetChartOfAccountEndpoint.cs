@@ -1,4 +1,5 @@
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Module.Accounting.Contracts.v1.ChartOfAccounts.GetChartOfAccount;
 using FSH.Module.Accounting.Contracts.v1.ChartOfAccounts;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
