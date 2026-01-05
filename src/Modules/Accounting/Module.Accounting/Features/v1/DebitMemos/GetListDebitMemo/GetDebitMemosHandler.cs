@@ -1,21 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.DebitMemos;
+using FSH.Module.Accounting.Contracts.v1.DebitMemos.GetListDebitMemo;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.DebitMemos.GetDebitMemos;
-
-public record GetDebitMemosQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<DebitMemosPagedResponse>;
-
-public record DebitMemosPagedResponse(
-    List<DebitMemoSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetDebitMemosHandler(AccountingDbContext context) 
     : IQueryHandler<GetDebitMemosQuery, DebitMemosPagedResponse>

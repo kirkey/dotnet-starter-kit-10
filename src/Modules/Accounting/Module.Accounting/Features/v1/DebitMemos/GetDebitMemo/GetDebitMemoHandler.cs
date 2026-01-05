@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.DebitMemos;
+using FSH.Module.Accounting.Contracts.v1.DebitMemos.GetDebitMemo;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.DebitMemos.GetDebitMemo;
-
-public record GetDebitMemoQuery(Guid Id) : IQuery<DebitMemoDto>;
 
 public class GetDebitMemoHandler(AccountingDbContext context) : IQueryHandler<GetDebitMemoQuery, DebitMemoDto>
 {

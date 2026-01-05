@@ -1,10 +1,9 @@
 // TODO: Implement Approve operation for DebitMemo
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.DebitMemos.ApproveDebitMemo;
 
 namespace FSH.Module.Accounting.Features.v1.DebitMemos.ApproveDebitMemo;
-
-public record ApproveDebitMemoCommand(Guid Id) : ICommand;
 
 public class ApproveDebitMemoHandler(AccountingDbContext context) 
     : ICommandHandler<ApproveDebitMemoCommand>

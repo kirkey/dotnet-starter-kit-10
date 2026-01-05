@@ -2,10 +2,9 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.DebitMemos.CreateDebitMemo;
 
 namespace FSH.Module.Accounting.Features.v1.DebitMemos.CreateDebitMemo;
-
-public record CreateDebitMemoCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreateDebitMemoHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateDebitMemoCommand, Guid>

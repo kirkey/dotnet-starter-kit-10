@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.DebitMemos.UpdateDebitMemo;
 
 namespace FSH.Module.Accounting.Features.v1.DebitMemos.UpdateDebitMemo;
-
-public record UpdateDebitMemoCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdateDebitMemoHandler(AccountingDbContext context) : ICommandHandler<UpdateDebitMemoCommand, Guid>
 {

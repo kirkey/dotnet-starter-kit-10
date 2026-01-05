@@ -1,6 +1,7 @@
 // TODO: Implement Approve endpoint for CreditMemo
 using FSH.Framework.Shared.Identity.Authorization;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.CreditMemos.ApproveCreditMemo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;

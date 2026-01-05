@@ -2,9 +2,12 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
-namespace FSH.Module.Accounting.Features.v1.DebitMemos.DeleteDebitMemo;
+using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Data;
+using Mediator;
+using FSH.Module.Accounting.Contracts.v1.DebitMemos.DeleteDebitMemo;
 
-public record DeleteDebitMemoCommand(Guid Id) : ICommand;
+namespace FSH.Module.Accounting.Features.v1.DebitMemos.DeleteDebitMemo;
 
 public class DeleteDebitMemoHandler(AccountingDbContext context) : ICommandHandler<DeleteDebitMemoCommand>
 {

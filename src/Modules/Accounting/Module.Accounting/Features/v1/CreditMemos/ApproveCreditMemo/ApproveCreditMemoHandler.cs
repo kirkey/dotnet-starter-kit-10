@@ -1,10 +1,9 @@
 // TODO: Implement Approve operation for CreditMemo
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.CreditMemos.ApproveCreditMemo;
 
 namespace FSH.Module.Accounting.Features.v1.CreditMemos.ApproveCreditMemo;
-
-public record ApproveCreditMemoCommand(Guid Id) : ICommand;
 
 public class ApproveCreditMemoHandler(AccountingDbContext context) 
     : ICommandHandler<ApproveCreditMemoCommand>
