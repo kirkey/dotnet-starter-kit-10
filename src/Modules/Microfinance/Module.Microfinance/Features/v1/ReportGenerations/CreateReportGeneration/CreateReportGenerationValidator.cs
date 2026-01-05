@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.ReportGenerations.CreateReportGeneration;
+
 namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.CreateReportGeneration;
 
 public class CreateReportGenerationValidator : AbstractValidator<CreateReportGenerationCommand>

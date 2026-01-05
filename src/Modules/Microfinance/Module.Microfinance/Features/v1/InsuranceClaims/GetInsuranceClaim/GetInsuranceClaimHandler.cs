@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.InsuranceClaims;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.InsuranceClaims.GetInsuranceClaim;
+using FSH.Module.Microfinance.Contracts.v1.InsuranceClaims;
 
 namespace FSH.Module.Microfinance.Features.v1.InsuranceClaims.GetInsuranceClaim;
 

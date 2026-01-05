@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations.CreateMfiConfiguration;
+
 namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.CreateMfiConfiguration;
 
 public class CreateMfiConfigurationValidator : AbstractValidator<CreateMfiConfigurationCommand>

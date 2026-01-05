@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.UssdSessions;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.UssdSessions.GetUssdSessions;
+using FSH.Module.Microfinance.Contracts.v1.UssdSessions;
 
 namespace FSH.Module.Microfinance.Features.v1.UssdSessions.GetUssdSessions;
 

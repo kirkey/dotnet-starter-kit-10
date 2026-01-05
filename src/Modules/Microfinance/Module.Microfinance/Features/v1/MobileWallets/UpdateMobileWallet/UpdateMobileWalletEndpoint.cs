@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
+using FSH.Module.Microfinance.Contracts.v1.MobileWallets.UpdateMobileWallet;
+
 namespace FSH.Module.Microfinance.Features.v1.MobileWallets.UpdateMobileWallet;
 
 public static class UpdateMobileWalletEndpoint

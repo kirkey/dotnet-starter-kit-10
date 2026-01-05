@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.InsurancePolicys.CreateInsurancePolicy;
+
 namespace FSH.Module.Microfinance.Features.v1.InsurancePolicys.CreateInsurancePolicy;
 
 public class CreateInsurancePolicyValidator : AbstractValidator<CreateInsurancePolicyCommand>

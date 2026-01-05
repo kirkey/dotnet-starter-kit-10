@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations.GetMfiConfigurations;
+using FSH.Module.Microfinance.Contracts.v1.MfiConfigurations;
 
 namespace FSH.Module.Microfinance.Features.v1.MfiConfigurations.GetMfiConfigurations;
 

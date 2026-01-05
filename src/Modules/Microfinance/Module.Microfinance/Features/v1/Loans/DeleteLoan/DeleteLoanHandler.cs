@@ -17,9 +17,9 @@ namespace FSH.Module.Microfinance.Features.v1.Loans.DeleteLoan;
 /// **Dependencies:**
 /// - MicrofinanceDbContext: For database operations
 /// </summary>
-public sealed class DeleteLoanHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteLoanCommand, Guid>
+public sealed class DeleteLoanHandler(MicrofinanceDbContext context) : ICommandHandler<DeleteLoanCommand>
 {
-    public async ValueTask<Guid> Handle(DeleteLoanCommand command, CancellationToken ct)
+    public async ValueTask<Unit> Handle(DeleteLoanCommand command, CancellationToken ct)
     {
         var entity = await context.Loans
             .Where(x => x.Id == command.Id)
@@ -27,6 +27,6 @@ public sealed class DeleteLoanHandler(MicrofinanceDbContext context) : ICommandH
         
         context.Loans.Remove(entity);
         await context.SaveChangesAsync(ct);
-        return entity.Id;
+        return Unit.Value;
     }
 }

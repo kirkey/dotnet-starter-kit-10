@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.RiskAlerts;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.RiskAlerts.GetRiskAlerts;
+using FSH.Module.Microfinance.Contracts.v1.RiskAlerts;
 
 namespace FSH.Module.Microfinance.Features.v1.RiskAlerts.GetRiskAlerts;
 

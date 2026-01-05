@@ -1,8 +1,10 @@
 using FSH.Framework.Shared.Identity.Authorization;
-using FSH.Module.Microfinance.Contracts.v1.CollectionCases;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+
+using FSH.Module.Microfinance.Contracts.v1.CollectionCases.GetCollectionCase;
+using FSH.Module.Microfinance.Contracts.v1.CollectionCases;
 
 namespace FSH.Module.Microfinance.Features.v1.CollectionCases.GetCollectionCase;
 

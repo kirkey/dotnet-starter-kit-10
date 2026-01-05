@@ -8,7 +8,7 @@ public class GetMemberHandler(MicrofinanceDbContext context) : IQueryHandler<Get
     public async ValueTask<MemberDto> Handle(GetMemberQuery query, CancellationToken ct)
     {
         var member = await context.Members
-            .Where(m => m.Id == query.MemberId)
+            .Where(m => m.Id == query.Id)
             .Select(m => new MemberDto(
                 m.Id,
                 m.MemberNumber,

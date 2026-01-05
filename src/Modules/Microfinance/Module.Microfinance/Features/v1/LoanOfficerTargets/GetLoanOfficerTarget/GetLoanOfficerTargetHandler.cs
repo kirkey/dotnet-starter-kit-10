@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.LoanOfficerTargets;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.LoanOfficerTargets.GetLoanOfficerTarget;
+using FSH.Module.Microfinance.Contracts.v1.LoanOfficerTargets;
 
 namespace FSH.Module.Microfinance.Features.v1.LoanOfficerTargets.GetLoanOfficerTarget;
 

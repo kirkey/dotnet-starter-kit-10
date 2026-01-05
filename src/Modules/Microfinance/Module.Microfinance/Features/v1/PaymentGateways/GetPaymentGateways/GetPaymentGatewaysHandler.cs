@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.PaymentGateways;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.PaymentGateways.GetPaymentGateways;
+using FSH.Module.Microfinance.Contracts.v1.PaymentGateways;
 
 namespace FSH.Module.Microfinance.Features.v1.PaymentGateways.GetPaymentGateways;
 

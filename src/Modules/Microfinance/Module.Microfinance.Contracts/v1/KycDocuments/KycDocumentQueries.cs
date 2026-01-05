@@ -1,5 +1,3 @@
 namespace FSH.Module.Microfinance.Contracts.v1.KycDocuments;
 
-public record GetKycDocumentQuery(Guid Id);
-public record GetKycDocumentsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive);
-public record KycDocumentsPagedResponse(List<KycDocumentSummaryDto> Items, int TotalCount, int Page, int PageSize);
+// Queries moved to nested Get* files to avoid ambiguous type names.

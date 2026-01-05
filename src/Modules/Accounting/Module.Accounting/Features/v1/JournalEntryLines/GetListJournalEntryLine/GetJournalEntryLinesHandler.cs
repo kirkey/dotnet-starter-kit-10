@@ -2,6 +2,7 @@ using FSH.Module.Accounting.Contracts.v1.JournalEntryLines;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.JournalEntryLines.GetListJournalEntryLine;
 
 namespace FSH.Module.Accounting.Features.v1.JournalEntryLines.GetListJournalEntryLine;
 

@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.CommunicationTemplates;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.CommunicationTemplates.GetCommunicationTemplates;
+using FSH.Module.Microfinance.Contracts.v1.CommunicationTemplates;
 
 namespace FSH.Module.Microfinance.Features.v1.CommunicationTemplates.GetCommunicationTemplates;
 

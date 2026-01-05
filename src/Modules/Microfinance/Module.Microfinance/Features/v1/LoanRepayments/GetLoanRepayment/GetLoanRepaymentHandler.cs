@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.LoanRepayments;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.LoanRepayments.GetLoanRepayment;
+using FSH.Module.Microfinance.Contracts.v1.LoanRepayments;
 
 namespace FSH.Module.Microfinance.Features.v1.LoanRepayments.GetLoanRepayment;
 

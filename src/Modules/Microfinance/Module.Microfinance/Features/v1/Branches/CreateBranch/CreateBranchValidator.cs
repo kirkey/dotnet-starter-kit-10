@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.Branches.CreateBranch;
+
 namespace FSH.Module.Microfinance.Features.v1.Branches.CreateBranch;
 
 public class CreateBranchValidator : AbstractValidator<CreateBranchCommand>

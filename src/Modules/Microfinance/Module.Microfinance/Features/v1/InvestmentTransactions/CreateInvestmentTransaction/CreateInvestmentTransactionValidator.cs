@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.InvestmentTransactions.CreateInvestmentTransaction;
+
 namespace FSH.Module.Microfinance.Features.v1.InvestmentTransactions.CreateInvestmentTransaction;
 
 public class CreateInvestmentTransactionValidator : AbstractValidator<CreateInvestmentTransactionCommand>

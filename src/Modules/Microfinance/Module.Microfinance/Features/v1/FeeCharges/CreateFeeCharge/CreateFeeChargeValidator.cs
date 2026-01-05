@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.FeeCharges.CreateFeeCharge;
+
 namespace FSH.Module.Microfinance.Features.v1.FeeCharges.CreateFeeCharge;
 
 public class CreateFeeChargeValidator : AbstractValidator<CreateFeeChargeCommand>

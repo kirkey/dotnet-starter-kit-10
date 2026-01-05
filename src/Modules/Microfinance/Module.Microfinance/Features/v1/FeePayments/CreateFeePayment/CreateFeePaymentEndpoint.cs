@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
+using FSH.Module.Microfinance.Contracts.v1.FeePayments.CreateFeePayment;
+
 namespace FSH.Module.Microfinance.Features.v1.FeePayments.CreateFeePayment;
 
 public static class CreateFeePaymentEndpoint

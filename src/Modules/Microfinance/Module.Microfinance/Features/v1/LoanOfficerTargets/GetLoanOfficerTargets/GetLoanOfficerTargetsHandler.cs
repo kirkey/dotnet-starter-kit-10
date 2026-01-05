@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.LoanOfficerTargets;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.LoanOfficerTargets.GetLoanOfficerTargets;
+using FSH.Module.Microfinance.Contracts.v1.LoanOfficerTargets;
 
 namespace FSH.Module.Microfinance.Features.v1.LoanOfficerTargets.GetLoanOfficerTargets;
 

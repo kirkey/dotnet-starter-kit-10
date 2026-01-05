@@ -1,8 +1,10 @@
 using FSH.Framework.Shared.Identity.Authorization;
-using FSH.Module.Microfinance.Contracts.v1.TellerSessions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+
+using FSH.Module.Microfinance.Contracts.v1.TellerSessions.GetTellerSession;
+using FSH.Module.Microfinance.Contracts.v1.TellerSessions;
 
 namespace FSH.Module.Microfinance.Features.v1.TellerSessions.GetTellerSession;
 

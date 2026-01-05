@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.ReportDefinitions.CreateReportDefinition;
+
 namespace FSH.Module.Microfinance.Features.v1.ReportDefinitions.CreateReportDefinition;
 
 public class CreateReportDefinitionValidator : AbstractValidator<CreateReportDefinitionCommand>

@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.CreditBureauInquirys.CreateCreditBureauInquiry;
+
 namespace FSH.Module.Microfinance.Features.v1.CreditBureauInquirys.CreateCreditBureauInquiry;
 
 public class CreateCreditBureauInquiryValidator : AbstractValidator<CreateCreditBureauInquiryCommand>

@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.LoanOfficerAssignments;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.LoanOfficerAssignments.GetLoanOfficerAssignment;
+using FSH.Module.Microfinance.Contracts.v1.LoanOfficerAssignments;
 
 namespace FSH.Module.Microfinance.Features.v1.LoanOfficerAssignments.GetLoanOfficerAssignment;
 

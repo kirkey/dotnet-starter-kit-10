@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.ReportGenerations;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.ReportGenerations.GetReportGenerations;
+using FSH.Module.Microfinance.Contracts.v1.ReportGenerations;
 
 namespace FSH.Module.Microfinance.Features.v1.ReportGenerations.GetReportGenerations;
 

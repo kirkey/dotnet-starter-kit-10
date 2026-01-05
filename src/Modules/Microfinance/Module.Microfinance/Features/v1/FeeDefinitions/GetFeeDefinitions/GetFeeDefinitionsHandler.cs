@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.FeeDefinitions;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.FeeDefinitions.GetFeeDefinitions;
+using FSH.Module.Microfinance.Contracts.v1.FeeDefinitions;
 
 namespace FSH.Module.Microfinance.Features.v1.FeeDefinitions.GetFeeDefinitions;
 

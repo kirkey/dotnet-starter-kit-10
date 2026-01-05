@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.GroupMemberships;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.GroupMemberships.GetGroupMemberships;
+using FSH.Module.Microfinance.Contracts.v1.GroupMemberships;
 
 namespace FSH.Module.Microfinance.Features.v1.GroupMemberships.GetGroupMemberships;
 

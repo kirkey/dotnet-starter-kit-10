@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.CommunicationLogs;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.CommunicationLogs.GetCommunicationLog;
+using FSH.Module.Microfinance.Contracts.v1.CommunicationLogs;
 
 namespace FSH.Module.Microfinance.Features.v1.CommunicationLogs.GetCommunicationLog;
 

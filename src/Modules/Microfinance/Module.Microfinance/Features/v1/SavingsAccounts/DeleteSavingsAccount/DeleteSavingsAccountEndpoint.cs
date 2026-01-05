@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
+
+using FSH.Module.Microfinance.Contracts.v1.SavingsAccounts;
+
 namespace FSH.Module.Microfinance.Features.v1.SavingsAccounts.DeleteSavingsAccount;
 
 public static class DeleteSavingsAccountEndpoint

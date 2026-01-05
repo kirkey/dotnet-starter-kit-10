@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.RiskIndicators;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.RiskIndicators.GetRiskIndicator;
+using FSH.Module.Microfinance.Contracts.v1.RiskIndicators;
 
 namespace FSH.Module.Microfinance.Features.v1.RiskIndicators.GetRiskIndicator;
 

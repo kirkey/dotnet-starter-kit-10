@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.PaymentGateways.CreatePaymentGateway;
+
 namespace FSH.Module.Microfinance.Features.v1.PaymentGateways.CreatePaymentGateway;
 
 public class CreatePaymentGatewayValidator : AbstractValidator<CreatePaymentGatewayCommand>

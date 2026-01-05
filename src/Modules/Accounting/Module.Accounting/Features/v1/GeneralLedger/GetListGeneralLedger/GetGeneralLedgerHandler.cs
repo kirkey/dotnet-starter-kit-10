@@ -2,6 +2,7 @@ using FSH.Module.Accounting.Contracts.v1.GeneralLedger;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.GeneralLedger.GetListGeneralLedger;
 
 namespace FSH.Module.Accounting.Features.v1.GeneralLedger.GetListGeneralLedger;
 

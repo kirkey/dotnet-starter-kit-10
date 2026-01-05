@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
+using FSH.Module.Microfinance.Contracts.v1.SavingsProducts.UpdateSavingsProduct;
+
 namespace FSH.Module.Microfinance.Features.v1.SavingsProducts.UpdateSavingsProduct;
 
 public static class UpdateSavingsProductEndpoint

@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
+
+using FSH.Module.Microfinance.Contracts.v1.Members;
+
 namespace FSH.Module.Microfinance.Features.v1.Members.UpdateMember;
 
 public static class UpdateMemberEndpoint
@@ -15,7 +18,7 @@ public static class UpdateMemberEndpoint
             IMediator mediator,
             CancellationToken ct) =>
         {
-            var updatedCommand = command with { MemberId = id };
+            var updatedCommand = command with { Id = id };
             var result = await mediator.Send(updatedCommand, ct);
             return TypedResults.Ok(result);
         })

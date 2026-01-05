@@ -1,8 +1,10 @@
 using FSH.Framework.Shared.Identity.Authorization;
-using FSH.Module.Microfinance.Contracts.v1.InsuranceClaims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+
+using FSH.Module.Microfinance.Contracts.v1.InsuranceClaims.GetInsuranceClaims;
+using FSH.Module.Microfinance.Contracts.v1.InsuranceClaims;
 
 namespace FSH.Module.Microfinance.Features.v1.InsuranceClaims.GetInsuranceClaims;
 

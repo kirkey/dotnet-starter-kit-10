@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.ShareProducts;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.ShareProducts.GetShareProducts;
+using FSH.Module.Microfinance.Contracts.v1.ShareProducts;
 
 namespace FSH.Module.Microfinance.Features.v1.ShareProducts.GetShareProducts;
 

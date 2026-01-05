@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.Staffs;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.Staffs.GetStaffs;
+using FSH.Module.Microfinance.Contracts.v1.Staffs;
 
 namespace FSH.Module.Microfinance.Features.v1.Staffs.GetStaffs;
 

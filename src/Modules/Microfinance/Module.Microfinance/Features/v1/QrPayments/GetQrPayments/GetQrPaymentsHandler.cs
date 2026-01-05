@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.QrPayments;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.QrPayments.GetQrPayments;
+using FSH.Module.Microfinance.Contracts.v1.QrPayments;
 
 namespace FSH.Module.Microfinance.Features.v1.QrPayments.GetQrPayments;
 

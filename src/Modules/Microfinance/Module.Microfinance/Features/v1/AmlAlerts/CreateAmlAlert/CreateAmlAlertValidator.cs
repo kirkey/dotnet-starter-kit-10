@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.AmlAlerts.CreateAmlAlert;
+
 namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.CreateAmlAlert;
 
 public class CreateAmlAlertValidator : AbstractValidator<CreateAmlAlertCommand>

@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.Branches;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.Branches.GetBranchs;
+using FSH.Module.Microfinance.Contracts.v1.Branches;
 
 namespace FSH.Module.Microfinance.Features.v1.Branches.GetBranchs;
 

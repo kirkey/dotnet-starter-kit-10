@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.CreditBureauReports;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.CreditBureauReports.GetCreditBureauReport;
+using FSH.Module.Microfinance.Contracts.v1.CreditBureauReports;
 
 namespace FSH.Module.Microfinance.Features.v1.CreditBureauReports.GetCreditBureauReport;
 

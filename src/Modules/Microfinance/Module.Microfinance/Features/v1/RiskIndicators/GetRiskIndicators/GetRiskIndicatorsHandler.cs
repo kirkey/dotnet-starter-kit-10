@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.RiskIndicators;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.RiskIndicators.GetRiskIndicators;
+using FSH.Module.Microfinance.Contracts.v1.RiskIndicators;
 
 namespace FSH.Module.Microfinance.Features.v1.RiskIndicators.GetRiskIndicators;
 

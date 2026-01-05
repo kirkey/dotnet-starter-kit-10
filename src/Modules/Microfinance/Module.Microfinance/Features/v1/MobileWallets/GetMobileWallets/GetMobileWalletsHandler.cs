@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.MobileWallets;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.MobileWallets.GetMobileWallets;
+using FSH.Module.Microfinance.Contracts.v1.MobileWallets;
 
 namespace FSH.Module.Microfinance.Features.v1.MobileWallets.GetMobileWallets;
 

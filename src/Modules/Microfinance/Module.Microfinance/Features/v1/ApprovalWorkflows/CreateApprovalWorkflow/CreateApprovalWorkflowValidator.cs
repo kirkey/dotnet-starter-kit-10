@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.ApprovalWorkflows.CreateApprovalWorkflow;
+
 namespace FSH.Module.Microfinance.Features.v1.ApprovalWorkflows.CreateApprovalWorkflow;
 
 public class CreateApprovalWorkflowValidator : AbstractValidator<CreateApprovalWorkflowCommand>

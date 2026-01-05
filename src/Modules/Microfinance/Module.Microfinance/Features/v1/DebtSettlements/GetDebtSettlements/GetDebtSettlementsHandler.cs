@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.DebtSettlements;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.DebtSettlements.GetDebtSettlements;
+using FSH.Module.Microfinance.Contracts.v1.DebtSettlements;
 
 namespace FSH.Module.Microfinance.Features.v1.DebtSettlements.GetDebtSettlements;
 

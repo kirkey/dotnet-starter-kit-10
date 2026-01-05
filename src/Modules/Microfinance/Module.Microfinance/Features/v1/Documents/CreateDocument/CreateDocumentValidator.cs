@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.Documents.CreateDocument;
+
 namespace FSH.Module.Microfinance.Features.v1.Documents.CreateDocument;
 
 public class CreateDocumentValidator : AbstractValidator<CreateDocumentCommand>

@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.FixedDeposits.CreateFixedDeposit;
+
 namespace FSH.Module.Microfinance.Features.v1.FixedDeposits.CreateFixedDeposit;
 
 public class CreateFixedDepositValidator : AbstractValidator<CreateFixedDepositCommand>

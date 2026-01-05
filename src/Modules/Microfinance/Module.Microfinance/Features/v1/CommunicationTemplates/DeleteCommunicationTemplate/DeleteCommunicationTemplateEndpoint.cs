@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
+using FSH.Module.Microfinance.Contracts.v1.CommunicationTemplates.DeleteCommunicationTemplate;
+
 namespace FSH.Module.Microfinance.Features.v1.CommunicationTemplates.DeleteCommunicationTemplate;
 
 public static class DeleteCommunicationTemplateEndpoint

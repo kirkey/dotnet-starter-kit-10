@@ -3,6 +3,7 @@ using FSH.Module.Accounting.Contracts.v1.JournalEntries;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.JournalEntries.GetJournalEntry;
 
 namespace FSH.Module.Accounting.Features.v1.JournalEntries.GetJournalEntry;
 

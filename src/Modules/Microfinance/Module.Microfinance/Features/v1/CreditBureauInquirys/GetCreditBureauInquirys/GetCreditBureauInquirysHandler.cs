@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.CreditBureauInquirys;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.CreditBureauInquirys.GetCreditBureauInquirys;
+using FSH.Module.Microfinance.Contracts.v1.CreditBureauInquirys;
 
 namespace FSH.Module.Microfinance.Features.v1.CreditBureauInquirys.GetCreditBureauInquirys;
 

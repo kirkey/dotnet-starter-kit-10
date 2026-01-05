@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.MobileWallets.CreateMobileWallet;
+
 namespace FSH.Module.Microfinance.Features.v1.MobileWallets.CreateMobileWallet;
 
 public class CreateMobileWalletValidator : AbstractValidator<CreateMobileWalletCommand>

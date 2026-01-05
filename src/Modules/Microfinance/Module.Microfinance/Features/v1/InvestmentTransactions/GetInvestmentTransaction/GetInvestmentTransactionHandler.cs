@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.InvestmentTransactions;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.InvestmentTransactions.GetInvestmentTransaction;
+using FSH.Module.Microfinance.Contracts.v1.InvestmentTransactions;
 
 namespace FSH.Module.Microfinance.Features.v1.InvestmentTransactions.GetInvestmentTransaction;
 

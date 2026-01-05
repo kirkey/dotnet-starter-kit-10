@@ -6,7 +6,7 @@ public class ActivateMemberHandler(MicrofinanceDbContext context) : ICommandHand
 {
     public async ValueTask<Unit> Handle(ActivateMemberCommand command, CancellationToken ct)
     {
-        var member = await context.Members.FindAsync([command.MemberId], ct)
+        var member = await context.Members.FindAsync(command.Id, ct)
             ?? throw new NotFoundException("Member not found");
         member.Activate();
         await context.SaveChangesAsync(ct);

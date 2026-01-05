@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.PromiseToPays;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.PromiseToPays.GetPromiseToPays;
+using FSH.Module.Microfinance.Contracts.v1.PromiseToPays;
 
 namespace FSH.Module.Microfinance.Features.v1.PromiseToPays.GetPromiseToPays;
 

@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.QrPayments.CreateQrPayment;
+
 namespace FSH.Module.Microfinance.Features.v1.QrPayments.CreateQrPayment;
 
 public class CreateQrPaymentValidator : AbstractValidator<CreateQrPaymentCommand>

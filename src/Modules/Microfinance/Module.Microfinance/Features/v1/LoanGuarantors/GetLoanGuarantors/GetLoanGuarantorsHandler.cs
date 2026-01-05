@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.LoanGuarantors;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.LoanGuarantors.GetLoanGuarantors;
+using FSH.Module.Microfinance.Contracts.v1.LoanGuarantors;
 
 namespace FSH.Module.Microfinance.Features.v1.LoanGuarantors.GetLoanGuarantors;
 

@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.FeeWaivers;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.FeeWaivers.GetFeeWaivers;
+using FSH.Module.Microfinance.Contracts.v1.FeeWaivers;
 
 namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.GetFeeWaivers;
 

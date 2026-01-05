@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.GroupMemberships;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.GroupMemberships.GetGroupMembership;
+using FSH.Module.Microfinance.Contracts.v1.GroupMemberships;
 
 namespace FSH.Module.Microfinance.Features.v1.GroupMemberships.GetGroupMembership;
 

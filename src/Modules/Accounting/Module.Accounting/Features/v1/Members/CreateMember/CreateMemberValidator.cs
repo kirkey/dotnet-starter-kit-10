@@ -1,5 +1,6 @@
 using FluentValidation;
 using FSH.Module.Accounting.Features;
+using FSH.Module.Accounting.Contracts.v1.Members.CreateMember;
 
 namespace FSH.Module.Accounting.Features.v1.Members.CreateMember;
 

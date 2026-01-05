@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.CreditScores;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.CreditScores.GetCreditScores;
+using FSH.Module.Microfinance.Contracts.v1.CreditScores;
 
 namespace FSH.Module.Microfinance.Features.v1.CreditScores.GetCreditScores;
 

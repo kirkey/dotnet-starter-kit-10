@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.CashVaults.CreateCashVault;
+
 namespace FSH.Module.Microfinance.Features.v1.CashVaults.CreateCashVault;
 
 public class CreateCashVaultValidator : AbstractValidator<CreateCashVaultCommand>

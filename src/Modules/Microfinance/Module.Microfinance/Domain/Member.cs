@@ -5,6 +5,18 @@ namespace FSH.Module.Microfinance.Domain;
 /// </summary>
 public class Member : AuditableEntity<Guid>
 {
+    // Max length constants for entity properties
+    public const int MemberNumberMaxLength = 20;
+    public const int FirstNameMaxLength = 50;
+    public const int LastNameMaxLength = 50;
+    public const int MiddleNameMaxLength = 50;
+    public const int EmailMaxLength = 255;
+    public const int PhoneNumberMaxLength = 20;
+    public const int GenderMaxLength = 10;
+    public const int AddressMaxLength = 250;
+    public const int NationalIdMaxLength = 50;
+    public const int OccupationMaxLength = 100;
+
     public string MemberNumber { get; private set; } = default!;
     public string FirstName { get; private set; } = default!;
     public string LastName { get; private set; } = default!;

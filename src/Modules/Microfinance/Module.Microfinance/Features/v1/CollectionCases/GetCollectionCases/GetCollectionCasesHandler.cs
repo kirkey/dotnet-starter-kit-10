@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.CollectionCases;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.CollectionCases.GetCollectionCases;
+using FSH.Module.Microfinance.Contracts.v1.CollectionCases;
 
 namespace FSH.Module.Microfinance.Features.v1.CollectionCases.GetCollectionCases;
 

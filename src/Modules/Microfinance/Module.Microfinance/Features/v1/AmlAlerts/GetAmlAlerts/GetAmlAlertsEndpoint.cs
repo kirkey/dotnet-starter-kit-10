@@ -1,8 +1,9 @@
 using FSH.Framework.Shared.Identity.Authorization;
-using FSH.Module.Microfinance.Contracts.v1.AmlAlerts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using FSH.Module.Microfinance.Contracts.v1.AmlAlerts.GetAmlAlerts;
+using FSH.Module.Microfinance.Contracts.v1.AmlAlerts;
 
 namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.GetAmlAlerts;
 

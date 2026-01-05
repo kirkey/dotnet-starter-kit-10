@@ -3,8 +3,9 @@ using FSH.Module.Accounting.Contracts.v1.PatronageCapital;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.PatronageCapital.GetPatronageCapital;
 
-using FSH.Module.Accounting.Contracts.v1.PatronageCapital.GetListPatronageCapital;namespace FSH.Module.Accounting.Features.v1.PatronageCapital.GetPatronageCapital;
+namespace FSH.Module.Accounting.Features.v1.PatronageCapital.GetPatronageCapital;
 
 public class GetPatronageCapitalHandler(AccountingDbContext context) : IQueryHandler<GetPatronageCapitalQuery, PatronageCapitalDto>
 {

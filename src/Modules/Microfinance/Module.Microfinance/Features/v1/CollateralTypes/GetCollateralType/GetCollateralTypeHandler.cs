@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.CollateralTypes;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.CollateralTypes.GetCollateralType;
+using FSH.Module.Microfinance.Contracts.v1.CollateralTypes;
 
 namespace FSH.Module.Microfinance.Features.v1.CollateralTypes.GetCollateralType;
 

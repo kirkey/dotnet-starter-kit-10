@@ -1,8 +1,8 @@
 using FSH.Framework.Core.Exceptions;
-using FSH.Module.Microfinance.Contracts.v1.FeePayments;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.FeePayments.GetFeePayment;
+using FSH.Module.Microfinance.Contracts.v1.FeePayments;
 
 namespace FSH.Module.Microfinance.Features.v1.FeePayments.GetFeePayment;
 

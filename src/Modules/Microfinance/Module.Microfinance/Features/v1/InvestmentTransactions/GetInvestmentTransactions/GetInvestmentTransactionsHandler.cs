@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.InvestmentTransactions;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.InvestmentTransactions.GetInvestmentTransactions;
+using FSH.Module.Microfinance.Contracts.v1.InvestmentTransactions;
 
 namespace FSH.Module.Microfinance.Features.v1.InvestmentTransactions.GetInvestmentTransactions;
 

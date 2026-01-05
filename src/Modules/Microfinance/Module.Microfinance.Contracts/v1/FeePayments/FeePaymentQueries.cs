@@ -1,5 +1,3 @@
 namespace FSH.Module.Microfinance.Contracts.v1.FeePayments;
 
-public record GetFeePaymentQuery(Guid Id);
-public record GetFeePaymentsQuery(int Page, int PageSize, string? SearchTerm, bool? IsActive);
-public record FeePaymentsPagedResponse(List<FeePaymentSummaryDto> Items, int TotalCount, int Page, int PageSize);
+// Queries moved to nested Get* files to avoid ambiguous type names.

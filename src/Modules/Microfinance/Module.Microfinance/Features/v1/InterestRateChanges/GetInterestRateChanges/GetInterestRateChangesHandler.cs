@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges.GetInterestRateChanges;
+using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges;
 
 namespace FSH.Module.Microfinance.Features.v1.InterestRateChanges.GetInterestRateChanges;
 

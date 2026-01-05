@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.CustomerCases;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.CustomerCases.GetCustomerCases;
+using FSH.Module.Microfinance.Contracts.v1.CustomerCases;
 
 namespace FSH.Module.Microfinance.Features.v1.CustomerCases.GetCustomerCases;
 

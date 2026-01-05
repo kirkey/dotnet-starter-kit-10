@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
+
+using FSH.Module.Microfinance.Contracts.v1.Loans;
+
 namespace FSH.Module.Microfinance.Features.v1.Loans.CreateLoan;
 
 public static class CreateLoanEndpoint

@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.MarketingCampaigns.CreateMarketingCampaign;
+
 namespace FSH.Module.Microfinance.Features.v1.MarketingCampaigns.CreateMarketingCampaign;
 
 public class CreateMarketingCampaignValidator : AbstractValidator<CreateMarketingCampaignCommand>

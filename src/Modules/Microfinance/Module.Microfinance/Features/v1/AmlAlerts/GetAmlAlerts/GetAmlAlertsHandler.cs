@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.AmlAlerts;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.AmlAlerts.GetAmlAlerts;
+using FSH.Module.Microfinance.Contracts.v1.AmlAlerts;
 
 namespace FSH.Module.Microfinance.Features.v1.AmlAlerts.GetAmlAlerts;
 

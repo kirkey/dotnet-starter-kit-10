@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.LoanWriteOffs.CreateLoanWriteOff;
+
 namespace FSH.Module.Microfinance.Features.v1.LoanWriteOffs.CreateLoanWriteOff;
 
 public class CreateLoanWriteOffValidator : AbstractValidator<CreateLoanWriteOffCommand>

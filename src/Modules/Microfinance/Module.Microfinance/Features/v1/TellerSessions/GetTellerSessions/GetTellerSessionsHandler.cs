@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.TellerSessions;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.TellerSessions.GetTellerSessions;
+using FSH.Module.Microfinance.Contracts.v1.TellerSessions;
 
 namespace FSH.Module.Microfinance.Features.v1.TellerSessions.GetTellerSessions;
 

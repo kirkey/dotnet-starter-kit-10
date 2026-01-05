@@ -6,7 +6,7 @@ public class DeleteMemberHandler(MicrofinanceDbContext context) : ICommandHandle
 {
     public async ValueTask<Unit> Handle(DeleteMemberCommand command, CancellationToken ct)
     {
-        var member = await context.Members.FindAsync([command.MemberId], ct)
+        var member = await context.Members.FindAsync(command.Id, ct)
             ?? throw new NotFoundException("Member not found");
         context.Members.Remove(member);
         await context.SaveChangesAsync(ct);

@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.InsurancePolicys;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.InsurancePolicys.GetInsurancePolicys;
+using FSH.Module.Microfinance.Contracts.v1.InsurancePolicys;
 
 namespace FSH.Module.Microfinance.Features.v1.InsurancePolicys.GetInsurancePolicys;
 

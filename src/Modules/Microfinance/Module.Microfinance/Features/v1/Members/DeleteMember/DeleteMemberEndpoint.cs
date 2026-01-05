@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
+
+using FSH.Module.Microfinance.Contracts.v1.Members;
+
 namespace FSH.Module.Microfinance.Features.v1.Members.DeleteMember;
 
 public static class DeleteMemberEndpoint

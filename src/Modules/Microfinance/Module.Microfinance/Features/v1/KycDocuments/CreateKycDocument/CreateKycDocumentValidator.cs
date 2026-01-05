@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.KycDocuments.CreateKycDocument;
+
 namespace FSH.Module.Microfinance.Features.v1.KycDocuments.CreateKycDocument;
 
 public class CreateKycDocumentValidator : AbstractValidator<CreateKycDocumentCommand>

@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.CollectionActions.CreateCollectionAction;
+
 namespace FSH.Module.Microfinance.Features.v1.CollectionActions.CreateCollectionAction;
 
 public class CreateCollectionActionValidator : AbstractValidator<CreateCollectionActionCommand>

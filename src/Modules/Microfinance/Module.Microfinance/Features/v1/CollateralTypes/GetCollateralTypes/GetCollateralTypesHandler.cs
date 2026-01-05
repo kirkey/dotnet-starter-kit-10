@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.CollateralTypes;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.CollateralTypes.GetCollateralTypes;
+using FSH.Module.Microfinance.Contracts.v1.CollateralTypes;
 
 namespace FSH.Module.Microfinance.Features.v1.CollateralTypes.GetCollateralTypes;
 

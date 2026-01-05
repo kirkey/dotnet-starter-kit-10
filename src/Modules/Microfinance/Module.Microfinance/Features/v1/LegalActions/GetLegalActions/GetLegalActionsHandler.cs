@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.LegalActions;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.LegalActions.GetLegalActions;
+using FSH.Module.Microfinance.Contracts.v1.LegalActions;
 
 namespace FSH.Module.Microfinance.Features.v1.LegalActions.GetLegalActions;
 

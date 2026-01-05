@@ -1,8 +1,10 @@
 using FSH.Framework.Shared.Identity.Authorization;
-using FSH.Module.Microfinance.Contracts.v1.MarketingCampaigns;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+
+using FSH.Module.Microfinance.Contracts.v1.MarketingCampaigns.GetMarketingCampaigns;
+using FSH.Module.Microfinance.Contracts.v1.MarketingCampaigns;
 
 namespace FSH.Module.Microfinance.Features.v1.MarketingCampaigns.GetMarketingCampaigns;
 

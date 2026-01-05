@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.CreditBureauReports.CreateCreditBureauReport;
+
 namespace FSH.Module.Microfinance.Features.v1.CreditBureauReports.CreateCreditBureauReport;
 
 public class CreateCreditBureauReportValidator : AbstractValidator<CreateCreditBureauReportCommand>

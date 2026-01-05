@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.FeeWaivers.CreateFeeWaiver;
+
 namespace FSH.Module.Microfinance.Features.v1.FeeWaivers.CreateFeeWaiver;
 
 public class CreateFeeWaiverValidator : AbstractValidator<CreateFeeWaiverCommand>

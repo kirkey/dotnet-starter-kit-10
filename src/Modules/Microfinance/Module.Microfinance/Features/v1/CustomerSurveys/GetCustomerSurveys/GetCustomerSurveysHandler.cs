@@ -1,7 +1,7 @@
-using FSH.Module.Microfinance.Contracts.v1.CustomerSurveys;
 using FSH.Module.Microfinance.Data;
 
 using FSH.Module.Microfinance.Contracts.v1.CustomerSurveys.GetCustomerSurveys;
+using FSH.Module.Microfinance.Contracts.v1.CustomerSurveys;
 
 namespace FSH.Module.Microfinance.Features.v1.CustomerSurveys.GetCustomerSurveys;
 

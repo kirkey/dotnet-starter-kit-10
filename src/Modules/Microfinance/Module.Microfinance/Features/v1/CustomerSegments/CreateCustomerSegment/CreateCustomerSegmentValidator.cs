@@ -1,3 +1,5 @@
+using FSH.Module.Microfinance.Contracts.v1.CustomerSegments.CreateCustomerSegment;
+
 namespace FSH.Module.Microfinance.Features.v1.CustomerSegments.CreateCustomerSegment;
 
 public class CreateCustomerSegmentValidator : AbstractValidator<CreateCustomerSegmentCommand>

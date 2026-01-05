@@ -1,8 +1,10 @@
 using FSH.Framework.Shared.Identity.Authorization;
-using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+
+using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges.GetInterestRateChanges;
+using FSH.Module.Microfinance.Contracts.v1.InterestRateChanges;
 
 namespace FSH.Module.Microfinance.Features.v1.InterestRateChanges.GetInterestRateChanges;
 
