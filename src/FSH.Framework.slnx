@@ -23,6 +23,7 @@
     <Project Path="Modules/Auditing/Module.Auditing.Contracts/Module.Auditing.Contracts.csproj" />
     <Project Path="Modules/Auditing/Module.Auditing/Module.Auditing.csproj" Id="2764205b-8725-43a7-b499-67b98959ad50" />
   </Folder>
+  <Folder Name="/Modules/Catalog/" />
 
   <Folder Name="/Modules/Identity/">
     <Project Path="Modules/Identity/Module.Identity.Contracts/Module.Identity.Contracts.csproj" />
