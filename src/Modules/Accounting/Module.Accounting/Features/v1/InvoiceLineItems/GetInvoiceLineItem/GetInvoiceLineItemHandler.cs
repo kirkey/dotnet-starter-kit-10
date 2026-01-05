@@ -3,10 +3,9 @@ using FSH.Module.Accounting.Contracts.v1.InvoiceLineItems;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.InvoiceLineItems.GetInvoiceLineItem;
 
 namespace FSH.Module.Accounting.Features.v1.InvoiceLineItems.GetInvoiceLineItem;
-
-public record GetInvoiceLineItemQuery(Guid Id) : IQuery<InvoiceLineItemDto>;
 
 public class GetInvoiceLineItemHandler(AccountingDbContext context) : IQueryHandler<GetInvoiceLineItemQuery, InvoiceLineItemDto>
 {

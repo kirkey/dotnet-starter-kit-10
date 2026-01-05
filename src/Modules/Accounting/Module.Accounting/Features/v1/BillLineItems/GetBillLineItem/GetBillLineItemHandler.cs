@@ -3,10 +3,9 @@ using FSH.Module.Accounting.Contracts.v1.BillLineItems;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.BillLineItems.GetBillLineItem;
 
 namespace FSH.Module.Accounting.Features.v1.BillLineItems.GetBillLineItem;
-
-public record GetBillLineItemQuery(Guid Id) : IQuery<BillLineItemDto>;
 
 public class GetBillLineItemHandler(AccountingDbContext context) : IQueryHandler<GetBillLineItemQuery, BillLineItemDto>
 {

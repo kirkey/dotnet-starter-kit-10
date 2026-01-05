@@ -2,20 +2,9 @@ using FSH.Module.Accounting.Contracts.v1.InvoiceLineItems;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.InvoiceLineItems.GetListInvoiceLineItem;
 
 namespace FSH.Module.Accounting.Features.v1.InvoiceLineItems.GetInvoiceLineItems;
-
-public record GetInvoiceLineItemsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<InvoiceLineItemsPagedResponse>;
-
-public record InvoiceLineItemsPagedResponse(
-    List<InvoiceLineItemSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetInvoiceLineItemsHandler(AccountingDbContext context) 
     : IQueryHandler<GetInvoiceLineItemsQuery, InvoiceLineItemsPagedResponse>

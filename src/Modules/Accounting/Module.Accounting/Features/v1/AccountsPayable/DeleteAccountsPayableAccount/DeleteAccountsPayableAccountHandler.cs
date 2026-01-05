@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.AccountsPayable.DeleteAccountsPayableAccount;
 
 namespace FSH.Module.Accounting.Features.v1.AccountsPayable.DeleteAccountsPayableAccount;
-
-public record DeleteAccountsPayableAccountCommand(Guid Id) : ICommand;
 
 public class DeleteAccountsPayableAccountHandler(AccountingDbContext context) : ICommandHandler<DeleteAccountsPayableAccountCommand>
 {

@@ -2,20 +2,9 @@ using FSH.Module.Accounting.Contracts.v1.AccountsPayable;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.AccountsPayable.GetListAccountsPayableAccount;
 
 namespace FSH.Module.Accounting.Features.v1.AccountsPayable.GetAccountsPayable;
-
-public record GetAccountsPayableQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<AccountsPayablePagedResponse>;
-
-public record AccountsPayablePagedResponse(
-    List<AccountsPayableAccountSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetAccountsPayableHandler(AccountingDbContext context) 
     : IQueryHandler<GetAccountsPayableQuery, AccountsPayablePagedResponse>

@@ -3,10 +3,9 @@ using FSH.Module.Accounting.Contracts.v1.AccountsPayable;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using FSH.Module.Accounting.Contracts.v1.AccountsPayable.GetAccountsPayableAccount;
 
 namespace FSH.Module.Accounting.Features.v1.AccountsPayable.GetAccountsPayableAccount;
-
-public record GetAccountsPayableAccountQuery(Guid Id) : IQuery<AccountsPayableAccountDto>;
 
 public class GetAccountsPayableAccountHandler(AccountingDbContext context) : IQueryHandler<GetAccountsPayableAccountQuery, AccountsPayableAccountDto>
 {

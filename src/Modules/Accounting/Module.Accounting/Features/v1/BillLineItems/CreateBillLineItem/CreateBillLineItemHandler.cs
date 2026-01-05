@@ -2,10 +2,9 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.BillLineItems.CreateBillLineItem;
 
 namespace FSH.Module.Accounting.Features.v1.BillLineItems.CreateBillLineItem;
-
-public record CreateBillLineItemCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreateBillLineItemHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateBillLineItemCommand, Guid>

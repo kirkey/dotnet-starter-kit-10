@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.InvoiceLineItems.DeleteInvoiceLineItem;
 
 namespace FSH.Module.Accounting.Features.v1.InvoiceLineItems.DeleteInvoiceLineItem;
-
-public record DeleteInvoiceLineItemCommand(Guid Id) : ICommand;
 
 public class DeleteInvoiceLineItemHandler(AccountingDbContext context) : ICommandHandler<DeleteInvoiceLineItemCommand>
 {

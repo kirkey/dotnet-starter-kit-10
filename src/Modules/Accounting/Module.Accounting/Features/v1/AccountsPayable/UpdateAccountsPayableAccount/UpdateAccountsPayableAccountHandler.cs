@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.AccountsPayable.UpdateAccountsPayableAccount;
 
 namespace FSH.Module.Accounting.Features.v1.AccountsPayable.UpdateAccountsPayableAccount;
-
-public record UpdateAccountsPayableAccountCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdateAccountsPayableAccountHandler(AccountingDbContext context) : ICommandHandler<UpdateAccountsPayableAccountCommand, Guid>
 {

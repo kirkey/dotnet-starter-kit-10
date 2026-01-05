@@ -2,10 +2,9 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.AccountsPayable.CreateAccountsPayableAccount;
 
 namespace FSH.Module.Accounting.Features.v1.AccountsPayable.CreateAccountsPayableAccount;
-
-public record CreateAccountsPayableAccountCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreateAccountsPayableAccountHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateAccountsPayableAccountCommand, Guid>

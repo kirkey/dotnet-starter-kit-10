@@ -2,23 +2,9 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.InvoiceLineItems.CreateInvoiceLineItem;
 
 namespace FSH.Module.Accounting.Features.v1.InvoiceLineItems.CreateInvoiceLineItem;
-
-public record CreateInvoiceLineItemCommand(
-    Guid InvoiceId,
-    int LineNumber,
-    string ItemDescription,
-    Guid AccountId,
-    string AccountCode,
-    decimal Quantity,
-    decimal UnitPrice,
-    string? ItemCode = null,
-    string? UnitOfMeasure = null,
-    decimal DiscountPercent = 0,
-    string? TaxCode = null,
-    decimal TaxRate = 0,
-    string? Notes = null) : ICommand<Guid>;
 
 public class CreateInvoiceLineItemHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateInvoiceLineItemCommand, Guid>

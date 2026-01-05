@@ -1,23 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.InvoiceLineItems.UpdateInvoiceLineItem;
 
 namespace FSH.Module.Accounting.Features.v1.InvoiceLineItems.UpdateInvoiceLineItem;
-
-public record UpdateInvoiceLineItemCommand(
-    Guid Id,
-    int LineNumber,
-    string ItemDescription,
-    Guid AccountId,
-    string AccountCode,
-    decimal Quantity,
-    decimal UnitPrice,
-    string? ItemCode = null,
-    string? UnitOfMeasure = null,
-    decimal DiscountPercent = 0,
-    string? TaxCode = null,
-    decimal TaxRate = 0,
-    string? Notes = null) : ICommand<Guid>;
 
 public class UpdateInvoiceLineItemHandler(AccountingDbContext context) : ICommandHandler<UpdateInvoiceLineItemCommand, Guid>
 {

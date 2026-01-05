@@ -1,5 +1,6 @@
 using FSH.Framework.Shared.Identity.Authorization;
 using FSH.Module.Accounting.Contracts.v1.BillLineItems;
+using FSH.Module.Accounting.Contracts.v1.BillLineItems.GetBillLineItem;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
