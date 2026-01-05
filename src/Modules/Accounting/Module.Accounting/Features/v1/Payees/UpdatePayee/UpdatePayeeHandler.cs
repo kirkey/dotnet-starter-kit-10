@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Payees.UpdatePayee;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Payees.UpdatePayee;
-
-public record UpdatePayeeCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdatePayeeHandler(AccountingDbContext context) : ICommandHandler<UpdatePayeeCommand, Guid>
 {

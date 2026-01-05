@@ -1,11 +1,10 @@
 using FSH.Framework.Shared.Identity;
+using FSH.Module.Accounting.Contracts.v1.Vendors.CreateVendor;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Vendors.CreateVendor;
-
-public record CreateVendorCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreateVendorHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreateVendorCommand, Guid>

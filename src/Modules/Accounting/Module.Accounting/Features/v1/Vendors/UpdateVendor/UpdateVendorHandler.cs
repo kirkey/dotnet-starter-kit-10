@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Vendors.UpdateVendor;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Vendors.UpdateVendor;
-
-public record UpdateVendorCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdateVendorHandler(AccountingDbContext context) : ICommandHandler<UpdateVendorCommand, Guid>
 {

@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Payees.DeletePayee;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Payees.DeletePayee;
-
-public record DeletePayeeCommand(Guid Id) : ICommand;
 
 public class DeletePayeeHandler(AccountingDbContext context) : ICommandHandler<DeletePayeeCommand>
 {

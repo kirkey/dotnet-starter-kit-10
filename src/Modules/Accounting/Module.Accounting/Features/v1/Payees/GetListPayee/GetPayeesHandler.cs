@@ -1,21 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.Payees;
+using FSH.Module.Accounting.Contracts.v1.Payees.GetPayees;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Payees.GetPayees;
-
-public record GetPayeesQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<PayeesPagedResponse>;
-
-public record PayeesPagedResponse(
-    List<PayeeSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetPayeesHandler(AccountingDbContext context) 
     : IQueryHandler<GetPayeesQuery, PayeesPagedResponse>

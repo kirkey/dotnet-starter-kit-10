@@ -1,21 +1,10 @@
 using FSH.Module.Accounting.Contracts.v1.Vendors;
+using FSH.Module.Accounting.Contracts.v1.Vendors.GetVendors;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Vendors.GetVendors;
-
-public record GetVendorsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null) : IQuery<VendorsPagedResponse>;
-
-public record VendorsPagedResponse(
-    List<VendorSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetVendorsHandler(AccountingDbContext context) 
     : IQueryHandler<GetVendorsQuery, VendorsPagedResponse>

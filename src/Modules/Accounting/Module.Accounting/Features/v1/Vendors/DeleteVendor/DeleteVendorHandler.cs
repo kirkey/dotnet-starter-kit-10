@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
+using FSH.Module.Accounting.Contracts.v1.Vendors.DeleteVendor;
 using FSH.Module.Accounting.Data;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Vendors.DeleteVendor;
-
-public record DeleteVendorCommand(Guid Id) : ICommand;
 
 public class DeleteVendorHandler(AccountingDbContext context) : ICommandHandler<DeleteVendorCommand>
 {

@@ -1,16 +1,11 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.Customers;
+using FSH.Module.Accounting.Contracts.v1.Customers.GetCustomer;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Customers.GetCustomer;
-
-/// <summary>
-/// Query to retrieve a single customer by ID.
-/// </summary>
-/// <param name="Id">Customer ID (Guid) to retrieve</param>
-public record GetCustomerQuery(Guid Id) : IQuery<CustomerDto>;
 
 /// <summary>
 /// Handler for retrieving a single customer by ID with DTO projection.

@@ -1,11 +1,10 @@
 using FSH.Framework.Shared.Identity;
+using FSH.Module.Accounting.Contracts.v1.Payees.CreatePayee;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Payees.CreatePayee;
-
-public record CreatePayeeCommand(string Name, string? Description) : ICommand<Guid>;
 
 public class CreatePayeeHandler(AccountingDbContext context, ICurrentUser currentUser) 
     : ICommandHandler<CreatePayeeCommand, Guid>

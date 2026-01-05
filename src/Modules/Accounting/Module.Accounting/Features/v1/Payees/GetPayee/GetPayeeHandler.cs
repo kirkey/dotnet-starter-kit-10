@@ -1,12 +1,11 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.Payees;
+using FSH.Module.Accounting.Contracts.v1.Payees.GetPayee;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.Payees.GetPayee;
-
-public record GetPayeeQuery(Guid Id) : IQuery<PayeeDto>;
 
 public class GetPayeeHandler(AccountingDbContext context) : IQueryHandler<GetPayeeQuery, PayeeDto>
 {

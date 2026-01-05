@@ -1,16 +1,10 @@
 using FSH.Framework.Shared.Identity;
+using FSH.Module.Accounting.Contracts.v1.Customers.CreateCustomer;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
 
 namespace FSH.Module.Accounting.Features.v1.Customers.CreateCustomer;
-
-/// <summary>
-/// Command to create a new customer entity.
-/// </summary>
-/// <param name="Name">Customer business name or individual name (required, unique per tenant)</param>
-/// <param name="Description">Optional customer description, notes, or additional information</param>
-public record CreateCustomerCommand(string Name, string? Description) : ICommand<Guid>;
 
 /// <summary>
 /// Handler for creating a new customer using the Customer aggregate factory method.

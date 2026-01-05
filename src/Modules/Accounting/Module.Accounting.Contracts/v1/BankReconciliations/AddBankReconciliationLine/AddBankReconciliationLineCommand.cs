@@ -5,4 +5,10 @@ public sealed record AddBankReconciliationLineCommand(
     Guid TransactionId,
     DateTime TransactionDate,
     decimal Amount,
-    string? Description = null) : ICommand<Guid>;
+    string? Description = null) : ICommand<Guid>
+{
+    public override bool Equals(object obj)
+    {
+        return Equals(obj as AddBankReconciliationLineCommand);
+    }
+}
