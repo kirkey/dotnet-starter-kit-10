@@ -1,6 +1,6 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
-using FSH.Module.Accounting.Contracts.v1.GeneralLedger;
+using FSH.Module.Accounting.Contracts.v1.GeneralLedger.RecalculateBalances;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 

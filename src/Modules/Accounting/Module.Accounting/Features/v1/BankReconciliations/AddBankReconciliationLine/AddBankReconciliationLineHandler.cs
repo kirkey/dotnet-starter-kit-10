@@ -2,6 +2,7 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using FSH.Module.Accounting.Contracts.v1.BankReconciliations;
+using FSH.Module.Accounting.Contracts.v1.BankReconciliations.AddBankReconciliationLine;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 

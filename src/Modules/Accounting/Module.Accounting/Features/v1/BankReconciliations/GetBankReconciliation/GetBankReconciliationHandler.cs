@@ -1,16 +1,12 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Contracts.v1.BankReconciliations;
+using FSH.Module.Accounting.Contracts.v1.BankReconciliations.GetBankReconciliation;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.BankReconciliations.GetBankReconciliation;
 
-/// <summary>
-/// Query to retrieve a single bank reconciliation by Id with full details.
-/// </summary>
-/// <param name="Id">BankReconciliation ID (Guid) to retrieve</param>
-public record GetBankReconciliationQuery(Guid Id) : IQuery<BankReconciliationDto>;
 
 /// <summary>
 /// Handler for retrieving a single BankReconciliation with DTO projection.

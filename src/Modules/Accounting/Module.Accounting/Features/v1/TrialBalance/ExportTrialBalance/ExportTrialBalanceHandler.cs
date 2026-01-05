@@ -3,16 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Accounting.Application.Reports.TrialBalance.v1.Services;
 using Microsoft.EntityFrameworkCore;
-using FSH.Module.Accounting.Contracts.v1.TrialBalance;
+using FSH.Module.Accounting.Contracts.v1.TrialBalance.ExportTrialBalance;
 
 namespace FSH.Module.Accounting.Features.v1.TrialBalance.ExportTrialBalance;
-
-/// <summary>
-/// Query to export a Trial Balance report to an external format/storage.
-/// </summary>
-/// <param name="Id">TrialBalance entity Id to export</param>
-public record ExportTrialBalanceQuery(Guid Id, string Format = "pdf") : IQuery<ExportTrialBalanceResult>;
-
 /// <summary>
 /// Handler for exporting Trial Balance reports using the trial balance report service.
 /// </summary>

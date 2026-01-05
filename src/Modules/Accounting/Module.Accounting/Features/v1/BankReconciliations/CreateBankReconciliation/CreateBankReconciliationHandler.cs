@@ -2,25 +2,10 @@ using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Domain;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.BankReconciliations.CreateBankReconciliation;
 
 namespace FSH.Module.Accounting.Features.v1.BankReconciliations.CreateBankReconciliation;
 
-/// <summary>
-/// Command to start a new bank reconciliation for a bank account and statement period.
-/// </summary>
-/// <param name="ReconciliationNumber">Unique reconciliation reference number (required)</param>
-/// <param name="BankAccountId">Bank account ID to reconcile (required)</param>
-/// <param name="StatementDate">Bank statement date for reconciliation (required)</param>
-/// <param name="StatementBalance">Ending balance from bank statement (required)</param>
-/// <param name="BookBalance">Ledger book balance to compare against (required)</param>
-/// <param name="Description">Optional reconciliation description or notes</param>
-public record CreateBankReconciliationCommand(
-    string ReconciliationNumber,
-    Guid BankAccountId,
-    DateTime StatementDate,
-    decimal StatementBalance,
-    decimal BookBalance,
-    string? Description = null) : ICommand<Guid>;
 
 /// <summary>
 /// Handler for creating a BankReconciliation aggregate and persisting it.

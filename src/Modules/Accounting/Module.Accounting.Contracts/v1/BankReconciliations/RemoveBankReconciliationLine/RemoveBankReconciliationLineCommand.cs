@@ -1,9 +1,7 @@
-namespace FSH.Module.Accounting.Contracts.v1.BankReconciliations;
+using Mediator;
+
+namespace FSH.Module.Accounting.Contracts.v1.BankReconciliations.RemoveBankReconciliationLine;
 
 public sealed record RemoveBankReconciliationLineCommand(Guid BankReconciliationLineId) : ICommand
 {
-    public override bool Equals(object obj)
-    {
-        return Equals(obj as RemoveBankReconciliationLineCommand);
-    }
 }

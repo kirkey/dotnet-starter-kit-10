@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.Accruals.UpdateAccrual;
 
 namespace FSH.Module.Accounting.Features.v1.Accruals.UpdateAccrual;
-
-public record UpdateAccrualCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdateAccrualHandler(AccountingDbContext context) : ICommandHandler<UpdateAccrualCommand, Guid>
 {

@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.AccountsReceivable.UpdateAccountsReceivableAccount;
 
 namespace FSH.Module.Accounting.Features.v1.AccountsReceivable.UpdateAccountsReceivableAccount;
-
-public record UpdateAccountsReceivableAccountCommand(Guid Id, string Name, string? Description) : ICommand<Guid>;
 
 public class UpdateAccountsReceivableAccountHandler(AccountingDbContext context) : ICommandHandler<UpdateAccountsReceivableAccountCommand, Guid>
 {

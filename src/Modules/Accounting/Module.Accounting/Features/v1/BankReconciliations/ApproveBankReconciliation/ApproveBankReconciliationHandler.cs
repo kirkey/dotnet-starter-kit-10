@@ -2,15 +2,11 @@ using FSH.Framework.Core.Exceptions;
 using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.BankReconciliations.ApproveBankReconciliation;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.BankReconciliations.ApproveBankReconciliation;
 
-/// <summary>
-/// Command to approve and finalize a bank reconciliation, applying reconciled items.
-/// </summary>
-/// <param name="Id">BankReconciliation ID to approve</param>
-public record ApproveBankReconciliationCommand(Guid Id) : ICommand;
 
 /// <summary>
 /// Handler for approving a bank reconciliation. This performs the reconciliation operation and records the approver.

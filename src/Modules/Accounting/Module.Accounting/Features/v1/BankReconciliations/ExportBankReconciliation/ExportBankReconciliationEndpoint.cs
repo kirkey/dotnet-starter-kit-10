@@ -1,5 +1,6 @@
 // TODO: Implement Export endpoint for BankReconciliation
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Module.Accounting.Contracts.v1.BankReconciliations.ExportBankReconciliation;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

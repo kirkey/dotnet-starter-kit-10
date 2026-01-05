@@ -2,7 +2,7 @@ using FSH.Module.Accounting.Contracts.v1.AccountsPayable;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
-using FSH.Module.Accounting.Contracts.v1.AccountsPayable.GetListAccountsPayableAccount;
+using FSH.Module.Accounting.Contracts.v1.AccountsPayable.GetAccountsPayable;
 
 namespace FSH.Module.Accounting.Features.v1.AccountsPayable.GetAccountsPayable;
 

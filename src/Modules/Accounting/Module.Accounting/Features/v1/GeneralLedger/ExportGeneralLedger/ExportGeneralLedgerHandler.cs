@@ -3,16 +3,9 @@ using FSH.Module.Accounting.Data;
 using Mediator;
 using Accounting.Application.Reports.GeneralLedger.v1.Services;
 using Microsoft.EntityFrameworkCore;
-using FSH.Module.Accounting.Contracts.v1.GeneralLedger;
+using FSH.Module.Accounting.Contracts.v1.GeneralLedger.ExportGeneralLedger;
 
 namespace FSH.Module.Accounting.Features.v1.GeneralLedger.ExportGeneralLedger;
-
-/// <summary>
-/// Query to export the General Ledger report for a specific GL account (full history or by date range).
-/// </summary>
-/// <param name="Id">GeneralLedger account Id to export</param>
-public record ExportGeneralLedgerQuery(Guid Id, string Format = "pdf") : IQuery<ExportGeneralLedgerResult>;
-
 /// <summary>
 /// Handler for exporting General Ledger data using the IGeneralLedgerReportService.
 /// </summary>

@@ -1,4 +1,6 @@
-namespace FSH.Module.Accounting.Contracts.v1.BankReconciliations;
+using Mediator;
+
+namespace FSH.Module.Accounting.Contracts.v1.BankReconciliations.AddBankReconciliationLine;
 
 public sealed record AddBankReconciliationLineCommand(
     Guid BankReconciliationId,
@@ -7,8 +9,4 @@ public sealed record AddBankReconciliationLineCommand(
     decimal Amount,
     string? Description = null) : ICommand<Guid>
 {
-    public override bool Equals(object obj)
-    {
-        return Equals(obj as AddBankReconciliationLineCommand);
-    }
 }

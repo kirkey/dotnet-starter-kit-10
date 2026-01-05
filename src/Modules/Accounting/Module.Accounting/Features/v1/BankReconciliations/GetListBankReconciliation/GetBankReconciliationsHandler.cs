@@ -1,25 +1,11 @@
 using FSH.Module.Accounting.Contracts.v1.BankReconciliations;
+using FSH.Module.Accounting.Contracts.v1.BankReconciliations.GetListBankReconciliation;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace FSH.Module.Accounting.Features.v1.BankReconciliations.GetBankReconciliations;
 
-public record GetBankReconciliationsQuery(
-    int Page = 1,
-    int PageSize = 10,
-    string? SearchTerm = null,
-    bool? IsActive = null,
-    Guid? BankAccountId = null,
-    string? Status = null,
-    DateTime? FromDate = null,
-    DateTime? ToDate = null) : IQuery<BankReconciliationsPagedResponse>;
-
-public record BankReconciliationsPagedResponse(
-    List<BankReconciliationSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 /// <summary>
 /// Handler for retrieving a paginated, filtered list of bank reconciliations.

@@ -1,10 +1,9 @@
 using FSH.Framework.Core.Exceptions;
 using FSH.Module.Accounting.Data;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.AccountsReceivable.DeleteAccountsReceivableAccount;
 
 namespace FSH.Module.Accounting.Features.v1.AccountsReceivable.DeleteAccountsReceivableAccount;
-
-public record DeleteAccountsReceivableAccountCommand(Guid Id) : ICommand;
 
 public class DeleteAccountsReceivableAccountHandler(AccountingDbContext context) : ICommandHandler<DeleteAccountsReceivableAccountCommand>
 {

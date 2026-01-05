@@ -1,11 +1,7 @@
-namespace FSH.Module.Accounting.Contracts.v1.GeneralLedger;
+using Mediator;
 
-public sealed record ExportGeneralLedgerQuery(Guid Id, string Format = "pdf") : IQuery<ExportGeneralLedgerResult>
-{
-    public override bool Equals(object obj)
-    {
-        return Equals(obj as ExportGeneralLedgerQuery);
-    }
-}
+namespace FSH.Module.Accounting.Contracts.v1.GeneralLedger.ExportGeneralLedger;
+
+public sealed record ExportGeneralLedgerQuery(Guid Id, string Format = "pdf") : IQuery<ExportGeneralLedgerResult>;
 
 public sealed record ExportGeneralLedgerResult(byte[] Data, string ContentType, string FileName);

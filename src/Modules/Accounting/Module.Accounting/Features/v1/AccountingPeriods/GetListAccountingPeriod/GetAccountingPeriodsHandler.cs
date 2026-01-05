@@ -7,11 +7,6 @@ using FSH.Module.Accounting.Contracts.v1.AccountingPeriods.GetListAccountingPeri
 
 namespace FSH.Module.Accounting.Features.v1.AccountingPeriods.GetAccountingPeriods;
 
-public record AccountingPeriodsPagedResponse(
-    List<AccountingPeriodSummaryDto> Items,
-    int TotalCount,
-    int Page,
-    int PageSize);
 
 public class GetAccountingPeriodsHandler(AccountingDbContext context) 
     : IQueryHandler<GetAccountingPeriodsQuery, AccountingPeriodsPagedResponse>
