@@ -1,6 +1,7 @@
 // TODO: Implement Reverse endpoint for FiscalPeriodClose
 using FSH.Framework.Shared.Identity.Authorization;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.FiscalPeriodClose.ReverseFiscalPeriodClose;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;

@@ -41,13 +41,3 @@ public record ChartOfAccountsPagedResponse(
     int Page,
     int PageSize);
 
-/// <summary>
-/// Summary DTO for Chart of Account in list view.
-/// </summary>
-public record ChartOfAccountSummaryDto(
-    Guid Id,
-    string AccountCode,
-    string AccountName,
-    string AccountType,
-    decimal Balance,
-    bool IsActive);

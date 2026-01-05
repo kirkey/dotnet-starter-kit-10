@@ -1,4 +1,3 @@
-using FSH.Module.Accounting.Contracts.v1.ChartOfAccounts;
 using FSH.Module.Accounting.Contracts.v1.ChartOfAccounts.GetChartOfAccounts;
 using FSH.Module.Accounting.Data;
 using Mediator;

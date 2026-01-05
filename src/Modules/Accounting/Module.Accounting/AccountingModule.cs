@@ -207,6 +207,13 @@ using FSH.Module.Accounting.Features.v1.RecurringJournalEntries.DeleteRecurringJ
 using FSH.Module.Accounting.Features.v1.RecurringJournalEntries.GenerateRecurringJournalEntry;
 using FSH.Module.Accounting.Features.v1.RecurringJournalEntries.ApproveRecurringJournalEntry;
 
+// InterconnectionAgreements endpoints
+using FSH.Module.Accounting.Features.v1.InterconnectionAgreements.CreateInterconnectionAgreement;
+using FSH.Module.Accounting.Features.v1.InterconnectionAgreements.GetInterconnectionAgreement;
+using FSH.Module.Accounting.Features.v1.InterconnectionAgreements.GetInterconnectionAgreements;
+using FSH.Module.Accounting.Features.v1.InterconnectionAgreements.UpdateInterconnectionAgreement;
+using FSH.Module.Accounting.Features.v1.InterconnectionAgreements.DeleteInterconnectionAgreement;
+
 // FixedAssets endpoints
 using FSH.Module.Accounting.Features.v1.FixedAssets.CreateFixedAsset;
 using FSH.Module.Accounting.Features.v1.FixedAssets.GetFixedAsset;

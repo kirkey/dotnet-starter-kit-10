@@ -21,13 +21,3 @@ public record JournalEntriesPagedResponse(
     int Page,
     int PageSize);
 
-/// <summary>
-/// Summary DTO for Journal Entry in list view.
-/// </summary>
-public record JournalEntrySummaryDto(
-    Guid Id,
-    string EntryNumber,
-    DateTime EntryDate,
-    string EntryType,
-    bool IsPosted,
-    int LineCount);
