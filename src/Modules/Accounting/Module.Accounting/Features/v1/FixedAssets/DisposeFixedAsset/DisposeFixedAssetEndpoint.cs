@@ -1,5 +1,6 @@
 // TODO: Implement Dispose endpoint for FixedAsset
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Module.Accounting.Contracts.v1.FixedAssets.DisposeFixedAsset;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

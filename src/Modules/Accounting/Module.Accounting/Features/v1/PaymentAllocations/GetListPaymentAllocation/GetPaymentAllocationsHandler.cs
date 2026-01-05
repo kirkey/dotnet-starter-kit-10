@@ -1,4 +1,5 @@
 using FSH.Module.Accounting.Contracts.v1.PaymentAllocations.GetListPaymentAllocation;
+using FSH.Module.Accounting.Contracts.v1.PaymentAllocations;
 using FSH.Module.Accounting.Data;
 using Mediator;
 using Microsoft.EntityFrameworkCore;

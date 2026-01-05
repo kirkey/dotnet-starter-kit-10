@@ -1,6 +1,7 @@
 using FSH.Framework.Shared.Identity;
 using FSH.Module.Accounting.Data;
 using FSH.Module.Accounting.Contracts.v1.PostingBatches.CreatePostingBatch;
+using FSH.Module.Accounting.Domain;
 using FSH.Module.Accounting.Data;
 using Mediator;
 

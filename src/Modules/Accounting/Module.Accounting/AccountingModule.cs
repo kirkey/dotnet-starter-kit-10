@@ -113,6 +113,11 @@ using FSH.Module.Accounting.Features.v1.Banks.DeleteBank;
 using FSH.Module.Accounting.Features.v1.BankReconciliations.CreateBankReconciliation;
 using FSH.Module.Accounting.Features.v1.BankReconciliations.GetBankReconciliation;
 using FSH.Module.Accounting.Features.v1.BankReconciliations.GetBankReconciliations;
+using FSH.Module.Accounting.Features.v1.BankReconciliations.ApproveBankReconciliation;
+using FSH.Module.Accounting.Features.v1.BankReconciliations.ExportBankReconciliation;
+using FSH.Module.Accounting.Features.v1.BankReconciliations.AddBankReconciliationLine;
+using FSH.Module.Accounting.Features.v1.BankReconciliations.RemoveBankReconciliationLine;
+using FSH.Module.Accounting.Features.v1.Checks.IssueCheck;
 
 // Checks
 using FSH.Module.Accounting.Features.v1.Checks.CreateCheck;
@@ -172,6 +177,12 @@ using FSH.Module.Accounting.Features.v1.PostingBatches.ApprovePostingBatch;
 using FSH.Module.Accounting.Features.v1.PostingBatches.RejectPostingBatch;
 using FSH.Module.Accounting.Features.v1.PostingBatches.PostPostingBatch;
 
+// General Ledger endpoints
+using FSH.Module.Accounting.Features.v1.GeneralLedger.GetGeneralLedger;
+using FSH.Module.Accounting.Features.v1.GeneralLedger.GetListGeneralLedger;
+using FSH.Module.Accounting.Features.v1.GeneralLedger.ExportGeneralLedger;
+using FSH.Module.Accounting.Features.v1.GeneralLedger.RecalculateBalances;
+
 // Budgets endpoints
 using FSH.Module.Accounting.Features.v1.Budgets.CreateBudget;
 using FSH.Module.Accounting.Features.v1.Budgets.GetBudget;
@@ -179,6 +190,13 @@ using FSH.Module.Accounting.Features.v1.Budgets.GetListBudget;
 using FSH.Module.Accounting.Features.v1.Budgets.UpdateBudget;
 using FSH.Module.Accounting.Features.v1.Budgets.DeleteBudget;
 using FSH.Module.Accounting.Features.v1.Budgets.ApproveBudget;
+
+// BudgetDetails endpoints (feature usings)
+using FSH.Module.Accounting.Features.v1.BudgetDetails.CreateBudgetDetail;
+using FSH.Module.Accounting.Features.v1.BudgetDetails.GetBudgetDetail;
+using FSH.Module.Accounting.Features.v1.BudgetDetails.GetListBudgetDetail;
+using FSH.Module.Accounting.Features.v1.BudgetDetails.UpdateBudgetDetail;
+using FSH.Module.Accounting.Features.v1.BudgetDetails.DeleteBudgetDetail;
 
 // RecurringJournalEntries endpoints
 using FSH.Module.Accounting.Features.v1.RecurringJournalEntries.CreateRecurringJournalEntry;
@@ -293,6 +311,13 @@ using FSH.Module.Accounting.Features.v1.Accruals.GetAccrual;
 using FSH.Module.Accounting.Features.v1.Accruals.GetAccruals;
 using FSH.Module.Accounting.Features.v1.Accruals.UpdateAccrual;
 using FSH.Module.Accounting.Features.v1.Accruals.DeleteAccrual;
+
+// Accounts Payable endpoints
+using FSH.Module.Accounting.Features.v1.AccountsPayable.CreateAccountsPayableAccount;
+using FSH.Module.Accounting.Features.v1.AccountsPayable.GetAccountsPayableAccount;
+using FSH.Module.Accounting.Features.v1.AccountsPayable.GetAccountsPayable;
+using FSH.Module.Accounting.Features.v1.AccountsPayable.UpdateAccountsPayableAccount;
+using FSH.Module.Accounting.Features.v1.AccountsPayable.DeleteAccountsPayableAccount;
 
 // DeferredRevenue endpoints
 using FSH.Module.Accounting.Features.v1.DeferredRevenue.CreateDeferredRevenue;
@@ -471,7 +496,7 @@ public class AccountingModule : IModule
         RouteGroupBuilder fiscalCloseGroup = group.MapGroup("/fiscalperiodclose");
         fiscalCloseGroup.MapCreateFiscalPeriodCloseEndpoint();
         fiscalCloseGroup.MapGetFiscalPeriodClosesEndpoint();
-        fiscalCloseGroup.MapGetFiscalPeriodCloseEndpoint();
+
         fiscalCloseGroup.MapInitiateFiscalPeriodCloseEndpoint();
         fiscalCloseGroup.MapCompleteFiscalPeriodCloseEndpoint();
         fiscalCloseGroup.MapReverseFiscalPeriodCloseEndpoint();
@@ -507,6 +532,9 @@ public class AccountingModule : IModule
         budgetDetailsGroup.MapGetBudgetDetailsEndpoint();
         budgetDetailsGroup.MapUpdateBudgetDetailEndpoint();
         budgetDetailsGroup.MapDeleteBudgetDetailEndpoint();
+
+        // Ensure BudgetDetails feature usings are available (endpoints defined in these namespaces)
+        // (USING LINES ADDED AT TOP TO IMPORT feature endpoint extensions)
 
         // ========================================
         // AP/AR Endpoints

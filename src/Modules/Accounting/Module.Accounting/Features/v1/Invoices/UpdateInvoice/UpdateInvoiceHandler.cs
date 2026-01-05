@@ -61,24 +61,22 @@ public class UpdateInvoiceHandler(AccountingDbContext context) : ICommandHandler
             ?? throw new NotFoundException("Invoice not found");
         
         entity.Update(
-            command.InvoiceNumber,
-            command.InvoiceDate,
-            command.DueDate,
-            command.BillToName,
-            command.CustomerId,
-            command.VendorId,
-            command.BillToAddress,
-            command.ShipToName,
-            command.ShipToAddress,
-            command.PaymentTerms,
-            command.TaxCode,
-            command.CurrencyCode,
-            command.ExchangeRate,
-            command.ReferenceNumber,
-            command.PurchaseOrderNumber,
-            command.Description,
-            command.Notes,
-            command.Terms);
+            invoiceNumber: command.InvoiceNumber,
+            invoiceDate: command.InvoiceDate,
+            dueDate: command.DueDate,
+            billToName: command.BillToName,
+            billToAddress: command.BillToAddress,
+            shipToName: command.ShipToName,
+            shipToAddress: command.ShipToAddress,
+            paymentTerms: command.PaymentTerms,
+            taxCode: command.TaxCode,
+            currencyCode: command.CurrencyCode,
+            exchangeRate: command.ExchangeRate,
+            referenceNumber: command.ReferenceNumber,
+            purchaseOrderNumber: command.PurchaseOrderNumber,
+            description: command.Description,
+            notes: command.Notes,
+            terms: command.Terms);
         
         await context.SaveChangesAsync(ct);
         return entity.Id;

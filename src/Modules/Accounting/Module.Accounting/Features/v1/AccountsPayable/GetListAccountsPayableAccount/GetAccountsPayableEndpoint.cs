@@ -21,12 +21,12 @@ public static class GetAccountsPayableEndpoint
             CancellationToken ct) =>
         {
             var result = await mediator.Send(
-                new GetAccountsPayableQuery(page, pageSize, searchTerm, isActive), ct);
+                new GetAccountsPayableAccountsQuery(page, pageSize, searchTerm, isActive), ct);
             return TypedResults.Ok(result);
         })
         .WithName(nameof(GetAccountsPayableEndpoint))
         .WithSummary("Get paginated list of AccountsPayable")
-        .Produces<AccountsPayablePagedResponse>(StatusCodes.Status200OK)
+        .Produces<AccountsPayableAccountsPagedResponse>(StatusCodes.Status200OK)
         .ProducesValidationProblem()
         .RequirePermission(AccountingPermissionConstants.AccountsPayable.Search);
     }

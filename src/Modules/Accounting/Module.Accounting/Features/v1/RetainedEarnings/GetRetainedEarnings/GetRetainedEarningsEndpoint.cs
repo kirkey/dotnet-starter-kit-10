@@ -1,5 +1,6 @@
 using FSH.Framework.Shared.Identity.Authorization;
 using FSH.Module.Accounting.Contracts.v1.RetainedEarnings;
+using FSH.Module.Accounting.Contracts.v1.RetainedEarnings.GetRetainedEarnings;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

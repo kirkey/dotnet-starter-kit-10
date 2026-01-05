@@ -1,6 +1,7 @@
 // TODO: Implement Reject endpoint for PostingBatch
 using FSH.Framework.Shared.Identity.Authorization;
 using Mediator;
+using FSH.Module.Accounting.Contracts.v1.PostingBatches.RejectPostingBatch;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
