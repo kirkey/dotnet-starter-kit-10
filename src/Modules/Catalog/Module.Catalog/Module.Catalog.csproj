@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>FSH.Module.Catalog</RootNamespace>
+		<AssemblyName>FSH.Module.Catalog</AssemblyName>
+		<PackageId>FullStackHero.Modules.Catalog</PackageId>
+		<NoWarn>$(NoWarn);CA1031;CA1812;CA1859;S3267;S1135</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Persistence\Persistence.csproj" />
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Web\Web.csproj" />
+	  <ProjectReference Include="..\..\..\BuildingBlocks\Eventing\Eventing.csproj" />
+	  <ProjectReference Include="..\Module.Catalog.Contracts\Module.Catalog.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>
