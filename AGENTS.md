@@ -1,78 +1,51 @@
 # FullStackHero .NET Starter Kit
 
-> A production-ready modular .NET 10 monolith + two React 19 apps, built for enterprise SaaS.
+> Modular .NET 10 monolith (Vertical Slice) + two React 19 apps — multi-tenant SaaS.
 
-This file is the canonical guide for **all** AI coding tools (Claude Code, Gemini CLI, Cursor, Codex, …).
-`CLAUDE.md` and `GEMINI.md` are thin bridges that import this file — edit conventions **here**, not there.
+This file is canonical for **all** AI tools. `CLAUDE.md` / `GEMINI.md` just import it — edit here, not there.
+**Before touching an area, read its rule file** in the index below. Rules beat memory.
 
-This file is the map. Detailed conventions live in `.agents/rules/` and are read on demand — **read the
-relevant rule file before working in that area** (see the index below). Keep this file lean.
+## Stack (non-obvious bits)
 
-## What this is
-
-A **modular monolith** (Vertical Slice Architecture) backend that ships with two **React + Vite**
-front-ends and a CLI. Multitenancy, auth, auditing, billing, files, chat and more are first-class.
-
-- **Backend** — .NET 10, EF Core 10, PostgreSQL, Redis, JWT + ASP.NET Identity, Finbuckle multitenancy,
-  Hangfire, OpenAPI/Scalar, Serilog + OpenTelemetry, .NET Aspire.
-- **Frontends** — `clients/admin` (operator-facing) and `clients/dashboard` (tenant-facing): React 19,
-  Vite 7, TypeScript, TanStack Query v5, React Router 7, Radix + Tailwind v4 (shadcn-style), SignalR/SSE.
+- Backend: Minimal APIs + **Mediator 3.x source-gen CQRS (not MediatR)** · FluentValidation · EF Core 10 / PostgreSQL · Finbuckle multitenancy · HybridCache on Valkey · Hangfire · OpenAPI + Scalar · Serilog + OpenTelemetry.
+- Frontend (`clients/admin` operator, `clients/dashboard` tenant): React 19 + Vite 7 + TS · TanStack Query v5 · React Router 7 · Radix + Tailwind v4 · SignalR/SSE. **Runtime `/config.json`, not `VITE_*`** (`VITE_API_BASE_URL` is dev-proxy target only). API client is **hand-written `apiFetch`, no codegen**. Playwright suites are **route-mocked, no backend**.
 
 ## Repo map
 
 | Path | What |
 |------|------|
-| `src/BuildingBlocks/` | Shared framework libraries (Core, Persistence, Web, Caching, Eventing, Storage, Quota…). **Protected — see below.** |
-| `src/Modules/{Name}/` | Bounded contexts. Each has a runtime project + a `.Contracts` project (its only public API). |
-| `src/Host/FSH.Starter.Api` | Composition-root Web API host. |
-| `src/Host/FSH.Starter.AppHost` | .NET Aspire orchestrator (Postgres, Redis, MinIO, migrator, API, **both React apps**). |
-| `src/Host/FSH.Starter.DbMigrator` | One-shot migrate/seed runner. DB is **not** migrated at API startup. |
-| `src/Host/FSH.Starter.Migrations.PostgreSQL` | All EF migrations, organized per-module by folder. |
-| `src/Tests/` | Per-module tests, `Architecture.Tests` (NetArchTest), `Integration.Tests` (Testcontainers). |
-| `src/Tools/CLI` | The `fsh` CLI (Spectre.Console). |
-| `clients/admin`, `clients/dashboard` | The two React apps. |
-| `deploy/` | Infra (docker, terraform, dokploy). |
+| `src/BuildingBlocks/` | Shared framework. **Protected — approval required to touch.** |
+| `src/Modules/{Name}/` | Bounded context = runtime project + `.Contracts` project (its only public API). |
+| `src/Host/FSH.Starter.Api` | Composition root. DB is **not** migrated at startup. |
+| `src/Host/FSH.Starter.AppHost` | Aspire orchestrator: Postgres, Valkey, MinIO, migrator, API, both React apps. |
+| `src/Host/FSH.Starter.DbMigrator` | One-shot migrate/seed runner (verbs below). |
+| `src/Host/FSH.Starter.Migrations.PostgreSQL` | All migrations, per-module folders, per-module snapshots. |
+| `src/Tests/` | `{Module}.Tests` units · `Architecture.Tests` (NetArchTest) · `Integration.Tests` (Testcontainers, needs Docker). |
+| `src/Tools/CLI` · `clients/*` · `deploy/` | `fsh` CLI · the two React apps · docker + terraform. |
 
-## Tech stack
-
-| Backend | | Frontend | |
-|---|---|---|---|
-| Framework | .NET 10 / C# latest | Framework | React 19 + Vite 7 + TS 5.x |
-| CQRS | Mediator 3.x (source-gen) | Data | TanStack Query v5 |
-| Validation | FluentValidation 12.x | Routing | React Router 7 |
-| ORM / DB | EF Core 10 / PostgreSQL (Npgsql) | UI | Radix + Tailwind v4 + CVA (shadcn) |
-| Auth | JWT Bearer + ASP.NET Identity | Forms | react-hook-form + zod (**admin only**) |
-| Multitenancy | Finbuckle 10.x | Realtime | `@microsoft/signalr`, SSE (dashboard) |
-| Cache / Jobs | Redis, Hangfire | Tests | Playwright (route-mocked) |
-| Docs | OpenAPI + Scalar | API client | hand-written `apiFetch` (no codegen) |
-| Hosting | .NET Aspire | Env | runtime `/config.json` (not `VITE_*`) |
-| Testing | xUnit, Shouldly, NSubstitute, AutoFixture, NetArchTest, Testcontainers | | |
-
-## Build & run
+## Build, run, migrate
 
 ```bash
-# Whole stack (Postgres + pgAdmin + Redis + MinIO + migrator + API + both React apps)
-dotnet run --project src/Host/FSH.Starter.AppHost   # one-time: npm install in clients/admin & clients/dashboard
-
-dotnet build src/FSH.Starter.slnx                   # build backend
-dotnet run --project src/Host/FSH.Starter.Api       # API only → https://localhost:7030 (/scalar)
-dotnet test src/FSH.Starter.slnx                    # tests — integration tests REQUIRE Docker
-
-cd clients/admin && npm install && npm run dev       # → http://localhost:5173
-cd clients/dashboard && npm install && npm run dev   # → http://localhost:5174
+dotnet run --project src/Host/FSH.Starter.AppHost   # whole stack (one-time: npm install in both clients/)
+dotnet build src/FSH.Starter.slnx
+dotnet run --project src/Host/FSH.Starter.Api       # https://localhost:7030 (/scalar)
+dotnet test src/FSH.Starter.slnx                    # integration suites REQUIRE Docker
+dotnet test src/Tests/{Module}.Tests                # one project; unit projects need no Docker
+cd clients/{app} && npm run dev                     # admin :5173, dashboard :5174
+cd clients/{app} && npm run test:e2e                # Playwright, route-mocked
 ```
 
-Migrations / seed (DbMigrator, separate step):
 ```bash
-dotnet run --project src/Host/FSH.Starter.DbMigrator -- apply [--seed]
-dotnet run --project src/Host/FSH.Starter.DbMigrator -- list-pending
+dotnet run --project src/Host/FSH.Starter.DbMigrator -- [apply|seed|seed-demo|list-pending] [--seed] [--tenant <id>] [--catalog-only]
+# Default verb is apply. seed-demo is dev-only (DOTNET_ENVIRONMENT=Development).
 ```
 
-**Ports:** API 7030 (https)/5030 (http) · admin 5173 · dashboard 5174 · Postgres 5432 · pgAdmin 5050 · Valkey 6379 · MinIO 9000/9001.
+**Ports:** API 7030/5030 · admin 5173 · dashboard 5174 · Aspire 15888 · Postgres 5432 · pgAdmin 5050 · Valkey 6379 · MinIO 9000/9001.
 
-## Branching & PRs
+## Branches & CI
 
-Single long-lived branch: **`main`** (the default) — there is **no `develop`**. Branch from and target `main`; stable releases are cut from `v*` tags. CI is split into path-scoped **Backend CI** (`src/**`) and **Frontend CI** (`clients/**`) workflows; branch protection requires only those two gate checks — never the individual jobs, which are skipped on the other side's PRs.
+Default branch is **`develop`** — branch from and target it. (Upstream uses `main`; this fork diverged.)
+⚠️ `backend.yml` / `frontend.yml` still trigger on `main` only, so pushes and PRs to `develop` run **no CI** — missing checks mean "not configured", not "passing". Gates are path-scoped (`Backend CI` on `src/**`, `Frontend CI` on `clients/**`) and report green when only the other side changed.
 
 ## Golden rules (do not break)
 
@@ -85,7 +58,6 @@ Single long-lived branch: **`main`** (the default) — there is **no `develop`**
 7. **Propagate `CancellationToken`** into every EF/IO call; add as `= default` on public service methods.
 8. **Every command handler + paginated query handler needs a validator** (`{Name}Validator`). Enforced by `Architecture.Tests`.
 9. **Frontend: pass per-call data through `mutate(arg)`**, never via state the mutation callbacks close over (execute-time race). See `frontend/shared.md`.
-10. **Docs + changelog travel with the change** — a user-facing change (feature, endpoint, config, infra, breaking change) isn't done until the **separate docs repo** (`github.com/fullstackhero/docs`, the Astro site) is updated to match **and** a changelog entry is added (`src/content/docs/changelog/`). Don't let the docs drift from the code.
 
 ## Rules index — read the relevant file before you work
 
@@ -121,17 +93,25 @@ Single long-lived branch: **`main`** (the default) — there is **no `develop`**
 
 File-scoped namespaces · 4-space indent · explicit types (`var` only when RHS-obvious) · `is null` /
 `is not null` · pattern matching + switch expressions · `ArgumentNullException.ThrowIfNull` guards ·
-records for DTOs/events/value objects · `default!` for required non-nullable strings. Build runs with
-`TreatWarningsAsErrors` — warnings fail the build.
+records for DTOs/events/value objects · `default!` for required non-nullable strings.
+Warnings fail the build (`TreatWarningsAsErrors` + `AllEnabledByDefault` analyzers in `src/Directory.Build.props`).
 
 ## Adding things (quick pointers)
 
 - **Feature** — Contracts command/query → handler → validator → endpoint → wire in module `MapEndpoints()` → tests. Details: `api-conventions.md`.
 - **Module** — new `Modules.{Name}` + `.Contracts`, implement `IModule` w/ assembly-level `[assembly: FshModule(typeof(XModule), order)]`, register in **all four places**, add migration folder + tests. Details: `architecture.md`.
-- **React page** — API module (`src/api/`) → page → register lazy route → (admin) mirror permission + RouteGuard → Playwright test. Details: `frontend/shared.md`.
+- **Migration** — `dotnet tool restore` first (`dotnet-ef` is pinned in `.config/dotnet-tools.json`); full build before `migrations remove` or the snapshot eats the previous migration. Details: `database.md`.
+- **React page** — API module (`src/api/`) → page (named export) → lazy route under `AppShell` → (admin) mirror permission + RouteGuard → Playwright test. Details: `frontend/shared.md`.
+
+## Frontend API quirks
+
+- Search params use **PascalCase** keys (`PageNumber`, `PageSize`); tenant header is lowercase `tenant`; login posts to `/api/v1/identity/token/issue` with header `X-FSH-App: "admin"|"dashboard"`.
+- E2E helpers: `seedAuthedSession(page, TEST_USER)` then `installShellMocks(page)` in `beforeEach`; page-specific route mocks after shell mocks (most-recently-registered wins).
 
 ## AI tooling resources
 
-- **Rules** — `.agents/rules/*.md` (indexed above). Read on demand.
-- **Skills** — `.agents/skills/*/SKILL.md`: step-by-step task recipes. Scaffolders: `add-feature`, `add-entity`, `add-module`, `add-react-page`, `add-full-slice`. Ops: `create-migration`, `add-integration-event`, `add-permission`. Reference: `query-patterns`, `testing-guide`, `mediator-reference`.
-- **Workflows** — `.agents/workflows/*.md`: task playbooks (`code-reviewer`, `feature-scaffolder`, `module-creator`, `architecture-guard`, `migration-helper`).
+- **Skills** (`.agents/skills/*/SKILL.md`) — read the skill before the task. FSH scaffolders: `add-feature`, `add-entity`, `add-module`, `add-react-page`, `add-full-slice`. Ops: `create-migration`, `add-permission`, `add-integration-event`. Reference: `query-patterns`, `testing-guide`, `mediator-reference`. Plus `openspec-*` (spec lifecycle) and `caveman-*` (compression/review helpers).
+- **Workflows** (`.agents/workflows/*.md`) — task playbooks, including `opsx-*` for the OpenSpec lifecycle.
+- **OpenSpec** — specs in `openspec/specs/`, proposals in `openspec/changes/` (`schema: spec-driven`); start work with the `openspec-propose` skill.
+- **CodeGraph** — this repo is indexed (`.codegraph/`). Prefer `codegraph_explore` (MCP) or `codegraph explore "<question>"` (shell) over grep/find for locating code; it follows call paths grep can't.
+- `opencode.jsonc` wires the superpowers plugin + CodeGraph MCP — don't remove either.
