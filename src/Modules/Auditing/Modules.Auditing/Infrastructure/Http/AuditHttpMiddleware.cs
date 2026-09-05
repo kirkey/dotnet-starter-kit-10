@@ -36,7 +36,7 @@ public sealed class AuditHttpMiddleware
         }
         bool suppressBodies = noAudit is { BodyOnly: true };
 
-        var requestContext = await CaptureRequestAsync(ctx, suppressBodies);
+        var requestContext = await CaptureRequestAsync(ctx, suppressBodies).ConfigureAwait(false);
         var sw = Stopwatch.StartNew();
 
         var originalBody = ctx.Response.Body;
@@ -48,12 +48,12 @@ public sealed class AuditHttpMiddleware
             await _next(ctx).ConfigureAwait(false);
             sw.Stop();
 
-            await WriteSuccessAuditAsync(ctx, requestContext, responseBuffer, originalBody, sw, suppressBodies);
+            await WriteSuccessAuditAsync(ctx, requestContext, responseBuffer, originalBody, sw, suppressBodies).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
             sw.Stop();
-            await WriteExceptionAuditAsync(ctx, ex);
+            await WriteExceptionAuditAsync(ctx, ex).ConfigureAwait(false);
             ctx.Response.Body = originalBody;
             throw;
         }
@@ -68,7 +68,7 @@ public sealed class AuditHttpMiddleware
         if (!suppressBodies && ShouldCaptureBody(ctx.Request.ContentType))
         {
             var masker = ctx.RequestServices.GetService<IAuditMaskingService>();
-            (reqPreview, reqSize) = await HttpBodyReader.ReadRequestAsync(ctx, _opts.MaxRequestBytes, ctx.RequestAborted);
+            (reqPreview, reqSize) = await HttpBodyReader.ReadRequestAsync(ctx, _opts.MaxRequestBytes, ctx.RequestAborted).ConfigureAwait(false);
 
             if (reqPreview is not null && masker is not null)
             {
@@ -89,11 +89,11 @@ public sealed class AuditHttpMiddleware
         Stopwatch sw,
         bool suppressBodies)
     {
-        var (respPreview, respSize, respMasked) = await CaptureResponseAsync(ctx, responseBuffer, suppressBodies);
+        var (respPreview, respSize, respMasked) = await CaptureResponseAsync(ctx, responseBuffer, suppressBodies).ConfigureAwait(false);
 
-        await RestoreResponseBodyAsync(responseBuffer, originalBody, ctx);
+        await RestoreResponseBodyAsync(responseBuffer, originalBody, ctx).ConfigureAwait(false);
 
-        await WriteActivityAuditAsync(ctx, requestContext, respPreview, respSize, respMasked, sw);
+        await WriteActivityAuditAsync(ctx, requestContext, respPreview, respSize, respMasked, sw).ConfigureAwait(false);
     }
 
     private async Task<(object? Preview, int Size, int MaskedFields)> CaptureResponseAsync(HttpContext ctx, MemoryStream responseBuffer, bool suppressBodies)
@@ -107,10 +107,10 @@ public sealed class AuditHttpMiddleware
         responseBuffer.Position = 0;
 
         await using var respBuffer = new MemoryStream();
-        await responseBuffer.CopyToAsync(respBuffer, ctx.RequestAborted);
+        await responseBuffer.CopyToAsync(respBuffer, ctx.RequestAborted).ConfigureAwait(false);
 
         var (respPreview, respSize) = await HttpBodyReader.ReadResponseAsync(
-            respBuffer, _opts.MaxResponseBytes, ctx.RequestAborted);
+            respBuffer, _opts.MaxResponseBytes, ctx.RequestAborted).ConfigureAwait(false);
 
         int maskedFields = 0;
         if (respPreview is not null && masker is not null)
@@ -130,7 +130,7 @@ public sealed class AuditHttpMiddleware
 
         if (responseBuffer.Length > 0)
         {
-            await responseBuffer.CopyToAsync(originalBody, ctx.RequestAborted);
+            await responseBuffer.CopyToAsync(originalBody, ctx.RequestAborted).ConfigureAwait(false);
         }
     }
 
@@ -171,7 +171,7 @@ public sealed class AuditHttpMiddleware
             builder.WithTags(tags);
         }
 
-        await builder.WriteAsync(ctx.RequestAborted);
+        await builder.WriteAsync(ctx.RequestAborted).ConfigureAwait(false);
     }
 
     private async Task WriteExceptionAuditAsync(HttpContext ctx, Exception ex)
@@ -188,7 +188,7 @@ public sealed class AuditHttpMiddleware
             .WithUser(_publisher.CurrentScope?.UserId, _publisher.CurrentScope?.UserName)
             .WithCorrelation(_publisher.CurrentScope?.CorrelationId ?? ctx.TraceIdentifier)
             .WithRequestId(_publisher.CurrentScope?.RequestId ?? ctx.TraceIdentifier)
-            .WriteAsync(ctx.RequestAborted);
+            .WriteAsync(ctx.RequestAborted).ConfigureAwait(false);
     }
 
     private bool ShouldCaptureBody(string? contentType) =>

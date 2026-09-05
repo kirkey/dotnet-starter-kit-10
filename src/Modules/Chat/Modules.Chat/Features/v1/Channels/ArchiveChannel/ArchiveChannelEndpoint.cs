@@ -14,7 +14,7 @@ public static class ArchiveChannelEndpoint
         => endpoints.MapDelete("/channels/{id:guid}",
                 async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new ArchiveChannelCommand(id), cancellationToken);
+                    await mediator.Send(new ArchiveChannelCommand(id), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("ArchiveChannel")

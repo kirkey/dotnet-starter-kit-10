@@ -14,7 +14,7 @@ public static class GetMySessionsEndpoint
     internal static RouteHandlerBuilder MapGetMySessionsEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/sessions/me", async (CancellationToken cancellationToken, IMediator mediator) =>
-            TypedResults.Ok(await mediator.Send(new GetMySessionsQuery(), cancellationToken)))
+            TypedResults.Ok(await mediator.Send(new GetMySessionsQuery(), cancellationToken).ConfigureAwait(false)))
         .WithName("GetMySessions")
         .WithSummary("Get current user's sessions")
         .RequirePermission(IdentityPermissions.Sessions.View)

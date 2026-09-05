@@ -19,7 +19,7 @@ public static class UpdateTicketEndpoint
         return endpoints.MapPut("/tickets/{ticketId:guid}",
                 async (Guid ticketId, UpdateTicketRequest body, IMediator mediator, CancellationToken ct) =>
                     Results.Ok(await mediator.Send(
-                        new UpdateTicketCommand(ticketId, body.Title, body.Description, body.Priority), ct)))
+                        new UpdateTicketCommand(ticketId, body.Title, body.Description, body.Priority), ct).ConfigureAwait(false)))
             .WithName("UpdateTicket")
             .WithSummary("Edit a ticket's title, description, and priority")
             .RequirePermission(TicketsPermissions.Tickets.Update)

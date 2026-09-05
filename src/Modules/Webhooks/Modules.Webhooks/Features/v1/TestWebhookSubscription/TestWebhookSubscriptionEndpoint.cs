@@ -17,7 +17,7 @@ public static class TestWebhookSubscriptionEndpoint
             IMediator mediator,
             CancellationToken ct) =>
         {
-            var success = await mediator.Send(new TestWebhookSubscriptionCommand(id), ct);
+            var success = await mediator.Send(new TestWebhookSubscriptionCommand(id), ct).ConfigureAwait(false);
             return TypedResults.Ok(new { Success = success });
         })
         .WithName("TestWebhookSubscription")

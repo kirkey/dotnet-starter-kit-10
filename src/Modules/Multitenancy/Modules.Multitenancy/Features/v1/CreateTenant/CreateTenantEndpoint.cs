@@ -21,7 +21,7 @@ public static class CreateTenantEndpoint
             CancellationToken cancellationToken)
             =>
             {
-                var result = await mediator.Send(command, cancellationToken);
+                var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
                 return TypedResults.Created($"/api/v1/multitenancy/tenants/{result.Id}", result);
             })
             .WithName("CreateTenant")

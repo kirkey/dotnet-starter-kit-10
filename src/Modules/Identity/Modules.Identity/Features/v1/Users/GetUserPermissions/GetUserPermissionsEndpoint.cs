@@ -12,7 +12,8 @@ namespace FSH.Modules.Identity.Features.v1.Users.GetUserPermissions;
 public static class GetUserPermissionsEndpoint
 {
     // No RequirePermission on purpose: returns the *caller's* own permissions (the SPA needs them to render
-    // gated routes); gating behind Users.View would lock out non-user-managing roles. Fallback policy → 401.
+    // gated routes); gating behind Users.View would lock out non-user-managing roles. RequireAuthorization
+    // makes the authentication requirement explicit instead of relying on the fallback policy → 401.
     internal static RouteHandlerBuilder MapGetCurrentUserPermissionsEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/permissions", async (ClaimsPrincipal user, IMediator mediator, CancellationToken cancellationToken) =>
@@ -22,11 +23,12 @@ public static class GetUserPermissionsEndpoint
                 throw new UnauthorizedException();
             }
 
-            return TypedResults.Ok(await mediator.Send(new GetCurrentUserPermissionsQuery(userId), cancellationToken));
+            return TypedResults.Ok(await mediator.Send(new GetCurrentUserPermissionsQuery(userId), cancellationToken).ConfigureAwait(false));
         })
         .WithName("GetCurrentUserPermissions")
         .WithSummary("Get current user permissions")
         .WithDescription("Retrieve permissions for the authenticated user. Requires authentication only — every signed-in user can read their own grants.")
+        .RequireAuthorization()
         .Produces<IEnumerable<string>>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status401Unauthorized);
     }

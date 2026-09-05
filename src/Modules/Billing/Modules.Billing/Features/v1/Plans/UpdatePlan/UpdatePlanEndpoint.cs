@@ -17,7 +17,7 @@ public static class UpdatePlanEndpoint
                 {
                     ArgumentNullException.ThrowIfNull(body);
                     var command = body with { PlanId = planId };
-                    return Results.Ok(await mediator.Send(command, ct));
+                    return Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false));
                 })
             .WithName("UpdateBillingPlan")
             .WithSummary("Update a billing plan")

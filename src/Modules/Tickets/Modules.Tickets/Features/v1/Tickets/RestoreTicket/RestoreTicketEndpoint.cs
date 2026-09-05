@@ -15,7 +15,7 @@ public static class RestoreTicketEndpoint
     {
         return endpoints.MapPost("/tickets/{ticketId:guid}/restore",
                 async (Guid ticketId, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new RestoreTicketCommand(ticketId), ct)))
+                    Results.Ok(await mediator.Send(new RestoreTicketCommand(ticketId), ct).ConfigureAwait(false)))
             .WithName("RestoreTicket")
             .WithSummary("Restore a soft-deleted ticket")
             .RequirePermission(TicketsPermissions.Tickets.Restore)

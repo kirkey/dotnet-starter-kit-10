@@ -15,7 +15,7 @@ public static class DeleteTicketEndpoint
         return endpoints.MapDelete("/tickets/{ticketId:guid}",
                 async (Guid ticketId, IMediator mediator, CancellationToken ct) =>
                 {
-                    await mediator.Send(new DeleteTicketCommand(ticketId), ct);
+                    await mediator.Send(new DeleteTicketCommand(ticketId), ct).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("DeleteTicket")

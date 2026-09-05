@@ -17,7 +17,7 @@ public static class ResolveTicketEndpoint
     {
         return endpoints.MapPost("/tickets/{ticketId:guid}/resolve",
                 async (Guid ticketId, ResolveTicketRequest? body, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new ResolveTicketCommand(ticketId, body?.ResolutionNote), ct)))
+                    Results.Ok(await mediator.Send(new ResolveTicketCommand(ticketId, body?.ResolutionNote), ct).ConfigureAwait(false)))
             .WithName("ResolveTicket")
             .WithSummary("Mark a ticket as resolved")
             .RequirePermission(TicketsPermissions.Tickets.Resolve)

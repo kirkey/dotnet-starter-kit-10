@@ -14,7 +14,7 @@ public static class RestoreFileEndpoint
         => endpoints.MapPost("/{id:guid}/restore",
                 async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new RestoreFileCommand(id), cancellationToken);
+                    await mediator.Send(new RestoreFileCommand(id), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("RestoreFile")

@@ -12,7 +12,7 @@ internal static class HttpBodyReader
 
         ctx.Request.EnableBuffering();
         using var ms = new MemoryStream();
-        var copied = await CopyCappedAsync(ctx.Request.Body, ms, maxBytes, ct);
+        var copied = await CopyCappedAsync(ctx.Request.Body, ms, maxBytes, ct).ConfigureAwait(false);
         ctx.Request.Body.Position = 0;
 
         return DeserializePreview(ms, copied);
@@ -25,7 +25,7 @@ internal static class HttpBodyReader
         source.Position = 0;
 
         using var ms = new MemoryStream();
-        var copied = await CopyCappedAsync(source, ms, maxBytes, ct);
+        var copied = await CopyCappedAsync(source, ms, maxBytes, ct).ConfigureAwait(false);
         return DeserializePreview(ms, copied);
     }
 
@@ -33,10 +33,10 @@ internal static class HttpBodyReader
     {
         var buf = new byte[8 * 1024];
         int total = 0, read;
-        while ((read = await src.ReadAsync(buf, ct)) > 0)
+        while ((read = await src.ReadAsync(buf, ct).ConfigureAwait(false)) > 0)
         {
             var toWrite = Math.Min(read, Math.Max(0, maxBytes - total));
-            if (toWrite > 0) await dst.WriteAsync(buf.AsMemory(0, toWrite), ct);
+            if (toWrite > 0) await dst.WriteAsync(buf.AsMemory(0, toWrite), ct).ConfigureAwait(false);
             total += read;
             if (total >= maxBytes) break;
         }

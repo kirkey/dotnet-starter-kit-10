@@ -39,7 +39,7 @@ public static class SearchTicketsEndpoint
                         SortBy = sortBy,
                         SortDir = sortDir,
                     };
-                    return Results.Ok(await mediator.Send(query, ct));
+                    return Results.Ok(await mediator.Send(query, ct).ConfigureAwait(false));
                 })
             .WithName("SearchTickets")
             .WithSummary("Search tickets")

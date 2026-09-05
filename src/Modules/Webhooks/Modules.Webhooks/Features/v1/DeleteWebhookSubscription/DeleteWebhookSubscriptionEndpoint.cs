@@ -17,7 +17,7 @@ public static class DeleteWebhookSubscriptionEndpoint
             IMediator mediator,
             CancellationToken ct) =>
         {
-            await mediator.Send(new DeleteWebhookSubscriptionCommand(id), ct);
+            await mediator.Send(new DeleteWebhookSubscriptionCommand(id), ct).ConfigureAwait(false);
             return TypedResults.NoContent();
         })
         .WithName("DeleteWebhookSubscription")

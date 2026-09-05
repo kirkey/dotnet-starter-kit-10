@@ -15,7 +15,7 @@ public static class GenerateInvoicesEndpoint
     {
         return endpoints.MapPost("/invoices/generate",
                 async (GenerateInvoicesCommand command, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(new { generated = await mediator.Send(command, ct) }))
+                    Results.Ok(new { generated = await mediator.Send(command, ct).ConfigureAwait(false) }))
             .WithName("GenerateInvoices")
             .WithSummary("Manually trigger invoice generation for a period")
             .RequirePermission(BillingPermissions.Manage)

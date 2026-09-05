@@ -21,7 +21,7 @@ public static class SelfRegisterUserEndpoint
         {
             var origin = $"{context.Request.Scheme}://{context.Request.Host.Value}{context.Request.PathBase.Value}";
             command.Origin = origin;
-            var result = await mediator.Send(command, cancellationToken);
+            var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return TypedResults.Created($"/api/v1/identity/users/{result.UserId}", result);
         })
         .WithName("SelfRegisterUser")

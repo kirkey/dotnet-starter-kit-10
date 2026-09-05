@@ -14,7 +14,7 @@ public static class RemoveProductImageEndpoint
         => endpoints.MapDelete("/products/{productId:guid}/images/{imageId:guid}",
                 async (Guid productId, Guid imageId, IMediator mediator, CancellationToken ct) =>
                 {
-                    await mediator.Send(new RemoveProductImageCommand(productId, imageId), ct);
+                    await mediator.Send(new RemoveProductImageCommand(productId, imageId), ct).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("RemoveProductImage")

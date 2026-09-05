@@ -14,7 +14,7 @@ public static class DeleteGroupEndpoint
     {
         return endpoints.MapDelete("/groups/{id:guid}", async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
         {
-            await mediator.Send(new DeleteGroupCommand(id), cancellationToken);
+            await mediator.Send(new DeleteGroupCommand(id), cancellationToken).ConfigureAwait(false);
             return TypedResults.NoContent();
         })
         .WithName("DeleteGroup")

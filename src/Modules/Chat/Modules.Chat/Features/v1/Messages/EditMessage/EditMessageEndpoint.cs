@@ -15,7 +15,7 @@ public static class EditMessageEndpoint
         => endpoints.MapPut("/messages/{id:guid}",
                 async (Guid id, [FromBody] EditMessageBody body, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new EditMessageCommand(id, body.Body), cancellationToken);
+                    await mediator.Send(new EditMessageCommand(id, body.Body), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("UpdateMessage")

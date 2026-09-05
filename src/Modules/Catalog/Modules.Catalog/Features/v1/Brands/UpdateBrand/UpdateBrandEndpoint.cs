@@ -17,7 +17,7 @@ public static class UpdateBrandEndpoint
                 {
                     ArgumentNullException.ThrowIfNull(body);
                     var command = body with { BrandId = brandId };
-                    return Results.Ok(await mediator.Send(command, ct));
+                    return Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false));
                 })
             .WithName("UpdateBrand")
             .WithSummary("Update a brand")

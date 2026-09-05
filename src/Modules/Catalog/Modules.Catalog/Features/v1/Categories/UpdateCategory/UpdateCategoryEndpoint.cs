@@ -17,7 +17,7 @@ public static class UpdateCategoryEndpoint
                 {
                     ArgumentNullException.ThrowIfNull(body);
                     var command = body with { CategoryId = categoryId };
-                    return Results.Ok(await mediator.Send(command, ct));
+                    return Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false));
                 })
             .WithName("UpdateCategory")
             .WithSummary("Update a category")

@@ -32,7 +32,7 @@ public class PathAwareAuthorizationHandler : IAuthorizationMiddlewareResultHandl
             var endpoint = context.GetEndpoint();
             if (endpoint != null)
             {
-                await next(context);
+                await next(context).ConfigureAwait(false);
                 return;
             }
 
@@ -42,6 +42,6 @@ public class PathAwareAuthorizationHandler : IAuthorizationMiddlewareResultHandl
             return;
         }
 
-        await _fallback.HandleAsync(next, context, policy, authorizeResult);
+        await _fallback.HandleAsync(next, context, policy, authorizeResult).ConfigureAwait(false);
     }
 }

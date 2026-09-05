@@ -17,7 +17,7 @@ public static class ApproveTopupRequestEndpoint
     {
         return endpoints.MapPost("/wallet/topup-requests/{id:guid}/approve",
                 async (Guid id, ApproveTopupRequestBody? body, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new ApproveTopupRequestCommand(id, body?.Note), ct)))
+                    Results.Ok(await mediator.Send(new ApproveTopupRequestCommand(id, body?.Note), ct).ConfigureAwait(false)))
             .WithName("ApproveTopupRequest")
             .WithSummary("Approve a pending top-up request and issue the invoice")
             .RequirePermission(BillingPermissions.Manage)

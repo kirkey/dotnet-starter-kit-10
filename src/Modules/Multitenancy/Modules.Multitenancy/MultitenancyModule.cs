@@ -95,9 +95,9 @@ public sealed class MultitenancyModule : IModule
                             .GetRequiredService<IEnumerable<IMultiTenantStore<AppTenantInfo>>>()
                             .FirstOrDefault(s => s.GetType() == typeof(DistributedCacheStore<AppTenantInfo>));
 
-                        await distributedStore!.AddAsync(context.MultiTenantContext.TenantInfo!);
+                        await distributedStore!.AddAsync(context.MultiTenantContext.TenantInfo!).ConfigureAwait(false);
                     }
-                    await Task.CompletedTask;
+                    await Task.CompletedTask.ConfigureAwait(false);
                 };
             })
             // ── Strategy chain — first non-null identifier wins (registration order) ──
@@ -113,7 +113,7 @@ public sealed class MultitenancyModule : IModule
                     string.IsNullOrEmpty(tenantIdentifier))
                     return null;
 
-                return await Task.FromResult(tenantIdentifier.ToString());
+                return await Task.FromResult(tenantIdentifier.ToString()).ConfigureAwait(false);
             })
             .WithDistributedCacheStore(TimeSpan.FromMinutes(60))
             .WithStore<EFCoreStore<TenantDbContext, AppTenantInfo>>(ServiceLifetime.Scoped);

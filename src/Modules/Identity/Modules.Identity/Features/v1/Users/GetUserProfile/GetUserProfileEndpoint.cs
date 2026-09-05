@@ -21,7 +21,7 @@ public static class GetUserProfileEndpoint
                 throw new UnauthorizedException();
             }
 
-            return TypedResults.Ok(await mediator.Send(new GetCurrentUserProfileQuery(userId), cancellationToken));
+            return TypedResults.Ok(await mediator.Send(new GetCurrentUserProfileQuery(userId), cancellationToken).ConfigureAwait(false));
         })
         .WithName("GetCurrentUserProfile")
         .WithSummary("Get current user profile")

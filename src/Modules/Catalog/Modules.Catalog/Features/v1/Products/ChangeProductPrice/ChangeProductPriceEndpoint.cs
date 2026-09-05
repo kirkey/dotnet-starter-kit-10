@@ -17,7 +17,7 @@ public static class ChangeProductPriceEndpoint
                 {
                     ArgumentNullException.ThrowIfNull(body);
                     var command = body with { ProductId = productId };
-                    return Results.Ok(await mediator.Send(command, ct));
+                    return Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false));
                 })
             .WithName("ChangeProductPrice")
             .WithSummary("Change a product's price")

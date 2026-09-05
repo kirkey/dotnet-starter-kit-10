@@ -14,7 +14,7 @@ public static class GetRolePermissionsEndpoint
     public static RouteHandlerBuilder MapGetRolePermissionsEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/{id:guid}/permissions", async (string id, IMediator mediator, CancellationToken cancellationToken) =>
-            TypedResults.Ok(await mediator.Send(new GetRoleWithPermissionsQuery(id), cancellationToken)))
+            TypedResults.Ok(await mediator.Send(new GetRoleWithPermissionsQuery(id), cancellationToken).ConfigureAwait(false)))
         .WithName("GetRolePermissions")
         .WithSummary("Get role permissions")
         .RequirePermission(IdentityPermissions.Roles.View)

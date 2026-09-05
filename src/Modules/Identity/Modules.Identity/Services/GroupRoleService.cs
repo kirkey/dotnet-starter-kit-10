@@ -21,7 +21,7 @@ public sealed class GroupRoleService : IGroupRoleService
         var userGroupIds = await _dbContext.UserGroups
             .Where(ug => ug.UserId == userId)
             .Select(ug => ug.GroupId)
-            .ToListAsync(ct);
+            .ToListAsync(ct).ConfigureAwait(false);
 
         if (userGroupIds.Count == 0)
         {
@@ -33,7 +33,7 @@ public sealed class GroupRoleService : IGroupRoleService
             .Where(gr => userGroupIds.Contains(gr.GroupId))
             .Select(gr => gr.Role!.Name!)
             .Distinct()
-            .ToListAsync(ct);
+            .ToListAsync(ct).ConfigureAwait(false);
 
         return groupRoles;
     }

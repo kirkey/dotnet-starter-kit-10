@@ -15,7 +15,7 @@ public static class ListTrashedBrandsEndpoint
         return endpoints.MapGet("/brands/trash",
                 async (int? pageNumber, int? pageSize, IMediator mediator, CancellationToken ct) =>
                     Results.Ok(await mediator.Send(
-                        new ListTrashedBrandsQuery(pageNumber ?? 1, pageSize ?? 20), ct)))
+                        new ListTrashedBrandsQuery(pageNumber ?? 1, pageSize ?? 20), ct).ConfigureAwait(false)))
             .WithName("ListTrashedBrands")
             .WithSummary("List soft-deleted brands")
             .RequirePermission(CatalogPermissions.Brands.Restore);

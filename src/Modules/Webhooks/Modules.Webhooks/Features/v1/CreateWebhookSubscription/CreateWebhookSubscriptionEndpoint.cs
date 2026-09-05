@@ -18,7 +18,7 @@ public static class CreateWebhookSubscriptionEndpoint
             IMediator mediator,
             CancellationToken ct) =>
         {
-            var id = await mediator.Send(command, ct);
+            var id = await mediator.Send(command, ct).ConfigureAwait(false);
             return TypedResults.Created($"/api/v1/webhooks/subscriptions/{id}", id);
         })
         .WithName("CreateWebhookSubscription")

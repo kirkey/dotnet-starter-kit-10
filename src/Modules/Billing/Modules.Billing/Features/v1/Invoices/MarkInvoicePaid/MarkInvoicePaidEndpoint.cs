@@ -15,7 +15,7 @@ public static class MarkInvoicePaidEndpoint
     {
         return endpoints.MapPost("/invoices/{invoiceId:guid}/pay",
                 async (Guid invoiceId, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new MarkInvoicePaidCommand(invoiceId), ct)))
+                    Results.Ok(await mediator.Send(new MarkInvoicePaidCommand(invoiceId), ct).ConfigureAwait(false)))
             .WithName("MarkInvoicePaid")
             .WithSummary("Mark an issued invoice as paid (manual, no payment processor)")
             .RequirePermission(BillingPermissions.Manage)

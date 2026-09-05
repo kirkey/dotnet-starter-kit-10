@@ -39,7 +39,7 @@ public static class ChangeTenantActivationEndpoint
             return TypedResults.BadRequest();
         }
 
-        TenantLifecycleResultDto result = await mediator.Send(command, cancellationToken);
+        TenantLifecycleResultDto result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
         return TypedResults.Ok(result);
     }
 }

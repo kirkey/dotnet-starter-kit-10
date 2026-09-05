@@ -17,7 +17,7 @@ public static class AddTicketCommentEndpoint
     {
         return endpoints.MapPost("/tickets/{ticketId:guid}/comments",
                 async (Guid ticketId, AddTicketCommentRequest body, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new AddTicketCommentCommand(ticketId, body.Body), ct)))
+                    Results.Ok(await mediator.Send(new AddTicketCommentCommand(ticketId, body.Body), ct).ConfigureAwait(false)))
             .WithName("AddTicketComment")
             .WithSummary("Add a comment to a ticket")
             .RequirePermission(TicketsPermissions.Tickets.Comment)

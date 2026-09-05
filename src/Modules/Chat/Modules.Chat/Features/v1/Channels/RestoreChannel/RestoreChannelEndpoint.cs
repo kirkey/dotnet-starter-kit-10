@@ -14,7 +14,7 @@ public static class RestoreChannelEndpoint
         => endpoints.MapPost("/channels/{id:guid}/restore",
                 async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new RestoreChannelCommand(id), cancellationToken);
+                    await mediator.Send(new RestoreChannelCommand(id), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("RestoreChannel")

@@ -14,7 +14,7 @@ public static class GetMyWalletEndpoint
     {
         return endpoints.MapGet("/wallet/me",
                 async (IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new GetMyWalletQuery(), ct)))
+                    Results.Ok(await mediator.Send(new GetMyWalletQuery(), ct).ConfigureAwait(false)))
             .WithName("GetMyWallet")
             .WithSummary("Get the wallet for the current tenant")
             .RequirePermission(BillingPermissions.View);

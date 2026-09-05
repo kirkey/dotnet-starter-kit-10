@@ -14,7 +14,7 @@ public static class DeleteRoleEndpoint
     {
         return endpoints.MapDelete("/roles/{id:guid}", async (string id, IMediator mediator, CancellationToken cancellationToken) =>
         {
-            await mediator.Send(new DeleteRoleCommand(id), cancellationToken);
+            await mediator.Send(new DeleteRoleCommand(id), cancellationToken).ConfigureAwait(false);
             return TypedResults.NoContent();
         })
         .WithName("DeleteRole")

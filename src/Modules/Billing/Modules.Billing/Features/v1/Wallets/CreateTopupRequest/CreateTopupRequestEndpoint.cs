@@ -15,7 +15,7 @@ public static class CreateTopupRequestEndpoint
     {
         return endpoints.MapPost("/wallet/topup-requests",
                 async (CreateTopupRequestCommand command, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(command, ct)))
+                    Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false)))
             .WithName("CreateTopupRequest")
             .WithSummary("Submit a wallet top-up request for the current tenant")
             .RequirePermission(BillingPermissions.View)

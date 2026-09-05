@@ -69,7 +69,7 @@ public sealed class SessionService : ISessionService
             osVersion: clientInfo.OS.Major);
 
         _db.UserSessions.Add(session);
-        await _db.SaveChangesAsync(cancellationToken);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         if (_logger.IsEnabled(LogLevel.Information))
         {
@@ -96,7 +96,7 @@ public sealed class SessionService : ISessionService
             .AsNoTracking()
             .Where(s => s.UserId == userId && !s.IsRevoked && s.ExpiresAt > now)
             .OrderByDescending(s => s.LastActivityAt)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
 
         return sessions.Select(s => MapToDto(s, isCurrentSession: false)).ToList();
     }
@@ -113,7 +113,7 @@ public sealed class SessionService : ISessionService
             .Include(s => s.User)
             .Where(s => s.UserId == userId && !s.IsRevoked && s.ExpiresAt > now)
             .OrderByDescending(s => s.LastActivityAt)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
 
         return sessions.Select(s => MapToDto(s, isCurrentSession: false)).ToList();
     }
@@ -152,13 +152,13 @@ public sealed class SessionService : ISessionService
                 || (s.IpAddress != null && EF.Functions.ILike(s.IpAddress, $"%{term}%")));
         }
 
-        long total = await q.LongCountAsync(cancellationToken);
+        long total = await q.LongCountAsync(cancellationToken).ConfigureAwait(false);
 
         var sessions = await q
             .OrderByDescending(s => s.LastActivityAt)
             .Skip(skip)
             .Take(take)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
 
         return (sessions.Select(s => MapToDto(s, isCurrentSession: false)).ToList(), total);
     }
@@ -172,7 +172,7 @@ public sealed class SessionService : ISessionService
         var session = await _db.UserSessions
             .AsNoTracking()
             .Include(s => s.User)
-            .FirstOrDefaultAsync(s => s.Id == sessionId, cancellationToken);
+            .FirstOrDefaultAsync(s => s.Id == sessionId, cancellationToken).ConfigureAwait(false);
 
         return session is null ? null : MapToDto(session, isCurrentSession: false);
     }
@@ -186,7 +186,7 @@ public sealed class SessionService : ISessionService
         EnsureValidTenant();
 
         var session = await _db.UserSessions
-            .FirstOrDefaultAsync(s => s.Id == sessionId && !s.IsRevoked, cancellationToken);
+            .FirstOrDefaultAsync(s => s.Id == sessionId && !s.IsRevoked, cancellationToken).ConfigureAwait(false);
 
         if (session is null)
         {
@@ -202,7 +202,7 @@ public sealed class SessionService : ISessionService
         var tenantId = _multiTenantContextAccessor?.MultiTenantContext?.TenantInfo?.Id;
         session.Revoke(revokedBy, reason ?? "User requested", tenantId);
 
-        await _db.SaveChangesAsync(cancellationToken);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         if (_logger.IsEnabled(LogLevel.Information))
         {
@@ -235,7 +235,7 @@ public sealed class SessionService : ISessionService
             query = query.Where(s => s.Id != exceptSessionId.Value);
         }
 
-        var sessions = await query.ToListAsync(cancellationToken);
+        var sessions = await query.ToListAsync(cancellationToken).ConfigureAwait(false);
 
         var tenantId = _multiTenantContextAccessor?.MultiTenantContext?.TenantInfo?.Id;
         foreach (var session in sessions)
@@ -243,7 +243,7 @@ public sealed class SessionService : ISessionService
             session.Revoke(revokedBy, reason ?? "User requested logout from all devices", tenantId);
         }
 
-        await _db.SaveChangesAsync(cancellationToken);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         if (_logger.IsEnabled(LogLevel.Information))
         {
@@ -263,7 +263,7 @@ public sealed class SessionService : ISessionService
 
         var sessions = await _db.UserSessions
             .Where(s => s.UserId == userId && !s.IsRevoked)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
 
         var tenantId = _multiTenantContextAccessor?.MultiTenantContext?.TenantInfo?.Id;
         foreach (var session in sessions)
@@ -271,7 +271,7 @@ public sealed class SessionService : ISessionService
             session.Revoke(revokedBy, reason ?? "Admin requested", tenantId);
         }
 
-        await _db.SaveChangesAsync(cancellationToken);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         if (_logger.IsEnabled(LogLevel.Information))
         {
@@ -291,7 +291,7 @@ public sealed class SessionService : ISessionService
         EnsureValidTenant();
 
         var session = await _db.UserSessions
-            .FirstOrDefaultAsync(s => s.Id == sessionId && !s.IsRevoked, cancellationToken);
+            .FirstOrDefaultAsync(s => s.Id == sessionId && !s.IsRevoked, cancellationToken).ConfigureAwait(false);
 
         if (session is null)
         {
@@ -301,7 +301,7 @@ public sealed class SessionService : ISessionService
         var tenantId = _multiTenantContextAccessor?.MultiTenantContext?.TenantInfo?.Id;
         session.Revoke(revokedBy, reason ?? "Admin requested", tenantId);
 
-        await _db.SaveChangesAsync(cancellationToken);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         if (_logger.IsEnabled(LogLevel.Information))
         {
@@ -318,12 +318,12 @@ public sealed class SessionService : ISessionService
         EnsureValidTenant();
 
         var session = await _db.UserSessions
-            .FirstOrDefaultAsync(s => s.RefreshTokenHash == refreshTokenHash && !s.IsRevoked, cancellationToken);
+            .FirstOrDefaultAsync(s => s.RefreshTokenHash == refreshTokenHash && !s.IsRevoked, cancellationToken).ConfigureAwait(false);
 
         if (session is not null)
         {
             session.UpdateActivity();
-            await _db.SaveChangesAsync(cancellationToken);
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -336,12 +336,12 @@ public sealed class SessionService : ISessionService
         EnsureValidTenant();
 
         var session = await _db.UserSessions
-            .FirstOrDefaultAsync(s => s.RefreshTokenHash == oldRefreshTokenHash && !s.IsRevoked, cancellationToken);
+            .FirstOrDefaultAsync(s => s.RefreshTokenHash == oldRefreshTokenHash && !s.IsRevoked, cancellationToken).ConfigureAwait(false);
 
         if (session is not null)
         {
             session.UpdateRefreshToken(newRefreshTokenHash, newExpiresAt);
-            await _db.SaveChangesAsync(cancellationToken);
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
             if (_logger.IsEnabled(LogLevel.Information))
             {
@@ -358,7 +358,7 @@ public sealed class SessionService : ISessionService
 
         var session = await _db.UserSessions
             .AsNoTracking()
-            .FirstOrDefaultAsync(s => s.RefreshTokenHash == refreshTokenHash, cancellationToken);
+            .FirstOrDefaultAsync(s => s.RefreshTokenHash == refreshTokenHash, cancellationToken).ConfigureAwait(false);
 
         if (session is null)
         {
@@ -388,7 +388,7 @@ public sealed class SessionService : ISessionService
         var cutoffDate = now.AddDays(-30); // Keep revoked sessions for 30 days for audit
         var deleted = await _db.UserSessions
             .Where(s => s.ExpiresAt < now && s.ExpiresAt < cutoffDate)
-            .ExecuteDeleteAsync(cancellationToken);
+            .ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
 
         if (deleted > 0 && _logger.IsEnabled(LogLevel.Information))
         {

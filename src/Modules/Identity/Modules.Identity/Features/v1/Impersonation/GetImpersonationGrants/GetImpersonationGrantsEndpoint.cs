@@ -18,7 +18,7 @@ public static class GetImpersonationGrantsEndpoint
             async ([AsParameters] GetImpersonationGrantsQuery query,
                    IMediator mediator,
                    CancellationToken ct) =>
-                TypedResults.Ok(await mediator.Send(query, ct)))
+                TypedResults.Ok(await mediator.Send(query, ct).ConfigureAwait(false)))
             .WithName("GetImpersonationGrants")
             .WithSummary("List impersonation grants")
             .WithDescription("Lists impersonation sessions scoped to what the caller can see. Tenant admins are limited to grants targeting their own tenant; root operators can filter by any tenant.")

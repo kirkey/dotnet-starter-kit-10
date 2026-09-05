@@ -13,7 +13,7 @@ public static class DisableTwoFactorEndpoint
     {
         return endpoints.MapPost("/2fa/disable",
                 async (DisableTwoFactorCommand command, IMediator mediator, CancellationToken ct) =>
-                    TypedResults.Ok(new { success = await mediator.Send(command, ct) }))
+                    TypedResults.Ok(new { success = await mediator.Send(command, ct).ConfigureAwait(false) }))
             .WithName("DisableTwoFactor")
             .WithSummary("Disable TOTP for the current user")
             .WithDescription("Turns off 2FA after confirming the current password. Also rotates the authenticator secret so a re-enroll starts fresh.")

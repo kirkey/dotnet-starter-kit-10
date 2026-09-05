@@ -35,7 +35,7 @@ public static class AssignUserRolesEndpoint
             return TypedResults.BadRequest();
         }
 
-        var result = await mediator.Send(command, cancellationToken);
+        var result = await mediator.Send(command, cancellationToken).ConfigureAwait(false);
         return TypedResults.Ok(result);
     }
 }

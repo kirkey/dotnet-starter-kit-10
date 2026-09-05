@@ -34,35 +34,35 @@ internal sealed class IdentityDbInitializer(
 
     public async Task SeedAsync(CancellationToken cancellationToken)
     {
-        await SeedRolesAsync(cancellationToken);
-        await SeedSystemGroupsAsync(cancellationToken);
-        await SeedAdminUserAsync(cancellationToken);
+        await SeedRolesAsync(cancellationToken).ConfigureAwait(false);
+        await SeedSystemGroupsAsync(cancellationToken).ConfigureAwait(false);
+        await SeedAdminUserAsync(cancellationToken).ConfigureAwait(false);
     }
 
     private async Task SeedRolesAsync(CancellationToken cancellationToken = default)
     {
         foreach (string roleName in RoleConstants.DefaultRoles)
         {
-            if (await roleManager.Roles.SingleOrDefaultAsync(r => r.Name == roleName, cancellationToken)
+            if (await roleManager.Roles.SingleOrDefaultAsync(r => r.Name == roleName, cancellationToken).ConfigureAwait(false)
                 is not FshRole role)
             {
                 // create role
                 role = new FshRole(roleName, $"{roleName} Role for {multiTenantContextAccessor.MultiTenantContext.TenantInfo?.Id} Tenant");
-                await roleManager.CreateAsync(role);
+                await roleManager.CreateAsync(role).ConfigureAwait(false);
             }
 
             // Assign permissions
             if (roleName == RoleConstants.Basic)
             {
-                await AssignPermissionsToRoleAsync(context, PermissionConstants.Basic, role, cancellationToken);
+                await AssignPermissionsToRoleAsync(context, PermissionConstants.Basic, role, cancellationToken).ConfigureAwait(false);
             }
             else if (roleName == RoleConstants.Admin)
             {
-                await AssignPermissionsToRoleAsync(context, PermissionConstants.Admin, role, cancellationToken);
+                await AssignPermissionsToRoleAsync(context, PermissionConstants.Admin, role, cancellationToken).ConfigureAwait(false);
 
                 if (multiTenantContextAccessor.MultiTenantContext.TenantInfo?.Id == MultitenancyConstants.Root.Id)
                 {
-                    await AssignPermissionsToRoleAsync(context, PermissionConstants.Root, role, cancellationToken);
+                    await AssignPermissionsToRoleAsync(context, PermissionConstants.Root, role, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -70,7 +70,7 @@ internal sealed class IdentityDbInitializer(
 
     private async Task AssignPermissionsToRoleAsync(IdentityDbContext dbContext, IReadOnlyList<FshPermission> permissions, FshRole role, CancellationToken cancellationToken = default)
     {
-        var currentClaims = await roleManager.GetClaimsAsync(role);
+        var currentClaims = await roleManager.GetClaimsAsync(role).ConfigureAwait(false);
         var newClaims = permissions
             .Where(permission => !currentClaims.Any(c => c.Type == ClaimConstants.Permission && c.Value == permission.Name))
             .Select(permission => new FshRoleClaim
@@ -89,13 +89,13 @@ internal sealed class IdentityDbInitializer(
             {
                 logger.LogInformation("Seeding {Role} Permission '{Permission}' for '{TenantId}' Tenant.", role.Name, claim.ClaimValue, multiTenantContextAccessor.MultiTenantContext.TenantInfo?.Id);
             }
-            await dbContext.RoleClaims.AddAsync(claim, cancellationToken);
+            await dbContext.RoleClaims.AddAsync(claim, cancellationToken).ConfigureAwait(false);
         }
 
         // Save changes to the database context
         if (newClaims.Count != 0)
         {
-            await dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
     }
@@ -112,7 +112,7 @@ internal sealed class IdentityDbInitializer(
         const string allUsersGroupName = "All Users";
         var allUsersGroup = await context.Groups
             .AsNoTracking()
-            .FirstOrDefaultAsync(g => g.Name == allUsersGroupName && g.IsSystemGroup, cancellationToken);
+            .FirstOrDefaultAsync(g => g.Name == allUsersGroupName && g.IsSystemGroup, cancellationToken).ConfigureAwait(false);
 
         if (allUsersGroup is null)
         {
@@ -123,7 +123,7 @@ internal sealed class IdentityDbInitializer(
                 isSystemGroup: true,
                 createdBy: "System");
 
-            await context.Groups.AddAsync(allUsersGroup, cancellationToken);
+            await context.Groups.AddAsync(allUsersGroup, cancellationToken).ConfigureAwait(false);
             if (logger.IsEnabled(LogLevel.Information))
             {
                 logger.LogInformation("Seeding '{GroupName}' system group for '{TenantId}' Tenant.", allUsersGroupName, tenantId);
@@ -134,7 +134,7 @@ internal sealed class IdentityDbInitializer(
         const string administratorsGroupName = "Administrators";
         var administratorsGroup = await context.Groups
             .AsNoTracking()
-            .FirstOrDefaultAsync(g => g.Name == administratorsGroupName && g.IsSystemGroup, cancellationToken);
+            .FirstOrDefaultAsync(g => g.Name == administratorsGroupName && g.IsSystemGroup, cancellationToken).ConfigureAwait(false);
 
         if (administratorsGroup is null)
         {
@@ -145,7 +145,7 @@ internal sealed class IdentityDbInitializer(
                 isSystemGroup: true,
                 createdBy: "System");
 
-            await context.Groups.AddAsync(administratorsGroup, cancellationToken);
+            await context.Groups.AddAsync(administratorsGroup, cancellationToken).ConfigureAwait(false);
             if (logger.IsEnabled(LogLevel.Information))
             {
                 logger.LogInformation("Seeding '{GroupName}' system group for '{TenantId}' Tenant.", administratorsGroupName, tenantId);
@@ -155,12 +155,12 @@ internal sealed class IdentityDbInitializer(
         await context.SaveChangesAsync(cancellationToken);
 
         // Assign Admin role to Administrators group
-        var adminRole = await roleManager.FindByNameAsync(RoleConstants.Admin);
+        var adminRole = await roleManager.FindByNameAsync(RoleConstants.Admin).ConfigureAwait(false);
         if (adminRole is not null)
         {
             var existingGroupRole = await context.GroupRoles
                 .AsNoTracking()
-                .FirstOrDefaultAsync(gr => gr.GroupId == administratorsGroup.Id && gr.RoleId == adminRole.Id, cancellationToken);
+                .FirstOrDefaultAsync(gr => gr.GroupId == administratorsGroup.Id && gr.RoleId == adminRole.Id, cancellationToken).ConfigureAwait(false);
 
             if (existingGroupRole is null)
             {
@@ -182,7 +182,7 @@ internal sealed class IdentityDbInitializer(
             return;
         }
 
-        if (await userManager.Users.FirstOrDefaultAsync(u => u.Email == multiTenantContextAccessor.MultiTenantContext.TenantInfo!.AdminEmail, cancellationToken)
+        if (await userManager.Users.FirstOrDefaultAsync(u => u.Email == multiTenantContextAccessor.MultiTenantContext.TenantInfo!.AdminEmail, cancellationToken).ConfigureAwait(false)
             is not FshUser adminUser)
         {
             string adminUserName = $"{multiTenantContextAccessor.MultiTenantContext.TenantInfo?.Id.Trim()}.{RoleConstants.Admin}".ToUpperInvariant();
@@ -212,7 +212,7 @@ internal sealed class IdentityDbInitializer(
             adminUser.PasswordHash = password.HashPassword(adminUser, initialPassword);
             // MUST check IdentityResult: a silent failure (password-policy reject, transient DB error)
             // would mark provisioning "Completed" with no admin user; throwing makes it a retryable Failed.
-            var createResult = await userManager.CreateAsync(adminUser);
+            var createResult = await userManager.CreateAsync(adminUser).ConfigureAwait(false);
             if (!createResult.Succeeded)
             {
                 throw new InvalidOperationException(
@@ -222,13 +222,13 @@ internal sealed class IdentityDbInitializer(
         }
 
         // Assign role to user
-        if (!await userManager.IsInRoleAsync(adminUser, RoleConstants.Admin))
+        if (!await userManager.IsInRoleAsync(adminUser, RoleConstants.Admin).ConfigureAwait(false))
         {
             if (logger.IsEnabled(LogLevel.Information))
             {
                 logger.LogInformation("Assigning Admin Role to Admin User for '{TenantId}' Tenant.", multiTenantContextAccessor.MultiTenantContext.TenantInfo?.Id);
             }
-            await userManager.AddToRoleAsync(adminUser, RoleConstants.Admin);
+            await userManager.AddToRoleAsync(adminUser, RoleConstants.Admin).ConfigureAwait(false);
         }
     }
 

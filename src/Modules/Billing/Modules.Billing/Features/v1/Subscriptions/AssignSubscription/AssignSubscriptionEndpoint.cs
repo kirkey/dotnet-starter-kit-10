@@ -15,7 +15,7 @@ public static class AssignSubscriptionEndpoint
     {
         return endpoints.MapPost("/subscriptions",
                 async (AssignSubscriptionCommand command, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(command, ct)))
+                    Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false)))
             .WithName("AssignSubscription")
             .WithSummary("Assign a plan to a tenant")
             .RequirePermission(BillingPermissions.Manage)

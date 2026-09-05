@@ -15,7 +15,7 @@ public static class RestoreProductEndpoint
     {
         return endpoints.MapPost("/products/{productId:guid}/restore",
                 async (Guid productId, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new RestoreProductCommand(productId), ct)))
+                    Results.Ok(await mediator.Send(new RestoreProductCommand(productId), ct).ConfigureAwait(false)))
             .WithName("RestoreProduct")
             .WithSummary("Restore a soft-deleted product")
             .RequirePermission(CatalogPermissions.Products.Restore)

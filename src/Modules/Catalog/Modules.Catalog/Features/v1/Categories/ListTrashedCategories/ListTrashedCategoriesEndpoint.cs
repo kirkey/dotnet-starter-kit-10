@@ -15,7 +15,7 @@ public static class ListTrashedCategoriesEndpoint
         return endpoints.MapGet("/categories/trash",
                 async (int? pageNumber, int? pageSize, IMediator mediator, CancellationToken ct) =>
                     Results.Ok(await mediator.Send(
-                        new ListTrashedCategoriesQuery(pageNumber ?? 1, pageSize ?? 20), ct)))
+                        new ListTrashedCategoriesQuery(pageNumber ?? 1, pageSize ?? 20), ct).ConfigureAwait(false)))
             .WithName("ListTrashedCategories")
             .WithSummary("List soft-deleted categories")
             .RequirePermission(CatalogPermissions.Categories.Restore);

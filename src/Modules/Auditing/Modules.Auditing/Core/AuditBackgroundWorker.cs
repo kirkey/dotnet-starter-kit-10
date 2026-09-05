@@ -51,7 +51,7 @@ public sealed class AuditBackgroundWorker : BackgroundService
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var (shouldContinue, newDelayTask) = await ProcessBatchCycleAsync(batch, delayTask, stoppingToken);
+                var (shouldContinue, newDelayTask) = await ProcessBatchCycleAsync(batch, delayTask, stoppingToken).ConfigureAwait(false);
                 delayTask = newDelayTask;
 
                 if (!shouldContinue)
@@ -70,7 +70,7 @@ public sealed class AuditBackgroundWorker : BackgroundService
             _logger.LogError(ex, "Audit background worker crashed.");
         }
 
-        await FinalFlushAsync(batch, stoppingToken);
+        await FinalFlushAsync(batch, stoppingToken).ConfigureAwait(false);
     }
 
     private async Task<(bool shouldContinue, Task delayTask)> ProcessBatchCycleAsync(
@@ -85,7 +85,7 @@ public sealed class AuditBackgroundWorker : BackgroundService
 
         if (batch.Count >= _batchSize)
         {
-            await FlushAsync(batch, stoppingToken);
+            await FlushAsync(batch, stoppingToken).ConfigureAwait(false);
             return (true, Task.Delay(_flushInterval, stoppingToken));
         }
 
@@ -93,7 +93,7 @@ public sealed class AuditBackgroundWorker : BackgroundService
         // closed (only stoppingToken signals), so any non-delay completion means data is ready.
         var securityWait = _publisher.SecurityReader.WaitToReadAsync(stoppingToken).AsTask();
         var defaultWait = _publisher.Reader.WaitToReadAsync(stoppingToken).AsTask();
-        var winner = await Task.WhenAny(securityWait, defaultWait, delayTask);
+        var winner = await Task.WhenAny(securityWait, defaultWait, delayTask).ConfigureAwait(false);
 
         if (winner == securityWait || winner == defaultWait)
         {
@@ -102,7 +102,7 @@ public sealed class AuditBackgroundWorker : BackgroundService
 
         if (batch.Count > 0)
         {
-            await FlushAsync(batch, stoppingToken);
+            await FlushAsync(batch, stoppingToken).ConfigureAwait(false);
         }
 
         return (true, Task.Delay(_flushInterval, stoppingToken));

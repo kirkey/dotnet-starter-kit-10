@@ -15,7 +15,7 @@ public static class UpdateChannelEndpoint
         => endpoints.MapPut("/channels/{id:guid}",
                 async (Guid id, [FromBody] UpdateChannelBody body, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new UpdateChannelCommand(id, body.Name, body.Description, body.IsPrivate), cancellationToken);
+                    await mediator.Send(new UpdateChannelCommand(id, body.Name, body.Description, body.IsPrivate), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("UpdateChannel")

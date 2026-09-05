@@ -19,7 +19,7 @@ public static class RetryTenantProvisioningEndpoint
             [FromRoute] string tenantId,
             [FromServices] IMediator mediator,
             CancellationToken cancellationToken) =>
-            TypedResults.Ok(await mediator.Send(new RetryTenantProvisioningCommand(tenantId), cancellationToken)))
+            TypedResults.Ok(await mediator.Send(new RetryTenantProvisioningCommand(tenantId), cancellationToken).ConfigureAwait(false)))
             .WithName("RetryTenantProvisioning")
             .WithSummary("Retry tenant provisioning")
             .RequirePermission(MultitenancyPermissions.Tenants.Update)

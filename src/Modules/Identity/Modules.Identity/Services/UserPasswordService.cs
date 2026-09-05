@@ -27,7 +27,7 @@ internal sealed class UserPasswordService(
     {
         EnsureValidTenant();
 
-        var user = await userManager.FindByEmailAsync(email);
+        var user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
 
         // Anti-enumeration: respond identically regardless of registration — a real user gets the
         // reset email; an unknown or email-less account silently no-ops with the same 200.
@@ -36,7 +36,7 @@ internal sealed class UserPasswordService(
             return;
         }
 
-        var token = await userManager.GeneratePasswordResetTokenAsync(user);
+        var token = await userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
         token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
         // Build the SPA reset link with QueryHelpers (matches GetEmailVerificationUriAsync): trim any trailing
@@ -63,14 +63,14 @@ internal sealed class UserPasswordService(
     {
         EnsureValidTenant();
 
-        var user = await userManager.FindByEmailAsync(email);
+        var user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
         if (user == null)
         {
             throw new NotFoundException("user not found");
         }
 
         token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
-        var result = await userManager.ResetPasswordAsync(user, token, password);
+        var result = await userManager.ResetPasswordAsync(user, token, password).ConfigureAwait(false);
 
         if (!result.Succeeded)
         {
@@ -81,16 +81,16 @@ internal sealed class UserPasswordService(
         // Raise domain event for password reset
         var tenantId = multiTenantContextAccessor?.MultiTenantContext?.TenantInfo?.Id;
         user.RecordPasswordChanged(wasReset: true, tenantId);
-        await db.SaveChangesAsync(cancellationToken);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public async Task ChangePasswordAsync(string password, string newPassword, string confirmNewPassword, string userId, CancellationToken cancellationToken = default)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByIdAsync(userId).ConfigureAwait(false);
 
         _ = user ?? throw new NotFoundException("user not found");
 
-        var result = await userManager.ChangePasswordAsync(user, password, newPassword);
+        var result = await userManager.ChangePasswordAsync(user, password, newPassword).ConfigureAwait(false);
 
         if (!result.Succeeded)
         {
@@ -101,13 +101,13 @@ internal sealed class UserPasswordService(
         // Raise domain event for password change
         var tenantId = multiTenantContextAccessor?.MultiTenantContext?.TenantInfo?.Id;
         user.RecordPasswordChanged(wasReset: false, tenantId);
-        await db.SaveChangesAsync(cancellationToken);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         // Update password expiry date
-        await passwordExpiryService.UpdateLastPasswordChangeDateAsync(userId, cancellationToken);
+        await passwordExpiryService.UpdateLastPasswordChangeDateAsync(userId, cancellationToken).ConfigureAwait(false);
 
         // Save to history
-        await passwordHistoryService.SavePasswordHistoryAsync(userId, cancellationToken);
+        await passwordHistoryService.SavePasswordHistoryAsync(userId, cancellationToken).ConfigureAwait(false);
     }
 
     private void EnsureValidTenant()

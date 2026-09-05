@@ -17,7 +17,7 @@ public static class IssueInvoiceEndpoint
     {
         return endpoints.MapPost("/invoices/{invoiceId:guid}/issue",
                 async (Guid invoiceId, IssueInvoiceBody? body, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new IssueInvoiceCommand(invoiceId, body?.DueAtUtc), ct)))
+                    Results.Ok(await mediator.Send(new IssueInvoiceCommand(invoiceId, body?.DueAtUtc), ct).ConfigureAwait(false)))
             .WithName("IssueInvoice")
             .WithSummary("Issue a draft invoice")
             .RequirePermission(BillingPermissions.Manage)

@@ -15,7 +15,7 @@ public static class MarkChannelReadEndpoint
         => endpoints.MapPost("/channels/{id:guid}/read",
                 async (Guid id, [FromBody] MarkChannelReadBody body, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new MarkChannelReadCommand(id, body.MessageId), cancellationToken);
+                    await mediator.Send(new MarkChannelReadCommand(id, body.MessageId), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("MarkChannelRead")

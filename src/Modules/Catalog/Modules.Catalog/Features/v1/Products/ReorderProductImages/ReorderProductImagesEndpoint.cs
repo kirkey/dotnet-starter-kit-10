@@ -15,7 +15,7 @@ public static class ReorderProductImagesEndpoint
         => endpoints.MapPut("/products/{productId:guid}/images/order",
                 async (Guid productId, [FromBody] ReorderBody body, IMediator mediator, CancellationToken ct) =>
                 {
-                    await mediator.Send(new ReorderProductImagesCommand(productId, body.OrderedImageIds), ct);
+                    await mediator.Send(new ReorderProductImagesCommand(productId, body.OrderedImageIds), ct).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("ReorderProductImages")

@@ -14,7 +14,7 @@ public static class GetTicketByIdEndpoint
     {
         return endpoints.MapGet("/tickets/{ticketId:guid}",
                 async (Guid ticketId, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new GetTicketByIdQuery(ticketId), ct)))
+                    Results.Ok(await mediator.Send(new GetTicketByIdQuery(ticketId), ct).ConfigureAwait(false)))
             .WithName("GetTicketById")
             .WithSummary("Get a ticket by id")
             .RequirePermission(TicketsPermissions.Tickets.View);

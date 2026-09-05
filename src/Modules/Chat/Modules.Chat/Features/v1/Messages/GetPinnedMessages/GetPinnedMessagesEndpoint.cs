@@ -14,7 +14,7 @@ public static class GetPinnedMessagesEndpoint
         => endpoints.MapGet("/channels/{id:guid}/pinned",
                 async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    var result = await mediator.Send(new GetPinnedMessagesQuery(id), cancellationToken);
+                    var result = await mediator.Send(new GetPinnedMessagesQuery(id), cancellationToken).ConfigureAwait(false);
                     return Results.Ok(result);
                 })
             .WithName("ListPinnedMessages")

@@ -14,7 +14,7 @@ public static class ListTicketCommentsEndpoint
     {
         return endpoints.MapGet("/tickets/{ticketId:guid}/comments",
                 async (Guid ticketId, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new ListTicketCommentsQuery(ticketId), ct)))
+                    Results.Ok(await mediator.Send(new ListTicketCommentsQuery(ticketId), ct).ConfigureAwait(false)))
             .WithName("ListTicketComments")
             .WithSummary("List the comments on a ticket")
             .RequirePermission(TicketsPermissions.Tickets.View);

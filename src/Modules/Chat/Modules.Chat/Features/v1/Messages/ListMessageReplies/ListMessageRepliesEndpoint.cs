@@ -15,7 +15,7 @@ public static class ListMessageRepliesEndpoint
                 async (Guid id, Guid? before, int? pageSize, IMediator mediator, CancellationToken cancellationToken) =>
                     Results.Ok(await mediator.Send(
                         new ListMessageRepliesQuery(id, before, pageSize ?? 50),
-                        cancellationToken)))
+                        cancellationToken).ConfigureAwait(false)))
             .WithName("ListMessageReplies")
             .WithSummary("List replies to a thread parent message (newest first, cursor-paged)")
             .RequirePermission(ChatPermissions.Channels.View);

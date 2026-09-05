@@ -15,7 +15,7 @@ public static class CloseTicketEndpoint
     {
         return endpoints.MapPost("/tickets/{ticketId:guid}/close",
                 async (Guid ticketId, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new CloseTicketCommand(ticketId), ct)))
+                    Results.Ok(await mediator.Send(new CloseTicketCommand(ticketId), ct).ConfigureAwait(false)))
             .WithName("CloseTicket")
             .WithSummary("Close a resolved ticket")
             .RequirePermission(TicketsPermissions.Tickets.Close)

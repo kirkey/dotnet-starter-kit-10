@@ -14,7 +14,7 @@ public static class RemoveUserFromGroupEndpoint
     {
         return endpoints.MapDelete("/groups/{groupId:guid}/members/{userId}", async (Guid groupId, string userId, IMediator mediator, CancellationToken cancellationToken) =>
         {
-            await mediator.Send(new RemoveUserFromGroupCommand(groupId, userId), cancellationToken);
+            await mediator.Send(new RemoveUserFromGroupCommand(groupId, userId), cancellationToken).ConfigureAwait(false);
             return TypedResults.NoContent();
         })
         .WithName("RemoveUserFromGroup")

@@ -15,7 +15,7 @@ public static class ListNotificationsEndpoint
                 async (bool? unreadOnly, int? page, int? pageSize, IMediator mediator, CancellationToken cancellationToken) =>
                     Results.Ok(await mediator.Send(
                         new ListNotificationsQuery(unreadOnly ?? false, page ?? 1, pageSize ?? 50),
-                        cancellationToken)))
+                        cancellationToken).ConfigureAwait(false)))
             .WithName("ListNotifications")
             .WithSummary("List the caller's notifications (newest first)")
             .RequirePermission(NotificationPermissions.Inbox.View);

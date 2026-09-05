@@ -15,7 +15,7 @@ public static class RestoreBrandEndpoint
     {
         return endpoints.MapPost("/brands/{brandId:guid}/restore",
                 async (Guid brandId, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new RestoreBrandCommand(brandId), ct)))
+                    Results.Ok(await mediator.Send(new RestoreBrandCommand(brandId), ct).ConfigureAwait(false)))
             .WithName("RestoreBrand")
             .WithSummary("Restore a soft-deleted brand")
             .RequirePermission(CatalogPermissions.Brands.Restore)

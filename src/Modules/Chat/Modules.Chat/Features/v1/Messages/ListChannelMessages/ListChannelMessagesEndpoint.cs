@@ -15,7 +15,7 @@ public static class ListChannelMessagesEndpoint
                 async (Guid id, Guid? before, int? pageSize, IMediator mediator, CancellationToken cancellationToken) =>
                     Results.Ok(await mediator.Send(
                         new ListChannelMessagesQuery(id, before, pageSize ?? 50),
-                        cancellationToken)))
+                        cancellationToken).ConfigureAwait(false)))
             .WithName("ListChannelMessages")
             .WithSummary("List top-level messages in a channel (cursor-paged, reverse chronological)")
             .RequirePermission(ChatPermissions.Channels.View);

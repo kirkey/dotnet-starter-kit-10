@@ -44,7 +44,7 @@ public sealed class ChangePasswordValidator : AbstractValidator<ChangePasswordCo
         var userId = _currentUser.GetUserId().ToString();
 
         // Check if password is in history
-        var isInHistory = await _passwordHistoryService.IsPasswordInHistoryAsync(userId, newPassword, cancellationToken);
+        var isInHistory = await _passwordHistoryService.IsPasswordInHistoryAsync(userId, newPassword, cancellationToken).ConfigureAwait(false);
         return !isInHistory; // Return true if NOT in history (validation passes)
     }
 }

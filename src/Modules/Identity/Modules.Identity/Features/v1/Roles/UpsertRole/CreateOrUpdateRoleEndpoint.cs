@@ -15,7 +15,7 @@ public static class CreateOrUpdateRoleEndpoint
     public static RouteHandlerBuilder MapCreateOrUpdateRoleEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapPost("/roles", async (IMediator mediator, [FromBody] UpsertRoleCommand request, CancellationToken cancellationToken) =>
-            TypedResults.Ok(await mediator.Send(request, cancellationToken)))
+            TypedResults.Ok(await mediator.Send(request, cancellationToken).ConfigureAwait(false)))
         .WithName("CreateOrUpdateRole")
         .WithSummary("Create or update role")
         .RequirePermission(IdentityPermissions.Roles.Create)

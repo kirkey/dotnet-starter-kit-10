@@ -194,7 +194,7 @@ public static class Audit
             foreach (var enricher in enrichers)
                 enricher.Enrich(env);
 
-            await Publisher.PublishAsync(env, ct);
+            await Publisher.PublishAsync(env, ct).ConfigureAwait(false);
         }
 
     }

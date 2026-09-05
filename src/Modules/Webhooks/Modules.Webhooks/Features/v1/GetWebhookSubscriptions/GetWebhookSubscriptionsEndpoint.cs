@@ -18,7 +18,7 @@ public static class GetWebhookSubscriptionsEndpoint
             IMediator mediator,
             CancellationToken ct) =>
         {
-            var result = await mediator.Send(new GetWebhookSubscriptionsQuery(pageNumber, pageSize), ct);
+            var result = await mediator.Send(new GetWebhookSubscriptionsQuery(pageNumber, pageSize), ct).ConfigureAwait(false);
             return TypedResults.Ok(result);
         })
         .WithName("GetWebhookSubscriptions")

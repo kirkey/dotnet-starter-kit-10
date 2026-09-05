@@ -1,4 +1,5 @@
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Framework.Web.Idempotency;
 using FSH.Modules.Chat.Contracts.Authorization;
 using FSH.Modules.Chat.Contracts.v1.Commands;
 using Mediator;
@@ -13,8 +14,9 @@ public static class CreateChannelEndpoint
     internal static RouteHandlerBuilder MapCreateChannelEndpoint(this IEndpointRouteBuilder endpoints)
         => endpoints.MapPost("/channels",
                 async (CreateChannelCommand command, IMediator mediator, CancellationToken cancellationToken) =>
-                    Results.Ok(await mediator.Send(command, cancellationToken)))
+                    Results.Ok(await mediator.Send(command, cancellationToken).ConfigureAwait(false)))
             .WithName("CreateChannel")
             .WithSummary("Create a new named chat channel")
-            .RequirePermission(ChatPermissions.Channels.Create);
+            .RequirePermission(ChatPermissions.Channels.Create)
+            .WithIdempotency();
 }

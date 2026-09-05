@@ -13,7 +13,7 @@ public static class ListSharedFilesEndpoint
     internal static RouteHandlerBuilder MapListSharedFilesEndpoint(this IEndpointRouteBuilder endpoints)
         => endpoints.MapGet("/shared",
                 async (int? page, int? pageSize, IMediator mediator, CancellationToken cancellationToken) =>
-                    Results.Ok(await mediator.Send(new ListSharedFilesQuery(page ?? 1, pageSize ?? 20), cancellationToken)))
+                    Results.Ok(await mediator.Send(new ListSharedFilesQuery(page ?? 1, pageSize ?? 20), cancellationToken).ConfigureAwait(false)))
             .WithName("ListSharedFiles")
             .WithSummary("List Public files in this tenant (the 'Shared' view)")
             .RequirePermission(FilesPermissions.Upload);

@@ -22,7 +22,7 @@ public static class RevokeImpersonationGrantEndpoint
                    IMediator mediator,
                    CancellationToken ct) =>
                 TypedResults.Ok(await mediator.Send(
-                    new RevokeImpersonationGrantCommand(id, body?.Reason), ct)))
+                    new RevokeImpersonationGrantCommand(id, body?.Reason), ct).ConfigureAwait(false)))
             .WithName("RevokeImpersonationGrant")
             .WithSummary("Revoke an impersonation grant")
             .WithDescription("Marks the grant as revoked. Subsequent requests carrying the impersonation token are rejected by the JWT validation hook within ~1 second (cache TTL).")

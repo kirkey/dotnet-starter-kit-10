@@ -21,7 +21,7 @@ public static class GetAuditsByTraceEndpoint
                         TraceId = traceId,
                         FromUtc = fromUtc,
                         ToUtc = toUtc
-                    }, cancellationToken)))
+                    }, cancellationToken).ConfigureAwait(false)))
             .WithName("GetAuditsByTrace")
             .WithSummary("Get audit events by trace id")
             .WithDescription("Retrieve audit events associated with a given trace id.")

@@ -15,7 +15,7 @@ public static class CreatePlanEndpoint
     {
         return endpoints.MapPost("/plans",
                 async (CreatePlanCommand command, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(command, ct)))
+                    Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false)))
             .WithName("CreateBillingPlan")
             .WithSummary("Create a new billing plan")
             .RequirePermission(BillingPermissions.Manage)

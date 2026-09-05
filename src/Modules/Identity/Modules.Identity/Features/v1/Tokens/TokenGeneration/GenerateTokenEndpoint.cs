@@ -45,7 +45,7 @@ public static class GenerateTokenEndpoint
                         detail: "SuperAdmin accounts must use the admin app. Sign in there instead of the tenant dashboard.");
                 }
 
-                var token = await mediator.Send(command, ct);
+                var token = await mediator.Send(command, ct).ConfigureAwait(false);
                 return token is null
                     ? TypedResults.Unauthorized()
                     : TypedResults.Ok(token);

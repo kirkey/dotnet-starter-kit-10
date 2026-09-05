@@ -1,4 +1,5 @@
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Framework.Web.Idempotency;
 using FSH.Modules.Multitenancy.Contracts.Authorization;
 using FSH.Modules.Multitenancy.Contracts.v1.RenewTenant;
 using Mediator;
@@ -17,6 +18,7 @@ public static class RenewTenantEndpoint
             .WithName("RenewTenant")
             .WithSummary("Renew tenant subscription")
             .RequirePermission(MultitenancyPermissions.Tenants.UpgradeSubscription)
+            .WithIdempotency()
             .WithDescription("Extend a tenant's validity by one plan term, optionally switching plans, and issue the term invoice.")
             .Produces<RenewTenantCommandResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)

@@ -17,7 +17,7 @@ public static class SendMessageEndpoint
                 async (Guid id, [FromBody] SendMessageBody body, IMediator mediator, CancellationToken cancellationToken) =>
                     Results.Ok(await mediator.Send(
                         new SendMessageCommand(id, body.Body, body.ParentMessageId, body.Attachments ?? []),
-                        cancellationToken)))
+                        cancellationToken).ConfigureAwait(false)))
             .WithName("SendMessage")
             .WithSummary("Send a message to a channel — supports replies (parentMessageId) and attachments")
             .RequirePermission(ChatPermissions.Messages.Send)

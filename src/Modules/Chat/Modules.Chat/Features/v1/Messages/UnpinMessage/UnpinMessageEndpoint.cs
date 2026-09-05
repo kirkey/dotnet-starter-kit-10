@@ -14,7 +14,7 @@ public static class UnpinMessageEndpoint
         => endpoints.MapDelete("/messages/{id:guid}/pin",
                 async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new UnpinMessageCommand(id), cancellationToken);
+                    await mediator.Send(new UnpinMessageCommand(id), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("UnpinMessage")

@@ -16,7 +16,7 @@ public static class CaptureUsageSnapshotsEndpoint
     {
         return endpoints.MapPost("/usage/snapshots/capture",
                 async (CaptureUsageSnapshotsCommand command, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(command, ct)))
+                    Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false)))
             .WithName("CaptureUsageSnapshots")
             .WithSummary("Manually capture usage snapshots for a tenant + period")
             .WithDescription("Ops endpoint wrapping IUsageReporter.CaptureForPeriodAsync. Idempotent: re-running for the same (tenant, period) returns existing snapshots unchanged. Used for retroactive billing, debugging, and re-runs after fixes.")

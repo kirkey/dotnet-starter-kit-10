@@ -14,7 +14,7 @@ public static class DeleteUserEndpoint
     {
         return endpoints.MapDelete("/users/{id:guid}", async (string id, IMediator mediator, CancellationToken cancellationToken) =>
         {
-            await mediator.Send(new DeleteUserCommand(id), cancellationToken);
+            await mediator.Send(new DeleteUserCommand(id), cancellationToken).ConfigureAwait(false);
             return TypedResults.NoContent();
         })
         .WithName("DeleteUser")

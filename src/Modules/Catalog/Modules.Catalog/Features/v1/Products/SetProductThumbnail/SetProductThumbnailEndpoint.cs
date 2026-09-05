@@ -14,7 +14,7 @@ public static class SetProductThumbnailEndpoint
         => endpoints.MapPut("/products/{productId:guid}/images/{imageId:guid}/thumbnail",
                 async (Guid productId, Guid imageId, IMediator mediator, CancellationToken ct) =>
                 {
-                    await mediator.Send(new SetProductThumbnailCommand(productId, imageId), ct);
+                    await mediator.Send(new SetProductThumbnailCommand(productId, imageId), ct).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("SetProductThumbnail")

@@ -37,15 +37,15 @@ internal sealed class UserRegistrationService(
 
         var email = ExtractEmailFromPrincipal(principal);
 
-        var existingUser = await userManager.FindByEmailAsync(email);
+        var existingUser = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
         if (existingUser is not null)
         {
             return existingUser.Id;
         }
 
-        var user = await CreateUserFromPrincipalAsync(principal, email);
-        await AssignDefaultRoleAndGroupsAsync(user, "ExternalAuth", cancellationToken);
-        await PublishUserRegisteredAsync(user, "Identity.ExternalAuth", cancellationToken);
+        var user = await CreateUserFromPrincipalAsync(principal, email).ConfigureAwait(false);
+        await AssignDefaultRoleAndGroupsAsync(user, "ExternalAuth", cancellationToken).ConfigureAwait(false);
+        await PublishUserRegisteredAsync(user, "Identity.ExternalAuth", cancellationToken).ConfigureAwait(false);
 
         return user.Id;
     }
@@ -63,10 +63,10 @@ internal sealed class UserRegistrationService(
     {
         ValidatePasswordMatch(password, confirmPassword);
 
-        var user = await CreateUserWithPasswordAsync(firstName, lastName, email, userName, password, phoneNumber);
-        await AssignDefaultRoleAndGroupsAsync(user, "System", cancellationToken);
-        await SendConfirmationEmailAsync(user, origin, cancellationToken);
-        await PublishUserRegisteredAsync(user, "Identity", cancellationToken);
+        var user = await CreateUserWithPasswordAsync(firstName, lastName, email, userName, password, phoneNumber).ConfigureAwait(false);
+        await AssignDefaultRoleAndGroupsAsync(user, "System", cancellationToken).ConfigureAwait(false);
+        await SendConfirmationEmailAsync(user, origin, cancellationToken).ConfigureAwait(false);
+        await PublishUserRegisteredAsync(user, "Identity", cancellationToken).ConfigureAwait(false);
 
         return user.Id;
     }
@@ -77,12 +77,12 @@ internal sealed class UserRegistrationService(
 
         var user = await userManager.Users
             .Where(u => u.Id == userId && !u.EmailConfirmed)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
 
         _ = user ?? throw new CustomException("An error occurred while confirming E-Mail.");
 
         code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-        var result = await userManager.ConfirmEmailAsync(user, code);
+        var result = await userManager.ConfirmEmailAsync(user, code).ConfigureAwait(false);
 
         return result.Succeeded
             ? string.Format(CultureInfo.InvariantCulture, "Account Confirmed for E-Mail {0}. You can now use the /api/tokens endpoint to generate JWT.", user.Email)
@@ -95,7 +95,7 @@ internal sealed class UserRegistrationService(
 
         var user = await userManager.Users
             .Where(u => u.Id == userId)
-            .FirstOrDefaultAsync(cancellationToken)
+            .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false)
             ?? throw new NotFoundException($"User {userId} was not found.");
 
         // Idempotent: a second confirm is a no-op rather than an error.
@@ -105,7 +105,7 @@ internal sealed class UserRegistrationService(
         }
 
         user.EmailConfirmed = true;
-        var result = await userManager.UpdateAsync(user);
+        var result = await userManager.UpdateAsync(user).ConfigureAwait(false);
         if (!result.Succeeded)
         {
             throw new CustomException(string.Format(
@@ -122,7 +122,7 @@ internal sealed class UserRegistrationService(
 
         var user = await userManager.Users
             .Where(u => u.Id == userId)
-            .FirstOrDefaultAsync(cancellationToken)
+            .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false)
             ?? throw new NotFoundException($"User {userId} was not found.");
 
         if (user.EmailConfirmed)
@@ -133,7 +133,7 @@ internal sealed class UserRegistrationService(
                 user.Email));
         }
 
-        await SendConfirmationEmailAsync(user, origin, cancellationToken);
+        await SendConfirmationEmailAsync(user, origin, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<string> ConfirmPhoneNumberAsync(string userId, string code, CancellationToken cancellationToken = default)
@@ -142,12 +142,12 @@ internal sealed class UserRegistrationService(
 
         var user = await userManager.Users
             .Where(u => u.Id == userId && !u.PhoneNumberConfirmed)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
 
         _ = user ?? throw new CustomException("An error occurred while confirming phone number.");
 
         code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-        var result = await userManager.ChangePhoneNumberAsync(user, user.PhoneNumber!, code);
+        var result = await userManager.ChangePhoneNumberAsync(user, user.PhoneNumber!, code).ConfigureAwait(false);
 
         return result.Succeeded
             ? string.Format(CultureInfo.InvariantCulture, "Phone number {0} confirmed successfully.", user.PhoneNumber)
@@ -173,7 +173,7 @@ internal sealed class UserRegistrationService(
     {
         var (firstName, lastName, userName) = ExtractUserInfoFromPrincipal(principal, email);
 
-        userName = await EnsureUniqueUserNameAsync(userName);
+        userName = await EnsureUniqueUserNameAsync(userName).ConfigureAwait(false);
 
         var user = new FshUser
         {
@@ -186,7 +186,7 @@ internal sealed class UserRegistrationService(
             IsActive = true
         };
 
-        var result = await userManager.CreateAsync(user);
+        var result = await userManager.CreateAsync(user).ConfigureAwait(false);
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(e => e.Description).ToList();
@@ -219,7 +219,7 @@ internal sealed class UserRegistrationService(
 
     private async Task<string> EnsureUniqueUserNameAsync(string userName)
     {
-        if (await userManager.FindByNameAsync(userName) is not null)
+        if (await userManager.FindByNameAsync(userName).ConfigureAwait(false) is not null)
         {
             return $"{userName}_{Guid.NewGuid():N}"[..20];
         }
@@ -257,7 +257,7 @@ internal sealed class UserRegistrationService(
             PhoneNumberConfirmed = false,
         };
 
-        var result = await userManager.CreateAsync(user, password);
+        var result = await userManager.CreateAsync(user, password).ConfigureAwait(false);
         if (!result.Succeeded)
         {
             // Identity create failures (duplicate email/username, password policy, …) are
@@ -278,12 +278,12 @@ internal sealed class UserRegistrationService(
         string source,
         CancellationToken cancellationToken = default)
     {
-        await userManager.AddToRoleAsync(user, RoleConstants.Basic);
+        await userManager.AddToRoleAsync(user, RoleConstants.Basic).ConfigureAwait(false);
 
         var defaultGroups = await db.Groups
             .AsNoTracking()
             .Where(g => g.IsDefault && !g.IsDeleted)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
 
         foreach (var group in defaultGroups)
         {
@@ -292,7 +292,7 @@ internal sealed class UserRegistrationService(
 
         if (defaultGroups.Count > 0)
         {
-            await db.SaveChangesAsync(cancellationToken);
+            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -303,7 +303,7 @@ internal sealed class UserRegistrationService(
             return;
         }
 
-        string emailVerificationUri = await GetEmailVerificationUriAsync(user, origin);
+        string emailVerificationUri = await GetEmailVerificationUriAsync(user, origin).ConfigureAwait(false);
         string emailBody = BuildConfirmationEmailHtml(user.FirstName ?? user.UserName ?? "User", emailVerificationUri);
 
         var mailRequest = new MailRequest(
@@ -322,7 +322,7 @@ internal sealed class UserRegistrationService(
         var tenantId = multiTenantContextAccessor.MultiTenantContext.TenantInfo?.Id;
         user.RecordRegistered(tenantId);
 
-        await db.SaveChangesAsync(cancellationToken);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         var integrationEvent = new UserRegisteredIntegrationEvent(
             Id: Guid.NewGuid(),
@@ -342,7 +342,7 @@ internal sealed class UserRegistrationService(
     {
         EnsureValidTenant();
 
-        string code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        string code = await userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
         const string route = "api/v1/identity/confirm-email";

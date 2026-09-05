@@ -19,7 +19,7 @@ public static class GetTenantProvisioningStatusEndpoint
             [FromRoute] string tenantId,
             [FromServices] IMediator mediator,
             CancellationToken cancellationToken) =>
-            TypedResults.Ok(await mediator.Send(new GetTenantProvisioningStatusQuery(tenantId), cancellationToken)))
+            TypedResults.Ok(await mediator.Send(new GetTenantProvisioningStatusQuery(tenantId), cancellationToken).ConfigureAwait(false)))
             .WithName("GetTenantProvisioningStatus")
             .WithSummary("Get tenant provisioning status")
             .RequirePermission(MultitenancyPermissions.Tenants.View)

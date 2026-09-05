@@ -14,7 +14,7 @@ public static class GetPermissionCatalogEndpoint
     internal static RouteHandlerBuilder MapGetPermissionCatalogEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/permissions/catalog", async (IMediator mediator, CancellationToken cancellationToken) =>
-            TypedResults.Ok(await mediator.Send(new GetPermissionCatalogQuery(), cancellationToken)))
+            TypedResults.Ok(await mediator.Send(new GetPermissionCatalogQuery(), cancellationToken).ConfigureAwait(false)))
         .WithName("GetPermissionCatalog")
         .WithSummary("Get permission catalog")
         .RequirePermission(IdentityPermissions.Roles.View)

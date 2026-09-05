@@ -14,7 +14,7 @@ public static class MarkNotificationReadEndpoint
         => endpoints.MapPost("/{id:guid}/read",
                 async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new MarkNotificationReadCommand(id), cancellationToken);
+                    await mediator.Send(new MarkNotificationReadCommand(id), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("MarkNotificationRead")

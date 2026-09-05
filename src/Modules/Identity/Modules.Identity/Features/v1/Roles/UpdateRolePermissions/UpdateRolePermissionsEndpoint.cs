@@ -37,7 +37,7 @@ public static class UpdateRolePermissionsEndpoint
             return TypedResults.BadRequest();
         }
 
-        var response = await mediator.Send(request, cancellationToken);
+        var response = await mediator.Send(request, cancellationToken).ConfigureAwait(false);
         return TypedResults.Ok(response);
     }
 }

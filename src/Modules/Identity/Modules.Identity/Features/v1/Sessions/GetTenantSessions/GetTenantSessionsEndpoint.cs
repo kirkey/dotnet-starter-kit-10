@@ -30,7 +30,7 @@ public static class GetTenantSessionsEndpoint
                         PageNumber = pageNumber ?? 1,
                         PageSize = pageSize ?? 50,
                     };
-                    return TypedResults.Ok(await mediator.Send(query, ct));
+                    return TypedResults.Ok(await mediator.Send(query, ct).ConfigureAwait(false));
                 })
             .WithName("GetTenantSessions")
             .WithSummary("List all sessions in the current tenant (Admin)")

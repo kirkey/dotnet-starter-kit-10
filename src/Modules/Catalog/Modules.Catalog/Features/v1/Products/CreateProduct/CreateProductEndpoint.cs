@@ -15,7 +15,7 @@ public static class CreateProductEndpoint
     {
         return endpoints.MapPost("/products",
                 async (CreateProductCommand command, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(command, ct)))
+                    Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false)))
             .WithName("CreateProduct")
             .WithSummary("Create a product")
             .RequirePermission(CatalogPermissions.Products.Create)

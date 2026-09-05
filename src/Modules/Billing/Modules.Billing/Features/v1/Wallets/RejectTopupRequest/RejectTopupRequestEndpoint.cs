@@ -17,7 +17,7 @@ public static class RejectTopupRequestEndpoint
     {
         return endpoints.MapPost("/wallet/topup-requests/{id:guid}/reject",
                 async (Guid id, RejectTopupRequestBody? body, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new RejectTopupRequestCommand(id, body?.Reason), ct)))
+                    Results.Ok(await mediator.Send(new RejectTopupRequestCommand(id, body?.Reason), ct).ConfigureAwait(false)))
             .WithName("RejectTopupRequest")
             .WithSummary("Reject a pending top-up request")
             .RequirePermission(BillingPermissions.Manage)

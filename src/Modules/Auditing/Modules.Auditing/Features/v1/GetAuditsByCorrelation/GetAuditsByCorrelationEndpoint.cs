@@ -21,7 +21,7 @@ public static class GetAuditsByCorrelationEndpoint
                         CorrelationId = correlationId,
                         FromUtc = fromUtc,
                         ToUtc = toUtc
-                    }, cancellationToken)))
+                    }, cancellationToken).ConfigureAwait(false)))
             .WithName("GetAuditsByCorrelation")
             .WithSummary("Get audit events by correlation id")
             .WithDescription("Retrieve audit events associated with a given correlation id.")

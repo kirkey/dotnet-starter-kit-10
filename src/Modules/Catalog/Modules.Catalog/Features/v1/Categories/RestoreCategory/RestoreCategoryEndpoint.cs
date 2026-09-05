@@ -15,7 +15,7 @@ public static class RestoreCategoryEndpoint
     {
         return endpoints.MapPost("/categories/{categoryId:guid}/restore",
                 async (Guid categoryId, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new RestoreCategoryCommand(categoryId), ct)))
+                    Results.Ok(await mediator.Send(new RestoreCategoryCommand(categoryId), ct).ConfigureAwait(false)))
             .WithName("RestoreCategory")
             .WithSummary("Restore a soft-deleted category")
             .RequirePermission(CatalogPermissions.Categories.Restore)

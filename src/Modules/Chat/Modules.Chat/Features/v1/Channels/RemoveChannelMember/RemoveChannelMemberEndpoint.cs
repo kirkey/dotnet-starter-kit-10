@@ -14,7 +14,7 @@ public static class RemoveChannelMemberEndpoint
         => endpoints.MapDelete("/channels/{id:guid}/members/{userId}",
                 async (Guid id, string userId, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new RemoveChannelMemberCommand(id, userId), cancellationToken);
+                    await mediator.Send(new RemoveChannelMemberCommand(id, userId), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("RemoveChannelMember")

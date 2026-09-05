@@ -17,7 +17,7 @@ public static class AdjustProductStockEndpoint
                 {
                     ArgumentNullException.ThrowIfNull(body);
                     var command = body with { ProductId = productId };
-                    return Results.Ok(new { stock = await mediator.Send(command, ct) });
+                    return Results.Ok(new { stock = await mediator.Send(command, ct).ConfigureAwait(false) });
                 })
             .WithName("AdjustProductStock")
             .WithSummary("Adjust product stock by a delta (+/-)")

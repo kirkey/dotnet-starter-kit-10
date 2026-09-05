@@ -22,7 +22,7 @@ public static class RefreshTokenEndpoint
             [FromServices] IMediator mediator,
             CancellationToken ct) =>
             {
-                var response = await mediator.Send(command, ct);
+                var response = await mediator.Send(command, ct).ConfigureAwait(false);
                 return TypedResults.Ok(response);
             })
             .WithName("RefreshJwtTokens")

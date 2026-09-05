@@ -15,7 +15,7 @@ public static class DeleteCategoryEndpoint
         return endpoints.MapDelete("/categories/{categoryId:guid}",
                 async (Guid categoryId, IMediator mediator, CancellationToken ct) =>
                 {
-                    await mediator.Send(new DeleteCategoryCommand(categoryId), ct);
+                    await mediator.Send(new DeleteCategoryCommand(categoryId), ct).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("DeleteCategory")

@@ -14,7 +14,7 @@ public static class GetUserByIdEndpoint
     internal static RouteHandlerBuilder MapGetUserByIdEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/users/{id:guid}", async (string id, IMediator mediator, CancellationToken cancellationToken) =>
-            TypedResults.Ok(await mediator.Send(new GetUserQuery(id), cancellationToken)))
+            TypedResults.Ok(await mediator.Send(new GetUserQuery(id), cancellationToken).ConfigureAwait(false)))
         .WithName("GetUser")
         .WithSummary("Get user by ID")
         .RequirePermission(IdentityPermissions.Users.View)

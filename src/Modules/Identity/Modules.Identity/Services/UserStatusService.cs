@@ -27,13 +27,13 @@ internal sealed class UserStatusService(
     {
         EnsureValidTenant();
 
-        var context = await BuildToggleContextAsync(userId, activateUser, cancellationToken);
+        var context = await BuildToggleContextAsync(userId, activateUser, cancellationToken).ConfigureAwait(false);
 
-        await ValidateTogglePermissionsAsync(context, cancellationToken);
+        await ValidateTogglePermissionsAsync(context, cancellationToken).ConfigureAwait(false);
 
         ApplyStatusChange(context);
 
-        await SaveAndAuditAsync(context, cancellationToken);
+        await SaveAndAuditAsync(context, cancellationToken).ConfigureAwait(false);
     }
 
     private void EnsureValidTenant()
@@ -55,12 +55,12 @@ internal sealed class UserStatusService(
             throw new UnauthorizedException("authenticated user required to toggle status");
         }
 
-        var actor = await userManager.FindByIdAsync(actorId.ToString())
+        var actor = await userManager.FindByIdAsync(actorId.ToString()).ConfigureAwait(false)
             ?? throw new UnauthorizedException("current user not found");
 
         var targetUser = await userManager.Users
             .Where(u => u.Id == userId)
-            .FirstOrDefaultAsync(cancellationToken)
+            .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false)
             ?? throw new NotFoundException("User Not Found.");
 
         return new ToggleStatusContext(
@@ -75,27 +75,27 @@ internal sealed class UserStatusService(
         ToggleStatusContext context,
         CancellationToken cancellationToken)
     {
-        if (!await userManager.IsInRoleAsync(context.Actor, RoleConstants.Admin))
+        if (!await userManager.IsInRoleAsync(context.Actor, RoleConstants.Admin).ConfigureAwait(false))
         {
-            await AuditPolicyFailureAsync(context, "ActorNotAdmin", cancellationToken);
+            await AuditPolicyFailureAsync(context, "ActorNotAdmin", cancellationToken).ConfigureAwait(false);
             throw new ForbiddenException("Only administrators can change user status.");
         }
 
         if (!context.ActivateUser && context.ActorId.ToString() == context.TargetUser.Id)
         {
-            await AuditPolicyFailureAsync(context, "SelfDeactivationBlocked", cancellationToken);
+            await AuditPolicyFailureAsync(context, "SelfDeactivationBlocked", cancellationToken).ConfigureAwait(false);
             throw new CustomException("Users cannot deactivate themselves.", Array.Empty<string>(), HttpStatusCode.BadRequest);
         }
 
-        if (!context.ActivateUser && await userManager.IsInRoleAsync(context.TargetUser, RoleConstants.Admin))
+        if (!context.ActivateUser && await userManager.IsInRoleAsync(context.TargetUser, RoleConstants.Admin).ConfigureAwait(false))
         {
-            await AuditPolicyFailureAsync(context, "AdminDeactivationBlocked", cancellationToken);
+            await AuditPolicyFailureAsync(context, "AdminDeactivationBlocked", cancellationToken).ConfigureAwait(false);
             throw new CustomException("Administrators cannot be deactivated.", Array.Empty<string>(), HttpStatusCode.BadRequest);
         }
 
         if (!context.ActivateUser)
         {
-            await EnsureMinimumActiveAdminsAsync(context, cancellationToken);
+            await EnsureMinimumActiveAdminsAsync(context, cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -103,10 +103,10 @@ internal sealed class UserStatusService(
         ToggleStatusContext context,
         CancellationToken cancellationToken)
     {
-        var activeAdmins = await userManager.GetUsersInRoleAsync(RoleConstants.Admin);
+        var activeAdmins = await userManager.GetUsersInRoleAsync(RoleConstants.Admin).ConfigureAwait(false);
         if (!activeAdmins.Any(u => u.IsActive))
         {
-            await AuditPolicyFailureAsync(context, "NoActiveAdmins", cancellationToken);
+            await AuditPolicyFailureAsync(context, "NoActiveAdmins", cancellationToken).ConfigureAwait(false);
             throw new CustomException("Tenant must have at least one active administrator.", Array.Empty<string>(), HttpStatusCode.BadRequest);
         }
     }
@@ -127,7 +127,7 @@ internal sealed class UserStatusService(
         ToggleStatusContext context,
         CancellationToken cancellationToken)
     {
-        var result = await userManager.UpdateAsync(context.TargetUser);
+        var result = await userManager.UpdateAsync(context.TargetUser).ConfigureAwait(false);
         if (!result.Succeeded)
         {
             throw new CustomException("Toggle status failed", result.Errors.Select(e => e.Description).ToList(), HttpStatusCode.BadRequest);

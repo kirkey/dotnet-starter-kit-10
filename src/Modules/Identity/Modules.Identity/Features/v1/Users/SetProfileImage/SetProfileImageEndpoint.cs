@@ -12,7 +12,7 @@ public static class SetProfileImageEndpoint
         => endpoints.MapPut("/profile/image",
                 async (SetProfileImageCommand command, IMediator mediator, CancellationToken ct) =>
                 {
-                    await mediator.Send(command, ct);
+                    await mediator.Send(command, ct).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("SetProfileImage")

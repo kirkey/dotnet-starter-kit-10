@@ -1,5 +1,6 @@
 using FSH.Modules.Identity.Contracts.Authorization;
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Framework.Web.Idempotency;
 using FSH.Modules.Identity.Contracts.DTOs;
 using FSH.Modules.Identity.Contracts.v1.Groups.CreateGroup;
 using Mediator;
@@ -16,12 +17,13 @@ public static class CreateGroupEndpoint
     {
         return endpoints.MapPost("/groups", async (IMediator mediator, [FromBody] CreateGroupCommand request, CancellationToken cancellationToken) =>
         {
-            var result = await mediator.Send(request, cancellationToken);
+            var result = await mediator.Send(request, cancellationToken).ConfigureAwait(false);
             return TypedResults.Created($"/api/v1/groups/{result.Id}", result);
         })
         .WithName("CreateGroup")
         .WithSummary("Create a new group")
         .RequirePermission(IdentityPermissions.Groups.Create)
+        .WithIdempotency()
         .WithDescription("Create a new group with optional role assignments.")
         .Produces<GroupDto>(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status401Unauthorized)

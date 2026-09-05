@@ -25,14 +25,14 @@ internal sealed class UserRoleService(
     {
         var user = await userManager.Users
             .Where(u => u.Id == userId)
-            .FirstOrDefaultAsync(cancellationToken)
+            .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false)
             ?? throw new NotFoundException("user not found");
 
-        await ValidateAdminRoleChangeAsync(user, userRoles);
+        await ValidateAdminRoleChangeAsync(user, userRoles).ConfigureAwait(false);
 
-        var assignedRoles = await ProcessRoleAssignmentsAsync(user, userRoles);
+        var assignedRoles = await ProcessRoleAssignmentsAsync(user, userRoles).ConfigureAwait(false);
 
-        await RaiseRolesAssignedEventAsync(user, assignedRoles, cancellationToken);
+        await RaiseRolesAssignedEventAsync(user, assignedRoles, cancellationToken).ConfigureAwait(false);
 
         // Any role mutation (add or remove) invalidates the cached permission set; flush
         // unconditionally rather than gating on assignedRoles, which only tracks additions.
@@ -43,14 +43,14 @@ internal sealed class UserRoleService(
 
     public async Task<List<UserRoleDto>> GetUserRolesAsync(string userId, CancellationToken cancellationToken)
     {
-        var user = await userManager.FindByIdAsync(userId)
+        var user = await userManager.FindByIdAsync(userId).ConfigureAwait(false)
             ?? throw new NotFoundException("user not found");
 
-        var roles = await roleManager.Roles.AsNoTracking().ToListAsync(cancellationToken)
+        var roles = await roleManager.Roles.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false)
             ?? throw new NotFoundException("roles not found");
 
         // Single membership query instead of one IsInRoleAsync round-trip per role.
-        var memberships = await userManager.GetRolesAsync(user);
+        var memberships = await userManager.GetRolesAsync(user).ConfigureAwait(false);
         var membershipSet = new HashSet<string>(memberships, StringComparer.OrdinalIgnoreCase);
 
         var userRoles = new List<UserRoleDto>();
@@ -76,7 +76,7 @@ internal sealed class UserRoleService(
             return;
         }
 
-        bool userIsAdmin = await userManager.IsInRoleAsync(user, RoleConstants.Admin);
+        bool userIsAdmin = await userManager.IsInRoleAsync(user, RoleConstants.Admin).ConfigureAwait(false);
         if (!userIsAdmin)
         {
             return;
@@ -101,7 +101,7 @@ internal sealed class UserRoleService(
 
         // After this removal, at least one admin must remain in the tenant — matches
         // the "at least one active administrator" invariant enforced on user deactivation.
-        await EnsureMinimumAdminCountAsync();
+            await EnsureMinimumAdminCountAsync().ConfigureAwait(false);
     }
 
     private bool IsRootTenantAdmin(FshUser user)
@@ -112,7 +112,7 @@ internal sealed class UserRoleService(
 
     private async Task EnsureMinimumAdminCountAsync()
     {
-        int adminCount = (await userManager.GetUsersInRoleAsync(RoleConstants.Admin)).Count;
+        int adminCount = (await userManager.GetUsersInRoleAsync(RoleConstants.Admin).ConfigureAwait(false)).Count;
         if (adminCount <= 1)
         {
             throw new CustomException(
@@ -128,22 +128,22 @@ internal sealed class UserRoleService(
 
         foreach (var userRole in userRoles)
         {
-            if (await roleManager.FindByNameAsync(userRole.RoleName!) is null)
+            if (await roleManager.FindByNameAsync(userRole.RoleName!).ConfigureAwait(false) is null)
             {
                 continue;
             }
 
             if (userRole.Enabled)
             {
-                if (!await userManager.IsInRoleAsync(user, userRole.RoleName!))
+                if (!await userManager.IsInRoleAsync(user, userRole.RoleName!).ConfigureAwait(false))
                 {
-                    await userManager.AddToRoleAsync(user, userRole.RoleName!);
+                    await userManager.AddToRoleAsync(user, userRole.RoleName!).ConfigureAwait(false);
                     assignedRoles.Add(userRole.RoleName!);
                 }
             }
             else
             {
-                await userManager.RemoveFromRoleAsync(user, userRole.RoleName!);
+                await userManager.RemoveFromRoleAsync(user, userRole.RoleName!).ConfigureAwait(false);
             }
         }
 
@@ -159,6 +159,6 @@ internal sealed class UserRoleService(
 
         var tenantId = multiTenantContextAccessor?.MultiTenantContext?.TenantInfo?.Id;
         user.RecordRolesAssigned(assignedRoles, tenantId);
-        await db.SaveChangesAsync(cancellationToken);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 }

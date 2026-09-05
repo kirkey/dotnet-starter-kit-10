@@ -14,7 +14,7 @@ public static class PinMessageEndpoint
         => endpoints.MapPost("/messages/{id:guid}/pin",
                 async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new PinMessageCommand(id), cancellationToken);
+                    await mediator.Send(new PinMessageCommand(id), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("PinMessage")

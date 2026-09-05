@@ -13,7 +13,7 @@ public static class ListMyChannelsEndpoint
     internal static RouteHandlerBuilder MapListMyChannelsEndpoint(this IEndpointRouteBuilder endpoints)
         => endpoints.MapGet("/channels",
                 async (int? page, int? pageSize, IMediator mediator, CancellationToken cancellationToken) =>
-                    Results.Ok(await mediator.Send(new ListMyChannelsQuery(page ?? 1, pageSize ?? 50), cancellationToken)))
+                    Results.Ok(await mediator.Send(new ListMyChannelsQuery(page ?? 1, pageSize ?? 50), cancellationToken).ConfigureAwait(false)))
             .WithName("ListMyChannels")
             .WithSummary("List channels the current user is a member of, newest activity first")
             .RequirePermission(ChatPermissions.Channels.View);

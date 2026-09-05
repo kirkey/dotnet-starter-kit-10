@@ -15,7 +15,7 @@ public static class DeleteProductEndpoint
         return endpoints.MapDelete("/products/{productId:guid}",
                 async (Guid productId, IMediator mediator, CancellationToken ct) =>
                 {
-                    await mediator.Send(new DeleteProductCommand(productId), ct);
+                    await mediator.Send(new DeleteProductCommand(productId), ct).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("DeleteProduct")

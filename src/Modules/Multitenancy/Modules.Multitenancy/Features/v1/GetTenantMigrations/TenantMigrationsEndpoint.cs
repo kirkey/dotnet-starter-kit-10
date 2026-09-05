@@ -19,7 +19,7 @@ public static class TenantMigrationsEndpoint
                 async (IMediator mediator, CancellationToken cancellationToken) =>
                 {
                     IReadOnlyCollection<TenantMigrationStatusDto> result =
-                        await mediator.Send(new GetTenantMigrationsQuery(), cancellationToken);
+                        await mediator.Send(new GetTenantMigrationsQuery(), cancellationToken).ConfigureAwait(false);
 
                     return TypedResults.Ok(result);
                 })

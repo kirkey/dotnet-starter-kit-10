@@ -14,7 +14,7 @@ public static class GetGroupMembersEndpoint
     public static RouteHandlerBuilder MapGetGroupMembersEndpoint(this IEndpointRouteBuilder endpoints)
     {
         return endpoints.MapGet("/groups/{groupId:guid}/members", async (Guid groupId, IMediator mediator, CancellationToken cancellationToken) =>
-            TypedResults.Ok(await mediator.Send(new GetGroupMembersQuery(groupId), cancellationToken)))
+            TypedResults.Ok(await mediator.Send(new GetGroupMembersQuery(groupId), cancellationToken).ConfigureAwait(false)))
         .WithName("GetGroupMembers")
         .WithSummary("Get members of a group")
         .RequirePermission(IdentityPermissions.Groups.View)

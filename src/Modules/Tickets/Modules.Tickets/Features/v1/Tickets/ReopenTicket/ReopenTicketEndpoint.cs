@@ -15,7 +15,7 @@ public static class ReopenTicketEndpoint
     {
         return endpoints.MapPost("/tickets/{ticketId:guid}/reopen",
                 async (Guid ticketId, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new ReopenTicketCommand(ticketId), ct)))
+                    Results.Ok(await mediator.Send(new ReopenTicketCommand(ticketId), ct).ConfigureAwait(false)))
             .WithName("ReopenTicket")
             .WithSummary("Reopen a resolved or closed ticket")
             .RequirePermission(TicketsPermissions.Tickets.Reopen)

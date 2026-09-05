@@ -25,7 +25,7 @@ public static class UpdateUserEndpoint
             // only, regardless of any id the caller supplied in the body.
             request.Id = userId;
 
-            await mediator.Send(request, cancellationToken);
+            await mediator.Send(request, cancellationToken).ConfigureAwait(false);
             return TypedResults.Ok();
         })
         .WithName("UpdateUserProfile")

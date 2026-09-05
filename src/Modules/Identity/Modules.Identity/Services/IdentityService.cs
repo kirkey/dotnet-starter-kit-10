@@ -51,17 +51,17 @@ public sealed class IdentityService : IIdentityService
         ArgumentNullException.ThrowIfNull(password);
 
         var tenant = GetValidatedTenant();
-        var user = await FindAndValidateUserByCredentialsAsync(email, password);
+        var user = await FindAndValidateUserByCredentialsAsync(email, password).ConfigureAwait(false);
 
         ValidateUserStatus(user);
         ValidateTenantStatus(tenant);
 
         if (user.TwoFactorEnabled)
         {
-            await VerifyTwoFactorOrThrowAsync(user, twoFactorCode);
+            await VerifyTwoFactorOrThrowAsync(user, twoFactorCode).ConfigureAwait(false);
         }
 
-        var claims = await BuildUserClaimsAsync(user, tenant.Id, ct);
+        var claims = await BuildUserClaimsAsync(user, tenant.Id, ct).ConfigureAwait(false);
         return (user.Id, claims);
     }
 
@@ -78,7 +78,7 @@ public sealed class IdentityService : IIdentityService
         var valid = await _userManager.VerifyTwoFactorTokenAsync(
             user,
             _userManager.Options.Tokens.AuthenticatorTokenProvider,
-            twoFactorCode);
+            twoFactorCode).ConfigureAwait(false);
 
         if (!valid)
         {
@@ -91,13 +91,13 @@ public sealed class IdentityService : IIdentityService
         ValidateRefreshTokenAsync(string refreshToken, CancellationToken ct = default)
     {
         var tenant = GetValidatedTenant();
-        var user = await FindUserByRefreshTokenAsync(refreshToken, tenant.Id, ct);
+        var user = await FindUserByRefreshTokenAsync(refreshToken, tenant.Id, ct).ConfigureAwait(false);
 
         ValidateRefreshTokenExpiry(user);
         ValidateUserStatus(user);
         ValidateTenantStatus(tenant);
 
-        var claims = await BuildUserClaimsAsync(user, tenant.Id, ct);
+        var claims = await BuildUserClaimsAsync(user, tenant.Id, ct).ConfigureAwait(false);
         return (user.Id, claims);
     }
 
@@ -138,7 +138,7 @@ public sealed class IdentityService : IIdentityService
         var user = await _userManager.Users
             .IgnoreQueryFilters()
             .Where(u => u.Id == userId && EF.Property<string>(u, "TenantId") == tenantId)
-            .FirstOrDefaultAsync(ct);
+            .FirstOrDefaultAsync(ct).ConfigureAwait(false);
 
         if (user is null)
         {
@@ -153,7 +153,7 @@ public sealed class IdentityService : IIdentityService
             .IgnoreQueryFilters()
             .Where(ur => ur.UserId == userId)
             .Select(ur => ur.RoleId)
-            .ToListAsync(ct);
+            .ToListAsync(ct).ConfigureAwait(false);
 
         if (userRoleIds.Count > 0)
         {
@@ -161,7 +161,7 @@ public sealed class IdentityService : IIdentityService
                 .IgnoreQueryFilters()
                 .Where(r => userRoleIds.Contains(r.Id) && EF.Property<string>(r, "TenantId") == tenantId)
                 .Select(r => r.Name!)
-                .ToListAsync(ct);
+                .ToListAsync(ct).ConfigureAwait(false);
 
             claims.AddRange(roleNames.Select(r => new Claim(ClaimTypes.Role, r)));
         }
@@ -184,7 +184,7 @@ public sealed class IdentityService : IIdentityService
 
     private async Task<FshUser> FindAndValidateUserByCredentialsAsync(string email, string password)
     {
-        var user = await _userManager.FindByEmailAsync(email.Trim().Normalize());
+        var user = await _userManager.FindByEmailAsync(email.Trim().Normalize()).ConfigureAwait(false);
         if (user is null)
         {
             // Generic 401 — never confirm or deny account existence from this path.
@@ -193,7 +193,7 @@ public sealed class IdentityService : IIdentityService
 
         // Lockout check runs BEFORE password check so an attacker can't tell a locked
         // account from a wrong-password one on every request.
-        if (_userManager.SupportsUserLockout && await _userManager.IsLockedOutAsync(user))
+        if (_userManager.SupportsUserLockout && await _userManager.IsLockedOutAsync(user).ConfigureAwait(false))
         {
             _logger.LogWarning("Login attempted for locked account {UserId}", user.Id);
             throw new CustomException(
@@ -202,12 +202,12 @@ public sealed class IdentityService : IIdentityService
                 HttpStatusCode.Locked);
         }
 
-        if (!await _userManager.CheckPasswordAsync(user, password))
+        if (!await _userManager.CheckPasswordAsync(user, password).ConfigureAwait(false))
         {
             if (_userManager.SupportsUserLockout)
             {
-                await _userManager.AccessFailedAsync(user);
-                if (await _userManager.IsLockedOutAsync(user))
+                await _userManager.AccessFailedAsync(user).ConfigureAwait(false);
+                if (await _userManager.IsLockedOutAsync(user).ConfigureAwait(false))
                 {
                     _logger.LogWarning(
                         "Account {UserId} locked out after exceeding failed login threshold.",
@@ -218,9 +218,9 @@ public sealed class IdentityService : IIdentityService
         }
 
         // Successful authentication resets the failed-attempt counter.
-        if (_userManager.SupportsUserLockout && await _userManager.GetAccessFailedCountAsync(user) > 0)
+        if (_userManager.SupportsUserLockout && await _userManager.GetAccessFailedCountAsync(user).ConfigureAwait(false) > 0)
         {
-            await _userManager.ResetAccessFailedCountAsync(user);
+            await _userManager.ResetAccessFailedCountAsync(user).ConfigureAwait(false);
         }
 
         return user;
@@ -238,7 +238,7 @@ public sealed class IdentityService : IIdentityService
         }
 
         var user = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.RefreshToken == hashedToken, ct);
+            .FirstOrDefaultAsync(u => u.RefreshToken == hashedToken, ct).ConfigureAwait(false);
 
         if (user is null)
         {
@@ -297,7 +297,7 @@ public sealed class IdentityService : IIdentityService
     private async Task<List<Claim>> BuildUserClaimsAsync(FshUser user, string tenantId, CancellationToken ct)
     {
         var claims = CreateBasicClaims(user, tenantId);
-        await AddRoleClaimsAsync(claims, user, ct);
+        await AddRoleClaimsAsync(claims, user, ct).ConfigureAwait(false);
         return claims;
     }
 
@@ -325,8 +325,8 @@ public sealed class IdentityService : IIdentityService
 
     private async Task AddRoleClaimsAsync(List<Claim> claims, FshUser user, CancellationToken ct)
     {
-        var directRoles = await _userManager.GetRolesAsync(user);
-        var groupRoles = await _groupRoleService.GetUserGroupRolesAsync(user.Id, ct);
+        var directRoles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+        var groupRoles = await _groupRoleService.GetUserGroupRolesAsync(user.Id, ct).ConfigureAwait(false);
 
         var allRoles = directRoles.Union(groupRoles).Distinct();
         claims.AddRange(allRoles.Select(r => new Claim(ClaimTypes.Role, r)));

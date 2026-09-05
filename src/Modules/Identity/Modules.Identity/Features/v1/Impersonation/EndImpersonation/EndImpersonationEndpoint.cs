@@ -19,7 +19,7 @@ public static class EndImpersonationEndpoint
             ([FromServices] IMediator mediator,
              CancellationToken ct) =>
             {
-                var token = await mediator.Send(new EndImpersonationCommand(), ct);
+                var token = await mediator.Send(new EndImpersonationCommand(), ct).ConfigureAwait(false);
                 return TypedResults.Ok(token);
             })
             .WithName("EndImpersonation")

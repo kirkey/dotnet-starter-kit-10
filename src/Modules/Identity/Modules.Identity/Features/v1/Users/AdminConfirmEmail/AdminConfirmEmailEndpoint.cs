@@ -29,7 +29,7 @@ public static class AdminConfirmEmailEndpoint
         IMediator mediator,
         CancellationToken cancellationToken)
     {
-        await mediator.Send(new AdminConfirmEmailCommand(id.ToString()), cancellationToken);
+        await mediator.Send(new AdminConfirmEmailCommand(id.ToString()), cancellationToken).ConfigureAwait(false);
         return TypedResults.NoContent();
     }
 }

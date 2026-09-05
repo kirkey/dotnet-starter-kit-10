@@ -25,7 +25,7 @@ internal sealed class PasswordExpiryService : IPasswordExpiryService
 
     public async Task<bool> IsPasswordExpiredAsync(string userId, CancellationToken cancellationToken = default)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
         if (user is null)
         {
             return false;
@@ -36,7 +36,7 @@ internal sealed class PasswordExpiryService : IPasswordExpiryService
 
     public async Task<int> GetDaysUntilExpiryAsync(string userId, CancellationToken cancellationToken = default)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
         if (user is null)
         {
             return int.MaxValue;
@@ -47,7 +47,7 @@ internal sealed class PasswordExpiryService : IPasswordExpiryService
 
     public async Task<bool> IsPasswordExpiringWithinWarningPeriodAsync(string userId, CancellationToken cancellationToken = default)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
         if (user is null)
         {
             return false;
@@ -58,7 +58,7 @@ internal sealed class PasswordExpiryService : IPasswordExpiryService
 
     public async Task<PasswordExpiryStatusDto> GetPasswordExpiryStatusAsync(string userId, CancellationToken cancellationToken = default)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
         if (user is null)
         {
             return new PasswordExpiryStatusDto
@@ -75,11 +75,11 @@ internal sealed class PasswordExpiryService : IPasswordExpiryService
 
     public async Task UpdateLastPasswordChangeDateAsync(string userId, CancellationToken cancellationToken = default)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId).ConfigureAwait(false);
         if (user is not null)
         {
             user.LastPasswordChangeDate = _timeProvider.GetUtcNow().UtcDateTime;
-            await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(user).ConfigureAwait(false);
         }
     }
 

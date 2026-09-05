@@ -16,7 +16,7 @@ public static class VoidInvoiceEndpoint
     {
         return endpoints.MapPost("/invoices/{invoiceId:guid}/void",
                 async (Guid invoiceId, VoidInvoiceBody? body, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new VoidInvoiceCommand(invoiceId, body?.Reason), ct)))
+                    Results.Ok(await mediator.Send(new VoidInvoiceCommand(invoiceId, body?.Reason), ct).ConfigureAwait(false)))
             .WithName("VoidInvoice")
             .WithSummary("Void an invoice")
             .RequirePermission(BillingPermissions.Manage);

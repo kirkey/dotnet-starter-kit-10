@@ -32,7 +32,7 @@ internal sealed class UserProfileService(
         var user = await userManager.Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
 
         _ = user ?? throw new NotFoundException("user not found");
 
@@ -56,7 +56,7 @@ internal sealed class UserProfileService(
 
     public async Task<List<UserDto>> GetListAsync(CancellationToken cancellationToken)
     {
-        var users = await userManager.Users.AsNoTracking().ToListAsync(cancellationToken);
+        var users = await userManager.Users.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
         var result = new List<UserDto>(users.Count);
         foreach (var user in users)
         {
@@ -77,7 +77,7 @@ internal sealed class UserProfileService(
 
     public async Task UpdateAsync(string userId, string firstName, string lastName, string phoneNumber, FileUploadRequest image, bool deleteCurrentImage, CancellationToken cancellationToken = default)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByIdAsync(userId).ConfigureAwait(false);
 
         _ = user ?? throw new NotFoundException("user not found");
 
@@ -86,29 +86,29 @@ internal sealed class UserProfileService(
         // dereferencing Data or the common no-image update path NREs.
         if (image?.Data != null)
         {
-            var imageString = await storageService.UploadAsync<FshUser>(image, FileType.Image, cancellationToken);
+            var imageString = await storageService.UploadAsync<FshUser>(image, FileType.Image, cancellationToken).ConfigureAwait(false);
             user.ImageUrl = new Uri(imageString, UriKind.RelativeOrAbsolute);
             if (deleteCurrentImage && imageUri != null)
             {
-                await storageService.RemoveAsync(imageUri.ToString(), cancellationToken);
+                await storageService.RemoveAsync(imageUri.ToString(), cancellationToken).ConfigureAwait(false);
             }
         }
         else if (deleteCurrentImage && imageUri != null)
         {
-            await storageService.RemoveAsync(imageUri.ToString(), cancellationToken);
+            await storageService.RemoveAsync(imageUri.ToString(), cancellationToken).ConfigureAwait(false);
             user.ImageUrl = null;
         }
 
         user.FirstName = firstName;
         user.LastName = lastName;
-        string? currentPhoneNumber = await userManager.GetPhoneNumberAsync(user);
+        string? currentPhoneNumber = await userManager.GetPhoneNumberAsync(user).ConfigureAwait(false);
         if (phoneNumber != currentPhoneNumber)
         {
-            await userManager.SetPhoneNumberAsync(user, phoneNumber);
+            await userManager.SetPhoneNumberAsync(user, phoneNumber).ConfigureAwait(false);
         }
 
-        var result = await userManager.UpdateAsync(user);
-        await signInManager.RefreshSignInAsync(user);
+        var result = await userManager.UpdateAsync(user).ConfigureAwait(false);
+        await signInManager.RefreshSignInAsync(user).ConfigureAwait(false);
 
         if (!result.Succeeded)
         {
@@ -119,38 +119,38 @@ internal sealed class UserProfileService(
     public async Task SetImageUrlAsync(string userId, string? imageUrl, CancellationToken cancellationToken)
     {
         EnsureValidTenant();
-        var user = await userManager.FindByIdAsync(userId)
+        var user = await userManager.FindByIdAsync(userId).ConfigureAwait(false)
             ?? throw new NotFoundException("user not found");
 
         user.ImageUrl = string.IsNullOrWhiteSpace(imageUrl)
             ? null
             : new Uri(imageUrl, UriKind.RelativeOrAbsolute);
 
-        var result = await userManager.UpdateAsync(user);
+        var result = await userManager.UpdateAsync(user).ConfigureAwait(false);
         if (!result.Succeeded)
         {
             throw new CustomException("Update profile image failed");
         }
 
-        await signInManager.RefreshSignInAsync(user);
+        await signInManager.RefreshSignInAsync(user).ConfigureAwait(false);
     }
 
     public async Task<bool> ExistsWithEmailAsync(string email, string? exceptId = null, CancellationToken cancellationToken = default)
     {
         EnsureValidTenant();
-        return await userManager.FindByEmailAsync(email.Normalize()) is FshUser user && user.Id != exceptId;
+        return await userManager.FindByEmailAsync(email.Normalize()).ConfigureAwait(false) is FshUser user && user.Id != exceptId;
     }
 
     public async Task<bool> ExistsWithNameAsync(string name, CancellationToken cancellationToken = default)
     {
         EnsureValidTenant();
-        return await userManager.FindByNameAsync(name) is not null;
+        return await userManager.FindByNameAsync(name).ConfigureAwait(false) is not null;
     }
 
     public async Task<bool> ExistsWithPhoneNumberAsync(string phoneNumber, string? exceptId = null, CancellationToken cancellationToken = default)
     {
         EnsureValidTenant();
-        return await userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber, cancellationToken) is FshUser user && user.Id != exceptId;
+        return await userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber, cancellationToken).ConfigureAwait(false) is FshUser user && user.Id != exceptId;
     }
 
     private void EnsureValidTenant()

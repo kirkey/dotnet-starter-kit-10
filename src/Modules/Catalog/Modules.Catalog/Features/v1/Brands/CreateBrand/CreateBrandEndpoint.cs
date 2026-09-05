@@ -15,7 +15,7 @@ public static class CreateBrandEndpoint
     {
         return endpoints.MapPost("/brands",
                 async (CreateBrandCommand command, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(command, ct)))
+                    Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false)))
             .WithName("CreateBrand")
             .WithSummary("Create a brand")
             .RequirePermission(CatalogPermissions.Brands.Create)

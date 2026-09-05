@@ -15,7 +15,7 @@ public static class ListTrashedTicketsEndpoint
         return endpoints.MapGet("/tickets/trash",
                 async (int? pageNumber, int? pageSize, IMediator mediator, CancellationToken ct) =>
                     Results.Ok(await mediator.Send(
-                        new ListTrashedTicketsQuery(pageNumber ?? 1, pageSize ?? 20), ct)))
+                        new ListTrashedTicketsQuery(pageNumber ?? 1, pageSize ?? 20), ct).ConfigureAwait(false)))
             .WithName("ListTrashedTickets")
             .WithSummary("List soft-deleted tickets")
             .RequirePermission(TicketsPermissions.Tickets.Restore);

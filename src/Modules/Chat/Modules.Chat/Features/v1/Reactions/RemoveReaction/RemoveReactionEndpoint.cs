@@ -14,7 +14,7 @@ public static class RemoveReactionEndpoint
         => endpoints.MapDelete("/messages/{id:guid}/reactions/{emoji}",
                 async (Guid id, string emoji, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new RemoveReactionCommand(id, Uri.UnescapeDataString(emoji)), cancellationToken);
+                    await mediator.Send(new RemoveReactionCommand(id, Uri.UnescapeDataString(emoji)), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("RemoveReaction")

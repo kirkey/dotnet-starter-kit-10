@@ -29,7 +29,7 @@ public static class RevokeSessionEndpoint
         IMediator mediator,
         CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new RevokeSessionCommand(sessionId), cancellationToken);
+        var result = await mediator.Send(new RevokeSessionCommand(sessionId), cancellationToken).ConfigureAwait(false);
         return result ? TypedResults.NoContent() : TypedResults.NotFound();
     }
 }

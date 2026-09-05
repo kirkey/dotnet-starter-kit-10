@@ -36,8 +36,8 @@ public sealed class SessionCleanupHostedService : BackgroundService
         {
             try
             {
-                await Task.Delay(_cleanupInterval, stoppingToken);
-                await CleanupExpiredSessionsAsync(stoppingToken);
+                await Task.Delay(_cleanupInterval, stoppingToken).ConfigureAwait(false);
+                await CleanupExpiredSessionsAsync(stoppingToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
             {
@@ -63,7 +63,7 @@ public sealed class SessionCleanupHostedService : BackgroundService
         var cutoffDate = _timeProvider.GetUtcNow().UtcDateTime.AddDays(-_retentionDays);
         var deleted = await db.UserSessions
             .Where(s => s.ExpiresAt < cutoffDate)
-            .ExecuteDeleteAsync(cancellationToken);
+            .ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
 
         if (deleted > 0 && _logger.IsEnabled(LogLevel.Information))
         {

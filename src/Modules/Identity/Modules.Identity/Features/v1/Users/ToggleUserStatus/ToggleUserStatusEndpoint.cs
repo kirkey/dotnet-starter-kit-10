@@ -41,7 +41,7 @@ public static class ToggleUserStatusEndpoint
             return TypedResults.BadRequest();
         }
 
-        await mediator.Send(command, cancellationToken);
+        await mediator.Send(command, cancellationToken).ConfigureAwait(false);
         return TypedResults.NoContent();
     }
 }

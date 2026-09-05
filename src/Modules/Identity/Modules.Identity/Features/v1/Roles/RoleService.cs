@@ -24,7 +24,7 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
     // direct holders (AspNetUserRoles) and group-derived holders (members of groups carrying this role).
     private async Task InvalidateAffectedUsersAsync(string roleId, CancellationToken cancellationToken)
     {
-        var role = await roleManager.FindByIdAsync(roleId);
+        var role = await roleManager.FindByIdAsync(roleId).ConfigureAwait(false);
         if (role?.Name is null)
         {
             return;
@@ -34,7 +34,7 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
         var directUserIds = await context.UserRoles
             .Where(ur => ur.RoleId == roleId)
             .Select(ur => ur.UserId)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
 
         // Group-derived role holders.
         var groupUserIds = await context.GroupRoles
@@ -42,7 +42,7 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
             .SelectMany(gr => context.UserGroups
                 .Where(ug => ug.GroupId == gr.GroupId)
                 .Select(ug => ug.UserId))
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
 
         foreach (var userId in directUserIds.Concat(groupUserIds).Distinct())
         {
@@ -95,7 +95,7 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
 
     public async Task<RoleDto?> GetRoleAsync(string id, CancellationToken cancellationToken = default)
     {
-        FshRole? role = await roleManager.FindByIdAsync(id);
+        FshRole? role = await roleManager.FindByIdAsync(id).ConfigureAwait(false);
 
         _ = role ?? throw new NotFoundException("role not found");
 
@@ -106,7 +106,7 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
     {
         FshRole? role = string.IsNullOrEmpty(roleId)
             ? null
-            : await roleManager.FindByIdAsync(roleId);
+            : await roleManager.FindByIdAsync(roleId).ConfigureAwait(false);
 
         if (role != null)
         {
@@ -117,7 +117,7 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
 
             role.Name = name;
             role.Description = description;
-            await roleManager.UpdateAsync(role);
+            await roleManager.UpdateAsync(role).ConfigureAwait(false);
         }
         else
         {
@@ -125,7 +125,7 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
             EnsureNotSystemRole(name, "Cannot create a role using a system role's name.");
 
             role = new FshRole(name, description);
-            await roleManager.CreateAsync(role);
+            await roleManager.CreateAsync(role).ConfigureAwait(false);
         }
 
         return new RoleDto { Id = role.Id, Name = role.Name!, Description = role.Description };
@@ -133,7 +133,7 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
 
     public async Task DeleteRoleAsync(string id, CancellationToken cancellationToken = default)
     {
-        FshRole? role = await roleManager.FindByIdAsync(id);
+        FshRole? role = await roleManager.FindByIdAsync(id).ConfigureAwait(false);
 
         _ = role ?? throw new NotFoundException("role not found");
 
@@ -143,19 +143,19 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
         // otherwise the lookup returns an empty set after delete.
         await InvalidateAffectedUsersAsync(id, cancellationToken).ConfigureAwait(false);
 
-        await roleManager.DeleteAsync(role);
+        await roleManager.DeleteAsync(role).ConfigureAwait(false);
     }
 
     public async Task<RoleDto> GetWithPermissionsAsync(string id, CancellationToken cancellationToken = default)
     {
-        var role = await GetRoleAsync(id, cancellationToken);
+        var role = await GetRoleAsync(id, cancellationToken).ConfigureAwait(false);
         _ = role ?? throw new NotFoundException("role not found");
 
         role.Permissions = await context.RoleClaims
             .AsNoTracking()
             .Where(c => c.RoleId == id && c.ClaimType == ClaimConstants.Permission)
             .Select(c => c.ClaimValue!)
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
 
         return role;
     }
@@ -164,15 +164,15 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
     {
         ArgumentNullException.ThrowIfNull(permissions);
 
-        var role = await roleManager.FindByIdAsync(roleId)
+        var role = await roleManager.FindByIdAsync(roleId).ConfigureAwait(false)
             ?? throw new NotFoundException("role not found");
 
         EnsureNotSystemRole(role.Name, "System role permissions are managed by the framework and cannot be modified.");
         FilterRootPermissions(permissions);
 
-        var currentClaims = await roleManager.GetClaimsAsync(role);
-        await RemoveRevokedPermissionsAsync(role, currentClaims, permissions, cancellationToken);
-        await AddNewPermissionsAsync(role, currentClaims, permissions, cancellationToken);
+        var currentClaims = await roleManager.GetClaimsAsync(role).ConfigureAwait(false);
+        await RemoveRevokedPermissionsAsync(role, currentClaims, permissions, cancellationToken).ConfigureAwait(false);
+        await AddNewPermissionsAsync(role, currentClaims, permissions, cancellationToken).ConfigureAwait(false);
 
         // Permissions on the role just changed — every user reachable through this
         // role (directly or via group membership) now has a stale cache entry.
@@ -210,7 +210,7 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
         foreach (var claim in claimsToRemove)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var result = await roleManager.RemoveClaimAsync(role, claim);
+            var result = await roleManager.RemoveClaimAsync(role, claim).ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(error => error.Description).ToList();
@@ -238,7 +238,7 @@ public sealed class RoleService(RoleManager<FshRole> roleManager,
 
         if (newPermissions.Count > 0)
         {
-            await context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 }

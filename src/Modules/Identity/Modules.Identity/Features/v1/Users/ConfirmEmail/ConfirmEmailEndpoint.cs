@@ -12,7 +12,7 @@ public static class ConfirmEmailEndpoint
     {
         return endpoints.MapGet("/confirm-email", async (string userId, string code, string tenant, IMediator mediator, CancellationToken cancellationToken) =>
         {
-            var result = await mediator.Send(new ConfirmEmailCommand(userId, code, tenant), cancellationToken);
+            var result = await mediator.Send(new ConfirmEmailCommand(userId, code, tenant), cancellationToken).ConfigureAwait(false);
             return TypedResults.Ok(result);
         })
         .WithName("ConfirmEmail")

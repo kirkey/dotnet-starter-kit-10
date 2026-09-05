@@ -13,7 +13,7 @@ public static class VerifyEnrollTwoFactorEndpoint
     {
         return endpoints.MapPost("/2fa/verify",
                 async (VerifyEnrollTwoFactorCommand command, IMediator mediator, CancellationToken ct) =>
-                    TypedResults.Ok(new { success = await mediator.Send(command, ct) }))
+                    TypedResults.Ok(new { success = await mediator.Send(command, ct).ConfigureAwait(false) }))
             .WithName("VerifyEnrollTwoFactor")
             .WithSummary("Confirm TOTP enrollment")
             .WithDescription("Verifies the 6-digit code from the authenticator app. On success, 2FA is enabled and subsequent logins must include a code.")

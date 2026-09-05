@@ -66,7 +66,7 @@ public sealed class AuditingSaveChangesInterceptor : SaveChangesInterceptor
                     tags: AuditTag.None,
                     payload: payload);
 
-                await _publisher.PublishAsync(env, cancellationToken);
+                await _publisher.PublishAsync(env, cancellationToken).ConfigureAwait(false);
             }
         }
 

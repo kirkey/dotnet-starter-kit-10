@@ -14,7 +14,7 @@ public static class EnrollTwoFactorEndpoint
     {
         return endpoints.MapPost("/2fa/enroll",
                 async (IMediator mediator, CancellationToken ct) =>
-                    TypedResults.Ok(await mediator.Send(new EnrollTwoFactorCommand(), ct)))
+                    TypedResults.Ok(await mediator.Send(new EnrollTwoFactorCommand(), ct).ConfigureAwait(false)))
             .WithName("EnrollTwoFactor")
             .WithSummary("Begin TOTP enrollment")
             .WithDescription("Generates (or rotates) the current user's authenticator shared secret and returns it plus an otpauth:// URI for QR rendering. 2FA is NOT enabled until the caller confirms with /2fa/verify.")

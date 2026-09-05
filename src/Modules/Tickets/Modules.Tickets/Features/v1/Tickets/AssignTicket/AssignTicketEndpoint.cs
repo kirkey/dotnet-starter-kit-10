@@ -17,7 +17,7 @@ public static class AssignTicketEndpoint
     {
         return endpoints.MapPost("/tickets/{ticketId:guid}/assign",
                 async (Guid ticketId, AssignTicketRequest body, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(new AssignTicketCommand(ticketId, body.AssigneeUserId), ct)))
+                    Results.Ok(await mediator.Send(new AssignTicketCommand(ticketId, body.AssigneeUserId), ct).ConfigureAwait(false)))
             .WithName("AssignTicket")
             .WithSummary("Assign or reassign a ticket")
             .RequirePermission(TicketsPermissions.Tickets.Assign)

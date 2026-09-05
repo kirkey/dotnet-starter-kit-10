@@ -14,7 +14,7 @@ public static class DeleteFileEndpoint
         => endpoints.MapDelete("/{id:guid}",
                 async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new DeleteFileCommand(id), cancellationToken);
+                    await mediator.Send(new DeleteFileCommand(id), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("DeleteFile")

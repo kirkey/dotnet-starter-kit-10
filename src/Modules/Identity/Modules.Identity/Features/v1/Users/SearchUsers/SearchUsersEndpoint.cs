@@ -17,7 +17,7 @@ public static class SearchUsersEndpoint
         return endpoints.MapGet(
                 "/users/search",
                 async ([AsParameters] SearchUsersQuery query, IMediator mediator, CancellationToken cancellationToken) =>
-                    TypedResults.Ok(await mediator.Send(query, cancellationToken)))
+                    TypedResults.Ok(await mediator.Send(query, cancellationToken).ConfigureAwait(false)))
             .WithName("SearchUsers")
             .WithSummary("Search users with pagination")
             .WithDescription("Search and filter users with server-side pagination, sorting, and filtering by status, email confirmation, and role.")

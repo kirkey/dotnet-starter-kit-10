@@ -1,4 +1,5 @@
 using FSH.Framework.Shared.Identity.Authorization;
+using FSH.Framework.Web.Idempotency;
 using FSH.Modules.Catalog.Contracts.Authorization;
 using FSH.Modules.Catalog.Contracts.Dtos;
 using FSH.Modules.Catalog.Contracts.v1.Products.AddProductImage;
@@ -17,12 +18,13 @@ public static class AddProductImageEndpoint
                 async (Guid productId, [FromBody] AddImageBody body, IMediator mediator, CancellationToken ct) =>
                     Results.Ok(await mediator.Send(
                         new AddProductImageCommand(productId, body.FileAssetId, body.Url),
-                        ct)))
+                        ct).ConfigureAwait(false)))
             .WithName("AddProductImage")
             .WithSummary("Attach an image to a product")
             .Produces<ProductImageDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .RequirePermission(CatalogPermissions.Products.Update);
+            .RequirePermission(CatalogPermissions.Products.Update)
+            .WithIdempotency();
 
     // Body shape: ProductId comes from the route, so we only accept FileAssetId + Url in the body.
     public sealed record AddImageBody(Guid? FileAssetId, string Url);

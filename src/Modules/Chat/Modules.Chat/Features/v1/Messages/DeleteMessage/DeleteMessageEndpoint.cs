@@ -14,7 +14,7 @@ public static class DeleteMessageEndpoint
         => endpoints.MapDelete("/messages/{id:guid}",
                 async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
                 {
-                    await mediator.Send(new DeleteMessageCommand(id), cancellationToken);
+                    await mediator.Send(new DeleteMessageCommand(id), cancellationToken).ConfigureAwait(false);
                     return Results.NoContent();
                 })
             .WithName("DeleteMessage")

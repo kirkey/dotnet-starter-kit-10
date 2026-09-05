@@ -15,7 +15,7 @@ public static class CreateCategoryEndpoint
     {
         return endpoints.MapPost("/categories",
                 async (CreateCategoryCommand command, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(command, ct)))
+                    Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false)))
             .WithName("CreateCategory")
             .WithSummary("Create a category")
             .RequirePermission(CatalogPermissions.Categories.Create)

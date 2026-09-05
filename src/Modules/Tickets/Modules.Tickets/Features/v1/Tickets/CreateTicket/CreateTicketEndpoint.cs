@@ -15,7 +15,7 @@ public static class CreateTicketEndpoint
     {
         return endpoints.MapPost("/tickets",
                 async (CreateTicketCommand command, IMediator mediator, CancellationToken ct) =>
-                    Results.Ok(await mediator.Send(command, ct)))
+                    Results.Ok(await mediator.Send(command, ct).ConfigureAwait(false)))
             .WithName("CreateTicket")
             .WithSummary("Create a ticket")
             .RequirePermission(TicketsPermissions.Tickets.Create)
