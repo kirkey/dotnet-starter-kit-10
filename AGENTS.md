@@ -25,6 +25,8 @@ This file is canonical for **all** AI tools. `CLAUDE.md` / `GEMINI.md` just impo
 
 ## Build, run, migrate
 
+`make help` lists the shortcuts (`run-api`, `run-ui`, `migrate`, `test-module MODULE=X`, …) — they wrap the raw commands below.
+
 ```bash
 dotnet run --project src/Host/FSH.Starter.AppHost   # whole stack (one-time: npm install in both clients/)
 dotnet build src/FSH.Starter.slnx
@@ -36,8 +38,10 @@ cd clients/{app} && npm run test:e2e                # Playwright, route-mocked
 ```
 
 ```bash
-dotnet run --project src/Host/FSH.Starter.DbMigrator -- [apply|seed|seed-demo|list-pending] [--seed] [--tenant <id>] [--catalog-only]
+DOTNET_ENVIRONMENT=Development dotnet run --project src/Host/FSH.Starter.DbMigrator -- [apply|seed|seed-demo|list-pending] [--seed] [--tenant <id>] [--catalog-only]
 # Default verb is apply. seed-demo is dev-only (DOTNET_ENVIRONMENT=Development).
+# The env prefix matters: DbMigrator has no launchSettings, so without it the run
+# is Production and appsettings.Development.json is silently ignored.
 ```
 
 **Ports:** API 7030/5030 · admin 5173 · dashboard 5174 · Aspire 15888 · Postgres 5432 · pgAdmin 5050 · Valkey 6379 · MinIO 9000/9001.
@@ -95,6 +99,12 @@ File-scoped namespaces · 4-space indent · explicit types (`var` only when RHS-
 `is not null` · pattern matching + switch expressions · `ArgumentNullException.ThrowIfNull` guards ·
 records for DTOs/events/value objects · `default!` for required non-nullable strings.
 Warnings fail the build (`TreatWarningsAsErrors` + `AllEnabledByDefault` analyzers in `src/Directory.Build.props`).
+
+## Bulk edits
+
+- **NEVER use scripts to touch code — no Python, no sed/awk, no throwaway rewrite scripts, in any case.** A past run corrupted hundreds of files at once (double `.ConfigureAwait(false)`, CA glued onto `?? throw` targets, CA after `is not null` checks) — text scanners can't see real syntax, and the damage compiles nowhere near the edit. The same ban covers `python3 -c` one-liners and script-generated edit lists: if a dedicated tool (Read/Edit/Grep/Glob) or the compiler can do it, use that instead.
+- Make surgical file-level edits: Read the file, edit exactly, keep diffs reviewable, verify with `dotnet build` + tests.
+- One mechanical pattern at a time; re-scan after each pass.
 
 ## Adding things (quick pointers)
 
