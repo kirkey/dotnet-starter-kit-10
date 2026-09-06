@@ -33,7 +33,8 @@ public sealed class FshWebApplicationFactory : WebApplicationFactory<Program>, I
     private const string MinioBucket = "fsh-integration-test-uploads";
 
     private static readonly SemaphoreSlim _migrationLock = new(1, 1);
-    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("postgres:17-alpine")
+    // pgvector image: the Ai module's migrations create the vector extension + halfvec columns.
+    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("pgvector/pgvector:pg18")
         .WithDatabase("fsh_integration_tests")
         .WithUsername("postgres")
         .WithPassword("integration_test_pwd")

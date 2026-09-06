@@ -32,6 +32,19 @@ public sealed class FileTypeMetadataTests
         rules.AllowedExtensions.ShouldContain(".pdf");
     }
 
+    [Fact]
+    public void GetRules_Should_ReturnDocumentRules_When_DocumentRequested()
+    {
+        // Act
+        var rules = FileTypeMetadata.GetRules(FileType.Document);
+
+        // Assert
+        rules.MaxSizeInMB.ShouldBe(50);
+        rules.AllowedExtensions.ShouldContain(".md");
+        rules.AllowedExtensions.ShouldContain(".markdown");
+        rules.AllowedExtensions.ShouldContain(".txt");
+    }
+
     #endregion
 
     #region Edge Cases
@@ -39,8 +52,8 @@ public sealed class FileTypeMetadataTests
     [Fact]
     public void GetRules_Should_Throw_When_TypeUnsupported()
     {
-        // FileType.Document has no mapping and falls into the default arm.
-        Should.Throw<NotSupportedException>(() => FileTypeMetadata.GetRules(FileType.Document));
+        // Every current FileType has a mapping; an out-of-range cast still hits the default arm.
+        Should.Throw<NotSupportedException>(() => FileTypeMetadata.GetRules((FileType)999));
     }
 
     [Fact]

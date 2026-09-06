@@ -22,6 +22,7 @@ public class EndpointAuthTests
         ("ForgotPasswordEndpoint", "password-reset initiation"),
         ("ResetPasswordEndpoint", "password-reset completion"),
         ("SelfRegisterUserEndpoint", "public signup"),
+        ("StartScheduledRunEndpoint", "webhook token in query string is the credential"),
     ];
 
     [Fact]

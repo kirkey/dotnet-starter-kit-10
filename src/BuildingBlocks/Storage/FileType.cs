@@ -20,6 +20,10 @@ public static class FileTypeMetadata
         {
             FileType.Image => new() { AllowedExtensions = [".jpg", ".jpeg", ".png", ".ico"], MaxSizeInMB = 5 },
             FileType.Pdf => new() { AllowedExtensions = [".pdf"], MaxSizeInMB = 10 },
+            // Document covers machine-generated text twins (e.g. the Ai module's .md knowledge
+            // copies). The enum value predates its rules — without this arm every Document upload
+            // throws NotSupportedException.
+            FileType.Document => new() { AllowedExtensions = [".md", ".markdown", ".txt"], MaxSizeInMB = 50 },
             _ => throw new NotSupportedException($"Unsupported file type: {type}")
         };
 }

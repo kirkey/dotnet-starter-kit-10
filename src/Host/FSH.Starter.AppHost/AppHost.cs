@@ -11,7 +11,11 @@ var appPrefix = builder.Environment.ApplicationName
 #pragma warning restore CA1308
 
 // Postgres + pgAdmin sidecar (auto-discovers registered databases); persistent so volumes and saved state survive restarts.
+// pgvector image (not stock postgres): the Ai module stores embeddings and needs the vector
+// extension. Major tracks the repo's production line (deploy/docker uses postgres:18-alpine);
+// changing majors later requires recreating this volume (PG data dirs are major-specific).
 var postgresServer = builder.AddPostgres("postgres")
+    .WithImage("pgvector/pgvector", "pg18")
     .WithDataVolume($"{appPrefix}-postgres-data")
     .WithLifetime(ContainerLifetime.Persistent)
     .WithPgAdmin(pa => pa

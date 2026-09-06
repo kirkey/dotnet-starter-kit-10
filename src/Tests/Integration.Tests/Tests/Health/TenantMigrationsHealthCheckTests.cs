@@ -19,7 +19,8 @@ namespace Integration.Tests.Tests.Health;
 /// </summary>
 public sealed class TenantMigrationsHealthCheckTests : IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("postgres:17-alpine")
+    // pgvector image: the Ai module's migrations create the vector extension + halfvec columns.
+    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("pgvector/pgvector:pg18")
         .WithDatabase("fsh_migrations_check")
         .WithUsername("postgres")
         .WithPassword("integration_test_pwd")

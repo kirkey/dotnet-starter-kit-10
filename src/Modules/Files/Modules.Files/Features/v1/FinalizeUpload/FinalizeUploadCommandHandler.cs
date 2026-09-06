@@ -97,7 +97,9 @@ public sealed class FinalizeUploadCommandHandler(
             OwnerId: asset.OwnerId,
             ContentType: asset.ContentType,
             SizeBytes: asset.SizeBytes,
-            FinalStatus: (int)asset.Status), cancellationToken).ConfigureAwait(false);
+            FinalStatus: (int)asset.Status,
+            StorageKey: asset.StorageKey,
+            OriginalFileName: asset.OriginalFileName), cancellationToken).ConfigureAwait(false);
 
         return FileAssetMapper.ToDto(asset);
     }

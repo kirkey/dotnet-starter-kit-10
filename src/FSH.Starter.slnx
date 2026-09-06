@@ -13,6 +13,10 @@
     <Project Path="BuildingBlocks/Web/Web.csproj" />
   </Folder>
   <Folder Name="/Modules/" />
+  <Folder Name="/Modules/Ai/">
+    <Project Path="Modules/Ai/Modules.Ai.Contracts/Modules.Ai.Contracts.csproj" />
+    <Project Path="Modules/Ai/Modules.Ai/Modules.Ai.csproj" />
+  </Folder>
   <Folder Name="/Modules/Auditing/">
     <Project Path="Modules/Auditing/Modules.Auditing.Contracts/Modules.Auditing.Contracts.csproj" />
     <Project Path="Modules/Auditing/Modules.Auditing/Modules.Auditing.csproj" Id="2764205b-8725-43a7-b499-67b98959ad50" />
@@ -72,6 +76,7 @@
     <Project Path="Tests/Catalog.Tests/Catalog.Tests.csproj" />
     <Project Path="Tests/Chat.Tests/Chat.Tests.csproj" />
     <Project Path="Tests/Webhooks.Tests/Webhooks.Tests.csproj" />
+    <Project Path="Tests/Ai.Tests/Ai.Tests.csproj" />
     <Project Path="Tests/Files.Tests/Files.Tests.csproj" />
     <Project Path="Tests/Framework.Tests/Framework.Tests.csproj" />
     <Project Path="Tests/Caching.Tests/Caching.Tests.csproj" />

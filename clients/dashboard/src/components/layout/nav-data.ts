@@ -1,5 +1,6 @@
 import {
   Activity,
+  Bot,
   CreditCard,
   FolderOpen,
   FolderTree,
@@ -11,6 +12,7 @@ import {
   ScrollText,
   Settings,
   ShieldCheck,
+  Sparkles,
   Tags,
   Ticket,
   Trash2,
@@ -58,6 +60,8 @@ export const topNavTop: NavSpec[] = [
   // server-side (Chat → channels list, Files → /files/mine). Same convention
   // as trash-permissions.ts: if the endpoint's permission changes, mirror it.
   { to: "/chat", label: "Chat", icon: MessageCircle, perm: "Permissions.Chat.Channels.View" },
+  { to: "/ai-chat", label: "AI Chat", icon: Sparkles, perm: "Permissions.AiChat.View" },
+  { to: "/ai-agents", label: "AI Agents", icon: Bot, perm: "Permissions.AiAgents.View" },
   { to: "/files", label: "My Files", icon: FolderOpen, perm: "Permissions.Files.Upload" },
 ];
 

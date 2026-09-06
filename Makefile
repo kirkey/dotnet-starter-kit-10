@@ -11,7 +11,7 @@ TEST_CONFIG ?= Release
 # Every port this repo binds: API, both apps, Aspire dashboard, Postgres,
 # pgAdmin, Valkey, MinIO. `make kill` frees them all (requires lsof).
 KILL_PORTS  := 7030 5030 5173 5174 15888 5432 5050 6379 9000 9001
-UNIT_TESTS  := Architecture Auditing Caching Generic Identity Multitenancy Billing Catalog Chat Files Framework Webhooks
+UNIT_TESTS  := Architecture Auditing Caching Generic Identity Multitenancy Billing Catalog Chat Files Framework Webhooks Ai
 
 .PHONY: help
 help: ## Show this help

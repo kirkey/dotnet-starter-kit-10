@@ -42,6 +42,8 @@ DOTNET_ENVIRONMENT=Development dotnet run --project src/Host/FSH.Starter.DbMigra
 # Default verb is apply. seed-demo is dev-only (DOTNET_ENVIRONMENT=Development).
 # The env prefix matters: DbMigrator has no launchSettings, so without it the run
 # is Production and appsettings.Development.json is silently ignored.
+# The Ai module needs the pgvector extension: use the Aspire Postgres container
+# (pgvector image) or install the extension into your local Postgres, else `apply` fails.
 ```
 
 **Ports:** API 7030/5030 · admin 5173 · dashboard 5174 · Aspire 15888 · Postgres 5432 · pgAdmin 5050 · Valkey 6379 · MinIO 9000/9001.

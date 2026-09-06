@@ -102,6 +102,9 @@ builder.Services.AddMediator(o =>
         typeof(FSH.Modules.Chat.ChatModule),
         typeof(FSH.Modules.Notifications.Contracts.v1.Commands.MarkNotificationReadCommand),
         typeof(FSH.Modules.Notifications.NotificationsModule),
+        // Ai Contracts marker re-added with the first commands (AddWebSource, task 2.2).
+        typeof(FSH.Modules.Ai.Contracts.AiContractsMarker),
+        typeof(FSH.Modules.Ai.AiModule),
     ];
 });
 
@@ -117,6 +120,7 @@ var moduleAssemblies = new Assembly[]
     typeof(TicketsModule).Assembly,
     typeof(FSH.Modules.Chat.ChatModule).Assembly,
     typeof(FSH.Modules.Notifications.NotificationsModule).Assembly,
+    typeof(FSH.Modules.Ai.AiModule).Assembly,
 };
 
 // Disable runtime-only concerns; persistence + multitenancy stay on so DbInitializers resolve. Caching

@@ -2,6 +2,7 @@
 using FSH.Framework.Shared.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Pgvector.EntityFrameworkCore;
 
 namespace FSH.Framework.Persistence;
 
@@ -39,6 +40,9 @@ public static class OptionsBuilderExtensions
                 builder.UseNpgsql(connectionString, e =>
                 {
                     e.MigrationsAssembly(migrationsAssembly);
+                    // Vector type mappings for modules storing embeddings (Ai). Additive only:
+                    // databases without the extension are unaffected unless a vector column is used.
+                    e.UseVector();
                 });
                 break;
 
@@ -86,6 +90,8 @@ public static class OptionsBuilderExtensions
                 builder.UseNpgsql(connection, contextOwnsConnection: false, e =>
                 {
                     e.MigrationsAssembly(migrationsAssembly);
+                    // See above: vector mappings for embedding-storing modules.
+                    e.UseVector();
                 });
                 break;
 

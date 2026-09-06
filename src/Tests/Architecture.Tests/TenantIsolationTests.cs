@@ -7,6 +7,7 @@ using FSH.Framework.Shared.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Pgvector.EntityFrameworkCore;
 using Shouldly;
 using System.Reflection;
 using Xunit;
@@ -93,7 +94,9 @@ public sealed class TenantIsolationTests
         var builder = (DbContextOptionsBuilder)Activator.CreateInstance(builderType)!;
         // Npgsql provider keeps OnConfiguring's per-tenant wiring a no-op (empty ConnectionString);
         // the model builds lazily on first ctx.Model access, so no DB connection is opened.
-        builder.UseNpgsql("Host=arch;Database=arch;Username=arch;Password=arch");
+        // UseVector: modules may map pgvector columns (Ai embeddings); without the plugin the
+        // model fails validation before we ever reach the isolation assertions.
+        builder.UseNpgsql("Host=arch;Database=arch;Username=arch;Password=arch", e => e.UseVector());
         var options = builder.Options;
 
         var settings = Options.Create(new DatabaseOptions
