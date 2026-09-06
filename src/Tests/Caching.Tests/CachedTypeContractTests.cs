@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using FSH.Framework.Web.Idempotency;
 using FSH.Modules.Identity;
 using FSH.Modules.Multitenancy.Contracts.Dtos;
 
@@ -30,7 +29,9 @@ public sealed class CachedTypeContractTests
                 typeof(BrandAssetsDto),
                 typeof(TypographyDto),
                 typeof(LayoutDto),
-                typeof(CachedIdempotentResponse),
+                // CachedIdempotentResponse deliberately absent: idempotent replays go through
+                // IDistributedCache directly (HybridCache namespaces L2 keys, invisible to raw
+                // probe reads), so the HybridCache immutability contract does not apply.
             };
 
             // Reach into the Identity runtime assembly for the internal PermissionSet type.

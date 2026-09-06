@@ -16,8 +16,8 @@ public sealed class IdempotencyFilterTests
         _auth = new AuthHelper(factory);
     }
 
-    // Full replay-with-matching-body coverage isn't possible yet (filter captures the raw IResult, not the body — dotnet/aspnetcore#57191, backlog 2.4b).
-    // These tests verify only the wiring: Idempotency-Replayed header presence/absence and that a distinct key forces fresh execution.
+    // Full replay coverage: identical bodies + Replayed header + no second execution
+    // (a re-executed create with the same plan key would conflict instead of returning 200).
 
     [Fact]
     public async Task CreateBillingPlan_Should_ExecuteNormally_When_NoIdempotencyKey()
@@ -69,6 +69,37 @@ public sealed class IdempotencyFilterTests
         secondResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
         secondResponse.Headers.Contains(ReplayedHeader).ShouldBeFalse(
             "A different idempotency key must route through a fresh execution.");
+    }
+
+    [Fact]
+    public async Task CreateBillingPlan_Should_ReplayIdenticalBody_When_SameIdempotencyKey()
+    {
+        using var client = await _auth.CreateRootAdminClientAsync();
+        var uniqueId = Guid.NewGuid().ToString("N")[..8];
+        var key = $"idem-same-{uniqueId}";
+        var payload = new
+        {
+            key = $"same-{uniqueId}",
+            name = $"Same Plan {uniqueId}",
+            currency = "USD",
+            monthlyBasePrice = 2m
+        };
+
+        using var firstRequest = BuildRequest(payload, key);
+        var firstResponse = await client.SendAsync(firstRequest);
+        firstResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+        firstResponse.Headers.Contains(ReplayedHeader).ShouldBeFalse(
+            "The first call must execute, not replay.");
+        var firstBody = await firstResponse.Content.ReadAsStringAsync();
+
+        using var secondRequest = BuildRequest(payload, key);
+        var secondResponse = await client.SendAsync(secondRequest);
+
+        secondResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+        secondResponse.Headers.Contains(ReplayedHeader).ShouldBeTrue(
+            "The second call with the same key must replay.");
+        var secondBody = await secondResponse.Content.ReadAsStringAsync();
+        secondBody.ShouldBe(firstBody);
     }
 
     private static HttpRequestMessage BuildRequest(object payload, string idempotencyKey)

@@ -12,7 +12,7 @@
 ## 3. Endpoint auth, idempotency, and test lock
 
 - [x] 3.1 Gate every endpoint the inventory marked as missing-but-required with `.RequirePermission(...)` using the module's permission constants; verify the inventory shows zero unclassified sites
-- [ ] 3.2 Add `.WithIdempotency()` to replay-safe POSTs after confirming the key-optional behavior for clients that send no key; verify double-submit creates no duplicates via handler/integration tests
+- [x] 3.2 Add `.WithIdempotency()` to replay-safe POSTs after confirming the key-optional behavior for clients that send no key; verify double-submit creates no duplicates via handler/integration tests (verified: filter defect fixed — replays byte-identical with header; chat replay test un-skipped; billing replay test added; SendChatMessage marked)
 - [x] 3.3 Add `Endpoints_Should_Be_Gated_Or_Allowlisted` to `Architecture.Tests` mirroring the KnownMissing pattern; verify it passes with the inventory's anonymous-by-design list
 
 ## 4. Missing validators (allowlist → zero)
@@ -24,5 +24,5 @@
 
 ## 5. Final verification
 
-- [ ] 5.1 Run the full gate: `dotnet test src/Tests/Architecture.Tests`, `make test-unit`, and `make test-integration` (Docker); verify all green with no new skips or allowlist entries
-- [ ] 5.2 Run `openspec validate --change api-best-practices-alignment` (add `--strict` if available) and fix any findings; verify the change reports planning-complete with all artifacts done
+- [x] 5.1 Run the full gate: `dotnet test src/Tests/Architecture.Tests`, `make test-unit`, and `make test-integration` (Docker); verify all green with no new skips or allowlist entries
+- [x] 5.2 Run `openspec validate --change api-best-practices-alignment` (add `--strict` if available) and fix any findings; verify the change reports planning-complete with all artifacts done (valid --strict; full gate re-run green: 12 unit projects, 748 integration + 5 middleware, 0 skips)

@@ -25,13 +25,13 @@ Eight other create-endpoints audited already carry it (`CreateTicket`, `CreatePr
   (`TestWebhookSubscription`). Double-submit of these is either impossible, already
   idempotent by state, or surfaces an explicit conflict — never a silent duplicate.
 
-## DEFECT (pre-existing, shared infra): replays never hit
+## DEFECT — FIXED (was: pre-existing shared infra, replays never hit)
 
-Live double-submit test against the running API (brand create ×2, ticket create ×2, same
-`Idempotency-Key`): second request re-executed the handler both times (new GUIDs; brand case
-returned the handler's own 409) with no `Idempotency-Replayed` header and no cache-write
-warning in the log. Suspect: `HybridCache.SetAsync` write vs the manual
-`IDistributedCache.GetAsync` + camelCase-`JsonSerializer.Deserialize` probe round-trip in
-`src/BuildingBlocks/Web/Idempotency/IdempotencyEndpointFilter.cs` (protected code — not
-touched). Affects all 33 idempotent endpoints, pre-existing, unrelated to the 4 additions.
-Needs a BuildingBlocks-level investigation with explicit approval.
+Root cause (proven by round-trip test): `HybridCache.SetAsync` namespaces its L2 keys
+(`__MSFT_HCT__*`), so the filter's raw `IDistributedCache.GetAsync` probe could never see
+HybridCache writes. Fix (approved): the filter now writes AND probes via `IDistributedCache`
+directly with explicit JSON; response bytes are captured by single-execution tee of the
+`IResult` so replays are byte-identical (previously would have replayed the result envelope).
+Files/streams skip caching; entries expire by 24h TTL (nothing purged by tag).
+Verified: live double-submit replays byte-identical with `Idempotency-Replayed: true`;
+`ChatSendMessageTests` replay test un-skipped; new billing-plan replay test added.

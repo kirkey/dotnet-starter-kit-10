@@ -1,15 +1,10 @@
-using System.ComponentModel;
-
 namespace FSH.Framework.Web.Idempotency;
 
 /// <summary>
-/// A cached HTTP response for idempotent replay.
+/// A cached HTTP response for idempotent replay. Serialized to JSON bytes and stored via
+/// <c>IDistributedCache</c> directly (both write and probe read); never through HybridCache,
+/// whose namespaced L2 keys are invisible to raw reads.
 /// </summary>
-/// <remarks>
-/// Marked <see cref="ImmutableObjectAttribute"/> + <c>sealed</c> so HybridCache can reuse the
-/// in-process instance across requests without re-deserializing on every L1 hit.
-/// </remarks>
-[ImmutableObject(true)]
 public sealed record CachedIdempotentResponse
 {
     public int StatusCode { get; init; }
