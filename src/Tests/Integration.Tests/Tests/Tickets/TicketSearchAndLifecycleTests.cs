@@ -212,7 +212,7 @@ public sealed class TicketSearchAndLifecycleTests
     }
 
     [Fact]
-    public async Task SearchTickets_Should_ClampOutOfRange_PagingArgs_To_Defaults()
+    public async Task SearchTickets_Should_Return400_When_PagingArgsOutOfRange()
     {
         #region Arrange
         using var client = await _auth.CreateRootAdminClientAsync();
@@ -221,14 +221,14 @@ public sealed class TicketSearchAndLifecycleTests
         #endregion
 
         #region Act
-        // pageNumber<1 clamps to 1; pageSize>200 clamps to the default of 20.
-        var page = await SearchAsync(client, $"assignedToUserId={assignee}&pageNumber=0&pageSize=9999");
+        // pageNumber<1 / pageSize>200 used to clamp to defaults in the handler;
+        // the SearchTicketsQueryValidator now rejects them with a clean 400.
+        var response = await client.GetAsync(
+            $"{TestConstants.TicketsBasePath}/tickets?assignedToUserId={assignee}&pageNumber=0&pageSize=9999");
         #endregion
 
         #region Assert
-        page.PageNumber.ShouldBe(1);
-        page.PageSize.ShouldBe(20);
-        page.Items.ShouldContain(t => t.AssignedToUserId == assignee);
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         #endregion
     }
 
